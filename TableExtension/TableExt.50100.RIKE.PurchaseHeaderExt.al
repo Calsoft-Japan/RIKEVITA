@@ -44,10 +44,10 @@ tableextension 50100 "RIKE Purchase Header Ext" extends "Purchase Header"
     /// </summary>
     procedure checkRVContractDate()
     begin
-        if ("RV_Contract Month" = "RV_Month"::" ") then
+        /* if ("RV_Contract Month" = "RV_Month"::" ") then
             Error('Contract Month cannot be empty. Please correct the date.');
         if ("RV_Contract Year" < Today.Year) then
-            Error('Contract Year cannot be less than current year. Please correct the date.');
+            Error('Contract Year cannot be less than current year. Please correct the date.'); */
 
         if ("RV_Contract Month" <> "RV_Month"::" ") and ("RV_Contract Year" <> 0) then begin
             if DMY2Date(1, "RV_Contract Month".AsInteger(), "RV_Contract Year") < DMY2Date(1, Today.Month, Today.Year) then
