@@ -13,6 +13,14 @@ table 50100 "RIKEVITA Setup"
         {
             Caption = 'Primary Key';
         }
+        field(2; "Notification Calculation"; Code[10])
+        {
+            Caption = 'Notification Calculation';
+        }
+        field(3; "Notify-to Email Address"; Text[50])
+        {
+            Caption = 'Notify-to Email Address';
+        }
     }
     keys
     {

@@ -6,27 +6,37 @@ page 50100 "RIKEVITA Setup"
 {
     ApplicationArea = All;
     Caption = 'RIKEVITA Setup';
-    PageType = Card;
+    PageType = List;
+    UsageCategory = Lists;
     SourceTable = "RIKEVITA Setup";
-    DeleteAllowed = false;
-    InsertAllowed = false;
+    DeleteAllowed = true;
+    InsertAllowed = true;
+    Editable = true;
     layout
     {
         area(Content)
         {
-            group(General)
+            repeater(General)
             {
-                Caption = 'General';
+                field("Primary Key"; Rec."Primary Key")
+                {
+                    ToolTip = 'Specifies the value of the Primary Key field.', Comment = '%';
+                    ApplicationArea = All;
+                }
 
+                field("Notification Calculation"; Rec."Notification Calculation")
+                {
+                    Caption = 'Notification Calculation';
+                    ApplicationArea = All;
+                }
+                field("Notify-to Email Address"; Rec."Notify-to Email Address")
+                {
+                    Caption = 'Notify-to Email Address';
+                    ApplicationArea = All;
+                }
             }
+
         }
     }
-    trigger OnOpenPage()
-    begin
-        Rec.Reset();
-        if not Rec.Get() then begin
-            Rec.Init();
-            Rec.Insert();
-        end;
-    end;
 }
+

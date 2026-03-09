@@ -35,4 +35,14 @@ pageextension 50101 "RIKE Purchase Order Ext" extends "Purchase Order"
 
         }
     }
+
+    /// <summary>
+    /// FDD003 2026/03/08: New. (Liuyang)
+    /// Init "RV_Contract Month" and "RV_Contract Year" fields to current year and month.
+    /// </summary>
+    trigger OnNewRecord(BelowxRec: Boolean)
+    begin
+        Rec."RV_Contract Month" := Enum::RV_Month.FromInteger(Today.Month);
+        Rec."RV_Contract Year" := Today.Year;
+    end;
 }

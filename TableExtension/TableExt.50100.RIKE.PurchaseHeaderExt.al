@@ -39,7 +39,7 @@ tableextension 50100 "RIKE Purchase Header Ext" extends "Purchase Header"
     }
 
     /// <summary>
-    /// FDD003 
+    /// FDD003 2026/03/08: New. (Liuyang)
     /// check if the Combined dates of Contract Month and Contract Year is correct. will be use in the OnValidate trigger of both "RV_Contract Month" and "RV_Contract Year" fields to make sure the data is correct when user input or update the data.
     /// </summary>
     procedure checkRVContractDate()
