@@ -1,6 +1,6 @@
 /// <summary>
 /// Table RIKEVITA Setup (ID 50100).
-/// COMMON 2026/02/23: New. (Stephen)
+/// FDD030 2026/02/23: New. (Stephen)
 /// </summary>
 table 50100 "RIKEVITA Setup"
 {

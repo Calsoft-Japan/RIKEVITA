@@ -1,6 +1,6 @@
 /// <summary>
 /// Table RV_HS Code Management (ID 50101)
-/// FDD039 2026/03/09: New. (Liuyang)
+/// FDD030 2026/03/09: New. (Liuyang)
 /// </summary>
 table 50101 "RV_HS Code Management"
 {
