@@ -8,6 +8,7 @@ tableextension 50203 "RV_Reservation Entry" extends "Reservation Entry"
     {
         field(50200; "RV_Manufacture Date"; Date)
         {
+            Caption = 'Manufacture Date';
             Description = 'FDD001';
         }
     }

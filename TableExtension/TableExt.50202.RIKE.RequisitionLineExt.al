@@ -8,6 +8,7 @@ tableextension 50202 "RV_Requisition Line" extends "Requisition Line"
     {
         field(50200; "RV_Expiration Calculation"; DateFormula)
         {
+            Caption = 'Expiration Calculation';
             Description = 'FDD001';
             FieldClass = FlowField;
             CalcFormula = lookup(Item."Expiration Calculation" where("No." = field("No.")));

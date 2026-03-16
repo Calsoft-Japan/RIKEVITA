@@ -8,6 +8,7 @@ tableextension 50201 "RV_Tracking Specification" extends "Tracking Specification
     {
         field(50200; "RV_Manufacture Date"; Date)
         {
+            Caption = 'Manufacture Date';
             Description = 'FDD001';
         }
     }

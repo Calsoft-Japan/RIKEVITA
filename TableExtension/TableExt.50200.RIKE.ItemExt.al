@@ -8,10 +8,12 @@ tableextension 50200 "RV_ITEM" extends "Item"
     {
         field(50200; "RV_RSPO"; Boolean)
         {
+            Caption = 'RSPO';
             Description = 'FDD027';
         }
         field(50201; "RV_Expiration Base Date (RM)"; Option)
         {
+            Caption = 'Expiration Base Date (RM)';
             Description = 'FDD001';
             OptionCaption = ' ,Manufacture Date,Posting Date';
             OptionMembers = " ","Manufacture Date","Posting Date";
