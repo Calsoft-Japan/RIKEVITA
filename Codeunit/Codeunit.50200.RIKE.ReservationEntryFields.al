@@ -1,5 +1,5 @@
 /// <summary>
-/// Codeunit RIKE RIKE Transf PO Addtion Fields (ID 50200)
+/// Codeunit RIKE Reservation Entry Addtion Fields (ID 50200)
 /// FDD001 2026/03/12: New. (Bobby.ji)
 /// </summary>
 codeunit 50200 "RIKE Reservation Entry Fields"
@@ -33,6 +33,4 @@ codeunit 50200 "RIKE Reservation Entry Fields"
             ReservationEntry."Expiration Date" := CalcDate(Item."Expiration Calculation", ReservationEntry."RV_Manufacture Date");
         end;
     end;
-
-
 }

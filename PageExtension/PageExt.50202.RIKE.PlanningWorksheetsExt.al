@@ -12,16 +12,7 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
             {
                 Caption = 'Expiration Calculation';
                 ApplicationArea = all;
-                trigger OnValidate()
-                var
-                    Item: Record Item;
-                begin
-                    if Rec."No." <> '' then begin
-                        if Item.Get(Rec."No.") then
-                            Rec."RV_Expiration Calculation" := Item."Expiration Calculation";
-
-                    end;
-                end;
+                Editable = false;
             }
         }
     }
