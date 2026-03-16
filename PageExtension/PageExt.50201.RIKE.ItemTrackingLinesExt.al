@@ -1,6 +1,6 @@
 /// <summary>
 /// PageExtension RV_Item Tracking Lines (ID 50201) extends "Item Tracking Lines"
-/// FDD001 2026/03/12: New. (Bobby.ji)
+/// FDD001 FDD008 2026/03/12: New. (Bobby.ji)
 /// </summary>
 pageextension 50201 "RV_Item Tracking Lines" extends "Item Tracking Lines"
 {
@@ -8,6 +8,12 @@ pageextension 50201 "RV_Item Tracking Lines" extends "Item Tracking Lines"
     {
         addbefore("Expiration Date")
         {
+
+            field("RV_Container No."; Rec."RV_Container No.")//FDD008
+            {
+                Caption = 'Container No.';
+                ApplicationArea = All;
+            }
             field("Manufacture Date"; Rec."RV_Manufacture Date")
             {
                 Caption = 'Manufacture Date';

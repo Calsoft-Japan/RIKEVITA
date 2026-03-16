@@ -9,7 +9,7 @@ codeunit 50200 "RIKE Reservation Entry Fields"
     var
         Item: Record Item;
     begin
-        ReservEntry."RV_Container No." := TrkgSpec."RV_Container No.";
+        ReservEntry."RV_Container No." := TrkgSpec."RV_Container No.";//FDD008
         ReservEntry."RV_Manufacture Date" := TrkgSpec."RV_Manufacture Date";
         Item.Get(TrkgSpec."Item No.");
         if Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date" then begin
@@ -20,6 +20,7 @@ codeunit 50200 "RIKE Reservation Entry Fields"
     [EventSubscriber(ObjectType::Table, Database::"Reservation Entry", OnAfterCopyTrackingFromTrackingSpec, '', false, false)]
     local procedure "Reservation Entry_OnAfterCopyTrackingFromTrackingSpec"(var ReservationEntry: Record "Reservation Entry"; TrackingSpecification: Record "Tracking Specification")
     begin
+        ReservationEntry."RV_Container No." := TrackingSpecification."RV_Container No.";//FDD008
         ReservationEntry."RV_Manufacture Date" := TrackingSpecification."RV_Manufacture Date";
     end;
 
@@ -28,6 +29,7 @@ codeunit 50200 "RIKE Reservation Entry Fields"
     var
         Item: Record Item;
     begin
+        ReservationEntry."RV_Container No." := ForReservEntry."RV_Container No.";//FDD008
         ReservationEntry."RV_Manufacture Date" := ForReservEntry."RV_Manufacture Date";
         if ReservationEntry."Item No." <> '' then begin
             Item.Get(ReservationEntry."Item No.");
