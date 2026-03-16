@@ -28,9 +28,12 @@ codeunit 50200 "RIKE Reservation Entry Fields"
         Item: Record Item;
     begin
         ReservationEntry."RV_Manufacture Date" := ForReservEntry."RV_Manufacture Date";
-        Item.Get(ReservationEntry."Item No.");
-        if Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date" then begin
-            ReservationEntry."Expiration Date" := CalcDate(Item."Expiration Calculation", ReservationEntry."RV_Manufacture Date");
+        if ReservationEntry."Item No." <> '' then begin
+            Item.Get(ReservationEntry."Item No.");
+            if Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date" then begin
+                ReservationEntry."Expiration Date" := CalcDate(Item."Expiration Calculation", ReservationEntry."RV_Manufacture Date");
+            end;
         end;
     end;
+
 }
