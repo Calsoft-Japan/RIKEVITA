@@ -9,6 +9,7 @@ codeunit 50200 "RIKE Reservation Entry Fields"
     var
         Item: Record Item;
     begin
+        ReservEntry."RV_Container No." := TrkgSpec."RV_Container No.";
         ReservEntry."RV_Manufacture Date" := TrkgSpec."RV_Manufacture Date";
         Item.Get(TrkgSpec."Item No.");
         if Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date" then begin

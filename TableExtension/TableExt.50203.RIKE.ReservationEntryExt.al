@@ -11,5 +11,10 @@ tableextension 50203 "RV_Reservation Entry" extends "Reservation Entry"
             Caption = 'Manufacture Date';
             Description = 'FDD001';
         }
+        field(50201; "RV_Container No."; Code[20])
+        {
+            Caption = 'Container No.';
+            Description = 'FDD008';
+        }
     }
 }

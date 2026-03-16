@@ -11,5 +11,10 @@ tableextension 50201 "RV_Tracking Specification" extends "Tracking Specification
             Caption = 'Manufacture Date';
             Description = 'FDD001';
         }
+        field(50201; "RV_Container No."; Code[20])
+        {
+            Caption = 'Container No.';
+            Description = 'FDD008';
+        }
     }
 }
