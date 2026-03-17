@@ -4,18 +4,22 @@
 /// </summary>
 codeunit 50200 "RIKE Reservation Entry Fields"
 {
-    [EventSubscriber(ObjectType::Page, Page::"Item Tracking Lines", OnAfterMoveFields, '', false, false)]
-    local procedure "Item Tracking Lines_OnAfterMoveFields"(var TrkgSpec: Record "Tracking Specification"; var ReservEntry: Record "Reservation Entry")
+
+    [EventSubscriber(ObjectType::Page, Page::"Item Tracking Lines", OnAfterSetQtyToHandleAndInvoiceOnBeforeReservEntryModify, '', false, false)]
+    local procedure "Item Tracking Lines_OnAfterSetQtyToHandleAndInvoiceOnBeforeReservEntryModify"(var ReservEntry: Record "Reservation Entry"; var TrackingSpecification: Record "Tracking Specification"; var TotalTrackingSpecification: Record "Tracking Specification"; var ModifyLine: Boolean)
+
     var
         Item: Record Item;
     begin
-        ReservEntry."RV_Container No." := TrkgSpec."RV_Container No.";//FDD008
-        ReservEntry."RV_Manufacture Date" := TrkgSpec."RV_Manufacture Date";
-        Item.Get(TrkgSpec."Item No.");
+        ReservEntry."RV_Container No." := TrackingSpecification."RV_Container No.";//FDD008
+        ReservEntry."RV_Manufacture Date" := TrackingSpecification."RV_Manufacture Date";
+        Item.Get(TrackingSpecification."Item No.");
         if Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date" then begin
             ReservEntry."Expiration Date" := CalcDate(Item."Expiration Calculation", ReservEntry."RV_Manufacture Date");
         end;
+        ModifyLine := true;
     end;
+
 
     [EventSubscriber(ObjectType::Table, Database::"Reservation Entry", OnAfterCopyTrackingFromTrackingSpec, '', false, false)]
     local procedure "Reservation Entry_OnAfterCopyTrackingFromTrackingSpec"(var ReservationEntry: Record "Reservation Entry"; TrackingSpecification: Record "Tracking Specification")
@@ -38,5 +42,7 @@ codeunit 50200 "RIKE Reservation Entry Fields"
             end;
         end;
     end;
+
+
 
 }
