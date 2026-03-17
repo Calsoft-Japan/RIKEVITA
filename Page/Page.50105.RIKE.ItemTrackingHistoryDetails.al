@@ -25,6 +25,13 @@ page 50105 "Item Tracking History - Sales"
                     ToolTip = 'Specifies the lot number of the shipped inventory.';
                 }
 
+                field("RV_Container No."; Rec."RV_Container No.")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Container No.';
+                    Description = 'FDD008';
+                }
+
                 // ── Qty. ───────────────────────────────────────────────────
                 // Per requirements: "Qty." = Item Ledger Entry.Quantity
                 // Sale ILEs store Quantity as a negative number (inventory out).
