@@ -1,3 +1,7 @@
+/// <summary>
+/// Page Item Tracking Details - Warehouse (ID 50103).
+/// FDD008 2026/03/09: New. (Liuyang)
+/// </summary>
 page 50103 "Item Tracking Details - Whse."
 {
     ApplicationArea = All;

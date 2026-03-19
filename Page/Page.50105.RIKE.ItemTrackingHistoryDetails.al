@@ -1,3 +1,7 @@
+/// <summary>
+/// Page Item Tracking History - Sales (ID 50105).
+/// FDD008 2026/03/09: New. (Liuyang)
+/// </summary>
 page 50105 "Item Tracking History - Sales"
 {
     ApplicationArea = All;

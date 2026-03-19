@@ -1,3 +1,7 @@
+/// <summary>
+/// Page Shipping History Summary (ID 50104).
+/// FDD008 2026/03/09: New. (Liuyang)
+/// </summary>
 page 50104 "Shipping History Summary"
 {
     ApplicationArea = All;
