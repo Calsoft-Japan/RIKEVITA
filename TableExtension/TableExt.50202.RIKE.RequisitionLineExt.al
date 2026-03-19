@@ -18,6 +18,19 @@ tableextension 50202 "RV_Requisition Line" extends "Requisition Line"
         {
             Caption = 'Available in Multiple Vendors';
             Description = 'FDD002';
+            trigger OnValidate()
+            var
+                ItemVendor: Record "Item Vendor";
+            begin
+                ItemVendor.Reset();
+                ItemVendor.SetRange("Item No.", Rec."No.");
+                if ItemVendor.FindFirst() then begin
+                    if ItemVendor.Count > 1 then begin
+                        RV_AvailableInMultipleVendor := true;
+                    end;
+                end;
+
+            end;
         }
     }
 }
