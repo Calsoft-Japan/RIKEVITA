@@ -3,7 +3,7 @@
 /// FDD013 2026/03/19: New (Liuyang)
 /// Lists all Vendor ISO Certificates. When opened from Vendor Card or
 /// Vendor List, the page is automatically filtered by Vendor No.
-/// Expired rows (End Date < Today) are automatically detected and shown
+/// Expired rows (End Date less than Today) are automatically detected and shown
 /// in bold red font (Status field, Start Date, End Date).
 /// Supports document attachment and remarks.
 /// </summary>
@@ -77,7 +77,7 @@ page 50107 "RV_Vendor ISO Certificate List"
         }
         area(FactBoxes)
         {
-            part(AttachmentFactBox; "Document Attachment Factbox")
+            part(AttachmentFactBox; "Doc. Attachment List Factbox")
             {
                 ApplicationArea = All;
                 Caption = 'Attachments';
@@ -231,7 +231,7 @@ page 50107 "RV_Vendor ISO Certificate List"
     /// Checks whether the certificate has expired (End Date is set and is earlier
     /// than today). If so, sets Status to Expired and modifies the record to persist
     /// the change. This implements the FDD requirement:
-    ///   "Expired must be automatically changed by the system when End Date < current date."
+    ///   "Expired must be automatically changed by the system when End Date less than current date."
     /// </summary>
     local procedure CheckAndSetExpiredStatus()
     begin

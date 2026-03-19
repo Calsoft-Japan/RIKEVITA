@@ -86,7 +86,7 @@ page 50108 "RV_Vendor ISO Certificate Card"
         }
         area(FactBoxes)
         {
-            part(AttachmentFactBox; "Document Attachment Factbox")
+            part(AttachmentFactBox; "Doc. Attachment List Factbox")
             {
                 ApplicationArea = All;
                 Caption = 'Attachments';
@@ -189,8 +189,8 @@ page 50108 "RV_Vendor ISO Certificate Card"
 
     /// <summary>
     /// Checks whether the certificate has expired and persists Status = Expired
-    /// when End Date < Today. Implements FDD requirement:
-    ///   "Expired must be automatically changed by the system when End Date < current date."
+    /// when End Date less than Today. Implements FDD requirement:
+    ///   "Expired must be automatically changed by the system when End Date less than current date."
     /// </summary>
     local procedure CheckAndSetExpiredStatus()
     begin
