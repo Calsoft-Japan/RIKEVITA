@@ -25,7 +25,7 @@ tableextension 50202 "RV_Requisition Line" extends "Requisition Line"
                 ItemVendor.Reset();
                 ItemVendor.SetRange("Item No.", Rec."No.");
                 if ItemVendor.FindFirst() then begin
-                    if ItemVendor.Count > 1 then begin
+                    if ItemVendor.Count > 0 then begin
                         RV_AvailableInMultipleVendor := true;
                     end;
                 end;

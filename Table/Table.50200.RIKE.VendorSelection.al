@@ -38,6 +38,7 @@ table 50200 "RIKE Vendor Selection"
         {
             Caption = 'Total Split Quantity';
             Description = 'FDD002';
+            DecimalPlaces = 0 : 5;
             FieldClass = FlowField;
             CalcFormula = sum("RIKE Vendor Selection"."Quantity to Order" where("Journal Batch Name" = field("Journal Batch Name"), "Line No." = field("Line No."), "Item No." = field("Item No.")));
         }
@@ -45,6 +46,7 @@ table 50200 "RIKE Vendor Selection"
         {
             Caption = 'Balance Quantity';
             Description = 'FDD002';
+            DecimalPlaces = 0 : 5;
         }
         field(8; "Vendor No."; Code[20])
         {
@@ -55,16 +57,19 @@ table 50200 "RIKE Vendor Selection"
         {
             Caption = 'Minimum Order Quantity';
             Description = 'FDD002';
+            DecimalPlaces = 0 : 5;
         }
         field(10; "Maxmum Order Quantity"; Decimal)
         {
             Caption = 'Maxmum Order Quantity';
             Description = 'FDD002';
+            DecimalPlaces = 0 : 5;
         }
         field(11; "Quantity to Order"; Decimal)
         {
             Caption = 'Quantity to Order';
             Description = 'FDD002';
+            DecimalPlaces = 0 : 5;
             trigger OnValidate()
             begin
                 Rec.CalcFields("Total Split Quantity");
