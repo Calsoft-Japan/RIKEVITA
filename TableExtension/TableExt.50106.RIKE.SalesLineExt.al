@@ -1,3 +1,7 @@
+/// <summary>
+/// Codeunit Sales Price Based on Shipment (ID 50102)
+/// FDD007 2026/03/17: New. (Liuyang)
+/// </summary>
 tableextension 50106 "Sales Line Ext." extends "Sales Line"
 {
     fields
