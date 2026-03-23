@@ -26,47 +26,59 @@ codeunit 50201 "RIKE Planning Worksheet Fields"
         POHeader: Record "Purchase Header";
         POLines: Record "Purchase Line";
         NoSeriesMgt: Codeunit "No. Series";
+        ReqWkshMakeOrder: Codeunit "Req. Wksh.-Make Order";
+        RecRequisitionLine: Record "Requisition Line";
+        LineNo: Integer;
     begin
-
+        /*RecRequisitionLine.Reset();
+        if RecRequisitionLine.FindLast() then begin
+            LineNo := RecRequisitionLine."Line No.";
+        end;
+        RecRequisitionLine.Reset();
+        RecRequisitionLine.TransferFields(RequisitionLine);
         if RequisitionLine.RV_AvailableInMultipleVendor then begin
             VendorSelection.Reset();
             VendorSelection.SetRange("Item No.", RequisitionLine."No.");
             if VendorSelection.FindFirst() then begin
                 repeat
+                    LineNo := LineNo + 10000;
+                    RecRequisitionLine.Validate("Vendor No.", VendorSelection."Vendor No.");
+                    RecRequisitionLine.Validate(Quantity, VendorSelection."Quantity to Order");
+                    RecRequisitionLine."Line No." := LineNo;
+                    PurchaseHeader."Buy-from Vendor No." := VendorSelection."Vendor No.";
+                    ReqWkshMakeOrder.InsertPurchOrderLine(RecRequisitionLine, PurchaseHeader);
+                
+                                    POHeader.Reset();
+                                    POHeader.Init();
+                                    POHeader.TransferFields(PurchaseHeader);
+                                    //POHeader.TestNoSeries();
+                                    //POHeader."No." := NoSeriesMgt.GetNextNo(POHeader.GetNoSeriesCode(), WorkDate());
+                                    POHeader."No." := '';
+                                    POHeader."Buy-from Vendor No." := '';
+                                    POHeader."Pay-to Vendor No." := '';
+                                    POHeader.Validate("Buy-from Vendor No.", VendorSelection."Vendor No.");
+                                    POHeader.Insert(true);
 
-                    POHeader.Reset();
-                    POHeader.Init();
-                    POHeader."Document Type" := POHeader."Document Type"::Order;
-                    POHeader.Validate("Buy-from Vendor No.", VendorSelection."Vendor No.");
-                    POHeader.TestNoSeries();
-                    POHeader."No." := NoSeriesMgt.GetNextNo(POHeader.GetNoSeriesCode(), WorkDate());
-                    POHeader."Order Date" := WorkDate();
-                    POHeader."Posting Date" := WorkDate();
-                    //POHeader."Dimension Set ID" := PurchaseHeader."Dimension Set ID";
-                    POHeader.Insert();
-                    /*
-                                        PurchaseHeader.Init();
-                                        PurchaseHeader.Validate("Buy-from Vendor No.", VendorSelection."Vendor No.");
-                                        PurchaseHeader."No." := '';
-                                        PurchaseHeader.Insert(true);
-                    */
-
-                    POLines.Init();
-                    POLines."Document Type" := POLines."Document Type"::Order;
-                    POLines."Document No." := POHeader."No.";
-                    POLines."Line No." := 10000;
-                    POLines.Validate("Buy-from Vendor No.", VendorSelection."Vendor No.");
-                    POLines.Validate(Type, POLines.Type::Item);
-                    POLines.Validate("No.", VendorSelection."Item No.");
-                    POLines.Validate(Quantity, VendorSelection."Quantity to Order");
-                    POLines.Validate("Unit of Measure", VendorSelection."Unit of Measure Code");
-                    POLines."Dimension Set ID" := POHeader."Dimension Set ID";
-                    POLines.Insert();
-
+                                    POLines.Init();
+                                    POLines."Document Type" := POLines."Document Type"::Order;
+                                    POLines."Document No." := POHeader."No.";
+                                    POLines."Line No." := 10000;
+                                    POLines.Validate("Buy-from Vendor No.", VendorSelection."Vendor No.");
+                                    POLines.Validate(Type, POLines.Type::Item);
+                                    POLines.Validate("No.", VendorSelection."Item No.");
+                                    POLines.Validate(Quantity, VendorSelection."Quantity to Order");
+                                    POLines.Validate("Unit of Measure", VendorSelection."Unit of Measure Code");
+                                    POLines."Dimension Set ID" := POHeader."Dimension Set ID";
+                                    POLines.Insert();
+                
                 until VendorSelection.Next() = 0;
             end;
         end;
+*/
+        //Error('OK');
 
     end;
+
+
 
 }
