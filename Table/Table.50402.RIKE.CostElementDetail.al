@@ -12,17 +12,36 @@ table 50402 "RIKE Cost Element Details"
         {
             Caption = 'Period Code';
             TableRelation = "Standard Cost Element Period"."Code";
+            Description = 'FDD034';
         }
         field(2; "Site"; Code[10])
         {
             Caption = 'Site';
-            TableRelation = "Dimension Value".code
-                where("Dimension Code" = const('ACC_SITE'));
+            TableRelation = "Dimension Value".code;
+            Description = 'FDD034';
+
+            trigger OnValidate()
+            var
+                RIKESetup: Record "RIKEVITA Setup";
+                DimValue: Record "Dimension Value";
+            begin
+                if not RIKESetup.Get() then
+                    Error('RIKE Setup is not configured.');
+
+                if "Site" <> '' then begin
+                    if not DimValue.Get(RIKESetup."ACC Site Analysis Code", "Site") then
+                        Error(
+                            'Site %1 is not valid for Dimension %2.',
+                            "Site",
+                            RIKESetup."ACC Site Analysis Code");
+                end;
+            end;
         }
         field(3; "Item No."; Code[20])
         {
             Caption = 'Item No.';
             TableRelation = "Item"."No.";
+            Description = 'FDD034';
         }
         field(4; "Item Description"; Text[100])
         {
@@ -30,6 +49,7 @@ table 50402 "RIKE Cost Element Details"
             FieldClass = FlowField;
             CalcFormula = lookup(Item."Description" where("No." = field("Item No.")));
             Editable = false;
+            Description = 'FDD034';
         }
         field(5; "Unit of Measure Code"; Code[10])
         {
@@ -37,15 +57,18 @@ table 50402 "RIKE Cost Element Details"
             FieldClass = FlowField;
             CalcFormula = lookup(Item."Base Unit of Measure" where("No." = field("Item No.")));
             Editable = false;
+            Description = 'FDD034';
         }
         field(6; "Cost Element Code"; Code[20])
         {
             Caption = 'Cost Element Code';
             TableRelation = "RIKE Cost Element Category"."Code";
+            Description = 'FDD034';
         }
         field(7; "Cost"; Decimal)
         {
             Caption = 'Cost';
+            Description = 'FDD034';
         }
     }
 

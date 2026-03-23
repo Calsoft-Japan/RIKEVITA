@@ -42,6 +42,10 @@ page 50100 "RIKEVITA Setup"
                     Description = 'FDD008';
                     ApplicationArea = All;
                 }
+                field("ACC Site Analysis Code"; Rec."ACC Site Analysis Code")
+                {
+                    Description = 'FDD034';
+                }
             }
 
         }

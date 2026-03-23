@@ -30,6 +30,11 @@ table 50100 "RIKEVITA Setup"
             Caption = 'Stuffing Date Calculation';
             Description = 'FDD008';
         }
+        field(5; "ACC Site Analysis Code"; Code[20])
+        {
+            Caption = 'ACC Site Analysis Code';
+            Description = 'FDD034';
+        }
     }
     keys
     {

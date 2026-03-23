@@ -11,16 +11,17 @@ table 50400 "RIKE Cost Element Category"
         field(1; "Code"; Code[20])
         {
             Caption = 'Code';
+            Description = 'FDD034';
         }
         field(2; "Description"; Text[100])
         {
             Caption = 'Description';
+            Description = 'FDD034';
         }
-        field(3; "Type"; Option)
+        field(3; "Type"; Enum "RIKE Cost Element Category")
         {
             DataClassification = ToBeClassified;
-            OptionMembers = " ","Raw Material","Package Material","Energy","Water","Process";
-            OptionCaption = ' , Raw Material, Package Material, Energy, Water, Process';
+            Description = 'FDD034';
         }
     }
     keys
