@@ -1,6 +1,6 @@
 /// <summary>
 /// Codeunit RIKE Transfer Warehouse Shipment (ID 50101)
-/// FDD003 2026/03/14: New. (Liuyang)
+/// FDD008 2026/03/14: New. (Liuyang)
 /// </summary>
 codeunit 50101 TransferWarehouseShipment
 {

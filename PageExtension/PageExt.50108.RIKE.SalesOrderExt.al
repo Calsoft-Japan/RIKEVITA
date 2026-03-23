@@ -1,6 +1,6 @@
 /// <summary>
 /// pageextension Sales Order Ext (ID 50108) extends "Sales Order" page
-/// FDD008 2026/03/14: New. (Liuyang)
+/// FDD005 2026/03/14: New. (Liuyang)
 /// </summary>
 pageextension 50108 "Sales Order Ext" extends "Sales Order"
 {
