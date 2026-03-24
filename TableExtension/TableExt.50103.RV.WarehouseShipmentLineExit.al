@@ -28,7 +28,8 @@ tableextension 50103 "Warehouse Shipment Line Exit" extends "Warehouse Shipment 
                 if RVSteup.FindFirst() then begin
                     DateFormulaVar := RVSteup."Stuffing Date Calculation";
                 end;
-                if Format(DateFormulaVar) = '' then
+
+                if (Format(DateFormulaVar) <> '') then
                     "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
             end;
         }

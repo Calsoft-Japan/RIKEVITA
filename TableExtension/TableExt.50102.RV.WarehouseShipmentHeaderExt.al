@@ -11,6 +11,21 @@ tableextension 50102 "Warehouse Shipment Header Ext" extends "Warehouse Shipment
             Caption = 'B/L Date';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
+
+            trigger OnValidate()
+            var
+                WhsShtLine: Record "Warehouse Shipment Line";
+            begin
+                WhsShtLine.Reset();
+                WhsShtLine.SetRange("No.", "No.");
+                if WhsShtLine.FindFirst() then
+                    if Confirm('You have modified the field B/L Date. Do you want to update the line?') then begin
+                        repeat
+                            WhsShtLine."RV_B/L Date" := "RV_B/L Date";
+                            WhsShtLine.Modify();
+                        until WhsShtLine.Next() = 0;
+                    end;
+            end;
         }
         field(50101; "RV_Cosing Date"; Date)
         {
@@ -29,7 +44,7 @@ tableextension 50102 "Warehouse Shipment Header Ext" extends "Warehouse Shipment
                 if RVSteup.FindFirst() then begin
                     DateFormulaVar := RVSteup."Stuffing Date Calculation";
                 end;
-                if Format(DateFormulaVar) = '' then
+                if (Format(DateFormulaVar) <> '') then
                     "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
 
                 WhsShtLine.Reset();
@@ -37,6 +52,7 @@ tableextension 50102 "Warehouse Shipment Header Ext" extends "Warehouse Shipment
                 if WhsShtLine.FindFirst() then
                     if Confirm('Do you want to update the related shipment lines with the same Cosing Date and Stuffing Date?') then begin
                         repeat
+                            //WhsShtLine."RV_B/L Date" := "RV_B/L Date";
                             WhsShtLine."RV_Cosing Date" := "RV_Cosing Date";
                             WhsShtLine."RV_Stuffing Date" := "RV_Stuffing Date";
                             WhsShtLine.Modify();
@@ -49,6 +65,21 @@ tableextension 50102 "Warehouse Shipment Header Ext" extends "Warehouse Shipment
             Caption = 'Stuffing Date';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
+
+            trigger OnValidate()
+            var
+                WhsShtLine: Record "Warehouse Shipment Line";
+            begin
+                WhsShtLine.Reset();
+                WhsShtLine.SetRange("No.", "No.");
+                if WhsShtLine.FindFirst() then
+                    if Confirm('You have modified the field Stuffing Date. Do you want to update the line?') then begin
+                        repeat
+                            WhsShtLine."RV_Stuffing Date" := "RV_Stuffing Date";
+                            WhsShtLine.Modify();
+                        until WhsShtLine.Next() = 0;
+                    end;
+            end;
         }
         field(50103; "RV_Country of Origin"; Text[50])
         {
