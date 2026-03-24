@@ -7,17 +7,17 @@ page 50100 "RIKEVITA Setup"
 {
     ApplicationArea = All;
     Caption = 'RIKEVITA Setup';
-    PageType = List;
-    UsageCategory = Lists;
+    PageType = Card;
+    UsageCategory = Administration;
     SourceTable = "RIKEVITA Setup";
-    DeleteAllowed = true;
-    InsertAllowed = true;
+    DeleteAllowed = false;
+    InsertAllowed = false;
     Editable = true;
     layout
     {
         area(Content)
         {
-            repeater(General)
+            group(General)
             {
                 field("Primary Key"; Rec."Primary Key")
                 {
