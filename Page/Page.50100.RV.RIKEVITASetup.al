@@ -8,18 +8,13 @@ page 50100 "RIKEVITA Setup"///
     ApplicationArea = All;
     Caption = 'RIKEVITA Setup';
     PageType = Card;
-<<<<<<< HEAD:Page/Page.50100.RV.RIKEVITASetup.al
-    SourceTable = "RIKEVITA Setup";
-    UsageCategory = Administration;
-    DeleteAllowed = false;
-    InsertAllowed = false;
-=======
+
     UsageCategory = Administration;
     SourceTable = "RIKEVITA Setup";
     DeleteAllowed = false;
     InsertAllowed = false;
     Editable = true;
->>>>>>> f36c2aa0e364d2b308f2c125395705ef0b82b4b6:Page/Page.50100.RIKE.RIKEVITASetup.al
+
     layout
     {
         area(Content)
