@@ -24,7 +24,7 @@ page 50104 "RV Shipping History Summary"
                 // Sales Order No. and Item No.
                 field(NoOfPostedShipments; NoOfPostedShipments)
                 {
-                    ApplicationArea = Sales;
+                    ApplicationArea = All;
                     Caption = 'No. of Posted Shipment';
                     DrillDown = true;
                     ToolTip = 'Specifies the total number of posted warehouse shipments for this item on the sales order. Click to view the full list.';
@@ -45,7 +45,7 @@ page 50104 "RV Shipping History Summary"
                 // ── Last Posted Shipment No. ───────────────────────────────
                 field(LastPostedShipmentNo; LastPostedShipmentNo)
                 {
-                    ApplicationArea = Sales;
+                    ApplicationArea = All;
                     Caption = 'Last Posted Shipment No.';
                     ToolTip = 'Specifies the document number of the most recent posted warehouse shipment for this item.';
                 }
@@ -54,7 +54,7 @@ page 50104 "RV Shipping History Summary"
                 // Sourced from the last Posted Whse. Shipment Line.Quantity.
                 field(LastQty; LastQty)
                 {
-                    ApplicationArea = Sales;
+                    ApplicationArea = All;
                     Caption = 'Quantity';
                     DecimalPlaces = 0 : 5;
                     ToolTip = 'Specifies the quantity shipped in the most recent posted warehouse shipment for this item.';
@@ -65,7 +65,7 @@ page 50104 "RV Shipping History Summary"
                 // for the header matching the last shipment line.
                 field(LastShipmentMethodCode; LastShipmentMethodCode)
                 {
-                    ApplicationArea = Sales;
+                    ApplicationArea = All;
                     Caption = 'Shipment Method';
                     ToolTip = 'Specifies the shipment method of the most recent posted warehouse shipment.';
                 }
@@ -74,7 +74,7 @@ page 50104 "RV Shipping History Summary"
                 // Sourced from the last Posted Whse. Shipment Line."Location Code".
                 field(LastLocationCode; LastLocationCode)
                 {
-                    ApplicationArea = Sales;
+                    ApplicationArea = All;
                     Caption = 'Location Code';
                     ToolTip = 'Specifies the warehouse location of the most recent posted warehouse shipment for this item.';
                 }
@@ -84,7 +84,7 @@ page 50104 "RV Shipping History Summary"
                 // for the header matching the last shipment line.
                 field(LastPostingDate; LastPostingDate)
                 {
-                    ApplicationArea = Sales;
+                    ApplicationArea = All;
                     Caption = 'Posting Date';
                     ToolTip = 'Specifies the posting date of the most recent posted warehouse shipment for this item.';
                 }
@@ -122,7 +122,7 @@ page 50104 "RV Shipping History Summary"
         PostedWhseShptLine.SetRange("Source No.", Rec."Document No.");
         PostedWhseShptLine.SetRange("Source Line No.", Rec."Line No.");
         PostedWhseShptLine.SetRange("Item No.", Rec."No.");
-
+        PostedWhseShptLine.FindSet();
         // Total count of posted shipment events for this item-line.
         NoOfPostedShipments := PostedWhseShptLine.Count();
 

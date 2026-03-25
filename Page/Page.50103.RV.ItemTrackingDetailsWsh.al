@@ -22,10 +22,12 @@ page 50103 "RV Item Tracking Details-Whs."
             {
                 field("Lot No."; Rec."Lot No.")
                 {
+                    ApplicationArea = All;
                     ToolTip = 'Specifies the lot number of the item that is being handled with the associated document line.';
                 }
                 field("Qty."; Abs(Rec."Qty. to Handle (Base)"))
                 {
+                    ApplicationArea = All;
                     ToolTip = 'Specifies the quantity of the item that has been reserved in the entry.';
                     DrillDown = true;
 
@@ -46,6 +48,7 @@ page 50103 "RV Item Tracking Details-Whs."
                 }
                 field("RV_Container No."; Rec."RV Container No.")
                 {
+                    ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Container No. field.', Comment = '%';
                 }
             }

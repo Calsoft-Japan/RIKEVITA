@@ -7,7 +7,7 @@ page 50105 "RV Item Tracking Hst. - Sales"
     ApplicationArea = All;
     Caption = 'Item Tracking History Details';
     PageType = ListPart;
-    SourceTable = "Item Ledger Entry";
+    SourceTable = "Sales Shipment Line";
     Editable = false;
     InsertAllowed = false;
     DeleteAllowed = false;
@@ -22,14 +22,14 @@ page 50105 "RV Item Tracking Hst. - Sales"
             {
                 // ── Shipped Lot No. ────────────────────────────────────────
                 // Per requirements: "Shipped Lot No." = Item Ledger Entry."Lot No."
-                field("Lot No."; Rec."Lot No.")
+                field("Lot No."; CurLotNo)
                 {
-                    ApplicationArea = Sales;
+                    ApplicationArea = All;
                     Caption = 'Shipped Lot No.';
                     ToolTip = 'Specifies the lot number of the shipped inventory.';
                 }
 
-                field("RV_Container No."; Rec."RV Container No.")
+                field("RV_Container No."; RV_Container_No)
                 {
                     ApplicationArea = All;
                     Caption = 'Container No.';
@@ -43,7 +43,7 @@ page 50105 "RV Item Tracking Hst. - Sales"
                 // DrillDown = true activates the OnDrillDown trigger below.
                 field(Qty; Abs(Rec.Quantity))
                 {
-                    ApplicationArea = Sales;
+                    ApplicationArea = All;
                     Caption = 'Qty.';
                     DecimalPlaces = 0 : 5;
                     DrillDown = true;
@@ -57,7 +57,7 @@ page 50105 "RV Item Tracking Hst. - Sales"
                         // Filter page 38 to the single ILE for this row.
                         // "Entry No." is the primary key of table 32 and
                         // uniquely identifies this item ledger entry.
-                        ItemLedgerEntry.SetRange("Entry No.", Rec."Entry No.");
+                        ItemLedgerEntry.SetRange("Entry No.", CurEntryNo);
                         ItemLedgerEntriesPage.SetTableView(ItemLedgerEntry);
                         ItemLedgerEntriesPage.RunModal();
                     end;
@@ -66,14 +66,31 @@ page 50105 "RV Item Tracking Hst. - Sales"
         }
     }
 
-    trigger OnOpenPage()
+    var
+        CurEntryNo: Integer;
+        RV_Container_No: Code[20];
+        CurLotNo: Code[50];
+
+    trigger OnAfterGetRecord()
+    var
+        ItmLedgerEntry: Record "Item Ledger Entry";
     begin
-        // Permanent filters applied for the lifetime of this page instance.
-        // These combine with the SubPageLink filters ("Order No." and "Item No.")
-        // that the parent page 42 extension supplies via Provider = SalesLines.
-        Rec.SetRange("Document Type", Rec."Document Type"::"Service Shipment");
-        Rec.SetRange("Entry Type", Rec."Entry Type"::Sale);
-        //Rec.SetRange("Source Type", Rec."Source Type"::Customer);
-        Rec.SetFilter("Lot No.", '<>%1', '');
+        Clear(CurEntryNo);
+
+        ItmLedgerEntry.SetRange("Document Type", ItmLedgerEntry."Document Type"::"Sales Shipment");
+        ItmLedgerEntry.SetRange("Entry Type", ItmLedgerEntry."Entry Type"::Sale);
+        ItmLedgerEntry.SetRange("Source Type", ItmLedgerEntry."Source Type"::Customer);
+        ItmLedgerEntry.SetRange("Document No.", Rec."Document No."); //Item Ledger Entry links to Posted Sales shipment lines
+        ItmLedgerEntry.SetRange("Document Line No.", Rec."Line No.");//Item Ledger Entry links to Posted Sales shipment lines
+        ItmLedgerEntry.SetFilter("Lot No.", '<>%1', '');
+
+        if ItmLedgerEntry.FindFirst() then begin
+            CurEntryNo := ItmLedgerEntry."Entry No.";
+            CurLotNo := ItmLedgerEntry."Lot No.";
+            RV_Container_No := ItmLedgerEntry."RV Container No.";
+        end;
     end;
+
+    var
+
 }

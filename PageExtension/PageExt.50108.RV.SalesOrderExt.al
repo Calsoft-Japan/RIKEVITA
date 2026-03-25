@@ -27,10 +27,11 @@ pageextension 50108 "RV Sales Order Ext" extends "Sales Order"
                 Visible = true;
                 Caption = 'Item Tracking History Details';
                 Provider = SalesLines;
-                // "Order No." on ILE = originating Sales Order No.
-                // "Item No."  on ILE = item number from the selected Sales Line.
+                // "Order No." on Sales Shipment Line(Posted) = originating Sales Order No.
+                // "Order Line No."  on Sales Shipment Line(Posted) = line no. from the selected Sales Line.
                 SubPageLink = "Order No." = FIELD("Document No."),
-                              "Item No." = FIELD("No.");
+                              "Order Line No." = FIELD("Line No.");
+
             }
         }
     }
