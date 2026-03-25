@@ -10,7 +10,7 @@ page 50100 "RIKEVITA Setup"///
     PageType = Card;
 
     UsageCategory = Administration;
-    SourceTable = "RIKEVITA Setup";
+    SourceTable = "RV RIKEVITA Setup";
     DeleteAllowed = false;
     InsertAllowed = false;
     Editable = true;

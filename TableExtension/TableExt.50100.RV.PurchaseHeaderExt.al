@@ -2,21 +2,21 @@
 /// TableExtension RIKE Purchase Header Ext (ID 50100) extends "Purchase Header" table
 /// FDD003 2026/03/08: New. (Liuyang)
 /// </summary>
-tableextension 50100 "RIKE Purchase Header Ext" extends "Purchase Header"
+tableextension 50100 "RV Purchase Header Ext" extends "Purchase Header"
 {
     fields
     {
-        field(50100; RV_ETA; Date)
+        field(50100; "RV ETA"; Date)
         {
             Caption = 'ETA';
             Description = 'FDD003';
         }
-        field(50101; RV_ETD; Date)
+        field(50101; "RV ETD"; Date)
         {
             Caption = 'ETD';
             Description = 'FDD003';
         }
-        field(50102; "RV_Contract Month"; Enum "RV_Month")
+        field(50102; "RV Contract Month"; Enum "RV Month")
         {
             Caption = 'Contract Month';
             Description = 'FDD003';
@@ -26,7 +26,7 @@ tableextension 50100 "RIKE Purchase Header Ext" extends "Purchase Header"
                 checkRVContractDate();
             end;
         }
-        field(50103; "RV_Contract Year"; Integer)
+        field(50103; "RV Contract Year"; Integer)
         {
             Caption = 'Contract Year';
             Description = 'FDD003';
@@ -49,8 +49,8 @@ tableextension 50100 "RIKE Purchase Header Ext" extends "Purchase Header"
         if ("RV_Contract Year" < Today.Year) then
             Error('Contract Year cannot be less than current year. Please correct the date.'); */
 
-        if ("RV_Contract Month" <> "RV_Month"::" ") and ("RV_Contract Year" <> 0) then begin
-            if DMY2Date(1, "RV_Contract Month".AsInteger(), "RV_Contract Year") < DMY2Date(1, Today.Month, Today.Year) then
+        if ("RV Contract Month" <> "RV Month"::" ") and ("RV Contract Year" <> 0) then begin
+            if DMY2Date(1, "RV Contract Month".AsInteger(), "RV Contract Year") < DMY2Date(1, Today.Month, Today.Year) then
                 Error('Combined dates of Contract Month and Contract Year is in the past dates. Please correct the dates.');
         end;
     end;

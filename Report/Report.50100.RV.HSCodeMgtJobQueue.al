@@ -2,7 +2,7 @@
 /// Report RIKE HS Code Mgt JobQueue (ID 50100).
 /// FDD030 2026/03/09: New. (Liuyang)
 /// </summary>
-report 50100 "RIKE HS Code Mgt JobQueue"
+report 50100 "RV HS Code Mgt JobQueue"
 {
     ApplicationArea = All;
     Caption = 'RIKE HS Code Mgt JobQueue';
@@ -10,7 +10,7 @@ report 50100 "RIKE HS Code Mgt JobQueue"
     ProcessingOnly = true;
     dataset
     {
-        dataitem(RV_HSCodeManagement; "RV_HS Code Management")
+        dataitem(RV_HSCodeManagement; "RV HS Code Management")
         {
             trigger OnAfterGetRecord()
             begin
@@ -59,7 +59,7 @@ report 50100 "RIKE HS Code Mgt JobQueue"
 
         if MailingList.Count = 0 then exit;
 
-        PRDLink := GetUrl(ClientType::Web, CompanyName, ObjectType::Page, Page::"RV_HS Code Management");//, RV_HSCode, true);
+        PRDLink := GetUrl(ClientType::Web, CompanyName, ObjectType::Page, Page::"RV HS Code Management");//, RV_HSCode, true);
         //AppLink := GetUrl(ClientType::Web, CompanyName, ObjectType::Page, Page::"Job Queue Log Entries", JobQueueLog, true);
 
         if MailingList.Count <> 0 then begin
@@ -83,5 +83,5 @@ report 50100 "RIKE HS Code Mgt JobQueue"
         RV_HSCodeExpir: Boolean;
         NotifyEmailAddress: Text;
         NotificationCalculation: Text;
-        RVSteup: Record "RIKEVITA Setup";
+        RVSteup: Record "RV RIKEVITA Setup";
 }

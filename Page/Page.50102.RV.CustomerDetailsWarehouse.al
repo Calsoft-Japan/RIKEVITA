@@ -2,7 +2,7 @@
 /// Page Customer Details - Warehouse (ID 50102).
 /// FDD008 2026/03/09: New. (Liuyang)
 /// </summary>
-page 50102 "Customer Details - Warehouse"
+page 50102 "RV Customer Details - Whs."
 {
     ApplicationArea = All;
     PageType = CardPart;

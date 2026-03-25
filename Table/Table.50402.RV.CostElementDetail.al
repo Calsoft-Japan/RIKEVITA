@@ -22,7 +22,7 @@ table 50402 "RIKE Cost Element Details"
 
             trigger OnValidate()
             var
-                RIKESetup: Record "RIKEVITA Setup";
+                RIKESetup: Record "RV RIKEVITA Setup";
                 DimValue: Record "Dimension Value";
             begin
                 if not RIKESetup.Get() then

@@ -7,7 +7,7 @@
 ///   "Both function buttons must be linked to the same page/table
 ///    Vendor ISO Certificate List."
 /// </summary>
-pageextension 50110 "RV_Vendor List Ext" extends "Vendor List"
+pageextension 50110 "RV Vendor List Ext" extends "Vendor List"
 {
     actions
     {
@@ -22,8 +22,8 @@ pageextension 50110 "RV_Vendor List Ext" extends "Vendor List"
 
                 trigger OnAction()
                 var
-                    VendorIsoCertList: Record "RV_Vendor ISO Certificate List";
-                    VendorIsoCertListPage: Page "RV_Vendor ISO Certificate List";
+                    VendorIsoCertList: Record "RV Vendor ISO Certificate List";
+                    VendorIsoCertListPage: Page "RV Vendor ISO Certificate List";
                 begin
                     // Pre-filter the list page to the selected vendor so that only
                     // that vendor's certificates are shown when opened from the list.

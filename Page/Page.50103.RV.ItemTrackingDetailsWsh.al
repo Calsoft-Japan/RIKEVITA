@@ -2,7 +2,7 @@
 /// Page Item Tracking Details - Warehouse (ID 50103).
 /// FDD008 2026/03/09: New. (Liuyang)
 /// </summary>
-page 50103 "Item Tracking Details - Whse."
+page 50103 "RV Item Tracking Details-Whs."
 {
     ApplicationArea = All;
     PageType = ListPart;
@@ -44,7 +44,7 @@ page 50103 "Item Tracking Details - Whse."
                         ReservEntriesPage.RunModal();
                     end;
                 }
-                field("RV_Container No."; Rec."RV_Container No.")
+                field("RV_Container No."; Rec."RV Container No.")
                 {
                     ToolTip = 'Specifies the value of the Container No. field.', Comment = '%';
                 }

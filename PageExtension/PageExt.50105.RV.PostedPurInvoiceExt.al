@@ -2,7 +2,7 @@
 /// PageExtension RIKE Posted Pur Invoice Ext"(ID 50105) extends "Posted Purchase Invoice" Page
 /// FDD003 2026/03/08: New. (Liuyang)
 /// </summary>
-pageextension 50105 "RIKE Posted Pur Invoice Ext" extends "Posted Purchase Invoice"
+pageextension 50105 "RV Posted Pur Invoice Ext" extends "Posted Purchase Invoice"
 {
     layout
     {
@@ -11,22 +11,22 @@ pageextension 50105 "RIKE Posted Pur Invoice Ext" extends "Posted Purchase Invoi
             group("RIKE")
             {
                 ShowCaption = false;
-                field(RV_ETA; Rec.RV_ETA)
+                field(RV_ETA; Rec."RV ETA")
                 {
                     ApplicationArea = All;
                     Description = 'FDD003';
                 }
-                field(RV_ETD; Rec.RV_ETD)
+                field(RV_ETD; Rec."RV ETD")
                 {
                     ApplicationArea = All;
                     Description = 'FDD003';
                 }
-                field("RV_Contract Month"; Rec."RV_Contract Month")
+                field("RV_Contract Month"; Rec."RV Contract Month")
                 {
                     ApplicationArea = All;
                     Description = 'FDD003';
                 }
-                field("RV_Contract Year"; Rec."RV_Contract Year")
+                field("RV_Contract Year"; Rec."RV Contract Year")
                 {
                     ApplicationArea = All;
                     Description = 'FDD003';

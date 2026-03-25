@@ -9,7 +9,7 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
     {
         addafter("Accept Action Message")
         {
-            field("Available in Multiple Vendors"; Rec.RV_AvailableInMultipleVendor)
+            field("Available in Multiple Vendors"; Rec."RV AvailableInMultipleVendor")
             {
                 Caption = 'Available in Multiple Vendors';
                 ApplicationArea = all;
@@ -18,7 +18,7 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
         }
         addafter("Description")
         {
-            field("Expiration Calculation"; Rec."RV_Expiration Calculation")
+            field("Expiration Calculation"; Rec."RV Expiration Calculation")
             {
                 Caption = 'Expiration Calculation';
                 ApplicationArea = all;
@@ -42,8 +42,8 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
 
                 trigger OnAction()
                 var
-                    VendorSelection: page "RIKEV Vendor Selection";
-                    RV_VendorSelection: Record "RIKE Vendor Selection";
+                    VendorSelection: page "RV Vendor Selection";
+                    RV_VendorSelection: Record "RV Vendor Selection";
                     ItemVendor: Record "Item Vendor";
                 begin
                     //RV_VendorSelection.DeleteAll();
@@ -63,8 +63,8 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
                                 RV_VendorSelection."Vendor No." := ItemVendor."Vendor No.";
                                 RV_VendorSelection."Starting Date" := Rec."Starting Date";
                                 RV_VendorSelection."Ending Date" := Rec."Ending Date";
-                                RV_VendorSelection."Minimum Order Quantity" := ItemVendor."RV_Minimum Order Quantity";
-                                RV_VendorSelection."Maxmum Order Quantity" := ItemVendor."RV_Maximum Order Quantity";
+                                RV_VendorSelection."Minimum Order Quantity" := ItemVendor."RV Minimum Order Quantity";
+                                RV_VendorSelection."Maxmum Order Quantity" := ItemVendor."RV Maximum Order Quantity";
                                 RV_VendorSelection."Quantity to Order" := 0;
                                 RV_VendorSelection."Unit of Measure Code" := Rec."Unit of Measure Code";
                                 RV_VendorSelection.Insert();
@@ -86,7 +86,7 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
     trigger OnAfterGetRecord()
     begin
         IsVendorSelection := false;
-        if Rec.RV_AvailableInMultipleVendor then begin
+        if Rec."RV AvailableInMultipleVendor" then begin
             IsVendorSelection := true;
         end;
     end;

@@ -2,7 +2,7 @@
 /// ReportExtension RIKE Carry Out Action Msg Plan(ID 50200) extends "Carry Out Action Msg. - Plan.".
 /// FDD002 2026/03/23: New. (Bobby.ji)
 /// </summary>
-reportextension 50200 "RIKE Carry Out Action Msg Plan" extends "Carry Out Action Msg. - Plan."
+reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action Msg. - Plan."
 {
 
     dataset
@@ -12,7 +12,7 @@ reportextension 50200 "RIKE Carry Out Action Msg Plan" extends "Carry Out Action
             trigger OnBeforePreDataItem()
             var
                 RecRequisitionLine: Record "Requisition Line";
-                VendorSelection: Record "RIKE Vendor Selection";
+                VendorSelection: Record "RV Vendor Selection";
                 LineNo: Integer;
             begin
                 if "Requisition Line".FindLast() then begin
@@ -21,7 +21,7 @@ reportextension 50200 "RIKE Carry Out Action Msg Plan" extends "Carry Out Action
 
                 if "Requisition Line".FindFirst() then begin
                     repeat
-                        if "Requisition Line".RV_AvailableInMultipleVendor then begin
+                        if "Requisition Line"."RV AvailableInMultipleVendor" then begin
 
                             VendorSelection.Reset();
                             VendorSelection.SetRange("Item No.", "Requisition Line"."No.");
@@ -31,7 +31,7 @@ reportextension 50200 "RIKE Carry Out Action Msg Plan" extends "Carry Out Action
                                     RecRequisitionLine.Init();
                                     RecRequisitionLine.TransferFields("Requisition Line");
                                     RecRequisitionLine."Line No." := LineNo;
-                                    RecRequisitionLine.RV_AvailableInMultipleVendor := false;
+                                    RecRequisitionLine."RV AvailableInMultipleVendor" := false;
                                     RecRequisitionLine.Validate("Vendor No.", VendorSelection."Vendor No.");
                                     RecRequisitionLine.Validate(Quantity, VendorSelection."Quantity to Order");
                                     RecRequisitionLine.Insert();

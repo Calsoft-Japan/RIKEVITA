@@ -2,7 +2,7 @@
 /// Page Item Tracking History - Sales (ID 50105).
 /// FDD005 2026/03/09: New. (Liuyang)
 /// </summary>
-page 50105 "Item Tracking History - Sales"
+page 50105 "RV Item Tracking Hst. - Sales"
 {
     ApplicationArea = All;
     Caption = 'Item Tracking History Details';
@@ -29,7 +29,7 @@ page 50105 "Item Tracking History - Sales"
                     ToolTip = 'Specifies the lot number of the shipped inventory.';
                 }
 
-                field("RV_Container No."; Rec."RV_Container No.")
+                field("RV_Container No."; Rec."RV Container No.")
                 {
                     ApplicationArea = All;
                     Caption = 'Container No.';

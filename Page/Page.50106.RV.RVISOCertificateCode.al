@@ -4,11 +4,11 @@
 /// Setup list for ISO Certificate Codes. Accessible from the search menu
 /// and linked from the Vendor ISO Certificate List page.
 /// </summary>
-page 50106 "RV_ISO Certificate Code"
+page 50106 "RV ISO Certificate Code"
 {
     Caption = 'ISO Certificate Code';
     PageType = List;
-    SourceTable = "RV_ISO Certificate Code";
+    SourceTable = "RV ISO Certificate Code";
     ApplicationArea = All;
     UsageCategory = Lists;
 

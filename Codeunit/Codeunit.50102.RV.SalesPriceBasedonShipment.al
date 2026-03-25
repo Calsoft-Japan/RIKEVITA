@@ -2,7 +2,7 @@
 /// Codeunit Sales Price Based on Shipment (ID 50102)
 /// FDD007 2026/03/17: New. (Liuyang)
 /// </summary>
-codeunit 50102 "Sales Price Based on Shipment"
+codeunit 50102 "RV Sales Price Based on Shpt."
 {
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Line - Price", OnAfterGetDocumentDate, '', false, false)]
     local procedure UseDeliveryDateForPriceLookup(

@@ -7,14 +7,14 @@
 /// in bold red font (Status field, Start Date, End Date).
 /// Supports document attachment and remarks.
 /// </summary>
-page 50107 "RV_Vendor ISO Certificate List"
+page 50107 "RV Vendor ISO Certificate List"
 {
     Caption = 'Vendor ISO Certificate List';
     PageType = List;
-    SourceTable = "RV_Vendor ISO Certificate List";
+    SourceTable = "RV Vendor ISO Certificate List";
     ApplicationArea = All;
     UsageCategory = Lists;
-    CardPageId = "RV_Vendor ISO Certificate Card";
+    CardPageId = "RV Vendor ISO Certificate Card";
 
     layout
     {
@@ -203,7 +203,7 @@ page 50107 "RV_Vendor ISO Certificate List"
     /// Separated from LookupVendorName so it can be called with any record instance
     /// (e.g. from the New action when pre-filling a new row).
     /// </summary>
-    local procedure LookupVendorNameForRec(var VendorIsoCert: Record "RV_Vendor ISO Certificate List")
+    local procedure LookupVendorNameForRec(var VendorIsoCert: Record "RV Vendor ISO Certificate List")
     var
         Vendor: Record Vendor;
     begin
@@ -219,7 +219,7 @@ page 50107 "RV_Vendor ISO Certificate List"
     /// </summary>
     local procedure ResolveIsoCertDescription()
     var
-        IsoCertCode: Record "RV_ISO Certificate Code";
+        IsoCertCode: Record "RV ISO Certificate Code";
     begin
         if IsoCertCode.Get(Rec."ISO Certificate") then
             IsoCertDescription := IsoCertCode.Description

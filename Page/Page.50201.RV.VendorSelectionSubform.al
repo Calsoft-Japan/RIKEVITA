@@ -2,13 +2,13 @@
 /// Page RIKE Vendor Selection Subform (ID 50201).
 /// COMMON 2026/03/18: New. (Bobby.ji)
 /// </summary>
-page 50201 "RIKEV Vendor Selection Subform"
+page 50201 "RV Vendor Selection Subform"
 {
     ApplicationArea = All;
     Caption = 'Vendor Selection Lines';
     PageType = ListPart;
     UsageCategory = Lists;
-    SourceTable = "RIKE Vendor Selection";
+    SourceTable = "RV Vendor Selection";
     DelayedInsert = true;
     LinksAllowed = false;
     MultipleNewLines = true;

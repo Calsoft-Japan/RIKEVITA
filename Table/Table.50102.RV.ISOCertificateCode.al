@@ -2,9 +2,9 @@
 /// Table RV_ISO Certificate Code (ID 50102).
 /// FDD013 2026/03/19: New (Liuyang)
 /// </summary>
-table 50102 "RV_ISO Certificate Code"
+table 50102 "RV ISO Certificate Code"
 {
-    Caption = 'RV_ISO Certificate Code';
+    Caption = 'RV ISO Certificate Code';
     DataClassification = ToBeClassified;
 
     fields

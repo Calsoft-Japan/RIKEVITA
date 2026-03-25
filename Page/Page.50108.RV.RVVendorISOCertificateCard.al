@@ -5,11 +5,11 @@
 /// Mirrors all expiry and styling logic from the List page.
 /// Supports document attachment and remarks.
 /// </summary>
-page 50108 "RV_Vendor ISO Certificate Card"
+page 50108 "RV Vendor ISO Certificate Card"
 {
     Caption = 'Vendor ISO Certificate Card';
     PageType = Card;
-    SourceTable = "RV_Vendor ISO Certificate List";
+    SourceTable = "RV Vendor ISO Certificate List";
     ApplicationArea = All;
 
     layout
@@ -179,7 +179,7 @@ page 50108 "RV_Vendor ISO Certificate Card"
     /// </summary>
     local procedure ResolveIsoCertDescription()
     var
-        IsoCertCode: Record "RV_ISO Certificate Code";
+        IsoCertCode: Record "RV ISO Certificate Code";
     begin
         if IsoCertCode.Get(Rec."ISO Certificate") then
             IsoCertDescription := IsoCertCode.Description

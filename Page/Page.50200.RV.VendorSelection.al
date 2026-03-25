@@ -2,13 +2,13 @@
 /// Page RIKE Vendor Selection (ID 50200).
 /// COMMON 2026/03/18: New. (Bobby.ji)
 /// </summary>
-page 50200 "RIKEV Vendor Selection"
+page 50200 "RV Vendor Selection"
 {
     ApplicationArea = All;
     Caption = 'Vendor Selection';
     PageType = Document;
     UsageCategory = Lists;
-    SourceTable = "RIKE Vendor Selection";
+    SourceTable = "RV Vendor Selection";
     layout
     {
         area(Content)
@@ -60,7 +60,7 @@ page 50200 "RIKEV Vendor Selection"
                     Enabled = false;
                 }
             }
-            part(VendorSelectionLines; "RIKEV Vendor Selection Subform")
+            part(VendorSelectionLines; "RV Vendor Selection Subform")
             {
                 ApplicationArea = Basic, Suite;
                 SubPageLink = "Journal Batch Name" = field("Journal Batch Name"), "Line No." = field("Line No."), "Item No." = field("Item No.");

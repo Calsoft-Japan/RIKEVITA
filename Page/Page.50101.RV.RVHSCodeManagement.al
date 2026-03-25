@@ -2,12 +2,12 @@
 /// Page RV_HS Code Management (ID 50101).
 /// FDD030 2026/03/09: New. (Liuyang)
 /// </summary>
-page 50101 "RV_HS Code Management"
+page 50101 "RV HS Code Management"
 {
     ApplicationArea = All;
     Caption = 'HS Code Management';
     PageType = List;
-    SourceTable = "RV_HS Code Management";
+    SourceTable = "RV HS Code Management";
     UsageCategory = Lists;
     DeleteAllowed = true;
     InsertAllowed = true;
@@ -169,7 +169,7 @@ page 50101 "RV_HS Code Management"
 
     trigger OnAfterGetRecord()
     var
-        RVSteup: Record "RIKEVITA Setup";
+        RVSteup: Record "RV RIKEVITA Setup";
     begin
         StyleExpr := 'Standard';
         RVSteup.Reset();

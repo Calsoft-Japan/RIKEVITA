@@ -2,7 +2,7 @@
 /// Enum RIKE RV_Month (ID 50100)
 /// FDD003 2026/03/08: New. (Liuyang)
 /// </summary>
-enum 50100 RV_Month
+enum 50100 "RV Month"
 {
     Extensible = true;
 

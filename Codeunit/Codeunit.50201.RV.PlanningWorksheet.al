@@ -2,19 +2,19 @@
 /// Codeunit RIKE Planning Worksheet Addtion Fields (ID 50201)
 /// FDD001 2026/03/12: New. (Bobby.ji)
 /// </summary>
-codeunit 50201 "RIKE Planning Worksheet Fields"
+codeunit 50201 "RV Planning Worksheet Fields"
 {
     [EventSubscriber(ObjectType::Table, Database::"Requisition Line", OnAfterCopyFromItem, '', false, false)]
     local procedure "Requisition Line_OnAfterCopyFromItem"(var RequisitionLine: Record "Requisition Line"; Item: Record Item; CurrentFieldNo: Integer)
     var
         ItemVendor: Record "Item Vendor";
     begin
-        RequisitionLine."RV_Expiration Calculation" := Item."Expiration Calculation";//FDD001
+        RequisitionLine."RV Expiration Calculation" := Item."Expiration Calculation";//FDD001
         ItemVendor.Reset();
         ItemVendor.SetRange("Item No.", RequisitionLine."No.");
         if ItemVendor.FindSet() then begin
             if ItemVendor.Count > 1 then begin
-                RequisitionLine.RV_AvailableInMultipleVendor := true;
+                RequisitionLine."RV AvailableInMultipleVendor" := true;
             end;
         end;
     end;
@@ -22,7 +22,7 @@ codeunit 50201 "RIKE Planning Worksheet Fields"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Req. Wksh.-Make Order", OnAfterCarryOutReqLineAction, '', false, false)]
     local procedure "Req. Wksh.-Make Order_OnAfterCarryOutReqLineAction"(var RequisitionLine: Record "Requisition Line"; var PurchaseHeader: Record "Purchase Header"; CommitIsSuppressed: Boolean; var OrderCounter: Integer; var LineCount: Integer)
     var
-        VendorSelection: Record "RIKE Vendor Selection";
+        VendorSelection: Record "RV Vendor Selection";
         POHeader: Record "Purchase Header";
         POLines: Record "Purchase Line";
         NoSeriesMgt: Codeunit "No. Series";

@@ -2,7 +2,7 @@
 /// Page Shipping History Summary (ID 50104).
 /// FDD005 2026/03/09: New. (Liuyang)
 /// </summary>
-page 50104 "Shipping History Summary"
+page 50104 "RV Shipping History Summary"
 {
     ApplicationArea = All;
     Caption = 'Shipping History Summary';

@@ -237,5 +237,5 @@ page 50514 "RV COA Card Subform"
     var
         PO: Page "Purchase Order";
         NoSeries: Codeunit "No. Series";
-        RIKEVITASetup: Record "RIKEVITA Setup";
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
 }

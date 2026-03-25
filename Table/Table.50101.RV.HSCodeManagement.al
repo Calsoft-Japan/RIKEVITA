@@ -2,9 +2,9 @@
 /// Table RV_HS Code Management (ID 50101)
 /// FDD030 2026/03/09: New. (Liuyang)
 /// </summary>
-table 50101 "RV_HS Code Management"
+table 50101 "RV HS Code Management"
 {
-    Caption = 'RV_HS Code Management';
+    Caption = 'RV HS Code Management';
     DataClassification = ToBeClassified;
 
     fields
@@ -97,15 +97,15 @@ table 50101 "RV_HS Code Management"
         }
     }
 
-    [InherentPermissions(PermissionObjectType::TableData, Database::"RV_HS Code Management", 'r')]
+    [InherentPermissions(PermissionObjectType::TableData, Database::"RV HS Code Management", 'r')]
     procedure GetNextEntryNo(): Integer
     var
         SequenceNoMgt: Codeunit "Sequence No. Mgt.";
     begin
-        exit(SequenceNoMgt.GetNextSeqNo(DATABASE::"RV_HS Code Management"));
+        exit(SequenceNoMgt.GetNextSeqNo(DATABASE::"RV HS Code Management"));
     end;
 
-    [InherentPermissions(PermissionObjectType::TableData, Database::"RV_HS Code Management", 'r')]
+    [InherentPermissions(PermissionObjectType::TableData, Database::"RV HS Code Management", 'r')]
     procedure GetLastEntryNo(): Integer;
     var
         FindRecordManagement: Codeunit "Find Record Management";

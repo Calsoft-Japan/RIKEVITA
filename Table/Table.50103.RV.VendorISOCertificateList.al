@@ -2,9 +2,9 @@
 /// Table RV_Vendor ISO Certificate List (ID 50103).
 /// FDD013 2026/03/19: New (Liuyang)
 /// </summary>
-table 50103 "RV_Vendor ISO Certificate List"
+table 50103 "RV Vendor ISO Certificate List"
 {
-    Caption = 'RV_Vendor ISO Certificate List';
+    Caption = 'RV Vendor ISO Certificate List';
     DataClassification = ToBeClassified;
 
     fields
@@ -20,7 +20,7 @@ table 50103 "RV_Vendor ISO Certificate List"
         field(3; "ISO Certificate"; Code[20])
         {
             Caption = 'ISO Certificate';
-            TableRelation = "RV_ISO Certificate Code".Code;
+            TableRelation = "RV ISO Certificate Code".Code;
         }
         field(4; Status; Option)
         {

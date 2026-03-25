@@ -3,7 +3,7 @@
 /// FDD030 2026/02/23: New. (Stephen)
 /// FDD008 2026/03/15: New field "Stuffing Date Calculation". (Liuyang)
 /// </summary>
-table 50100 "RIKEVITA Setup"
+table 50100 "RV RIKEVITA Setup"
 {
     Caption = 'RIKEVITA Setup';
     DataClassification = ToBeClassified;

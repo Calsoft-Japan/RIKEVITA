@@ -3,7 +3,7 @@
 /// FDD014 2026/02/23: New. (Stephen)
 /// FDD008 2026/03/15: New field "Stuffing Date Calculation". (Liuyang)
 /// </summary>
-pageextension 50600 "RIKE User Setup" extends "User Setup"
+pageextension 50600 "RV User Setup" extends "User Setup"
 {
     layout
     {

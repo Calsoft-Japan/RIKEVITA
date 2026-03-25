@@ -7,7 +7,7 @@
 ///   "When accessed through the Vendor card, this page must be
 ///    automatically filtered by Vendor."
 /// </summary>
-pageextension 50109 "RV_Vendor Card Ext" extends "Vendor Card"
+pageextension 50109 "RV Vendor Card Ext" extends "Vendor Card"
 {
     actions
     {
@@ -22,8 +22,8 @@ pageextension 50109 "RV_Vendor Card Ext" extends "Vendor Card"
 
                 trigger OnAction()
                 var
-                    VendorIsoCertList: Record "RV_Vendor ISO Certificate List";
-                    VendorIsoCertListPage: Page "RV_Vendor ISO Certificate List";
+                    VendorIsoCertList: Record "RV Vendor ISO Certificate List";
+                    VendorIsoCertListPage: Page "RV Vendor ISO Certificate List";
                 begin
                     // Pre-filter the list page to the current vendor so that only
                     // this vendor's certificates are shown when opened from the card.

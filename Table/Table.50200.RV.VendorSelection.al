@@ -2,7 +2,7 @@
 /// Table RIKEVITA Vendor Selection (ID 50200).
 /// FDD002 2026/03/18: New. (Bobby.ji)
 /// </summary>
-table 50200 "RIKE Vendor Selection"
+table 50200 "RV Vendor Selection"
 {
     Caption = 'RIKE Vendor Selection';
     DataClassification = ToBeClassified;
@@ -40,7 +40,7 @@ table 50200 "RIKE Vendor Selection"
             Description = 'FDD002';
             DecimalPlaces = 0 : 5;
             FieldClass = FlowField;
-            CalcFormula = sum("RIKE Vendor Selection"."Quantity to Order" where("Journal Batch Name" = field("Journal Batch Name"), "Line No." = field("Line No."), "Item No." = field("Item No.")));
+            CalcFormula = sum("RV Vendor Selection"."Quantity to Order" where("Journal Batch Name" = field("Journal Batch Name"), "Line No." = field("Line No."), "Item No." = field("Item No.")));
         }
         field(7; "Balance Quantity"; Decimal)
         {

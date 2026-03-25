@@ -134,6 +134,6 @@ page 50509 "RV IQC Card"
 
     var
         NoSeries: Codeunit "No. Series";
-        RIKEVITASetup: Record "RIKEVITA Setup";
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
 
 }
