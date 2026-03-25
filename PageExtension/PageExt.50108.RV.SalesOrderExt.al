@@ -25,7 +25,7 @@ pageextension 50108 "RV Sales Order Ext" extends "Sales Order"
             {
                 ApplicationArea = All;
                 Visible = true;
-                Caption = 'Item Tracking History - Sales';
+                Caption = 'Item Tracking History Details';
                 Provider = SalesLines;
                 // "Order No." on ILE = originating Sales Order No.
                 // "Item No."  on ILE = item number from the selected Sales Line.
