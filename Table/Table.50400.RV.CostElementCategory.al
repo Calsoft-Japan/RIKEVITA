@@ -2,7 +2,7 @@
 /// Table RV Cost Element Category (ID 50400).
 /// FDD034 2026/03/19: New. (Vani)
 /// </summary>
-table 50400 "RIKE Cost Element Category"
+table 50400 "RV Cost Element Category"
 {
     DataClassification = ToBeClassified;
 
@@ -18,7 +18,7 @@ table 50400 "RIKE Cost Element Category"
             Caption = 'Description';
             Description = 'FDD034';
         }
-        field(3; "Type"; Enum "RIKE Cost Element Category")
+        field(3; "Type"; Enum "RV Cost Element Category")
         {
             DataClassification = ToBeClassified;
             Description = 'FDD034';

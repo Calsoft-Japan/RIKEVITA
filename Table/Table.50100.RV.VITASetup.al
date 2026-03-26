@@ -33,6 +33,7 @@ table 50100 "RV RIKEVITA Setup"
         field(5; "ACC Site Analysis Code"; Code[20])
         {
             Caption = 'ACC Site Analysis Code';
+            TableRelation = Dimension.Code;
             Description = 'FDD034';
         }
         field(12; "QC No. Nos."; Code[20])

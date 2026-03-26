@@ -50,6 +50,8 @@ page 50100 "RIKEVITA Setup"///
                 field("ACC Site Analysis Code"; Rec."ACC Site Analysis Code")
                 {
                     Description = 'FDD034';
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the dimension code used for Site validation.';
                 }
 
             }

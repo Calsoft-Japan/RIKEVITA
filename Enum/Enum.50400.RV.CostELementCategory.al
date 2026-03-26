@@ -2,7 +2,7 @@
 /// Enum RIKE Cost Element Category (ID 50400).
 /// FDD034 2026/03/19: New. (Vani)
 /// </summary>
-enum 50400 "RIKE Cost Element Category"
+enum 50400 "RV Cost Element Category"
 {
     Extensible = true;
 
