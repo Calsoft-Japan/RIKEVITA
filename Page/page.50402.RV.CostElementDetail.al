@@ -2,10 +2,10 @@
 /// Page RV Cost Element Details (ID 50402).
 /// FDD034 2026/03/19: New. (Vani)
 /// </summary>
-page 50402 "RIKE Cost Element Details"
+page 50402 "Standard Cost Element Details"
 {
     PageType = List;
-    SourceTable = "RIKE Cost Element Details";
+    SourceTable = "Standard Cost Element Details";
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTableView = sorting("Period Code", "Site", "Item No.");
@@ -47,10 +47,11 @@ page 50402 "RIKE Cost Element Details"
                     ApplicationArea = All;
                     ToolTip = 'Cost Element Code';
                 }
-                field("Cost"; Rec."Cost")
+                field("Standard Cost"; Rec."Standard Cost")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Standard Cost for the selected Cost Element';
+                    DecimalPlaces = 0 : 9;
                 }
             }
         }

@@ -2,9 +2,9 @@
 /// Page RV Cost Element Category (ID 50400).
 /// FDD034 2026/03/19: New. (Vani)
 /// </summary>
-page 50400 "RIKE Cost Element Category"
+page 50400 "RV Cost Element Category"
 {
-    SourceTable = "RIKE Cost Element Category";
+    SourceTable = "RV Cost Element Category";
     PageType = List;
     UsageCategory = Lists;
     ApplicationArea = All;

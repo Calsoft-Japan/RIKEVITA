@@ -2,7 +2,7 @@
 /// Table RV Cost Element Details (ID 50402).
 /// FDD034 2026/03/19: New. (Vani)
 /// </summary>
-table 50402 "RIKE Cost Element Details"
+table 50402 "Standard Cost Element Details"
 {
     DataClassification = CustomerContent;
 
@@ -26,7 +26,7 @@ table 50402 "RIKE Cost Element Details"
                 DimValue: Record "Dimension Value";
             begin
                 if not RIKESetup.Get() then
-                    Error('RIKE Setup is not configured.');
+                    Error('RV Setup is not configured.');
 
                 if "Site" <> '' then begin
                     if not DimValue.Get(RIKESetup."ACC Site Analysis Code", "Site") then
@@ -62,13 +62,14 @@ table 50402 "RIKE Cost Element Details"
         field(6; "Cost Element Code"; Code[20])
         {
             Caption = 'Cost Element Code';
-            TableRelation = "RIKE Cost Element Category"."Code";
+            TableRelation = "RV Cost Element Category"."Code";
             Description = 'FDD034';
         }
-        field(7; "Cost"; Decimal)
+        field(7; "Standard Cost"; Decimal)
         {
-            Caption = 'Cost';
+            Caption = ' Standard Cost';
             Description = 'FDD034';
+            DecimalPlaces = 0 : 9;
         }
     }
 

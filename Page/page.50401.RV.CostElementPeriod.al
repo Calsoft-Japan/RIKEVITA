@@ -2,7 +2,7 @@
 /// Page RV Cost Element Period (ID 50401).
 /// FDD034 2026/03/19: New. (Vani)
 /// </summary>
-page 50401 "RIKE Cost Element Period"
+page 50401 "Standard Cost Element Period"
 {
     PageType = List;
     SourceTable = "Standard Cost Element Period";
@@ -37,9 +37,9 @@ page 50401 "RIKE Cost Element Period"
             action("Details")
             {
                 ApplicationArea = All;
-                RunObject = page "RIKE Cost Element Details";
+                Image = ViewDetails;
+                RunObject = page "Standard Cost Element Details";
                 RunPageLink = "Period Code" = FIELD("Code");
-
             }
         }
     }
