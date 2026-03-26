@@ -78,6 +78,27 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
                     VendorSelection.RunModal();
                 end;
             }
+            action(ClearVS)
+            {
+                ApplicationArea = All;
+                Caption = 'Clear All Vendor Selection';
+                Image = ClearLog;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedOnly = true;
+                Enabled = true;
+                Visible = false;
+
+                trigger OnAction()
+                var
+                    RV_VendorSelection: Record "RV Vendor Selection";
+                begin
+                    RV_VendorSelection.Reset();
+                    RV_VendorSelection.DeleteAll();
+
+                    Message('All Vendor Selction Lines been deleted.');
+                end;
+            }
         }
     }
     var

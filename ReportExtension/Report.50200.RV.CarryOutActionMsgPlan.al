@@ -36,16 +36,23 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                                     RecRequisitionLine."RV AvailableInMultipleVendor" := false;
                                     RecRequisitionLine.Validate("Vendor No.", VendorSelection."Vendor No.");
                                     RecRequisitionLine.Validate(Quantity, VendorSelection."Quantity to Order");
+                                    RecRequisitionLine.Validate("Accept Action Message", true);
+                                    RecRequisitionLine."RV AvailableInMultipleVendor" := false;
                                     RecRequisitionLine.Insert();
-
                                 until VendorSelection.Next() = 0;
                             end;
+
+                            VendorSelection.FindSet();
+                            VendorSelection.DeleteAll();
+
+                            "Requisition Line".Delete();
                         end;
                     until "Requisition Line".Next() = 0;
+                    //Commit();
 
                     RecRequisitionLine.CopyFilters("Requisition Line");
 
-                    "Requisition Line".DeleteAll();
+
 
                     "Requisition Line".Reset();
                     "Requisition Line".SetRange("Worksheet Template Name", RecRequisitionLine."Worksheet Template Name");
