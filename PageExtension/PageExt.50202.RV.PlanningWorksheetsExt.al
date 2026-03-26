@@ -84,10 +84,28 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
         IsVendorSelection: Boolean;
 
     trigger OnAfterGetRecord()
+    var
+        ItemVendor: Record "Item Vendor";
     begin
         IsVendorSelection := false;
+
+        ItemVendor.Reset();
+        ItemVendor.SetRange("Item No.", Rec."No.");
+        if ItemVendor.FindFirst() then begin
+            if ItemVendor.Count > 0 then begin
+                Rec."RV AvailableInMultipleVendor" := true;
+                IsVendorSelection := true;
+            end;
+        end
+        else begin
+            Rec."RV AvailableInMultipleVendor" := false;
+            IsVendorSelection := false;
+        end;
+
+
+        /* IsVendorSelection := false;
         if Rec."RV AvailableInMultipleVendor" then begin
             IsVendorSelection := true;
-        end;
+        end; */
     end;
 }

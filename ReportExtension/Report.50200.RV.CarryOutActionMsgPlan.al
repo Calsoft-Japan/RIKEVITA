@@ -15,8 +15,10 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                 VendorSelection: Record "RV Vendor Selection";
                 LineNo: Integer;
             begin
-                if "Requisition Line".FindLast() then begin
-                    LineNo := "Requisition Line"."Line No.";
+                RecRequisitionLine.Reset();
+                RecRequisitionLine.SetAscending("Line No.", true);
+                if RecRequisitionLine.FindLast() then begin
+                    LineNo := RecRequisitionLine."Line No.";
                 end;
 
                 if "Requisition Line".FindFirst() then begin
@@ -38,10 +40,17 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
 
                                 until VendorSelection.Next() = 0;
                             end;
-
-                            "Requisition Line".Delete();
                         end;
                     until "Requisition Line".Next() = 0;
+
+                    RecRequisitionLine.CopyFilters("Requisition Line");
+
+                    "Requisition Line".DeleteAll();
+
+                    "Requisition Line".Reset();
+                    "Requisition Line".SetRange("Worksheet Template Name", RecRequisitionLine."Worksheet Template Name");
+                    "Requisition Line".SetRange("Journal Batch Name", RecRequisitionLine."Journal Batch Name");
+                    "Requisition Line".SetRange("No.", RecRequisitionLine."No.");
                 end;
 
             end;
