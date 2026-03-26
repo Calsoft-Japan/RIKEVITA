@@ -6,7 +6,7 @@ page 50200 "RV Vendor Selection"
 {
     ApplicationArea = All;
     Caption = 'Vendor Selection';
-    PageType = Card;
+    PageType = Worksheet;
     UsageCategory = Lists;
     SourceTable = "RV Vendor Selection";
     layout

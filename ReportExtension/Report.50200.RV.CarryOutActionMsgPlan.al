@@ -20,7 +20,10 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                 if RecRequisitionLine.FindLast() then begin
                     LineNo := RecRequisitionLine."Line No.";
                 end;
-
+                "Requisition Line".Reset();
+                "Requisition Line".SetRange("Worksheet Template Name", CurrReqWkshTemp);
+                "Requisition Line".SetRange("Journal Batch Name", CurrReqWkshName);
+                "Requisition Line".SetRange("Accept Action Message", true);
                 if "Requisition Line".FindFirst() then begin
                     repeat
                         if "Requisition Line"."RV AvailableInMultipleVendor" then begin
@@ -40,24 +43,16 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                                     RecRequisitionLine."RV AvailableInMultipleVendor" := false;
                                     RecRequisitionLine.Insert();
                                 until VendorSelection.Next() = 0;
+
+                                VendorSelection.FindSet();
+                                VendorSelection.DeleteAll();
                             end;
-
-                            VendorSelection.FindSet();
-                            VendorSelection.DeleteAll();
-
                             "Requisition Line".Delete();
                         end;
                     until "Requisition Line".Next() = 0;
-                    //Commit();
 
                     RecRequisitionLine.CopyFilters("Requisition Line");
-
-
-
-                    "Requisition Line".Reset();
-                    "Requisition Line".SetRange("Worksheet Template Name", RecRequisitionLine."Worksheet Template Name");
-                    "Requisition Line".SetRange("Journal Batch Name", RecRequisitionLine."Journal Batch Name");
-                    "Requisition Line".SetRange("No.", RecRequisitionLine."No.");
+                    //"Requisition Line".SetRange("No.", RecRequisitionLine."No.");
                 end;
 
             end;
