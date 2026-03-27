@@ -13,9 +13,11 @@ codeunit 50200 "RV Reservation Entry Fields"
     begin
         ReservEntry."RV Container No." := TrackingSpecification."RV Container No.";//FDD008
         ReservEntry."RV Manufacture Date" := TrackingSpecification."RV Manufacture Date";
-        Item.Get(TrackingSpecification."Item No.");
-        if Item."RV Expiration Base Date (RM)" = Item."RV Expiration Base Date (RM)"::"Manufacture Date" then begin
-            ReservEntry."Expiration Date" := CalcDate(Item."Expiration Calculation", ReservEntry."RV Manufacture Date");
+        if (ReservEntry."Item No." <> '') and (ReservEntry."RV Manufacture Date" <> 0D) then begin
+            Item.Get(TrackingSpecification."Item No.");
+            if Item."RV Expiration Base Date (RM)" = Item."RV Expiration Base Date (RM)"::"Manufacture Date" then begin
+                ReservEntry."Expiration Date" := CalcDate(Item."Expiration Calculation", ReservEntry."RV Manufacture Date");
+            end;
         end;
         ModifyLine := true;
     end;
@@ -35,7 +37,7 @@ codeunit 50200 "RV Reservation Entry Fields"
     begin
         ReservationEntry."RV Container No." := ForReservEntry."RV Container No.";//FDD008
         ReservationEntry."RV Manufacture Date" := ForReservEntry."RV Manufacture Date";
-        if ReservationEntry."Item No." <> '' then begin
+        if (ReservationEntry."Item No." <> '') and (ReservationEntry."RV Manufacture Date" <> 0D) then begin
             Item.Get(ReservationEntry."Item No.");
             if Item."RV Expiration Base Date (RM)" = Item."RV Expiration Base Date (RM)"::"Manufacture Date" then begin
                 ReservationEntry."Expiration Date" := CalcDate(Item."Expiration Calculation", ReservationEntry."RV Manufacture Date");

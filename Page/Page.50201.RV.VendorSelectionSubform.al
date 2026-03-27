@@ -25,18 +25,20 @@ page 50201 "RV Vendor Selection Subform"
                     Description = 'FDD002';
                     ApplicationArea = All;
                     NotBlank = true;
-                    TableRelation = Vendor;
+                    TableRelation = "Item Vendor" where("Item No." = field("Item No."));
                 }
                 field("Minimum Order Quantity"; Rec."Minimum Order Quantity")
                 {
                     Caption = 'Minimum Order Quantity';
                     Description = 'FDD002';
+                    Enabled = false;
                     ApplicationArea = All;
                 }
                 field("Maxmum Order Quantity"; Rec."Maxmum Order Quantity")
                 {
                     Caption = 'Maxmum Order Quantity';
                     Description = 'FDD002';
+                    Enabled = false;
                     ApplicationArea = All;
                 }
                 field("Quantity to Order"; Rec."Quantity to Order")
@@ -56,6 +58,7 @@ page 50201 "RV Vendor Selection Subform"
                     Caption = 'Unit of Measure Code';
                     Description = 'FDD002';
                     ApplicationArea = All;
+                    TableRelation = "Item Unit of Measure".Code where("Item No." = field("Item No."));
                 }
             }
 

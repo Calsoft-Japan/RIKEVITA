@@ -19,6 +19,15 @@ pageextension 50201 "RV Item Tracking Lines" extends "Item Tracking Lines"
                 Caption = 'Manufacture Date';
                 ApplicationArea = all;
                 //Visible = ShowManufactureDate;
+                trigger OnValidate()
+                begin
+                    if Rec."RV Manufacture Date" <> 0D then begin
+                        Item.Get(Rec."Item No.");
+                        if Item."RV Expiration Base Date (RM)" = Item."RV Expiration Base Date (RM)"::"Manufacture Date" then begin
+                            Rec."Expiration Date" := CalcDate(Item."Expiration Calculation", Rec."RV Manufacture Date");
+                        end;
+                    end;
+                end;
             }
         }
         /*modify("Expiration Date")
