@@ -97,6 +97,8 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
                     RV_VendorSelection.DeleteAll();
 
                     Message('All Vendor Selction Lines been deleted.');
+
+                    //SplitCurline();
                 end;
             }
         }
@@ -129,4 +131,58 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
             IsVendorSelection := true;
         end; */
     end;
+
+
+    procedure SplitCurline()
+    var
+        RecRequisitionLine: Record "Requisition Line";
+        VendorSelection: Record "RV Vendor Selection";
+        LineNo: Integer;
+
+        ReqLineReserve: Codeunit "Req. Line-Reserve";
+    //ResEntry: Record "Reservation Entry" temporary;
+    begin
+        RecRequisitionLine.Reset();
+        RecRequisitionLine.SetAscending("Line No.", true);
+        if RecRequisitionLine.FindLast() then begin
+            LineNo := RecRequisitionLine."Line No.";
+        end;
+
+        if Rec."RV AvailableInMultipleVendor" then begin
+            VendorSelection.Reset();
+            VendorSelection.SetRange("Item No.", Rec."No.");
+            if VendorSelection.FindFirst() then begin
+                repeat
+                    LineNo := LineNo + 10000;
+                    RecRequisitionLine.Init();
+                    RecRequisitionLine.TransferFields(Rec);
+                    RecRequisitionLine."Line No." := LineNo;
+                    RecRequisitionLine."RV AvailableInMultipleVendor" := false;
+                    RecRequisitionLine.Validate("Vendor No.", VendorSelection."Vendor No.");
+                    RecRequisitionLine.Validate(Quantity, VendorSelection."Quantity to Order");
+                    RecRequisitionLine.Validate("Accept Action Message", true);
+                    RecRequisitionLine."RV AvailableInMultipleVendor" := false;
+                    RecRequisitionLine.Insert();
+
+
+                    /* ResEntry.Init();
+                    ResEntry.Insert();
+                    ReqLineReserve.CreateReservation(Rec, '', 0D,
+                                Rec.Quantity, Rec."Quantity (Base)", ResEntry); */
+
+                    ReqLineReserve.TransferReqLineToReqLine(Rec, RecRequisitionLine, VendorSelection."Quantity to Order", false);
+                until VendorSelection.Next() = 0;
+
+                VendorSelection.FindSet();
+                VendorSelection.DeleteAll();
+            end;
+            //Rec.Delete(true);
+        end;
+
+
+
+        //RecRequisitionLine.CopyFilters(Rec);
+        //"Requisition Line".SetRange("No.", RecRequisitionLine."No.");
+    end;
+
 }
