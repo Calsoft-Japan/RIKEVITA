@@ -15,8 +15,18 @@ page 50401 "Standard Cost Element Period"
         {
             repeater(Group)
             {
-                field("Code"; Rec."Code")
+                field(Code; Rec.Code)
                 {
+                    ApplicationArea = All;
+                    DrillDown = true;
+
+                    trigger OnDrillDown()
+                    var
+                        StandardCostElementDetails: Record "Standard Cost Element Details";
+                    begin
+                        StandardCostElementDetails.SetRange("Period Code", Rec.Code);
+                        Page.Run(Page::"Standard Cost Element Details", StandardCostElementDetails);
+                    end;
                 }
                 field("Description"; Rec."Description")
                 {

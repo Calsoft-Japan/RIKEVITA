@@ -67,7 +67,7 @@ table 50402 "Standard Cost Element Details"
         }
         field(7; "Standard Cost"; Decimal)
         {
-            Caption = ' Standard Cost';
+            Caption = 'Standard Cost';
             Description = 'FDD034';
             DecimalPlaces = 0 : 9;
         }
