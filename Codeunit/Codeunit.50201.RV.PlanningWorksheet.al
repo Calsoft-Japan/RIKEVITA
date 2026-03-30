@@ -1,6 +1,7 @@
 /// <summary>
-/// Codeunit RIKE Planning Worksheet Addtion Fields (ID 50201)
+/// Codeunit RV Planning Worksheet Addtion Fields (ID 50201)
 /// FDD001 2026/03/12: New. (Bobby.ji)
+/// FDD002
 /// </summary>
 codeunit 50201 "RV Planning Worksheet Fields"
 {
@@ -19,64 +20,53 @@ codeunit 50201 "RV Planning Worksheet Fields"
         end;
     end;
 
-    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Req. Wksh.-Make Order", OnAfterCarryOutReqLineAction, '', false, false)]
-    local procedure "Req. Wksh.-Make Order_OnAfterCarryOutReqLineAction"(var RequisitionLine: Record "Requisition Line"; var PurchaseHeader: Record "Purchase Header"; CommitIsSuppressed: Boolean; var OrderCounter: Integer; var LineCount: Integer)
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Req. Wksh.-Make Order", OnCodeOnBeforeSetPurchOrderHeader, '', false, false)]
+    local procedure "Req. Wksh.-Make Order_OnCodeOnBeforeSetPurchOrderHeader"(var Sender: Codeunit "Req. Wksh.-Make Order"; var RequisitionLine: Record "Requisition Line"; var IsHandled: Boolean)
     var
-        VendorSelection: Record "RV Vendor Selection";
-        POHeader: Record "Purchase Header";
-        POLines: Record "Purchase Line";
-        NoSeriesMgt: Codeunit "No. Series";
-        ReqWkshMakeOrder: Codeunit "Req. Wksh.-Make Order";
         RecRequisitionLine: Record "Requisition Line";
+        VendorSelection: Record "RV Vendor Selection";
+        ReqLineReserve: Codeunit "Req. Line-Reserve";
         LineNo: Integer;
     begin
-        /*RecRequisitionLine.Reset();
+        RecRequisitionLine.Reset();
+        RecRequisitionLine.SetAscending("Line No.", true);
         if RecRequisitionLine.FindLast() then begin
             LineNo := RecRequisitionLine."Line No.";
         end;
-        RecRequisitionLine.Reset();
-        RecRequisitionLine.TransferFields(RequisitionLine);
-        if RequisitionLine.RV_AvailableInMultipleVendor then begin
-            VendorSelection.Reset();
-            VendorSelection.SetRange("Item No.", RequisitionLine."No.");
-            if VendorSelection.FindFirst() then begin
-                repeat
-                    LineNo := LineNo + 10000;
-                    RecRequisitionLine.Validate("Vendor No.", VendorSelection."Vendor No.");
-                    RecRequisitionLine.Validate(Quantity, VendorSelection."Quantity to Order");
-                    RecRequisitionLine."Line No." := LineNo;
-                    PurchaseHeader."Buy-from Vendor No." := VendorSelection."Vendor No.";
-                    ReqWkshMakeOrder.InsertPurchOrderLine(RecRequisitionLine, PurchaseHeader);
-                
-                                    POHeader.Reset();
-                                    POHeader.Init();
-                                    POHeader.TransferFields(PurchaseHeader);
-                                    //POHeader.TestNoSeries();
-                                    //POHeader."No." := NoSeriesMgt.GetNextNo(POHeader.GetNoSeriesCode(), WorkDate());
-                                    POHeader."No." := '';
-                                    POHeader."Buy-from Vendor No." := '';
-                                    POHeader."Pay-to Vendor No." := '';
-                                    POHeader.Validate("Buy-from Vendor No.", VendorSelection."Vendor No.");
-                                    POHeader.Insert(true);
 
-                                    POLines.Init();
-                                    POLines."Document Type" := POLines."Document Type"::Order;
-                                    POLines."Document No." := POHeader."No.";
-                                    POLines."Line No." := 10000;
-                                    POLines.Validate("Buy-from Vendor No.", VendorSelection."Vendor No.");
-                                    POLines.Validate(Type, POLines.Type::Item);
-                                    POLines.Validate("No.", VendorSelection."Item No.");
-                                    POLines.Validate(Quantity, VendorSelection."Quantity to Order");
-                                    POLines.Validate("Unit of Measure", VendorSelection."Unit of Measure Code");
-                                    POLines."Dimension Set ID" := POHeader."Dimension Set ID";
-                                    POLines.Insert();
-                
-                until VendorSelection.Next() = 0;
-            end;
+        if RequisitionLine.FindFirst() then begin
+            repeat
+                if RequisitionLine."RV AvailableInMultipleVendor" then begin
+
+                    VendorSelection.Reset();
+                    VendorSelection.SetRange("Item No.", RequisitionLine."No.");
+                    if VendorSelection.FindFirst() then begin
+                        repeat
+                            LineNo := LineNo + 10000;
+                            RecRequisitionLine.Init();
+                            RecRequisitionLine.TransferFields(RequisitionLine);
+                            RecRequisitionLine."Line No." := LineNo;
+                            RecRequisitionLine."RV AvailableInMultipleVendor" := false;
+                            RecRequisitionLine.Validate("Vendor No.", VendorSelection."Vendor No.");
+                            RecRequisitionLine.Validate(Quantity, VendorSelection."Quantity to Order");
+                            RecRequisitionLine.Validate("Accept Action Message", true);
+                            RecRequisitionLine."RV AvailableInMultipleVendor" := false;
+                            RecRequisitionLine.Insert();
+
+                            ReqLineReserve.TransferReqLineToReqLine(RequisitionLine, RecRequisitionLine, VendorSelection."Quantity to Order", false);
+                        until VendorSelection.Next() = 0;
+
+                        VendorSelection.FindSet();
+                        VendorSelection.DeleteAll();
+                    end;
+                    RequisitionLine.Delete(true);
+                end;
+            until RequisitionLine.Next() = 0;
+
+            RecRequisitionLine.CopyFilters(RequisitionLine);
+            //"Requisition Line".SetRange("No.", RecRequisitionLine."No.");
         end;
-*/
-        //Error('OK');
-
     end;
 
 

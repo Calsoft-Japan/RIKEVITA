@@ -1,10 +1,10 @@
 /// <summary>
-/// Table RIKEVITA Vendor Selection (ID 50200).
+/// Table RV Vendor Selection (ID 50200).
 /// FDD002 2026/03/18: New. (Bobby.ji)
 /// </summary>
 table 50200 "RV Vendor Selection"
 {
-    Caption = 'RIKE Vendor Selection';
+    Caption = 'RV Vendor Selection';
     DataClassification = ToBeClassified;
 
     fields
@@ -52,6 +52,18 @@ table 50200 "RV Vendor Selection"
         {
             Caption = 'Vendor No.';
             Description = 'FDD002';
+            trigger OnValidate()
+            var
+                ItemVendor: Record "Item Vendor";
+            begin
+                ItemVendor.Reset();
+                ItemVendor.SetRange("Item No.", Rec."Item No.");
+                ItemVendor.SetRange("Vendor No.", Rec."Vendor No.");
+                if ItemVendor.FindFirst() then begin
+                    "Minimum Order Quantity" := ItemVendor."RV Minimum Order Quantity";
+                    "Maximum Order Quantity" := ItemVendor."RV Maximum Order Quantity";
+                end;
+            end;
         }
         field(9; "Minimum Order Quantity"; Decimal)
         {
@@ -59,9 +71,9 @@ table 50200 "RV Vendor Selection"
             Description = 'FDD002';
             DecimalPlaces = 0 : 5;
         }
-        field(10; "Maxmum Order Quantity"; Decimal)
+        field(10; "Maximum Order Quantity"; Decimal)
         {
-            Caption = 'Maxmum Order Quantity';
+            Caption = 'Maximum Order Quantity';
             Description = 'FDD002';
             DecimalPlaces = 0 : 5;
         }

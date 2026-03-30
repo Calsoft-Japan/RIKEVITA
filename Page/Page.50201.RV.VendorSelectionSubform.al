@@ -34,9 +34,9 @@ page 50201 "RV Vendor Selection Subform"
                     Enabled = false;
                     ApplicationArea = All;
                 }
-                field("Maxmum Order Quantity"; Rec."Maxmum Order Quantity")
+                field("Maximum Order Quantity"; Rec."Maximum Order Quantity")
                 {
-                    Caption = 'Maxmum Order Quantity';
+                    Caption = 'Maximum Order Quantity';
                     Description = 'FDD002';
                     Enabled = false;
                     ApplicationArea = All;

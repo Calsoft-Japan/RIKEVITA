@@ -64,7 +64,7 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
                                 RV_VendorSelection."Starting Date" := Rec."Starting Date";
                                 RV_VendorSelection."Ending Date" := Rec."Ending Date";
                                 RV_VendorSelection."Minimum Order Quantity" := ItemVendor."RV Minimum Order Quantity";
-                                RV_VendorSelection."Maxmum Order Quantity" := ItemVendor."RV Maximum Order Quantity";
+                                RV_VendorSelection."Maximum Order Quantity" := ItemVendor."RV Maximum Order Quantity";
                                 RV_VendorSelection."Quantity to Order" := 0;
                                 RV_VendorSelection."Unit of Measure Code" := Rec."Unit of Measure Code";
                                 RV_VendorSelection.Insert();
@@ -96,7 +96,7 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
                     RV_VendorSelection.Reset();
                     RV_VendorSelection.DeleteAll();
 
-                    Message('All Vendor Selction Lines been deleted.');
+                    Message('All Vendor Selection Lines been deleted.');
 
                     //SplitCurline();
                 end;
