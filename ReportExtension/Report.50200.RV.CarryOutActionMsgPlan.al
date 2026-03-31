@@ -7,7 +7,7 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
 
     dataset
     {
-        modify("Requisition Line")
+        /*modify("Requisition Line")
         {
             trigger OnBeforePreDataItem()
             var
@@ -16,6 +16,7 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                 ReqLineReserve: Codeunit "Req. Line-Reserve";
                 LineNo: Integer;
             begin
+                
                 RecRequisitionLine.Reset();
                 RecRequisitionLine.SetAscending("Line No.", true);
                 if RecRequisitionLine.FindLast() then begin
@@ -59,7 +60,7 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                 end;
 
             end;
-        }
+        }*/
     }
 
 }

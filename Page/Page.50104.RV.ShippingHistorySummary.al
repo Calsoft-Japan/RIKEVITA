@@ -122,12 +122,9 @@ page 50104 "RV Shipping History Summary"
         PostedWhseShptLine.SetRange("Source No.", Rec."Document No.");
         PostedWhseShptLine.SetRange("Source Line No.", Rec."Line No.");
         PostedWhseShptLine.SetRange("Item No.", Rec."No.");
-        PostedWhseShptLine.FindSet();
-        // Total count of posted shipment events for this item-line.
-        NoOfPostedShipments := PostedWhseShptLine.Count();
-
-        if NoOfPostedShipments = 0 then
+        if not PostedWhseShptLine.FindSet() then begin
             exit;
+        end;
 
         // FindLast() uses the current key (default: "No.", Line No.) and returns
         // the record with the highest "No." — the most recently created shipment.
