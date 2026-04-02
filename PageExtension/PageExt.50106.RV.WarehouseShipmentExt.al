@@ -27,6 +27,11 @@ pageextension 50106 "RV Warehouse Shipment Ext" extends "Warehouse Shipment"
                     ApplicationArea = All;
                     Description = 'FDD008';
                 }
+                field("RV_Country of Origin"; Rec."RV Country of Origin")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD008';
+                }
                 field(RV_VIA; Rec."RV VIA")
                 {
                     ApplicationArea = All;

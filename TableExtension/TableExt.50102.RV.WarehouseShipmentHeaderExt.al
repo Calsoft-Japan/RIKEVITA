@@ -81,11 +81,12 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
                     end;
             end;
         }
-        field(50103; "RV Country of Origin"; Text[50])
+        field(50103; "RV Country of Origin"; Code[10])
         {
             Caption = 'Country of Origin';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
+            TableRelation = "Country/Region";
         }
         field(50104; "RV VIA"; Text[50])
         {
