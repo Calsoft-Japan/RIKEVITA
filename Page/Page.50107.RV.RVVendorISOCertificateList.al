@@ -14,7 +14,9 @@ page 50107 "RV Vendor ISO Certificate List"
     SourceTable = "RV Vendor ISO Certificate List";
     ApplicationArea = All;
     UsageCategory = Lists;
-    DeleteAllowed = false;
+    Editable = false;
+    DeleteAllowed = true;
+    RefreshOnActivate = true;
     CardPageId = "RV Vendor ISO Certificate Card";
 
     layout

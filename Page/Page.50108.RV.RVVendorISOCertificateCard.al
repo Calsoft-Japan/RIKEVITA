@@ -92,7 +92,7 @@ page 50108 "RV Vendor ISO Certificate Card"
                 Caption = 'Attachments';
                 // Links attachment records to the Vendor ISO Certificate table (ID 50103)
                 // using Vendor No. as the document identifier.
-                SubPageLink = "Table ID" = const(50103),
+                SubPageLink = "Table ID" = const(Database::"RV Vendor ISO Certificate List"),
                               "No." = field("Vendor No.");
             }
         }
