@@ -11,7 +11,7 @@ pageextension 50109 "RV Vendor Card Ext" extends "Vendor Card"
 {
     actions
     {
-        addlast(processing)
+        addafter(Attachments)//addlast("Ven&dor")//processing
         {
             action(ISOCertificates)
             {
@@ -33,7 +33,7 @@ pageextension 50109 "RV Vendor Card Ext" extends "Vendor Card"
                 end;
             }
         }
-        addlast(Promoted)
+        addlast(Category_Category9)
         {
             actionref(ISOCertificates_Promoted; ISOCertificates) { }
         }

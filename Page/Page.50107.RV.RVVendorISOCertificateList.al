@@ -14,6 +14,7 @@ page 50107 "RV Vendor ISO Certificate List"
     SourceTable = "RV Vendor ISO Certificate List";
     ApplicationArea = All;
     UsageCategory = Lists;
+    DeleteAllowed = false;
     CardPageId = "RV Vendor ISO Certificate Card";
 
     layout
@@ -93,7 +94,7 @@ page 50107 "RV Vendor ISO Certificate List"
     {
         area(Processing)
         {
-            action(NewRecord)
+            /* action(NewRecord)
             {
                 ApplicationArea = All;
                 Caption = 'New';
@@ -109,9 +110,10 @@ page 50107 "RV Vendor ISO Certificate List"
                         Rec."Vendor No." := VendorNoFilter;
                         LookupVendorNameForRec(Rec);
                     end;
+                    Rec.Insert();
                     CurrPage.Update(false);
                 end;
-            }
+            } 
             action(DeleteRecord)
             {
                 ApplicationArea = All;
@@ -124,7 +126,7 @@ page 50107 "RV Vendor ISO Certificate List"
                     if Confirm(DeleteConfirmQst, false, Rec."ISO Certificate") then
                         Rec.Delete(true);
                 end;
-            }
+            }*/
             action(Attachments)
             {
                 ApplicationArea = All;
@@ -145,8 +147,8 @@ page 50107 "RV Vendor ISO Certificate List"
         }
         area(Promoted)
         {
-            actionref(NewRecord_Promoted; NewRecord) { }
-            actionref(DeleteRecord_Promoted; DeleteRecord) { }
+            //actionref(NewRecord_Promoted; NewRecord) { }
+            //actionref(DeleteRecord_Promoted; DeleteRecord) { }
             actionref(Attachments_Promoted; Attachments) { }
         }
     }
@@ -161,6 +163,8 @@ page 50107 "RV Vendor ISO Certificate List"
 
     trigger OnAfterGetRecord()
     begin
+        if Rec.IsEmpty then exit;
+
         // Resolve ISO Certificate description from the setup table.
         ResolveIsoCertDescription();
 
@@ -170,6 +174,12 @@ page 50107 "RV Vendor ISO Certificate List"
 
         // Set the style expression for bold red rendering when Expired.
         SetExpiredStyle();
+    end;
+
+    trigger OnDeleteRecord(): Boolean
+    begin
+        if not Confirm(DeleteConfirmQst, false, Rec."ISO Certificate") then
+            exit(false);
     end;
 
     // ── Variables ─────────────────────────────────────────────────────────
@@ -240,7 +250,7 @@ page 50107 "RV Vendor ISO Certificate List"
            (Rec.Status <> Rec.Status::Expired)
         then begin
             Rec.Status := Rec.Status::Expired;
-            Rec.Modify();
+            //Rec.Modify();
         end;
     end;
 

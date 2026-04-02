@@ -11,7 +11,7 @@ pageextension 50110 "RV Vendor List Ext" extends "Vendor List"
 {
     actions
     {
-        addlast(processing)
+        addafter(ApprovalEntries)
         {
             action(ISOCertificates)
             {
@@ -33,9 +33,11 @@ pageextension 50110 "RV Vendor List Ext" extends "Vendor List"
                 end;
             }
         }
-        addlast(Promoted)
+
+        addlast(Category_Category5)
         {
             actionref(ISOCertificates_Promoted; ISOCertificates) { }
         }
+
     }
 }

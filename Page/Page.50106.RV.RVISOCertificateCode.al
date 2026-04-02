@@ -32,7 +32,7 @@ page 50106 "RV ISO Certificate Code"
         }
     }
 
-    actions
+    /* actions
     {
         area(Processing)
         {
@@ -54,5 +54,5 @@ page 50106 "RV ISO Certificate Code"
         {
             actionref(NewRecord_Promoted; NewRecord) { }
         }
-    }
+    } */
 }
