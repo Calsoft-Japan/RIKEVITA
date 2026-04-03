@@ -11,13 +11,13 @@ page 50107 "RV Vendor ISO Certificate List"
 {
     Caption = 'Vendor ISO Certificate List';
     PageType = List;
-    SourceTable = "RV Vendor ISO Certificate List";
+    SourceTable = "RV Vendor ISO Certificate Line";
     ApplicationArea = All;
     UsageCategory = Lists;
     Editable = false;
-    DeleteAllowed = true;
     RefreshOnActivate = true;
     CardPageId = "RV Vendor ISO Certificate Card";
+    DataCaptionFields = "Vendor No.";
 
     layout
     {
@@ -33,6 +33,15 @@ page 50107 "RV Vendor ISO Certificate List"
                     trigger OnValidate()
                     begin
                         LookupVendorName();
+                    end;
+
+                    trigger OnDrillDown()
+                    var
+                        CertCard: Page "RV Vendor ISO Certificate Card";
+                    begin
+                        CertCard.SetTableView(Rec);
+                        CertCard.RunModal();
+                        CurrPage.Update(false);
                     end;
                 }
                 field("Vendor Name"; Rec."Vendor Name")
@@ -86,8 +95,8 @@ page 50107 "RV Vendor ISO Certificate List"
                 Caption = 'Attachments';
                 // Links attachment records to this Vendor ISO Certificate table (ID 50103)
                 // using Vendor No. as the document identifier.
-                SubPageLink = "Table ID" = const(50103),
-                              "No." = field("Vendor No.");
+                SubPageLink = "Table ID" = const(Database::"RV Vendor ISO Certificate Line"),
+                              "No." = field("Attach. Doc. No.");
             }
         }
     }
@@ -102,33 +111,48 @@ page 50107 "RV Vendor ISO Certificate List"
                 Caption = 'New';
                 Image = New;
                 ToolTip = 'Create a new vendor ISO certificate record.';
+                RunObject = Page "RV Vendor ISO Certificate Card";
+                RunPageLink = "Vendor No." = field("Vendor No.");
 
                 trigger OnAction()
+                var
+                    CertCard: Page "RV Vendor ISO Certificate Card";
+                    ISOCertList: Record "RV Vendor ISO Certificate List";
                 begin
-                    Rec.Init();
-                    // If page was opened with a Vendor No. filter, pre-fill the field
-                    // so the new record belongs to the same vendor.
-                    if VendorNoFilter <> '' then begin
-                        Rec."Vendor No." := VendorNoFilter;
-                        LookupVendorNameForRec(Rec);
-                    end;
-                    Rec.Insert();
+                    ISOCertList.SetRange("Vendor No.", VendorNoFilter);
+                    ISOCertList.Init();
+                    ISOCertList."Vendor No." := VendorNoFilter;
+                    //ISOCertList.Insert(true);
+
+                    CertCard.SetTableView(ISOCertList);
+                    CertCard.RunModal();
                     CurrPage.Update(false);
                 end;
-            } 
+            } */
             action(DeleteRecord)
             {
                 ApplicationArea = All;
-                Caption = 'Delete';
+                Caption = 'Delete All';
                 Image = Delete;
                 ToolTip = 'Delete the selected vendor ISO certificate record.';
 
                 trigger OnAction()
+                var
+                    ISOCertList: Record "RV Vendor ISO Certificate Line";
+                    DocAttachment: Record "Document Attachment";
                 begin
-                    if Confirm(DeleteConfirmQst, false, Rec."ISO Certificate") then
-                        Rec.Delete(true);
+                    DocAttachment.Reset();
+                    DocAttachment.SetRange("Table ID", Database::"RV Vendor ISO Certificate Line");
+                    ISOCertList.Reset();
+                    if Confirm('Are you sure you want to delete all of the ISO certificate records?', false) then begin
+                        DocAttachment.DeleteAll();
+                        ISOCertList.DeleteAll();
+
+                        CurrPage.Update();
+                    end;
+
                 end;
-            }*/
+            }
             action(Attachments)
             {
                 ApplicationArea = All;
@@ -150,7 +174,7 @@ page 50107 "RV Vendor ISO Certificate List"
         area(Promoted)
         {
             //actionref(NewRecord_Promoted; NewRecord) { }
-            //actionref(DeleteRecord_Promoted; DeleteRecord) { }
+            actionref(DeleteRecord_Promoted; DeleteRecord) { }
             actionref(Attachments_Promoted; Attachments) { }
         }
     }
@@ -161,6 +185,7 @@ page 50107 "RV Vendor ISO Certificate List"
     begin
         // Capture any active Vendor No. filter so the New action can pre-fill it.
         VendorNoFilter := Rec.GetFilter("Vendor No.");
+        Rec."Vendor No." := VendorNoFilter;
     end;
 
     trigger OnAfterGetRecord()
@@ -215,7 +240,7 @@ page 50107 "RV Vendor ISO Certificate List"
     /// Separated from LookupVendorName so it can be called with any record instance
     /// (e.g. from the New action when pre-filling a new row).
     /// </summary>
-    local procedure LookupVendorNameForRec(var VendorIsoCert: Record "RV Vendor ISO Certificate List")
+    local procedure LookupVendorNameForRec(var VendorIsoCert: Record "RV Vendor ISO Certificate Line")
     var
         Vendor: Record Vendor;
     begin

@@ -9,8 +9,10 @@ page 50108 "RV Vendor ISO Certificate Card"
 {
     Caption = 'Vendor ISO Certificate Card';
     PageType = Card;
-    SourceTable = "RV Vendor ISO Certificate List";
+    SourceTable = "RV Vendor ISO Certificate Line";
     ApplicationArea = All;
+    //InsertAllowed = false;
+    DataCaptionFields = "Vendor No.", "Vendor Name";
 
     layout
     {
@@ -24,6 +26,7 @@ page 50108 "RV Vendor ISO Certificate Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the vendor number. The Vendor Name is auto-populated on validation.';
+                    Editable = false;
 
                     trigger OnValidate()
                     begin
@@ -33,7 +36,7 @@ page 50108 "RV Vendor ISO Certificate Card"
                 field("Vendor Name"; Rec."Vendor Name")
                 {
                     ApplicationArea = All;
-                    Editable = false;
+                    //Editable = false;
                     ToolTip = 'Specifies the vendor name, automatically filled from the Vendor No.';
                 }
                 field("ISO Certificate"; Rec."ISO Certificate")
@@ -92,8 +95,8 @@ page 50108 "RV Vendor ISO Certificate Card"
                 Caption = 'Attachments';
                 // Links attachment records to the Vendor ISO Certificate table (ID 50103)
                 // using Vendor No. as the document identifier.
-                SubPageLink = "Table ID" = const(Database::"RV Vendor ISO Certificate List"),
-                              "No." = field("Vendor No.");
+                SubPageLink = "Table ID" = const(Database::"RV Vendor ISO Certificate Line"),
+                              "No." = field("Attach. Doc. No.");
             }
         }
     }
@@ -111,13 +114,20 @@ page 50108 "RV Vendor ISO Certificate Card"
 
                 trigger OnAction()
                 var
-                    DocumentAttachmentDetails: Page "Document Attachment Details";
+                    DocAttachmentDetails: Page "Document Attachment Details";
                     RecRef: RecordRef;
                 begin
+
                     RecRef.GetTable(Rec);
-                    DocumentAttachmentDetails.OpenForRecRef(RecRef);
-                    DocumentAttachmentDetails.RunModal();
+                    DocAttachmentDetails.OpenForRecRef(RecRef);
+                    DocAttachmentDetails.RunModal();
+
+                    // Refresh the FactBox to reflect any newly added attachments
+                    CurrPage.AttachmentFactBox.Page.Update(false);
                 end;
+
+
+
             }
         }
         area(Promoted)
@@ -145,6 +155,15 @@ page 50108 "RV Vendor ISO Certificate Card"
         // Reset style and description for blank new record.
         ExpiredStyleExpr := 'Standard';
         IsoCertDescription := '';
+
+        Rec.Validate("Vendor No.", Rec.GetFilter("Vendor No."));
+    end;
+
+    trigger OnQueryClosePage(CloseAction: Action): Boolean
+    begin
+        if (Rec."Vendor No." = '') or (Rec."ISO Certificate" = '') or (Rec."Start Date" = 0D) then begin
+            Error('[Vendor No.],[ISO Certificat],[Start Date] must all have value.');
+        end;
     end;
 
     // ── Variables ─────────────────────────────────────────────────────────
@@ -156,6 +175,8 @@ page 50108 "RV Vendor ISO Certificate Card"
 
         // Cached ISO Certificate description for the current record.
         IsoCertDescription: Text[100];
+
+
 
     // ── Local Procedures ──────────────────────────────────────────────────
 
@@ -199,7 +220,7 @@ page 50108 "RV Vendor ISO Certificate Card"
            (Rec.Status <> Rec.Status::Expired)
         then begin
             Rec.Status := Rec.Status::Expired;
-            Rec.Modify();
+            //Rec.Modify();
         end;
     end;
 

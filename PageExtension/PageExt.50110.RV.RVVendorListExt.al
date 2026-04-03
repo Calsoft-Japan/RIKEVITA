@@ -19,8 +19,10 @@ pageextension 50110 "RV Vendor List Ext" extends "Vendor List"
                 Caption = 'ISO Certificates';
                 Image = Certificate;
                 ToolTip = 'View and manage ISO certificates registered for the selected vendor.';
+                RunObject = Page "RV Vendor ISO Certificate List";
+                RunPageLink = "Vendor No." = field("No.");
 
-                trigger OnAction()
+                /* trigger OnAction()
                 var
                     VendorIsoCertList: Record "RV Vendor ISO Certificate List";
                     VendorIsoCertListPage: Page "RV Vendor ISO Certificate List";
@@ -30,7 +32,7 @@ pageextension 50110 "RV Vendor List Ext" extends "Vendor List"
                     VendorIsoCertList.SetRange("Vendor No.", Rec."No.");
                     VendorIsoCertListPage.SetTableView(VendorIsoCertList);
                     VendorIsoCertListPage.RunModal();
-                end;
+                end; */
             }
         }
 
