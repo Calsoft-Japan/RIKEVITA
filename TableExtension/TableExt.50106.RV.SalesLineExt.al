@@ -35,6 +35,7 @@ tableextension 50106 "RV Sales Line Ext." extends "Sales Line"
                 // intercepts this call and substitutes Planned Delivery Date as
                 // the effective date for the Price List Line date filter.
                 ApplyPrice(FieldNo("Shipment Date"), PriceCalculation);
+                Validate("Unit Price");
             end;
         }
     }
