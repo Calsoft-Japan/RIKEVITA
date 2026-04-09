@@ -5,7 +5,7 @@
 page 50602 "RV Pst. Prod. Resul Jnl Line"
 {
     ApplicationArea = All;
-    Caption = 'RV Posted Prod. Result Journal Line';
+    Caption = 'Posted Prod. Result Journal';
     PageType = Worksheet;
     SourceTable = "RV Pst. Prod. Res. Jnl. Line";
     UsageCategory = Lists;
@@ -22,13 +22,21 @@ page 50602 "RV Pst. Prod. Resul Jnl Line"
                 {
                     ToolTip = 'Specifies the value of the Entry No. field.', Comment = '%';
                 }
+                field("Data Type"; Rec."Data Type")
+                {
+                    ToolTip = 'Specifies the value of the Data Type field.', Comment = '%';
+                }
                 field("Prod. Order No."; Rec."Prod. Order No.")
                 {
                     ToolTip = 'Specifies the value of the Prod. Order No. field.', Comment = '%';
                 }
-                field("Data Type"; Rec."Data Type")
+                field("Output Item No."; Rec."Output Item No.")
                 {
-                    ToolTip = 'Specifies the value of the Data Type field.', Comment = '%';
+
+                }
+                field("Operation No."; Rec."Operation No.")
+                {
+                    ToolTip = 'Specifies the value of the Operation No. field.', Comment = '%';
                 }
                 field("Work Center No."; Rec."Work Center No.")
                 {
@@ -50,10 +58,6 @@ page 50602 "RV Pst. Prod. Resul Jnl Line"
                 {
                     ToolTip = 'Specifies the value of the Posting Date field.', Comment = '%';
                 }
-                field(Status; Rec.Status)
-                {
-                    ToolTip = 'Specifies the value of the Status field.', Comment = '%';
-                }
                 field("Lot No."; Rec."Lot No.")
                 {
                     ToolTip = 'Specifies the value of the Lot No. field.', Comment = '%';
@@ -65,6 +69,21 @@ page 50602 "RV Pst. Prod. Resul Jnl Line"
                 field("Expire Date"; Rec."Expire Date")
                 {
                     ToolTip = 'Specifies the value of the Expire Date field.', Comment = '%';
+                }
+                field("Prod. Order Line No."; Rec."Prod. Order Line No.")
+                {
+                    ToolTip = 'Specifies the value of the Prod. Order Line No. field.', Comment = '%';
+                    Editable = false;
+                }
+                field("Routing No."; Rec."Routing No.")
+                {
+                    ToolTip = 'Specifies the value of the Routing No. field.', Comment = '%';
+                    Editable = false;
+                }
+                field("Prod. Order Comp. Line No."; Rec."Prod. Order Comp. Line No.")
+                {
+                    ToolTip = 'Specifies the value of the Prod. Order Comp. Line No. field.', Comment = '%';
+                    Editable = false;
                 }
                 field(SystemCreatedAt; Rec.SystemCreatedAt)
                 {

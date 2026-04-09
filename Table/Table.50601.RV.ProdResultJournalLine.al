@@ -50,19 +50,32 @@ table 50601 "RV Prod. Result Journal Line"
             trigger OnValidate()
             var
                 item: Record Item;
+                ProdOrderLine: Record "Prod. Order Line";
+                T83: Record "item journal line";
             begin
                 if "Prod. Order No." = '' then
                     Error(ErrProdNoBlank, "Output Item No.");
+                if "Output Item No." = '' then begin
+                    "Prod. Order Line No." := 0;
+                    UOM := '';
+                end else begin
+                    ProdOrderLine.SetFilterByReleasedOrderNo(Rec."Prod. Order No.");
+                    ProdOrderLine.SetRange("Item No.", Rec."Output Item No.");
+                    if not ProdOrderLine.FindFirst() then
+                        Error(ErrOutputItemNoNotExist, "Output Item No.", Rec."Prod. Order No.");
+                    "Prod. Order Line No." := ProdOrderLine."Line No.";
+                    "Routing No." := ProdOrderLine."Routing No.";
 
-                if rec.uom = '' then
-                    case "Data Type" of
-                        "RV Prod. Results Data Type"::"Planned Output",
-                        "RV Prod. Results Data Type"::"Adjust Output":
-                            begin
-                                item.get("Output Item No.");
-                                Validate(rec."UOM", item."Base Unit of Measure");
-                            end;
-                    end;
+                    if rec.uom = '' then
+                        case "Data Type" of
+                            "RV Prod. Results Data Type"::"Planned Output",
+                            "RV Prod. Results Data Type"::"Adjust Output":
+                                begin
+                                    item.get("Output Item No.");
+                                    Validate(rec."UOM", ProdOrderLine."Unit of Measure Code");
+                                end;
+                        end;
+                end;
             end;
 
             trigger OnLookup()
@@ -119,7 +132,22 @@ table 50601 "RV Prod. Result Journal Line"
             trigger OnValidate()
             var
                 UOM: Record "Item Unit of Measure";
+                ProdOrderComponent: Record "Prod. Order Component";
             begin
+                ProdOrderComponent.SetFilterByReleasedOrderNo(Rec."Prod. Order No.");
+                if Rec."Prod. Order Line No." <> 0 then
+                    ProdOrderComponent.SetRange("Prod. Order Line No.", Rec."Prod. Order Line No.");
+                ProdOrderComponent.SetRange("Item No.", Rec."Item No.");
+                if ProdOrderComponent.FindFirst() then begin
+                    if Rec."Prod. Order Line No." = 0 then
+                        Rec."Prod. Order Line No." := ProdOrderComponent."Prod. Order Line No.";
+                    Validate("Prod. Order Comp. Line No.", ProdOrderComponent."Line No.");
+                    rec.UOM := ProdOrderComponent."Unit of Measure Code";
+                end else begin
+                    Validate("Prod. Order Comp. Line No.", 0);
+                    rec.UOM := '';
+                end;
+
                 if rec.uom = '' then
                     case "Data Type" of
                         "RV Prod. Results Data Type"::"Adjust Consumption",
@@ -141,11 +169,13 @@ table 50601 "RV Prod. Result Journal Line"
         {
             Caption = 'Quantity';
             DecimalPlaces = 0 : 5;
+            BlankZero = true;
         }
         field(11; "Scrap Quantity"; Decimal)
         {
             Caption = 'Scrap Quantity';
             DecimalPlaces = 0 : 5;
+            BlankZero = true;
         }
         field(12; "UOM"; Code[10])
         {
@@ -185,6 +215,7 @@ table 50601 "RV Prod. Result Journal Line"
         {
             Caption = 'Prod. Order Line No.';
             TableRelation = "Prod. Order Line"."Line No." WHERE("Prod. Order No." = FIELD("Prod. Order No."), Status = CONST(Released));
+            BlankZero = true;
             trigger OnValidate()
             var
                 ProdOrderLine: Record "Prod. Order Line";
@@ -208,7 +239,7 @@ table 50601 "RV Prod. Result Journal Line"
                             WHERE("Prod. Order No." = FIELD("Prod. Order No."),
                                   "Prod. Order Line No." = field("Prod. Order Line No."),
                                   Status = CONST(Released));
-
+            BlankZero = true;
             trigger OnLookup()
             var
                 ProdOrderComp: Record "Prod. Order Component";
@@ -256,4 +287,5 @@ table 50601 "RV Prod. Result Journal Line"
     var
         ProdOrderLine: Record "Prod. Order Line";
         ErrProdNoBlank: Label 'You can not insert item number %1 because it is not produced on released production order.';
+        ErrOutputItemNoNotExist: Label 'You can not insert item number %1 because it is not produced on released production order %2.';
 }

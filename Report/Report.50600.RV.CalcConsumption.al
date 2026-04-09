@@ -4,7 +4,7 @@
 /// </summary>
 report 50600 "RV Calc. Consumption"
 {
-    Caption = 'RV Calc. Consumption';
+    Caption = 'Calc. Consumption';
     ProcessingOnly = true;
 
     dataset
@@ -68,12 +68,11 @@ report 50600 "RV Calc. Consumption"
         }
         trigger OnOpenPage()
         begin
-            InitializeRequest(WorkDate(), GetDefaultCalcBasedOn());
+            InitializeRequest(GetDefaultCalcBasedOn());
         end;
     }
 
     var
-        PostingDate: Date;
         CalcBasedOn: Option "Actual Output","Expected Output";
         ReservedFromStock: Enum "Reservation From Stock";
         Item: Record Item;
@@ -81,9 +80,8 @@ report 50600 "RV Calc. Consumption"
         LastLineNo: Integer;
         RVProdResultJnlLine: Record "RV Prod. Result Journal Line";
 
-    procedure InitializeRequest(NewPostingDate: Date; NewCalcBasedOn: Option)
+    procedure InitializeRequest(NewCalcBasedOn: Option)
     begin
-        PostingDate := NewPostingDate;
         CalcBasedOn := NewCalcBasedOn;
     end;
 
@@ -117,12 +115,12 @@ report 50600 "RV Calc. Consumption"
         RVProdResultJnlLine.Init();
         RVProdResultJnlLine."Batch Name" := "RV Prod. Result Journal Line"."Batch Name";
         RVProdResultJnlLine."Journal Line No." := LastLineNo;
-        case RVProdResultJnlLine."Data Type" of
-            RVProdResultJnlLine."Data Type"::"Adjust Output":
+        case "RV Prod. Result Journal Line"."Data Type" of
+            "RV Prod. Result Journal Line"."Data Type"::"Adjust Output":
                 begin
                     RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Adjust Consumption";
                 end;
-            RVProdResultJnlLine."Data Type"::"Planned Output":
+            "RV Prod. Result Journal Line"."Data Type"::"Planned Output":
                 begin
                     RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Planned Consumption";
                 end;
@@ -131,7 +129,7 @@ report 50600 "RV Calc. Consumption"
         RVProdResultJnlLine."Item No." := "Prod. Order Component"."Item No.";
         RVProdResultJnlLine.Quantity := QtyToPost;
         RVProdResultJnlLine.UOM := "Prod. Order Component"."Unit of Measure Code";
-        RVProdResultJnlLine."Posting Date" := PostingDate;
+        RVProdResultJnlLine."Posting Date" := "RV Prod. Result Journal Line"."Posting Date";
         RVProdResultJnlLine."Prod. Order Line No." := "Prod. Order Component"."Prod. Order Line No.";
         RVProdResultJnlLine."Prod. Order Comp. Line No." := "Prod. Order Component"."Line No.";
         RVProdResultJnlLine.Insert();

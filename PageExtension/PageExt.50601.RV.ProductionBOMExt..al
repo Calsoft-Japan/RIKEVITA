@@ -2,13 +2,13 @@
 /// PageExtension RV Production BOM (ID 50601) extends Production BOM page
 /// FDD014 2026/02/23: New. (Stephen)
 /// </summary>
-pageextension 50601 "RV Production BOM" extends "Production BOM"
+pageextension 50601 "RV_Production BOM" extends "Production BOM"
 {
     layout
     {
         addlast(General)
         {
-            field("RV Highly Restricted BOM"; Rec."RV_Highly Restricted BOM")
+            field("RV_Highly Restricted BOM"; Rec."RV_Highly Restricted BOM")
             {
                 ApplicationArea = All;
                 Description = 'FDD014';

@@ -9,6 +9,7 @@ page 50508 "RV IQC List"
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = "RV QC Header";
+    SourceTableView = WHERE("QC Type" = FILTER(IQC));
     CardPageId = "RV IQC Card";
 
     layout
@@ -96,4 +97,6 @@ page 50508 "RV IQC List"
     }
 
     var
+
+
 }

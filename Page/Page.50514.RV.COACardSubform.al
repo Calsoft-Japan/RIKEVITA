@@ -9,7 +9,6 @@ page 50514 "RV COA Card Subform"
     ApplicationArea = All;
     UsageCategory = None;
     SourceTable = "RV QA Header";
-    DelayedInsert = true;
 
     layout
     {
@@ -46,6 +45,7 @@ page 50514 "RV COA Card Subform"
                         //clear ShipmentLotNo
                         Rec.ClearShipmentLotNo;
                         CurrPage.Update();
+
                     end;
                 }
                 field("Order No."; Rec."Order No.")
@@ -237,5 +237,5 @@ page 50514 "RV COA Card Subform"
     var
         PO: Page "Purchase Order";
         NoSeries: Codeunit "No. Series";
-        RIKEVITASetup: Record "RV RIKEVITA Setup";
+        RIKEVITASetup: Record "RIKEVITA Setup";
 }

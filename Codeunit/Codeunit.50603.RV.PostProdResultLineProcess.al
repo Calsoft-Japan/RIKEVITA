@@ -51,11 +51,11 @@ codeunit 50603 "RV Post Prod Result Line Proc."
                 ProdResultJournalLine."Data Type"::"Adjust Output",
                 ProdResultJournalLine."Data Type"::"Planned Output":
                     begin
-
                         CreateOutputJnlLine();
                     end;
                 ProdResultJournalLine."Data Type"::"Adjust Consumption",
-                ProdResultJournalLine."Data Type"::"Planned Consumption":
+                ProdResultJournalLine."Data Type"::"Planned Consumption",
+                ProdResultJournalLine."Data Type"::"Recycle Consumption":
                     begin
                         CreateConsumptionJnlLine();
                     end;
@@ -177,6 +177,7 @@ codeunit 50603 "RV Post Prod Result Line Proc."
     var
         CreateReservEntry: Codeunit "Create Reserv. Entry";
         TempReservEntry: Record "Reservation Entry" temporary;
+        LotNoInfo: Record "Lot No. Information";
     begin
         ProdOrderRtngLine.get(ProdOrderRtngLine.Status::Released,
                             ProdResultJournalLine."Prod. Order No.",
@@ -211,31 +212,42 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         ItemJnlLine.Insert();
         NextLineNo += 10000;
 
-        TempReservEntry.Init();
-        TempReservEntry."Lot No." := ProdResultJournalLine."Lot No.";
+        if ProdResultJournalLine."Lot No." <> '' then begin
+            TempReservEntry.Init();
+            TempReservEntry."Lot No." := ProdResultJournalLine."Lot No.";
 
-        CreateReservEntry.CreateReservEntryFor(
-            Database::"Item Journal Line",
-            ItemJnlLine."Entry Type".AsInteger(),
-            ItemJnlLine."Journal Template Name",
-            ItemJnlLine."Journal Batch Name",
+            CreateReservEntry.CreateReservEntryFor(
+                Database::"Item Journal Line",
+                ItemJnlLine."Entry Type".AsInteger(),
+                ItemJnlLine."Journal Template Name",
+                ItemJnlLine."Journal Batch Name",
+                0,
+                ItemJnlLine."Line No.",
+                ItemJnlLine."Qty. per Unit of Measure",
+                ItemJnlLine.Quantity,
+                ItemJnlLine."Quantity (Base)",
+                TempReservEntry
+                );
+            CreateReservEntry.CreateEntry(
+            ItemJnlLine."Item No.",
+            ItemJnlLine."Variant Code",
+            ItemJnlLine."Location Code",
+            '',
+            WorkDate(),
+            WorkDate(),
             0,
-            ItemJnlLine."Line No.",
-            ItemJnlLine."Qty. per Unit of Measure",
-            ItemJnlLine.Quantity,
-            ItemJnlLine."Quantity (Base)",
-            TempReservEntry
+            Enum::"Reservation Status"::Prospect
             );
-        CreateReservEntry.CreateEntry(
-        ItemJnlLine."Item No.",
-        ItemJnlLine."Variant Code",
-        ItemJnlLine."Location Code",
-        '',
-        WorkDate(),
-        WorkDate(),
-        0,
-        Enum::"Reservation Status"::Surplus
-        );
+
+            if not LotNoInfo.Get(ItemJnlLine."Item No.", ItemJnlLine."Variant Code", ProdResultJournalLine."Lot No.") then begin
+                LotNoInfo.Init();
+                LotNoInfo."Item No." := ItemJnlLine."Item No.";
+                LotNoInfo."Variant Code" := ItemJnlLine."Variant Code";
+                LotNoInfo."Lot No." := ProdResultJournalLine."Lot No.";
+                // LotNoInfo."RV_Manufacture Date" := ItemJnlLine."Posting Date";
+                LotNoInfo.Insert();
+            end;
+        end;
     end;
 
     procedure CreateConsumptionJnlLine()

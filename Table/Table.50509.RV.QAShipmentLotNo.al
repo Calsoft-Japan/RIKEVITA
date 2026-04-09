@@ -58,7 +58,11 @@ table 50509 "RV QA Shipment Lot No."
         {
             Caption = 'Qty. (Base)';
             DecimalPlaces = 0 : 5;
-            Editable = false;
+        }
+        field(17; "Qty. per UOM"; Decimal)
+        {
+            Caption = 'Qty. per UOM';
+            DecimalPlaces = 0 : 5;
         }
     }
     keys

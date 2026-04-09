@@ -187,7 +187,7 @@ page 50512 "RV COA List"
     var
         QAShipmentLotNo: Record "RV QA Shipment Lot No.";
         NoSeriesMgt: Codeunit "No. Series";
-        RIKEVITASetup: Record "RV RIKEVITA Setup";
+        RIKEVITASetup: Record "RIKEVITA Setup";
     //COANo: Code[20];
     begin
         RIKEVITASetup.Get();

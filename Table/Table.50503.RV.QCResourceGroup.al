@@ -1,22 +1,21 @@
 /// <summary>
-/// Table RV QC Group (ID 50503)
+/// Table RV QC Resource Group (ID 50503)
 /// FDD039 2026/02/23: New. (Mike)
 /// </summary>
-table 50503 "RV QC Group"
+table 50503 "RV QC Resource Group"
 {
-    Caption = 'QC Group';
+    Caption = 'QC Resource Group';
     DataClassification = CustomerContent;
     fields
     {
-        field(1; "QC Group No."; Code[20])
+        field(1; "QC Resource Group No."; Code[20])
         {
-            Caption = 'QC Group No.';
+            Caption = 'QC Resource Group No.';
             NotBlank = true;
         }
         field(2; "Effective Date"; Date)
         {
             Caption = 'Effective Date';
-            NotBlank = true;
         }
         field(3; "Internal Specification"; Code[20])
         {
@@ -31,7 +30,7 @@ table 50503 "RV QC Group"
     }
     keys
     {
-        key(PK; "QC Group No.", "Effective Date")
+        key(PK; "QC Resource Group No.", "Effective Date")
         {
             Clustered = true;
         }

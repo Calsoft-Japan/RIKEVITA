@@ -1,5 +1,5 @@
 /// <summary>
-/// PAge RV IQC Iny. Result Subform Subform (ID 50511)
+/// Page RV IQC Iny. Result Subform Subform (ID 50511)
 /// FDD039 2026/02/23: New. (Mike)
 /// </summary>
 page 50511 "RV IQC Iny. Result Subform"

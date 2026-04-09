@@ -10,7 +10,6 @@ report 50500 "RV_COA Report"
     RDLCLayout = './ReportLayout/RV_COAReport.rdl';
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = All;
-    //WordMergeDataItem = "RV_COA Header";  // 
 
     dataset
     {
@@ -43,49 +42,31 @@ report 50500 "RV_COA Report"
             column(SalesOrderNoText; SalesOrderNoText)
             {
             }
-
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = sorting(Number);
                 dataitem(PageLoop; "Integer")
                 {
                     DataItemTableView = sorting(Number) where(Number = const(1));
-                    column(STRSUBSTNO_Text002_FORMAT_CurrReport_PAGENO__; StrSubstNo(Text002Txt, Format(1)))
+                    column(CurrReport_PAGENO; StrSubstNo(Text002Txt, Format(1)))
                     {
                     }
                     column(PageCaptionLbl; PageCaptionLbl)
                     {
                     }
-                    column(TransferToAddr_1_; TransferToAddr[1])
+                    column(MARKSText_1; MARKSText[1])
                     {
                     }
-                    column(TransferFromAddr_1_; TransferFromAddr[1])
+                    column(MARKSText_2; MARKSText[2])
                     {
                     }
-                    column(TransferToAddr_2_; TransferToAddr[2])
+                    column(MARKSText_3; MARKSText[3])
                     {
                     }
-                    column(TransferFromAddr_2_; TransferFromAddr[2])
+                    column(MARKSText_4; MARKSText[4])
                     {
                     }
-                    column(TransferToAddr_3_; TransferToAddr[3])
-                    {
-                    }
-                    column(TransferFromAddr_3_; TransferFromAddr[3])
-                    {
-                    }
-                    column(TransferToAddr_4_; TransferToAddr[4])
-                    {
-                    }
-                    column(TransferFromAddr_4_; TransferFromAddr[4])
-                    {
-                    }
-
-                    column(TransferToAddr_5_; TransferToAddr[5])
-                    {
-                    }
-
-                    column(TransferFromAddr_5_; TransferFromAddr[5])
+                    column(PRODUCTText; PRODUCTText)
                     {
                     }
                     column(QA_Header___No__; "QA Header"."COA No.")
@@ -97,92 +78,29 @@ report 50500 "RV_COA Report"
                     column(CompanyInfo_Picture; CompanyInfo.Picture)
                     {
                     }
-                    column(TransferToAddr_7_; TransferToAddr[7])
-                    {
-                    }
-                    column(TransferToAddr_6_; TransferToAddr[6])
-                    {
-                    }
-                    column(TransferToAddr_8_; TransferToAddr[8])
-                    {
-                    }
-                    column(TransferFromAddr_7_; TransferFromAddr[7])
-                    {
-                    }
-                    column(TransferFromAddr_6_; TransferFromAddr[6])
-                    {
-                    }
-                    column(TransferFromAddr_8_; TransferFromAddr[8])
-                    {
-                    }
                     column(OutputNo; OutputNo)
                     {
                     }
                     column(PageLoop_Number; Number)
                     {
                     }
-                    dataitem(DimensionLoop1; "Integer")
-                    {
-                        DataItemLinkReference = "QA Header";
-                        DataItemTableView = sorting(Number) where(Number = FILTER(1 ..));
-                        column(DimText; DimText)
-                        {
-                        }
-                        column(DimensionLoop1_Number; DimensionLoop1.Number)
-                        {
-                        }
-                        column(DimText_Control80; DimText)
-                        {
-                        }
-
-
-                        trigger OnPreDataItem()
-                        begin
-                            if not ShowInternalInfo then
-                                CurrReport.Break();
-                        end;
-
-                        trigger OnAfterGetRecord()
-                        begin
-                            if Number = 1 then begin
-                                if not DimSetEntry1.Find('-') then
-                                    CurrReport.Break();
-                            end else
-                                if not Continue then
-                                    CurrReport.Break();
-                            /*
-                            CLEAR(DimText);
-                            Continue := false;
-                            repeat
-                                OldDimText := DimText;
-                                if DimText = '' then
-                                    DimText := StrSubstNo(
-                                      Subst01Txt, DimSetEntry1."Dimension Code", DimSetEntry1."Dimension Value Code")
-                                else
-                                    DimText :=
-                                      StrSubstNo(
-                                        Subst02Txt, DimText,
-                                        DimSetEntry1."Dimension Code", DimSetEntry1."Dimension Value Code");
-                                if StrLen(DimText) > MaxStrLen(OldDimText) then begin
-                                    DimText := OldDimText;
-                                    Continue := true;
-                                    exit;
-                                end;
-                            until (DimSetEntry1.Next() = 0);
-                            */
-                        end;
-                    }
                     dataitem("RV QA Shipment Lot No."; "RV QA Shipment Lot No.")
                     {
                         DataItemLink = "COA No." = FIELD("COA No.");
                         DataItemLinkReference = "QA Header";
                         DataItemTableView = sorting("COA No.", "COA Lot Line No.");
+
+                        column(ContainerNoNo; "Container No.")//CONTAINER
+                        {
+                        }
+                        column(Header_Quantity; HeaderQuantity)//HeaderQuantity
+                        {
+                        }
                         column(QAShipmentLine_Item_No; "QA Header"."Item No.")
                         {
                         }
-                        column(Line_Quantity; Quantity)
+                        column(Line_Quantity; LineQuantity)
                         {
-                            DecimalPlaces = 0 : 5;
                         }
                         column(UOM; UOM)
                         {
@@ -247,9 +165,6 @@ report 50500 "RV_COA Report"
                                 CLEAR(resultText);
                                 CLEAR(SpecLineNoText);
 
-
-
-
                                 CASE DisplayMethodCharsSpec OF
                                     DisplayMethodCharsSpec::Method:
                                         begin
@@ -276,10 +191,8 @@ report 50500 "RV_COA Report"
                                         END;
                                 end;
 
-
-
                                 resultText := ExternalQCResults."COA Value";
-                                SpecLineNoText := Format(ExternalQCResults."QC External Spec. Line No.") + '.';
+                                SpecLineNoText := Format(Number) + '.';
                             end;
                         }
 
@@ -288,10 +201,46 @@ report 50500 "RV_COA Report"
                             //UOM := JPCK_Functions.GetUnitOfMeasureText(UOM, CurrReport.Language);
                             UOM := UOM;
 
+                            Clear(HeaderQuantity);
+                            Clear(ContainerNo);
 
+                            Clear(LineQuantity);
 
+                            Clear(QtyCalculated);
 
-                            TransferFromAddr[4] := format("RV QA Shipment Lot No.".Quantity);
+                            if not Item.get("QA Header"."Item No.") then
+                                Item.Init();
+
+                            LineQuantity := Format("RV QA Shipment Lot No."."Qty. (Base)") + ' ' + Item."Base Unit of Measure";
+                            ContainerNo := "RV QA Shipment Lot No."."Container No.";
+
+                            Clear(UOMMgt);
+                            Clear(QtyCalculated);
+                            if "RV QA Shipment Lot No."."Qty. (Base)" <> 0 then
+                                QtyCalculated := Round("RV QA Shipment Lot No.".Quantity / "RV QA Shipment Lot No."."Qty. (Base)", UOMMgt.QtyRndPrecision());
+
+                            HeaderQuantity := 'NET ' +
+                            format("RV QA Shipment Lot No.".Quantity) +
+                            ' KG (NET ' +
+                            format(QtyCalculated) + ' ' +
+                            "RV QA Shipment Lot No.".UOM + ' x ' +
+                            format("RV QA Shipment Lot No."."Qty. (Base)") + ' ' +
+                            Item."Base Unit of Measure" + ')';
+
+                            /*
+                            Sample data: “NET 400.00 KG(NET 20.00 KG x 20 CTN)”.
+                            Sample data: “NET 100.00 KG(NET 25.00 KG x 4 BAG)”.
+                            Data Logic:
+                            “NET” is fix information. 
+                            “400.00” is calculated results by Base UOM. 
+                            “KG” is Item’s Base UOM.
+                            ”(NET “ is fix information.
+                            “20.00” is the  “Qty. per UOM” of UM field get from “Shipment Lot No. List”.  
+                            “KG” is Item’s Base UOM.
+                            ”x” is fix information.
+                            “20” is the “Qty.” of “Shipment Lot No. List”. 
+                            “CTN” is   UM field of “Shipment Lot No. List”.
+                            */
 
                             if DateCalculation = DateCalculation::"Shelf Life By Months Without Days MMM-YYYY" then
                                 FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date", 0, '<Month Text,3>-<Year4>')
@@ -325,38 +274,33 @@ report 50500 "RV_COA Report"
                 trigger OnAfterGetRecord()
                 begin
                     if Number > 1 then begin
-                        CopyText := Text000Txt;
                         OutputNo += 1;
                     end;
                     //MARKS
-                    TransferToAddr[1] := 'BRENNTAG';
-                    TransferToAddr[2] := 'INGREDIENTS';
-                    TransferToAddr[3] := 'BANGKOK';
-                    TransferToAddr[4] := 'MADE IN MALAYSIA';
+                    MARKSText[1] := 'BRENNTAG';
+                    MARKSText[2] := 'INGREDIENTS';
+                    MARKSText[3] := 'BANGKOK';
+                    MARKSText[4] := 'MADE IN MALAYSIA';
 
-                    //TransferFromAddr[1] := 'RVSM2507126/602135/3094';
-                    TransferFromAddr[2] := "QA Header"."Item Description";
-                    TransferFromAddr[3] := "RV QA Shipment Lot No."."Container No.";
+                    PRODUCTText := "QA Header"."Item Description";
+
                 end;
 
                 trigger OnPreDataItem()
                 begin
-                    //NoOfLoops := Abs(NoOfCopies) + 1;  // PBCJP-DOC-014-210-04
                     CopyText := '';
-                    SetRange(Number, 1);  // PBCJP-DOC-014-210-04
-                    //SetRange(Number, 1, NoOfLoops);  // PBCJP-DOC-014-210-04
+                    SetRange(Number, 1);
                     OutputNo := 1;
                 end;
             }
 
             trigger OnAfterGetRecord()
             begin
+
                 CompanyInfo.Get();
                 CompanyInfo.CalcFields(Picture);
 
                 Format_DateText := Format(Today(), 0, '<Day,2>-<Month Text,3>-<Year4>');
-
-                DimSetEntry1.SetRange("Dimension Set ID", 1);
 
                 Clear(TotalPageText);
 
@@ -366,11 +310,11 @@ report 50500 "RV_COA Report"
                 Clear(SalesOrderNoText);
                 CollectUniqueSalesOrderNo("COA No.");
 
-
-
                 Clear(DisplayQuantityPerLot);
                 Clear(DateCalculation);
                 Clear(DisplayMethodCharsSpec);
+                Clear(DateWordingText);
+                Clear(DateWording_remarkText);
 
 
                 CustCOAReportSetting.Reset();
@@ -398,10 +342,13 @@ report 50500 "RV_COA Report"
                         DateCalculation := CustCOAReportSetting."Date Calculation";
                         DisplayMethodCharsSpec := CustCOAReportSetting."Display Method&Chars Spec.";
 
-                        if (CustCOAReportSetting."Date Wording" = DateWording::"Best Before Date") then
-                            DateWordingText := 'BEST BEFORE DATE'
-                        else if (CustCOAReportSetting."Date Wording" = DateWording::"Expiry Date") then
+                        if (CustCOAReportSetting."Date Wording" = DateWording::"Best Before Date") then begin
+                            DateWordingText := 'BEST BEFORE DATE';
+                            DateWording_remarkText := 'Best Before Date';
+                        end else if (CustCOAReportSetting."Date Wording" = DateWording::"Expiry Date") then begin
                             DateWordingText := 'EXPIRY DATE';
+                            DateWording_remarkText := 'Expiry Date';
+                        end;
 
                     end else
                         DisplayQuantityPerLot := false;
@@ -448,20 +395,6 @@ report 50500 "RV_COA Report"
                 group(Options)
                 {
                     Caption = 'Options';
-                    // PBCJP-DOC-014-210-04: BEGIN
-                    /*
-                    field(NoOf_Copies; NoOfCopies)
-                    {
-                        Caption = 'No. of Copies';
-                        ApplicationArea = All;
-                    }
-                    
-                    // PBCJP-DOC-014-210-04: END
-                    field(Show_InternalInfo; ShowInternalInfo)
-                    {
-                        Caption = 'Show Internal Information';
-                    }
-                    */
                 }
             }
         }
@@ -487,41 +420,28 @@ report 50500 "RV_COA Report"
 
     var
 
-        DimSetEntry1: Record "Dimension Set Entry";
         QAShipmentLotNo: Record "RV QA Shipment Lot No.";
+        UOMMgt: Codeunit "Unit of Measure Management";
+
         ExternalQCResults: Record "RV QA External QC Results";
         CompanyInfo: Record "Company Information";
-
         CustCOAReportSetting: Record "RV Cust. COA Report Setting";
         DateWording: Enum "RV Date Wording";
-
         DisplayMethodCharsSpec: Enum "RV Display Method Chars Spec.";
-
-
         DateWordingText: Text;
-
         DateWording_remarkText: Text;
         DisplayQuantityPerLot: Boolean;
-
         DateCalculation: Enum "RV Date Calculation";
-
-
         METHOD_Caption: Text;
         SPECIFICATION_Caption: Text;
-
         METHODText: Text;
+        ContainerNo: Text;
+        HeaderQuantity: Text;
+        LineQuantity: Text;
+        QtyCalculated: Decimal;
         SPECIFICATIONText: Text;
-
         SalesOrderNoText: Text;
-
-
-
-        //FormatAddr: Codeunit "PBCJP JPCK_Format Address";
-        //JPCK_Functions: Codeunit "PBCJP JPCK_Functions";
-        TransferFromAddr: array[8] of Text[100];
-        TransferToAddr: array[8] of Text[100];
-        //NoOfCopies: Integer;
-        //NoOfLoops: Integer;
+        MARKSText: array[4] of Text[100];
         CopyText: Text[50];
         DimText: Text;
         OldDimText: Text;
@@ -529,32 +449,18 @@ report 50500 "RV_COA Report"
         Continue: Boolean;
         OutputNo: Integer;
         UOM: Text[50];
-
-
-
-
-
+        Item: Record Item;
         FormatExpireDateText: Text;
-
-
-
-
-
         resultText: Text;
-
         SpecLineNoText: Text;
-
+        PRODUCTText: Text;
         TotalPageText: Text;
-
-
         Format_DateText: Text;
 
-        Text000Txt: Label 'COPY';
-        Text002Txt: Label 'Page %1', Comment = '%1: Page No.';
+        Text002Txt: Label 'Page %1';
 
         RemarksCaptionLbl: Label 'Remarks';
         PageCaptionLbl: Label 'Page';
-
 
 
     procedure CollectUniqueSalesOrderNo(ParCOANO: Code[20])

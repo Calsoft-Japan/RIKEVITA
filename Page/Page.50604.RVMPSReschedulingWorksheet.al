@@ -39,24 +39,31 @@ page 50604 "RV MPS Rescheduling Worksheet"
             {
                 field("Production No."; Rec."Production No.")
                 {
+                    Editable = false;
                 }
                 field("Item No."; Rec."Item No.")
                 {
+                    Editable = false;
                 }
                 field("Due Date"; Rec."Due Date")
                 {
+                    Editable = false;
                 }
                 field("Quantity"; Rec."Quantity")
                 {
+                    Editable = false;
                 }
                 field("Routing No."; Rec."Routing No.")
                 {
+                    Editable = false;
                 }
                 field("Starting Date"; Rec."Starting Date")
                 {
+                    Editable = false;
                 }
                 field("Ending Date"; Rec."Ending Date")
                 {
+                    Editable = false;
                 }
                 field("New Starting Date"; Rec."New Starting Date")
                 {
@@ -66,12 +73,15 @@ page 50604 "RV MPS Rescheduling Worksheet"
                 }
                 field("Work Center No. 1"; Rec."Work Center No. 1")
                 {
+                    Editable = false;
                 }
                 field("Work Center No. 2"; Rec."Work Center No. 2")
                 {
+                    Editable = false;
                 }
                 field("Work Center No. 3"; Rec."Work Center No. 3")
                 {
+                    Editable = false;
                 }
                 field("New Work Center No. 1"; Rec."New Work Center No. 1")
                 {
@@ -84,6 +94,14 @@ page 50604 "RV MPS Rescheduling Worksheet"
                 }
                 field("Planning Status"; Rec."Planning Status")
                 {
+                }
+                field(Status; Rec.Status)
+                {
+                    Editable = false;
+                }
+                field("Error Message"; Rec."Error Message")
+                {
+                    Editable = false;
                 }
             }
         }
@@ -140,6 +158,17 @@ page 50604 "RV MPS Rescheduling Worksheet"
                     UpdateMOData();
                 end;
             }
+            action(Reset)
+            {
+                ApplicationArea = All;
+                Caption = 'Reset';
+                Image = ResetStatus;
+
+                trigger OnAction()
+                begin
+                    ResetData();
+                end;
+            }
         }
         area(Promoted)
         {
@@ -147,6 +176,7 @@ page 50604 "RV MPS Rescheduling Worksheet"
             actionref(ExportMPSData_Promoted; ExportMPSData) { }
             actionref(ImportMPSData_Promoted; ImportMPSData) { }
             actionref(ApplyReschedulingData_Promoted; ApplyReschedulingData) { }
+            actionref(Reset_Promoted; Reset) { }
         }
     }
 
@@ -338,11 +368,26 @@ page 50604 "RV MPS Rescheduling Worksheet"
         MPSReschedulingLine.CopyFilters(Rec);
         if MPSReschedulingLine.FindSet() then
             repeat
+                Commit();
                 if not MPSReschedulingUpdateBatch.Run(MPSReschedulingLine) then begin
                     MPSReschedulingLine.Status := MPSReschedulingLine.Status::Error;
                     MPSReschedulingLine."Error Message" := getLastErrorText();
                     MPSReschedulingLine.Modify();
                 end;
+            until MPSReschedulingLine.Next() = 0;
+    end;
+
+    procedure ResetData()
+    var
+        MPSReschedulingLine: Record "RV MPS Rescheduling Line";
+    begin
+        MPSReschedulingLine.Reset();
+        MPSReschedulingLine.SetRange(Status, MPSReschedulingLine.Status::Error);
+        if MPSReschedulingLine.FindSet() then
+            repeat
+                MPSReschedulingLine.Status := MPSReschedulingLine.Status::" ";
+                MPSReschedulingLine."Error Message" := '';
+                MPSReschedulingLine.Modify();
             until MPSReschedulingLine.Next() = 0;
     end;
 }

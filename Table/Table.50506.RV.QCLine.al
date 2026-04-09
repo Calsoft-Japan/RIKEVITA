@@ -26,10 +26,28 @@ table 50506 "RV QC Line"
         {
             Caption = 'QC Parameter Name';
             TableRelation = "RV QC Parameter";
+            trigger OnValidate()
+            var
+                QCParameter: Record "RV QC Parameter";
+            begin
+                if QCParameter.Get("QC Parameter Name") then begin
+                    Type := QCParameter.Type;
+                    "Value Table Type" := QCParameter."Value Table Type";
+                end;
+            end;
         }
         field(5; "QC Result"; Code[10])
         {
             Caption = 'QC Result';
+            trigger OnValidate()
+            begin
+                if "Value Table Type" = "Value Table Type"::Range then begin
+                    if "QC Result" = '' then
+                        "Check Status" := "Check Status"::Init
+                    else
+                        CheckQCResultRange();
+                end;
+            end;
         }
         field(6; "Check Status"; Enum "RV Check Status")
         {
@@ -38,6 +56,10 @@ table 50506 "RV QC Line"
         field(10; "Value Table Type"; Enum "RV Value Table Type")
         {
             Caption = 'Value Table Type';
+        }
+        field(11; "Type"; Enum "RV Type")
+        {
+            Caption = 'Type';
         }
     }
     keys
@@ -49,4 +71,32 @@ table 50506 "RV QC Line"
     }
 
     var
+
+    procedure CheckQCResultRange()
+    var
+        TempInteger: Record "Integer" temporary;// Temp
+        QCSpecificationLine: Record "RV QC Specification Line";
+    begin
+
+        TempInteger.Reset();
+
+        TempInteger.Init();
+        if Evaluate(TempInteger.Number, "QC Result") then
+            TempInteger.Insert()
+        else
+            Error('Please enter a Numeric');
+
+        QCSpecificationLine.Reset();
+        QCSpecificationLine.SetRange("QC Parameter Name", "QC Parameter Name");
+        if QCSpecificationLine.FindFirst() then begin
+            TempInteger.SetFilter(Number, QCSpecificationLine."Target Value ib Base UM");
+        end else begin
+            Error('QC Result cannot be checked because QC Specification Line do not exist.');
+        end;
+
+        if not TempInteger.IsEmpty() then
+            "Check Status" := "Check Status"::PASSED
+        else
+            "Check Status" := "Check Status"::FAILED;
+    end;
 }

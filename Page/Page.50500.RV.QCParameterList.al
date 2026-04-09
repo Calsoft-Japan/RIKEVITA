@@ -9,6 +9,7 @@ page 50500 "RV QC Parameter List"
     UsageCategory = Lists;
     Caption = 'QC Parameter List';
     SourceTable = "RV QC Parameter";
+    SourceTableView = sorting("Parameter Name");
     DelayedInsert = true;
 
     layout
@@ -20,6 +21,7 @@ page 50500 "RV QC Parameter List"
                 field("Parameter Name"; Rec."Parameter Name")
                 {
                     ApplicationArea = All;
+                    NotBlank = true;
                 }
                 field("Parameter Description"; Rec."Parameter Description")
                 {

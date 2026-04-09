@@ -17,8 +17,9 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
         ProdOrderLine: Record "Prod. Order Line";
         ProdOrderRoutingLine: Record "Prod. Order Routing Line";
         RountCount: Integer;
-        DiffDays: Integer;
+        DiffDays: BigInteger;
     begin
+        MfgSetup.get();
         ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
         ProdOrderLine.get(ProdOrderLine.Status::"Firm Planned", MPSReschedulingLine."Production No.", MPSReschedulingLine."Prod. Line No.");
 
@@ -33,37 +34,46 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
                 case RountCount of
                     1:
                         begin
-                            if ProdOrderRoutingLine."No." <> MPSReschedulingLine."Work Center No. 1" then
-                                ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."Work Center No. 1");
+                            if MPSReschedulingLine."new Work Center No. 1" <> '' then
+                                if ProdOrderRoutingLine."No." <> MPSReschedulingLine."new Work Center No. 1" then
+                                    ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."new Work Center No. 1");
                         end;
                     2:
                         begin
-                            if ProdOrderRoutingLine."No." <> MPSReschedulingLine."Work Center No. 2" then
-                                ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."Work Center No. 2");
+                            if MPSReschedulingLine."new Work Center No. 2" <> '' then
+                                if ProdOrderRoutingLine."No." <> MPSReschedulingLine."new Work Center No. 2" then
+                                    ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."new Work Center No. 2");
                         end;
                     3:
                         begin
-                            if ProdOrderRoutingLine."No." <> MPSReschedulingLine."Work Center No. 3" then
-                                ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."Work Center No. 3");
+                            if MPSReschedulingLine."new Work Center No. 3" <> '' then
+                                if ProdOrderRoutingLine."No." <> MPSReschedulingLine."new Work Center No. 3" then
+                                    ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."new Work Center No. 3");
                         end;
 
                 end;
                 ProdOrderRoutingLine.Modify();
             until ProdOrderRoutingLine.Next() = 0;
 
-        if ProdOrder."Ending Date" <> DT2Date(MPSReschedulingLine."New Ending Date") then begin
-            ProdOrder.Validate("Ending Date-Time", MPSReschedulingLine."New Ending Date");
-            ProdOrder.Validate("RV_Rescheduling Ending Date", MPSReschedulingLine."New Ending Date");
-        end;
-        if ProdOrder."Starting Date" <> DT2Date(MPSReschedulingLine."New Starting Date") then begin
-            ProdOrder.Validate("RV_Rescheduling Starting Date", MPSReschedulingLine."New Starting Date");
+        if MPSReschedulingLine."New Ending Date" <> 0DT then
+            if ProdOrder."Ending Date" <> DT2Date(MPSReschedulingLine."New Ending Date") then begin
+                ProdOrder.Validate("Ending Date-Time", CreateDateTime(DT2Date(MPSReschedulingLine."New Ending Date"), MfgSetup."Normal Ending Time"));
+                ProdOrder.Validate("RV_Rescheduling Ending Date", MPSReschedulingLine."New Ending Date");
+                ProdOrder.Modify();
+            end;
 
-            //Calculate the difference days = “MPS Rescheduling Line”.“New Starting Date”- “Production Header”. “Starting Date-Time”
-            DiffDays := MPSReschedulingLine."New Starting Date" - ProdOrder."Starting Date-Time";
-            ProdOrder.Validate("Ending Date-Time", ProdOrder."Ending Date-Time" + DiffDays);
-        end;
+        if MPSReschedulingLine."New Starting Date" <> 0DT then
+            if ProdOrder."Starting Date" <> DT2Date(MPSReschedulingLine."New Starting Date") then begin
+                ProdOrder.Validate("RV_Rescheduling Starting Date", MPSReschedulingLine."New Starting Date");
+
+                //Calculate the difference days = “MPS Rescheduling Line”.“New Starting Date”- “Production Header”. “Starting Date-Time”
+                DiffDays := CreateDateTime(DT2Date(MPSReschedulingLine."New Starting Date"), ProdOrder."Starting Time") - ProdOrder."Starting Date-Time";
+                ProdOrder.Validate("Ending Date-Time", ProdOrder."Ending Date-Time" + DiffDays);
+                ProdOrder.Modify();
+            end;
+
         if ProdOrder."RV_Planning Status" <> MPSReschedulingLine."Planning Status" then begin
-            ProdOrder.Validate("RV_Planning Status", ProdOrder."RV_Planning Status");
+            ProdOrder.Validate("RV_Planning Status", MPSReschedulingLine."Planning Status");
             ProdOrder."RV_Planning Controller" := UserId();
             ProdOrder."RV_Planning Date" := Today();
             ProdOrder.Modify();
@@ -87,4 +97,5 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
         MPSReschedulingLine: Record "RV MPS Rescheduling Line";
         Text004: Label 'DEFAULT';
         Text005: Label 'Default Journal';
+        MfgSetup: Record "Manufacturing Setup";
 }

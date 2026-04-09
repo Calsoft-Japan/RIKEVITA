@@ -48,6 +48,18 @@ table 50100 "RV RIKEVITA Setup"
             Caption = 'COA No. Nos.';
             TableRelation = "No. Series";
         }
+        field(14; "FP Inventory Posting Group"; Code[20])
+        {
+            DataClassification = CustomerContent;
+            Caption = 'FP Inventory Posting Group';
+            TableRelation = "Inventory Posting Group";
+        }
+        field(15; "WIP Inventory Posting Group"; Code[20])
+        {
+            DataClassification = CustomerContent;
+            Caption = 'WIP Inventory Posting Group';
+            TableRelation = "Inventory Posting Group";
+        }
     }
     keys
     {

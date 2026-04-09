@@ -6,6 +6,7 @@ table 50501 "RV QC Specification"
 {
     Caption = 'QC Specification';
     DataClassification = CustomerContent;
+    LookupPageID = "RV QC Specification List";
     fields
     {
         field(1; "QC Specification Name"; Code[20])

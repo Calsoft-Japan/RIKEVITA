@@ -36,6 +36,8 @@ table 50604 "RV MPS Rescheduling Line"
         field(7; Quantity; Decimal)
         {
             Caption = 'Quantity';
+            BlankZero = true;
+            DecimalPlaces = 0 : 5;
         }
         field(8; "Routing No."; Code[20])
         {
@@ -115,9 +117,9 @@ table 50604 "RV MPS Rescheduling Line"
         }
         field(27; Status; enum "RV MPS Rescheduling Status")
         {
-            Caption = 'Error Info';
+            Caption = 'Status';
         }
-        field(28; "Error Message"; Text[100])
+        field(28; "Error Message"; Text[1024])
         {
             Caption = 'Error Message';
         }

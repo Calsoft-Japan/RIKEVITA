@@ -60,7 +60,100 @@ codeunit 50604 "RV MPS Rescheduling Management"
         ReqLine: Record "RV MPS Rescheduling Line";
         JnlSelected: Boolean;
     begin
-        ReqWkshName.Find('-');
+        // ReqWkshName.Find('-');
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Calculate Prod. Order", 'OnCalculateProdOrderDatesOnSetBeforeDueDate', '', false, false)]
+    procedure OnCalculateProdOrderDatesOnSetBeforeDueDate(var ProdOrderLine: Record "Prod. Order Line"; var IsHandled: Boolean)
+    var
+        LeadTimeMgt: Codeunit "Lead-Time Management";
+        NewDueDate: Date;
+    begin
+        LeadTimeMgt.SetManualScheduling(ProdOrderLine."Manual Scheduling");
+        if ProdOrderLine."Planning Level Code" = 0 then
+            NewDueDate :=
+              LeadTimeMgt.GetPlannedDueDate(
+                ProdOrderLine."Item No.", ProdOrderLine."Location Code", ProdOrderLine."Variant Code",
+                ProdOrderLine."Ending Date", '', "Requisition Ref. Order Type"::"Prod. Order")
+        else
+            NewDueDate := ProdOrderLine."Ending Date";
+
+        if NewDueDate > ProdOrderLine."Due Date" then
+            ProdOrderLine."Due Date" := NewDueDate;
+
+        IsHandled := true;
+    end;
+
+    procedure ChangeMORVPlanningStatus(var ProdOrder: Record "Production Order"; ChangeTo: Option Fix,Planning)
+    var
+        ProdOrderLine: Record "Prod. Order Line";
+    begin
+        case ChangeTo of
+            ChangeTo::Fix:
+                ProdOrder.SetRange("RV_Planning Status", ProdOrder."RV_Planning Status"::Planning);
+            ChangeTo::Planning:
+                ProdOrder.SetRange("RV_Planning Status", ProdOrder."RV_Planning Status"::Fixed);
+        end;
+        if ProdOrder.FindSet() then
+            repeat
+                case ChangeTo of
+                    ChangeTo::Fix:
+                        ProdOrder."RV_Planning Status" := ProdOrder."RV_Planning Status"::Fixed;
+                    ChangeTo::Planning:
+                        ProdOrder."RV_Planning Status" := ProdOrder."RV_Planning Status"::Planning;
+                end;
+                ProdOrder.Modify();
+
+                ProdOrderLine.Reset();
+                ProdOrderLine.SetRange(Status, ProdOrder.Status);
+                ProdOrderLine.SetRange("Prod. Order No.", ProdOrder."No.");
+                if ProdOrderLine.FindSet() then
+                    repeat
+                        case ChangeTo of
+                            changeto::Fix:
+                                ProdOrderLine.Validate("Planning Flexibility", ProdOrderLine."Planning Flexibility"::None);
+                            ChangeTo::Planning:
+                                ProdOrderLine.Validate("Planning Flexibility", ProdOrderLine."Planning Flexibility"::Unlimited);
+                        end;
+                        ProdOrderLine.Modify();
+                    until ProdOrderLine.Next() = 0;
+            until ProdOrder.Next() = 0;
+    end;
+
+    procedure ChangePORVPlanningStatus(var PurchOrder: Record "Purchase Header"; ChangeTo: Option Fix,Planning)
+    var
+        PurchOrderLine: Record "Purchase Line";
+    begin
+        case ChangeTo of
+            ChangeTo::Fix:
+                PurchOrder.SetRange("RV_Planning Status", PurchOrder."RV_Planning Status"::Planning);
+            ChangeTo::Planning:
+                PurchOrder.SetRange("RV_Planning Status", PurchOrder."RV_Planning Status"::Fixed);
+        end;
+        if PurchOrder.FindSet() then
+            repeat
+                case ChangeTo of
+                    ChangeTo::Fix:
+                        PurchOrder."RV_Planning Status" := PurchOrder."RV_Planning Status"::Fixed;
+                    ChangeTo::Planning:
+                        PurchOrder."RV_Planning Status" := PurchOrder."RV_Planning Status"::Planning;
+                end;
+                PurchOrder.Modify();
+
+                PurchOrderLine.Reset();
+                PurchOrderLine.SetRange("Document Type", PurchOrder."Document Type");
+                PurchOrderLine.SetRange("Document No.", PurchOrder."No.");
+                if PurchOrderLine.FindSet() then
+                    repeat
+                        case ChangeTo of
+                            ChangeTo::Fix:
+                                PurchOrderLine.Validate("Planning Flexibility", PurchOrderLine."Planning Flexibility"::None);
+                            ChangeTo::Planning:
+                                PurchOrderLine.Validate("Planning Flexibility", PurchOrderLine."Planning Flexibility"::Unlimited);
+                        end;
+                        PurchOrderLine.Modify();
+                    until PurchOrderLine.Next() = 0;
+            until PurchOrder.Next() = 0;
     end;
 
     var

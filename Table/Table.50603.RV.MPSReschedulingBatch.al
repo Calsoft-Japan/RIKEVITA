@@ -28,4 +28,11 @@ table 50603 "RV MPS Rescheduling Batch"
             Clustered = true;
         }
     }
+    trigger OnDelete()
+    var
+        MPSReschedulingLine: Record "RV MPS Rescheduling Line";
+    begin
+        MPSReschedulingLine.SetRange("Batch Name", Name);
+        MPSReschedulingLine.DeleteAll();
+    end;
 }

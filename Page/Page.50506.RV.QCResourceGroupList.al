@@ -1,14 +1,15 @@
 /// <summary>
-/// Page RV QC Group List (ID 50506).
+/// Page RV QC Resource Group List (ID 50506).
 /// FDD039 2026/02/23: New. (Mike)
 /// </summary>
-page 50506 "RV QC Group List"
+page 50506 "RV QC Resource Group List"
 {
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
-    Caption = 'QC Group List';
-    SourceTable = "RV QC Group";
+    Caption = 'QC Resource Group List';
+    SourceTable = "RV QC Resource Group";
+    SourceTableView = sorting("QC Resource Group No.");
     DelayedInsert = true;
 
     layout
@@ -17,7 +18,7 @@ page 50506 "RV QC Group List"
         {
             repeater(General)
             {
-                field("QC Group No."; Rec."QC Group No.")
+                field("QC Resource Group No."; Rec."QC Resource Group No.")
                 {
                     ApplicationArea = All;
                     NotBlank = true;
@@ -25,7 +26,6 @@ page 50506 "RV QC Group List"
                 field("Effective Date"; Rec."Effective Date")
                 {
                     ApplicationArea = All;
-                    NotBlank = true;
                 }
                 field("Internal Specification"; Rec."Internal Specification")
                 {

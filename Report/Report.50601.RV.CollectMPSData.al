@@ -13,8 +13,8 @@ report 50601 "RV Collect MPS Data"
         {
             DataItemTableView = sorting(Status, "No.") where(Status = const("Firm Planned"));
             RequestFilterFields = "RV_Planning Controller",
-                                "RV_Rescheduling Starting Date",
-                                "RV_Rescheduling Ending Date",
+                                "Starting Date",
+                                "Ending Date",
                                 "RV_Planning Status";
             dataitem("Prod. Order Line"; "Prod. Order Line")
             {

@@ -9,6 +9,7 @@ page 50503 "RV QC Specification List"
     ApplicationArea = All;
     UsageCategory = Lists;
     SourceTable = "RV QC Specification";
+    SourceTableView = sorting("QC Specification Name");
     CardPageId = "RV QC Specification Card";
 
     layout
@@ -20,10 +21,12 @@ page 50503 "RV QC Specification List"
                 field("QC Specification Name"; Rec."QC Specification Name")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("QC Specification Description"; Rec."QC Specification Description")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
             }
         }

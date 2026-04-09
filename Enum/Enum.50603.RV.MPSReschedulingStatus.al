@@ -8,7 +8,7 @@ enum 50603 "RV MPS Rescheduling Status"
 
     value(0; " ")
     {
-        Caption = 'Need to Update';
+        Caption = ' ';
     }
     value(1; "OK")
     {

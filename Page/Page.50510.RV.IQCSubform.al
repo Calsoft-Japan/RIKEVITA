@@ -1,5 +1,5 @@
 /// <summary>
-/// PAge RV IQC Subform (ID 50510)
+/// Page RV IQC Subform (ID 50510)
 /// FDD039 2026/02/23: New. (Mike)
 /// </summary>
 page 50510 "RV IQC Subform"
@@ -8,7 +8,9 @@ page 50510 "RV IQC Subform"
     ApplicationArea = All;
     UsageCategory = None;
     SourceTable = "RV QC Line";
+    SourceTableView = where("QC Type" = filter(IQC));
     AutoSplitKey = true;
+    DelayedInsert = true;
 
     layout
     {
@@ -16,22 +18,34 @@ page 50510 "RV IQC Subform"
         {
             repeater(Line)
             {
-
                 field("QC No."; Rec."QC No.")
                 {
                     ApplicationArea = All;
+                    Visible = false;
                 }
                 field("QC Type"; Rec."QC Type")
                 {
                     ApplicationArea = All;
+                    Visible = false;
                 }
                 field("Line No."; Rec."Line No.")
                 {
                     ApplicationArea = All;
+                    Visible = false;
                 }
                 field("QC Parameter Name"; Rec."QC Parameter Name")
                 {
                     ApplicationArea = All;
+                }
+                field(Type; Rec.Type)
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Value Table Type"; Rec."Value Table Type")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
                 }
                 field("QC Result"; Rec."QC Result")
                 {
@@ -40,12 +54,8 @@ page 50510 "RV IQC Subform"
                 field("Check Status"; Rec."Check Status")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
-                field("Value Table Type"; Rec."Value Table Type")
-                {
-                    ApplicationArea = All;
-                }
-
             }
         }
     }

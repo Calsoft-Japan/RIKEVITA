@@ -60,7 +60,8 @@ codeunit 50601 "RV Prod. Results Management"
         ReqLine: Record "RV Prod. Result Journal Line";
         JnlSelected: Boolean;
     begin
-        ReqWkshName.Find('-');
+        // ReqWkshName.SetRange(Name, ReqWkshName.Name);
+        // ReqWkshName.Find('-');
     end;
 
     var

@@ -5,7 +5,7 @@
 page 50601 "RV Prod. Result Journal Line"
 {
     ApplicationArea = All;
-    Caption = 'RV Prod. Result Journal Line';
+    Caption = 'Prod. Result Journal';
     PageType = Worksheet;
     SourceTable = "RV Prod. Result Journal Line";
     UsageCategory = Tasks;
@@ -40,70 +40,92 @@ page 50601 "RV Prod. Result Journal Line"
                 field("Data Type"; Rec."Data Type")
                 {
                     ToolTip = 'Specifies the value of the Data Type field.', Comment = '%';
+                    Editable = CanEdit;
                 }
                 field("Prod. Order No."; Rec."Prod. Order No.")
                 {
                     ToolTip = 'Specifies the value of the Prod. Order No. field.', Comment = '%';
+                    Editable = CanEdit;
                 }
                 field("Output Item No."; Rec."Output Item No.")
                 {
                     ToolTip = 'Specifies the value of the Output Item No. field.', Comment = '%';
+                    Editable = CanEdit;
                 }
                 field("Operation No."; Rec."Operation No.")
                 {
                     ToolTip = 'Specifies the value of the Operation No. field.', Comment = '%';
+                    Editable = CanEdit;
                 }
                 field("Work Center No."; Rec."Work Center No.")
                 {
                     ToolTip = 'Specifies the value of the Work Center No. field.', Comment = '%';
+                    Editable = CanEdit;
                 }
                 field("Item No."; Rec."Item No.")
                 {
                     ToolTip = 'Specifies the value of the Item No. field.', Comment = '%';
+                    Editable = CanEdit;
                 }
                 field(Quantity; Rec.Quantity)
                 {
                     ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
+                    Editable = CanEdit;
                 }
                 field("Scrap Quantity"; Rec."Scrap Quantity")
                 {
                     ToolTip = 'Specifies the value of the Scrap Quantity field.', Comment = '%';
+                    Editable = CanEdit;
                 }
                 field(UOM; Rec.UOM)
                 {
                     ToolTip = 'Specifies the value of the UOM field.', Comment = '%';
-                }
-                field("Lot No."; Rec."Lot No.")
-                {
-                    ToolTip = 'Specifies the value of the Lot No. field.', Comment = '%';
+                    Editable = CanEdit;
                 }
                 field("Posting Date"; Rec."Posting Date")
                 {
                     ToolTip = 'Specifies the value of the Posting Date field.', Comment = '%';
+                    Editable = CanEdit;
+                }
+                field("Lot No."; Rec."Lot No.")
+                {
+                    ToolTip = 'Specifies the value of the Lot No. field.', Comment = '%';
+                    Editable = CanEdit;
                 }
                 field("Manufacturing Date"; Rec."Manufacturing Date")
                 {
                     ToolTip = 'Specifies the value of the Manufacturing Date field.', Comment = '%';
+                    Editable = CanEdit;
                 }
                 field("Expire Date"; Rec."Expire Date")
                 {
                     ToolTip = 'Specifies the value of the Expire Date field.', Comment = '%';
+                    Editable = CanEdit;
                 }
                 field(Status; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
+                    Editable = CanEdit;
+                }
+                field("Error Message"; Rec."Error Message")
+                {
+                    ToolTip = 'Specifies the value of the Error Message field.', Comment = '%';
+                    Editable = false;
                 }
                 field("Prod. Order Line No."; Rec."Prod. Order Line No.")
                 {
                     ToolTip = 'Specifies the value of the Prod. Order Line No. field.', Comment = '%';
+                    Editable = false;
                 }
                 field("Routing No."; Rec."Routing No.")
                 {
                     ToolTip = 'Specifies the value of the Routing No. field.', Comment = '%';
+                    Editable = false;
                 }
                 field("Prod. Order Comp. Line No."; Rec."Prod. Order Comp. Line No.")
                 {
                     ToolTip = 'Specifies the value of the Prod. Order Comp. Line No. field.', Comment = '%';
+                    Editable = false;
                 }
                 field(SystemCreatedAt; Rec.SystemCreatedAt)
                 {
@@ -149,7 +171,7 @@ page 50601 "RV Prod. Result Journal Line"
                     begin
                         ProdResultLine.Reset();
                         CurrPage.SetSelectionFilter(ProdResultLine);
-                        ProdResultLine.SetRange("Data Type", ProdResultLine."Data Type"::"Adjust Consumption");
+                        ProdResultLine.SetRange("Data Type", ProdResultLine."Data Type"::"Recycle Consumption");
                         ProdResultLine.SetFilter(Status, '%1|%2', ProdResultLine.Status::Rejected, ProdResultLine.Status::Preparing);
                         if not ProdResultLine.IsEmpty then
                             ProdResultLine.ModifyAll(Status, ProdResultLine.Status::"Pending Approve");
@@ -196,7 +218,7 @@ page 50601 "RV Prod. Result Journal Line"
                 action(RejectApprovalRequest)
                 {
 
-                    Caption = 'Reject Approval Request';
+                    Caption = 'Reject';
                     Image = Reject;
 
                     trigger OnAction()
@@ -210,11 +232,15 @@ page 50601 "RV Prod. Result Journal Line"
                             ProdResultLine.ModifyAll(Status, ProdResultLine.Status::Rejected);
                     end;
                 }
-                action(CancelApprovalRequestForApprover)
+            }
+            group(DoPost)
+            {
+                Caption = 'Post';
+                action(ChangeToReadyToPost)
                 {
 
-                    Caption = 'Cancel Approval Request';
-                    Image = CancelApprovalRequest;
+                    Caption = 'Ready Post';
+                    Image = Approval;
 
                     trigger OnAction()
                     var
@@ -222,24 +248,74 @@ page 50601 "RV Prod. Result Journal Line"
                     begin
                         ProdResultLine.Reset();
                         CurrPage.SetSelectionFilter(ProdResultLine);
-                        ProdResultLine.SetRange("Data Type", ProdResultLine."Data Type"::"Adjust Consumption");
-                        ProdResultLine.SetRange(Status, ProdResultLine.Status::"Pending Approve");
-                        if not ProdResultLine.IsEmpty then
-                            ProdResultLine.ModifyAll(Status, ProdResultLine.Status::Preparing);
+                        if ProdResultLine.FindSet() then
+                            repeat
+                                case ProdResultLine."Data Type" of
+                                    ProdResultLine."Data Type"::"Adjust Consumption",
+                                    ProdResultLine."Data Type"::"Adjust Output",
+                                    ProdResultLine."Data Type"::"Planned Consumption",
+                                    ProdResultLine."Data Type"::"Planned Output":
+                                        begin
+                                            if (ProdResultLine.Status = ProdResultLine.Status::Preparing)
+                                            or (ProdResultLine.Status = ProdResultLine.Status::"Post Error") then begin
+                                                ProdResultLine.Status := ProdResultLine.Status::"Ready Post";
+                                                ProdResultLine."Error Message" := '';
+                                                ProdResultLine.Modify();
+                                            end;
+                                        end;
+                                    ProdResultLine."Data Type"::"Recycle Consumption":
+                                        if (ProdResultLine.Status = ProdResultLine.Status::Approved)
+                                        or (ProdResultLine.Status = ProdResultLine.Status::"Post Error") then begin
+                                            ProdResultLine.Status := ProdResultLine.Status::"Ready Post";
+                                            ProdResultLine."Error Message" := '';
+                                            ProdResultLine.Modify();
+                                        end;
+                                end;
+                            until ProdResultLine.Next() = 0;
                     end;
                 }
-            }
-            action(Post)
-            {
-                Caption = 'Post';
-                Image = Post;
+                action(Post)
+                {
+                    Caption = 'Post';
+                    Image = Post;
 
-                trigger OnAction()
-                var
-                    PostProdResultLineBatch: codeunit "RV Post Prod Result Line Batch";
-                begin
-                    PostProdResultLineBatch.Run();
-                end;
+                    trigger OnAction()
+                    var
+                        PostProdResultLineBatch: codeunit "RV Post Prod Result Line Batch";
+                    begin
+                        PostProdResultLineBatch.Run();
+                    end;
+                }
+                action(CancelPostReady)
+                {
+                    Caption = 'Cancel Post Ready';
+                    Image = Delete;
+
+                    trigger OnAction()
+                    var
+                        ProdResultLine: Record "RV Prod. Result Journal Line";
+                    begin
+                        ProdResultLine.Reset();
+                        CurrPage.SetSelectionFilter(ProdResultLine);
+                        if ProdResultLine.FindSet() then
+                            repeat
+                                case ProdResultLine."Data Type" of
+                                    ProdResultLine."Data Type"::"Adjust Consumption",
+                                    ProdResultLine."Data Type"::"Adjust Output",
+                                    ProdResultLine."Data Type"::"Planned Consumption",
+                                    ProdResultLine."Data Type"::"Planned Output":
+                                        begin
+                                            if (ProdResultLine.Status = ProdResultLine.Status::"Ready Post")
+                                            or (ProdResultLine.Status = ProdResultLine.Status::"Post Error") then begin
+                                                ProdResultLine.Status := ProdResultLine.Status::Preparing;
+                                                ProdResultLine."Error Message" := '';
+                                                ProdResultLine.Modify();
+                                            end;
+                                        end;
+                                end;
+                            until ProdResultLine.Next() = 0;
+                    end;
+                }
             }
         }
         area(Promoted)
@@ -273,12 +349,20 @@ page 50601 "RV Prod. Result Journal Line"
                 {
 
                 }
-                actionref(CancelApprovalRequestForApprover_Promoted; CancelApprovalRequestForApprover)
+            }
+            group(ReadyToPostGrp)
+            {
+                Caption = 'Post';
+                actionref(ChangeToReadyToPost_Promoted; ChangeToReadyToPost)
+                {
+
+                }
+                actionref(CancelPostReady_Promoted; CancelPostReady)
                 {
                 }
-            }
-            actionref(Post_Promoted; Post)
-            {
+                actionref(Post_Promoted; Post)
+                {
+                }
             }
         }
     }
@@ -293,10 +377,42 @@ page 50601 "RV Prod. Result Journal Line"
         RVProdResultsMgt.OpenJnl(CurrentJnlBatchName, Rec);
     end;
 
+    trigger OnAfterGetCurrRecord()
+    begin
+        case Rec.Status of
+            Rec.Status::Preparing,
+            Rec.Status::Rejected:
+                CanEdit := true;
+            Rec.Status::"Pending Approve",
+            Rec.Status::Approved,
+            Rec.Status::"Ready Post",
+            Rec.Status::"Post Error":
+                CanEdit := false;
+        end;
+    end;
+
+    trigger OnAfterGetRecord()
+    begin
+        case Rec.Status of
+            Rec.Status::Preparing,
+            Rec.Status::Rejected:
+                CanEdit := true;
+            Rec.Status::"Pending Approve",
+            Rec.Status::Approved,
+            Rec.Status::"Ready Post",
+            Rec.Status::"Post Error":
+                CanEdit := false;
+        end;
+    end;
+
     var
         CurrentJnlBatchName: Code[10];
-        RVProdResultsMgt: Codeunit "RV Prod. Results Management";
-        OpenedFromBatch: Boolean;
+        RVProdResultsMgt:
+                Codeunit "RV Prod. Results Management";
+        OpenedFromBatch:
+                Boolean;
+        CanEdit:
+                Boolean;
 
     local procedure CurrentJnlBatchNameOnAfterVali()
     begin

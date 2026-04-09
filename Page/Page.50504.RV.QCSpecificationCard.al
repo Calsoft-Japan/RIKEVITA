@@ -21,6 +21,7 @@ page 50504 "RV QC Specification Card"
                 field("QC Specification Name"; Rec."QC Specification Name")
                 {
                     ApplicationArea = All;
+                    NotBlank = true;
                 }
                 field("QC Specification Description"; Rec."QC Specification Description")
                 {

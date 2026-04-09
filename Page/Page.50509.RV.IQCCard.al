@@ -10,7 +10,6 @@ page 50509 "RV IQC Card"
     RefreshOnActivate = true;
     UsageCategory = Documents;
     SourceTable = "RV QC Header";
-    DelayedInsert = true;
     SourceTableView = WHERE("QC Type" = FILTER(IQC));
 
     layout
@@ -25,9 +24,9 @@ page 50509 "RV IQC Card"
                     ApplicationArea = All;
                     trigger OnAssistEdit()
                     begin
+                        RIKEVITASetup.Get();
+                        RIKEVITASetup.TestField("QC No. Nos.");
                         if (Rec."QC No." = '') then begin
-                            RIKEVITASetup.Get();
-                            RIKEVITASetup.TestField("QC No. Nos.");
                             if NoSeries.LookupRelatedNoSeries(RIKEVITASetup."QC No. Nos.", Rec."QC No.") then begin
                                 Rec."QC No." := NoSeries.GetNextNo(RIKEVITASetup."QC No. Nos.");
                             end;
@@ -50,14 +49,17 @@ page 50509 "RV IQC Card"
                 field("Item No."; Rec."Item No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Lot No."; Rec."Lot No.")
                 {
                     ApplicationArea = All;
+
                 }
                 field("QC Date"; Rec."QC Date")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("QC Standard Type"; Rec."QC Standard Type")
                 {
@@ -66,26 +68,51 @@ page 50509 "RV IQC Card"
                 field("QC Status"; Rec."QC Status")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("QC Checked By"; Rec."QC Checked By")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                }
+                field("QC Checked Remark"; Rec."QC Checked Remark")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
                 }
                 field("QC Approved By"; Rec."QC Approved By")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("QC Approved Remark"; Rec."QC Approved Remark")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
-                field("Manufacturing Date"; Rec."Manufacturing Date")
+                field("Line No."; Rec."Line No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
                 }
-                field("Tan No."; Rec."Tan No.")
+                field("Customer No."; Rec."Customer No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
+                }
+                field("Ship-to Code"; Rec."Ship-to Code")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
+                }
+                field("Ship-to Country"; Rec."Ship-to Country")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
                 }
             }
 
@@ -111,7 +138,7 @@ page 50509 "RV IQC Card"
                 ApplicationArea = All;
                 Caption = 'Documents';
                 UpdatePropagation = Both;
-                SubPageLink = "Table ID" = const(Database::"RV QA Header"),
+                SubPageLink = "Table ID" = const(Database::"RV QC Header"),
                               "No." = field("QC No.");
             }
         }
@@ -119,21 +146,68 @@ page 50509 "RV IQC Card"
 
     actions
     {
-        area(Processing)
+        area(processing)
         {
+            action("Create QC Line")
+            {
+                Caption = 'Create QC Line';
+                ApplicationArea = All;
+                Image = Create;
+
+                trigger OnAction()
+                begin
+                    //CreateQCLine
+                    Rec.CreateQCLine();
+                end;
+            }
+            action("QC Check")
+            {
+                Caption = 'QC Check';
+                ApplicationArea = All;
+                Image = Check;
+
+                trigger OnAction()
+                begin
+                    //IsQCCheckAllowed
+                    Rec.IsQCCheckAllowed();
+
+                    //CheckRemark_Input
+                    Rec.CheckRemark_Input();
+                end;
+            }
+            action("QC Approve")
+            {
+                Caption = 'QC Approve';
+                ApplicationArea = All;
+                Image = Approval;
+                trigger OnAction()
+                begin
+                    //IsQCApproveAllowed
+                    Rec.IsQCApproveAllowed();
+
+                    //ApprovedRemark_Input
+                    Rec.ApprovedRemark_Input();
+                end;
+            }
+        }
+        area(Promoted)
+        {
+            group(Category_Process)
+            {
+                Caption = 'Process';
+                actionref("Create QC Line_Promoted"; "Create QC Line")
+                {
+                }
+                actionref("QC Check_Promoted"; "QC Check")
+                {
+                }
+                actionref("QC Approve_Promoted"; "QC Approve")
+                {
+                }
+            }
         }
     }
-
-    trigger OnOpenPage()
-    var
-
-    begin
-
-    end;
-
-
     var
         NoSeries: Codeunit "No. Series";
         RIKEVITASetup: Record "RV RIKEVITA Setup";
-
 }
