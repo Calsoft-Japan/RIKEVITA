@@ -7,7 +7,7 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
 
     dataset
     {
-        /*modify("Requisition Line")
+        modify("Requisition Line")
         {
             trigger OnBeforePreDataItem()
             var
@@ -16,23 +16,27 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                 ReqLineReserve: Codeunit "Req. Line-Reserve";
                 LineNo: Integer;
             begin
-                
+
                 RecRequisitionLine.Reset();
                 RecRequisitionLine.SetAscending("Line No.", true);
+                RecRequisitionLine.SetRange("Worksheet Template Name", CurrReqWkshTemp);
+                RecRequisitionLine.SetRange("Journal Batch Name", CurrReqWkshName);
                 if RecRequisitionLine.FindLast() then begin
                     LineNo := RecRequisitionLine."Line No.";
                 end;
+
                 "Requisition Line".Reset();
                 "Requisition Line".SetRange("Worksheet Template Name", CurrReqWkshTemp);
                 "Requisition Line".SetRange("Journal Batch Name", CurrReqWkshName);
+                "Requisition Line".SetRange("Ref. Order Type", "Ref. Order Type"::Purchase);
                 "Requisition Line".SetRange("Accept Action Message", true);
-                if "Requisition Line".FindFirst() then begin
+                if "Requisition Line".FindSet() then begin
                     repeat
                         if "Requisition Line"."RV AvailableInMultipleVendor" then begin
-
                             VendorSelection.Reset();
                             VendorSelection.SetRange("Item No.", "Requisition Line"."No.");
-                            if VendorSelection.FindFirst() then begin
+                            VendorSelection.SetRange("Journal Batch Name", CurrReqWkshName);
+                            if VendorSelection.FindSet() then begin
                                 repeat
                                     LineNo := LineNo + 10000;
                                     RecRequisitionLine.Init();
@@ -46,6 +50,7 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                                     RecRequisitionLine.Insert();
 
                                     ReqLineReserve.TransferReqLineToReqLine("Requisition Line", RecRequisitionLine, VendorSelection."Quantity to Order", false);
+
                                 until VendorSelection.Next() = 0;
 
                                 VendorSelection.FindSet();
@@ -60,7 +65,7 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                 end;
 
             end;
-        }*/
+        }
     }
 
 }
