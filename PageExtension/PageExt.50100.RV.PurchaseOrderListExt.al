@@ -8,12 +8,12 @@ pageextension 50100 "RV Purchase Order List Ext" extends "Purchase Order List"
     {
         addafter("Document Date")
         {
-            field(RV_ETA; Rec."RV ETA")
+            field(RV_ETA; Rec."RV_ETA")
             {
                 ApplicationArea = All;
                 Description = 'FDD003';
             }
-            field(RV_ETD; Rec."RV ETD")
+            field(RV_ETD; Rec."RV_ETD")
             {
                 ApplicationArea = All;
                 Description = 'FDD003';
