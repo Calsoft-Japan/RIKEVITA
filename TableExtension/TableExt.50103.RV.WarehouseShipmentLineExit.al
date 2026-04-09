@@ -1,18 +1,19 @@
 /// <summary>
 /// TableExtension Warehouse Shipment Line Exit (ID 50103) extends "Warehouse Shipment Line" table
 /// FDD008 2026/03/14: New. (Liuyang)
+/// FDD020 2026/04/08: New. (Bobby.ji)
 /// </summary>
 tableextension 50103 "RV Warehouse Shipment Ln Ext" extends "Warehouse Shipment Line"
 {
     fields
     {
-        field(50100; "RV B/L Date"; Date)
+        field(50100; "RV_B/L Date"; Date)
         {
             Caption = 'B/L Date';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
         }
-        field(50101; "RV Cosing Date"; Date)
+        field(50101; "RV_Cosing Date"; Date)
         {
             Caption = 'Cosing Date';
             Description = 'FDD008';
@@ -30,26 +31,33 @@ tableextension 50103 "RV Warehouse Shipment Ln Ext" extends "Warehouse Shipment 
                 end;
 
                 if (Format(DateFormulaVar) <> '') then
-                    "RV Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
+                    "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
             end;
         }
-        field(50102; "RV Stuffing Date"; Date)
+        field(50102; "RV_Stuffing Date"; Date)
         {
             Caption = 'Stuffing Date';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
         }
-        field(50103; "RV ETA"; Date)
+        field(50103; "RV_ETA"; Date)
         {
             Caption = 'ETA';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
         }
-        field(50104; "RV ETD"; Date)
+        field(50104; "RV_ETD"; Date)
         {
             Caption = 'ETD';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
+        }
+        field(50200; "RV_Print RSPO No."; Boolean)
+        {
+            Caption = 'Print RSPO No.';
+            Description = 'FDD020';
+            FieldClass = FlowField;
+            CalcFormula = Lookup(Item."RV_Print RSPO No." WHERE("No." = FIELD("Item No.")));
         }
     }
 }

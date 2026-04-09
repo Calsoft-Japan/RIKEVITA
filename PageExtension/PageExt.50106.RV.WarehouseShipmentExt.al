@@ -12,52 +12,52 @@ pageextension 50106 "RV Warehouse Shipment Ext" extends "Warehouse Shipment"
             {
                 ShowCaption = false;
 
-                field("RV_B/L Date"; Rec."RV B/L Date")
+                field("RV_B/L Date"; Rec."RV_B/L Date")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';
                 }
-                field("RV_Cosing Date"; Rec."RV Cosing Date")
+                field("RV_Cosing Date"; Rec."RV_Cosing Date")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';
                 }
-                field("RV_Stuffing Date"; Rec."RV Stuffing Date")
+                field("RV_Stuffing Date"; Rec."RV_Stuffing Date")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';
                 }
-                field("RV_Country of Origin"; Rec."RV Country of Origin")
+                field("RV_Country of Origin"; Rec."RV_Country of Origin")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';
                 }
-                field(RV_VIA; Rec."RV VIA")
+                field(RV_VIA; Rec."RV_VIA")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';
                 }
-                field("RV_Final Destination"; Rec."RV Final Destination")
+                field("RV_Final Destination"; Rec."RV_Final Destination")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';
                 }
-                field("RV_Feeder Vessel"; Rec."RV Feeder Vessel")
+                field("RV_Feeder Vessel"; Rec."RV_Feeder Vessel")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';
                 }
-                field("RV_Mother Vessel"; Rec."RV Mother Vessel")
+                field("RV_Mother Vessel"; Rec."RV_Mother Vessel")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';
                 }
-                field(RV_ETD; Rec."RV ETD")
+                field(RV_ETD; Rec."RV_ETD")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';
                 }
-                field(RV_ETA; Rec."RV ETA")
+                field(RV_ETA; Rec."RV_ETA")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';

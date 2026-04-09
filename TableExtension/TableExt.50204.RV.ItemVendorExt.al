@@ -6,12 +6,12 @@ tableextension 50204 "RV Item Vendor" extends "Item Vendor"
 {
     fields
     {
-        field(50200; "RV Minimum Order Quantity"; Integer)
+        field(50200; "RV_Minimum Order Quantity"; Integer)
         {
             Caption = 'Minimum Order Quantity';
             Description = 'FDD002';
         }
-        field(50201; "RV Maximum Order Quantity"; Integer)
+        field(50201; "RV_Maximum Order Quantity"; Integer)
         {
             Caption = 'Maximum Order Quantity';
             Description = 'FDD002';

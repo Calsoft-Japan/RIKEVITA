@@ -60,8 +60,8 @@ table 50200 "RV Vendor Selection"
                 ItemVendor.SetRange("Item No.", Rec."Item No.");
                 ItemVendor.SetRange("Vendor No.", Rec."Vendor No.");
                 if ItemVendor.FindFirst() then begin
-                    "Minimum Order Quantity" := ItemVendor."RV Minimum Order Quantity";
-                    "Maximum Order Quantity" := ItemVendor."RV Maximum Order Quantity";
+                    "Minimum Order Quantity" := ItemVendor."RV_Minimum Order Quantity";
+                    "Maximum Order Quantity" := ItemVendor."RV_Maximum Order Quantity";
                 end;
             end;
         }

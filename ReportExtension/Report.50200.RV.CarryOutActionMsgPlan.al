@@ -32,7 +32,7 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                 "Requisition Line".SetRange("Accept Action Message", true);
                 if "Requisition Line".FindSet() then begin
                     repeat
-                        if "Requisition Line"."RV AvailableInMultipleVendor" then begin
+                        if "Requisition Line"."RV_AvailableInMultipleVendor" then begin
                             VendorSelection.Reset();
                             VendorSelection.SetRange("Item No.", "Requisition Line"."No.");
                             VendorSelection.SetRange("Journal Batch Name", CurrReqWkshName);
@@ -42,11 +42,11 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                                     RecRequisitionLine.Init();
                                     RecRequisitionLine.TransferFields("Requisition Line");
                                     RecRequisitionLine."Line No." := LineNo;
-                                    RecRequisitionLine."RV AvailableInMultipleVendor" := false;
+                                    RecRequisitionLine."RV_AvailableInMultipleVendor" := false;
                                     RecRequisitionLine.Validate("Vendor No.", VendorSelection."Vendor No.");
                                     RecRequisitionLine.Validate(Quantity, VendorSelection."Quantity to Order");
                                     RecRequisitionLine.Validate("Accept Action Message", true);
-                                    RecRequisitionLine."RV AvailableInMultipleVendor" := false;
+                                    RecRequisitionLine."RV_AvailableInMultipleVendor" := false;
                                     RecRequisitionLine.Insert();
 
                                     ReqLineReserve.TransferReqLineToReqLine("Requisition Line", RecRequisitionLine, VendorSelection."Quantity to Order", false);

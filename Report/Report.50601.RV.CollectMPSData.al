@@ -12,10 +12,10 @@ report 50601 "RV Collect MPS Data"
         dataitem("Production Order"; "Production Order")
         {
             DataItemTableView = sorting(Status, "No.") where(Status = const("Firm Planned"));
-            RequestFilterFields = "RV Planning Controller",
-                                "RV Rescheduling Starting Date",
-                                "RV Rescheduling Ending Date",
-                                "RV Planning Status";
+            RequestFilterFields = "RV_Planning Controller",
+                                "RV_Rescheduling Starting Date",
+                                "RV_Rescheduling Ending Date",
+                                "RV_Planning Status";
             dataitem("Prod. Order Line"; "Prod. Order Line")
             {
                 DataItemLink = status = field(status), "Prod. Order No." = field("No.");
@@ -54,7 +54,7 @@ report 50601 "RV Collect MPS Data"
                                     ProdOrderRoutingLine.FindLast();
                             end;
                         until ProdOrderRoutingLine.Next() = 0;
-                        MPSReschedulingLine."Planning Status" := "Production Order"."RV Planning Status";
+                        MPSReschedulingLine."Planning Status" := "Production Order"."RV_Planning Status";
                         MPSReschedulingLine."Prod. Line No." := "Prod. Order Line"."Line No.";
                         MPSReschedulingLine.Insert();
                     end;

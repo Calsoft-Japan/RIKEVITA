@@ -3,6 +3,7 @@
 /// FDD001 2026/03/12: New. (Bobby.ji)
 /// PageExtension RV Item Card (ID 50606) extends "Item Card" Merge from 50606 to 50200, FDD014 2026/02/23: New. (Bobby.ji)
 /// FDD014 2026/02/23: New. (Stephen)
+/// FDD020 2026/04/08：New.（Bobby.ji）
 /// </summary>
 pageextension 50200 "RV Item Card" extends "Item Card"
 {
@@ -10,9 +11,22 @@ pageextension 50200 "RV Item Card" extends "Item Card"
     {
         addafter("Expiration Calculation")
         {
-            field("Expiration Base Date (RM)"; Rec."RV Expiration Base Date (RM)")
+            field("Expiration Base Date (RM)"; Rec."RV_Expiration Base Date (RM)")
             {
                 Caption = 'Expiration Base Date (RM)';
+                ApplicationArea = all;
+            }
+        }
+        addafter("Item Category Code")
+        {
+            field("RSPO Type"; Rec."RV_RSPO Type")
+            {
+                Caption = 'RSPO Type';
+                ApplicationArea = all;
+            }
+            field("Print RSPO No."; Rec."RV_Print RSPO No.")
+            {
+                Caption = 'Print RSPO No.';
                 ApplicationArea = all;
             }
         }

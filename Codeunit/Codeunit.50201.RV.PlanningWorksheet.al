@@ -10,12 +10,12 @@ codeunit 50201 "RV Planning Worksheet Fields"
     var
         ItemVendor: Record "Item Vendor";
     begin
-        RequisitionLine."RV Expiration Calculation" := Item."Expiration Calculation";//FDD001
+        RequisitionLine."RV_Expiration Calculation" := Item."Expiration Calculation";//FDD001
         ItemVendor.Reset();
         ItemVendor.SetRange("Item No.", RequisitionLine."No.");
         if ItemVendor.FindSet() then begin
             if ItemVendor.Count > 1 then begin
-                RequisitionLine."RV AvailableInMultipleVendor" := true;
+                RequisitionLine."RV_AvailableInMultipleVendor" := true;
             end;
         end;
     end;

@@ -6,12 +6,12 @@ tableextension 50203 "RV Reservation Entry" extends "Reservation Entry"
 {
     fields
     {
-        field(50200; "RV Manufacture Date"; Date)
+        field(50200; "RV_Manufacture Date"; Date)
         {
             Caption = 'Manufacture Date';
             Description = 'FDD001';
         }
-        field(50201; "RV Container No."; Code[20])
+        field(50201; "RV_Container No."; Code[20])
         {
             Caption = 'Container No.';
             Description = 'FDD008';

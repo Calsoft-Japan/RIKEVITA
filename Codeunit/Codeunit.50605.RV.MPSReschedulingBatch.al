@@ -53,27 +53,27 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
 
         if ProdOrder."Ending Date" <> DT2Date(MPSReschedulingLine."New Ending Date") then begin
             ProdOrder.Validate("Ending Date-Time", MPSReschedulingLine."New Ending Date");
-            ProdOrder.Validate("RV Rescheduling Ending Date", MPSReschedulingLine."New Ending Date");
+            ProdOrder.Validate("RV_Rescheduling Ending Date", MPSReschedulingLine."New Ending Date");
         end;
         if ProdOrder."Starting Date" <> DT2Date(MPSReschedulingLine."New Starting Date") then begin
-            ProdOrder.Validate("RV Rescheduling Starting Date", MPSReschedulingLine."New Starting Date");
+            ProdOrder.Validate("RV_Rescheduling Starting Date", MPSReschedulingLine."New Starting Date");
 
             //Calculate the difference days = “MPS Rescheduling Line”.“New Starting Date”- “Production Header”. “Starting Date-Time”
             DiffDays := MPSReschedulingLine."New Starting Date" - ProdOrder."Starting Date-Time";
             ProdOrder.Validate("Ending Date-Time", ProdOrder."Ending Date-Time" + DiffDays);
         end;
-        if ProdOrder."RV Planning Status" <> MPSReschedulingLine."Planning Status" then begin
-            ProdOrder.Validate("RV Planning Status", ProdOrder."RV Planning Status");
-            ProdOrder."RV Planning Controller" := UserId();
-            ProdOrder."RV Planning Date" := Today();
+        if ProdOrder."RV_Planning Status" <> MPSReschedulingLine."Planning Status" then begin
+            ProdOrder.Validate("RV_Planning Status", ProdOrder."RV_Planning Status");
+            ProdOrder."RV_Planning Controller" := UserId();
+            ProdOrder."RV_Planning Date" := Today();
             ProdOrder.Modify();
 
-            if ProdOrder."RV Planning Status" = ProdOrder."RV Planning Status"::Planning then
+            if ProdOrder."RV_Planning Status" = ProdOrder."RV_Planning Status"::Planning then
                 if ProdOrderLine."Planning Flexibility" <> ProdOrderLine."Planning Flexibility"::Unlimited then begin
                     ProdOrderLine.Validate("Planning Flexibility", ProdOrderLine."Planning Flexibility"::Unlimited);
                     ProdOrderLine.Modify();
                 end;
-            if ProdOrder."RV Planning Status" = ProdOrder."RV Planning Status"::Fixed then
+            if ProdOrder."RV_Planning Status" = ProdOrder."RV_Planning Status"::Fixed then
                 if ProdOrderLine."Planning Flexibility" <> ProdOrderLine."Planning Flexibility"::None then begin
                     ProdOrderLine.Validate("Planning Flexibility", ProdOrderLine."Planning Flexibility"::None);
                     ProdOrderLine.Modify();

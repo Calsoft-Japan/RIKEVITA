@@ -8,7 +8,7 @@ pageextension 50601 "RV Production BOM" extends "Production BOM"
     {
         addlast(General)
         {
-            field("RV Highly Restricted BOM"; Rec."RV Highly Restricted BOM")
+            field("RV Highly Restricted BOM"; Rec."RV_Highly Restricted BOM")
             {
                 ApplicationArea = All;
                 Description = 'FDD014';

@@ -46,7 +46,7 @@ page 50103 "RV Item Tracking Details-Whs."
                         ReservEntriesPage.RunModal();
                     end;
                 }
-                field("RV_Container No."; Rec."RV Container No.")
+                field("RV_Container No."; Rec."RV_Container No.")
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the value of the Container No. field.', Comment = '%';

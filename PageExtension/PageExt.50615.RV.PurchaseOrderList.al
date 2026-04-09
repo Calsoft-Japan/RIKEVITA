@@ -8,19 +8,19 @@ pageextension 50615 "RV Purchase Order List" extends "Purchase Order List"
     {
         addlast(Control1)
         {
-            field("RV Planning Date"; Rec."RV Planning Date")
+            field("RV Planning Date"; Rec."RV_Planning Date")
             {
                 ApplicationArea = All;
                 Editable = false;
                 Description = 'FDD011';
             }
-            field("RV Planning Status"; Rec."RV Planning Status")
+            field("RV Planning Status"; Rec."RV_Planning Status")
             {
                 ApplicationArea = All;
                 Editable = false;
                 Description = 'FDD011';
             }
-            field("RV Planning Controller"; Rec."RV Planning Controller")
+            field("RV Planning Controller"; Rec."RV_Planning Controller")
             {
                 ApplicationArea = All;
                 Editable = false;
@@ -48,10 +48,10 @@ pageextension 50615 "RV Purchase Order List" extends "Purchase Order List"
                         PurchOrderLine: Record "Purchase Line";
                     begin
                         CurrPage.SetSelectionFilter(PurchOrder);
-                        PurchOrder.SetRange("RV Planning Status", PurchOrder."RV Planning Status"::Planning);
+                        PurchOrder.SetRange("RV_Planning Status", PurchOrder."RV_Planning Status"::Planning);
                         if PurchOrder.FindSet() then
                             repeat
-                                PurchOrder."RV Planning Status" := PurchOrder."RV Planning Status"::Fixed;
+                                PurchOrder."RV_Planning Status" := PurchOrder."RV_Planning Status"::Fixed;
                                 PurchOrder.Modify();
 
                                 PurchOrderLine.Reset();
@@ -78,10 +78,10 @@ pageextension 50615 "RV Purchase Order List" extends "Purchase Order List"
                         PurchOrderLine: Record "Purchase Line";
                     begin
                         CurrPage.SetSelectionFilter(PurchOrder);
-                        PurchOrder.SetRange("RV Planning Status", PurchOrder."RV Planning Status"::Fixed);
+                        PurchOrder.SetRange("RV_Planning Status", PurchOrder."RV_Planning Status"::Fixed);
                         if PurchOrder.FindSet() then
                             repeat
-                                PurchOrder."RV Planning Status" := PurchOrder."RV Planning Status"::Planning;
+                                PurchOrder."RV_Planning Status" := PurchOrder."RV_Planning Status"::Planning;
                                 PurchOrder.Modify();
 
                                 PurchOrderLine.Reset();

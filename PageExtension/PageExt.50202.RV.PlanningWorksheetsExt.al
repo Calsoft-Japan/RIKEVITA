@@ -9,7 +9,7 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
     {
         addafter("Accept Action Message")
         {
-            field("Available in Multiple Vendors"; Rec."RV AvailableInMultipleVendor")
+            field("Available in Multiple Vendors"; Rec."RV_AvailableInMultipleVendor")
             {
                 Caption = 'Available in Multiple Vendors';
                 ApplicationArea = all;
@@ -18,7 +18,7 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
         }
         addafter("Description")
         {
-            field("Expiration Calculation"; Rec."RV Expiration Calculation")
+            field("Expiration Calculation"; Rec."RV_Expiration Calculation")
             {
                 Caption = 'Expiration Calculation';
                 ApplicationArea = all;
@@ -63,8 +63,8 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
                                 RV_VendorSelection."Vendor No." := ItemVendor."Vendor No.";
                                 RV_VendorSelection."Starting Date" := Rec."Starting Date";
                                 RV_VendorSelection."Ending Date" := Rec."Ending Date";
-                                RV_VendorSelection."Minimum Order Quantity" := ItemVendor."RV Minimum Order Quantity";
-                                RV_VendorSelection."Maximum Order Quantity" := ItemVendor."RV Maximum Order Quantity";
+                                RV_VendorSelection."Minimum Order Quantity" := ItemVendor."RV_Minimum Order Quantity";
+                                RV_VendorSelection."Maximum Order Quantity" := ItemVendor."RV_Maximum Order Quantity";
                                 RV_VendorSelection."Quantity to Order" := 0;
                                 RV_VendorSelection."Unit of Measure Code" := Rec."Unit of Measure Code";
                                 RV_VendorSelection.Insert();
@@ -116,12 +116,12 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
         ItemVendor.SetRange("Item No.", Rec."No.");
         if ItemVendor.FindFirst() then begin
             if ItemVendor.Count > 0 then begin
-                Rec."RV AvailableInMultipleVendor" := true;
+                Rec."RV_AvailableInMultipleVendor" := true;
                 IsVendorSelection := true;
             end;
         end
         else begin
-            Rec."RV AvailableInMultipleVendor" := false;
+            Rec."RV_AvailableInMultipleVendor" := false;
             IsVendorSelection := false;
         end;
 
@@ -148,7 +148,7 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
             LineNo := RecRequisitionLine."Line No.";
         end;
 
-        if Rec."RV AvailableInMultipleVendor" then begin
+        if Rec."RV_AvailableInMultipleVendor" then begin
             VendorSelection.Reset();
             VendorSelection.SetRange("Item No.", Rec."No.");
             if VendorSelection.FindFirst() then begin
@@ -157,11 +157,11 @@ pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
                     RecRequisitionLine.Init();
                     RecRequisitionLine.TransferFields(Rec);
                     RecRequisitionLine."Line No." := LineNo;
-                    RecRequisitionLine."RV AvailableInMultipleVendor" := false;
+                    RecRequisitionLine."RV_AvailableInMultipleVendor" := false;
                     RecRequisitionLine.Validate("Vendor No.", VendorSelection."Vendor No.");
                     RecRequisitionLine.Validate(Quantity, VendorSelection."Quantity to Order");
                     RecRequisitionLine.Validate("Accept Action Message", true);
-                    RecRequisitionLine."RV AvailableInMultipleVendor" := false;
+                    RecRequisitionLine."RV_AvailableInMultipleVendor" := false;
                     RecRequisitionLine.Insert();
 
 

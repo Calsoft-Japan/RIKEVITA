@@ -11,22 +11,22 @@ pageextension 50101 "RV Purchase Order Ext" extends "Purchase Order"
             group("RIKE")
             {
                 ShowCaption = false;
-                field(RV_ETA; Rec."RV ETA")
+                field(RV_ETA; Rec."RV_ETA")
                 {
                     ApplicationArea = All;
                     Description = 'FDD003';
                 }
-                field(RV_ETD; Rec."RV ETD")
+                field(RV_ETD; Rec."RV_ETD")
                 {
                     ApplicationArea = All;
                     Description = 'FDD003';
                 }
-                field("RV_Contract Month"; Rec."RV Contract Month")
+                field("RV_Contract Month"; Rec."RV_Contract Month")
                 {
                     ApplicationArea = All;
                     Description = 'FDD003';
                 }
-                field("RV_Contract Year"; Rec."RV Contract Year")
+                field("RV_Contract Year"; Rec."RV_Contract Year")
                 {
                     ApplicationArea = All;
                     Description = 'FDD003';
@@ -42,7 +42,7 @@ pageextension 50101 "RV Purchase Order Ext" extends "Purchase Order"
     /// </summary>
     trigger OnNewRecord(BelowxRec: Boolean)
     begin
-        Rec."RV Contract Month" := Enum::"RV Month".FromInteger(Today.Month);
-        Rec."RV Contract Year" := Today.Year;
+        Rec."RV_Contract Month" := Enum::"RV Month".FromInteger(Today.Month);
+        Rec."RV_Contract Year" := Today.Year;
     end;
 }

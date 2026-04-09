@@ -87,7 +87,7 @@ page 50105 "RV Item Tracking Hst. - Sales"
         if ItmLedgerEntry.FindFirst() then begin
             CurEntryNo := ItmLedgerEntry."Entry No.";
             CurLotNo := ItmLedgerEntry."Lot No.";
-            RV_Container_No := ItmLedgerEntry."RV Container No.";
+            RV_Container_No := ItmLedgerEntry."RV_Container No.";
         end;
     end;
 

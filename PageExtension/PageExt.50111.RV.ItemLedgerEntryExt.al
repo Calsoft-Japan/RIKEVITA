@@ -8,7 +8,7 @@ pageextension 50111 "RV Item Ledger Entry Ext" extends "Item Ledger Entries"
     {
         addafter("Lot No.")
         {
-            field("RV_Container No."; Rec."RV Container No.")
+            field("RV_Container No."; Rec."RV_Container No.")
             {
                 ApplicationArea = All;
                 Description = 'FDD008';

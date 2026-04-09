@@ -6,7 +6,7 @@ tableextension 50202 "RV Requisition Line" extends "Requisition Line"
 {
     fields
     {
-        field(50200; "RV Expiration Calculation"; DateFormula)
+        field(50200; "RV_Expiration Calculation"; DateFormula)
         {
             Caption = 'Expiration Calculation';
             Description = 'FDD001';
@@ -14,7 +14,7 @@ tableextension 50202 "RV Requisition Line" extends "Requisition Line"
             CalcFormula = lookup(Item."Expiration Calculation" where("No." = field("No.")));
             TableRelation = Item;
         }
-        field(50201; "RV AvailableInMultipleVendor"; Boolean)
+        field(50201; "RV_AvailableInMultipleVendor"; Boolean)
         {
             Caption = 'Available in Multiple Vendors';
             Description = 'FDD002';
@@ -29,11 +29,11 @@ tableextension 50202 "RV Requisition Line" extends "Requisition Line"
         ItemVendor.SetRange("Item No.", Rec."No.");
         if ItemVendor.FindFirst() then begin
             if ItemVendor.Count > 0 then begin
-                Rec."RV AvailableInMultipleVendor" := true;
+                Rec."RV_AvailableInMultipleVendor" := true;
             end;
         end
         else begin
-            Rec."RV AvailableInMultipleVendor" := false;
+            Rec."RV_AvailableInMultipleVendor" := false;
         end;
     end;
 }

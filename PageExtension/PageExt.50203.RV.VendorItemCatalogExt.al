@@ -9,12 +9,12 @@ pageextension 50203 "RV Vendor Item Catalog" extends "Vendor Item Catalog"
 
         addafter("Lead Time Calculation")
         {
-            field("Minimum Order Quantity"; Rec."RV Minimum Order Quantity")
+            field("Minimum Order Quantity"; Rec."RV_Minimum Order Quantity")
             {
                 Caption = 'Minimum Order Quantity';
                 ApplicationArea = all;
             }
-            field("Maximum Order Quantity"; Rec."RV Maximum Order Quantity")
+            field("Maximum Order Quantity"; Rec."RV_Maximum Order Quantity")
             {
                 Caption = 'Maximum Order Quantity';
                 ApplicationArea = all;

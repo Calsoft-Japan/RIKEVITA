@@ -9,22 +9,22 @@ pageextension 50201 "RV Item Tracking Lines" extends "Item Tracking Lines"
         addbefore("Expiration Date")
         {
 
-            field("RV_Container No."; Rec."RV Container No.")//FDD008
+            field("RV_Container No."; Rec."RV_Container No.")//FDD008
             {
                 Caption = 'Container No.';
                 ApplicationArea = All;
             }
-            field("Manufacture Date"; Rec."RV Manufacture Date")
+            field("Manufacture Date"; Rec."RV_Manufacture Date")
             {
                 Caption = 'Manufacture Date';
                 ApplicationArea = all;
                 //Visible = ShowManufactureDate;
                 trigger OnValidate()
                 begin
-                    if Rec."RV Manufacture Date" <> 0D then begin
+                    if Rec."RV_Manufacture Date" <> 0D then begin
                         Item.Get(Rec."Item No.");
-                        if Item."RV Expiration Base Date (RM)" = Item."RV Expiration Base Date (RM)"::"Manufacture Date" then begin
-                            Rec."Expiration Date" := CalcDate(Item."Expiration Calculation", Rec."RV Manufacture Date");
+                        if Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date" then begin
+                            Rec."Expiration Date" := CalcDate(Item."Expiration Calculation", Rec."RV_Manufacture Date");
                         end;
                     end;
                 end;

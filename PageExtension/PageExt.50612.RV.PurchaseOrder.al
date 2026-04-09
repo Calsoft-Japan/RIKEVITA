@@ -9,17 +9,17 @@ pageextension 50612 "RV Purchase Order" extends "Purchase Order"
     {
         addlast(General)
         {
-            field("RV Planning Date"; Rec."RV Planning Date")
+            field("RV Planning Date"; Rec."RV_Planning Date")
             {
                 ApplicationArea = All;
             }
 
-            field("RV Planning Status"; Rec."RV Planning Status")
+            field("RV Planning Status"; Rec."RV_Planning Status")
             {
                 ApplicationArea = All;
             }
 
-            field("RV Planning Controller"; Rec."RV Planning Controller")
+            field("RV Planning Controller"; Rec."RV_Planning Controller")
             {
                 ApplicationArea = All;
             }

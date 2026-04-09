@@ -8,12 +8,12 @@ pageextension 50104 "RV Posted Pur Invoices Ext" extends "Posted Purchase Invoic
     {
         addafter("Document Date")
         {
-            field(RV_ETA; Rec."RV ETA")
+            field(RV_ETA; Rec."RV_ETA")
             {
                 ApplicationArea = All;
                 Description = 'FDD003';
             }
-            field(RV_ETD; Rec."RV ETD")
+            field(RV_ETD; Rec."RV_ETD")
             {
                 ApplicationArea = All;
                 Description = 'FDD003';

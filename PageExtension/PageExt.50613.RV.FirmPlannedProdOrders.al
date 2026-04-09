@@ -8,19 +8,19 @@ pageextension 50613 "RV Firm Planned Prod. Orders" extends "Firm Planned Prod. O
     {
         addlast(Control1)
         {
-            field("RV Planning Date"; Rec."RV Planning Date")
+            field("RV Planning Date"; Rec."RV_Planning Date")
             {
                 ApplicationArea = All;
                 Editable = false;
                 Description = 'FDD011';
             }
-            field("RV Planning Status"; Rec."RV Planning Status")
+            field("RV Planning Status"; Rec."RV_Planning Status")
             {
                 ApplicationArea = All;
                 Editable = false;
                 Description = 'FDD011';
             }
-            field("RV Planning Controller"; Rec."RV Planning Controller")
+            field("RV Planning Controller"; Rec."RV_Planning Controller")
             {
                 ApplicationArea = All;
                 Editable = false;
@@ -48,10 +48,10 @@ pageextension 50613 "RV Firm Planned Prod. Orders" extends "Firm Planned Prod. O
                         ProdOrderLine: Record "Prod. Order Line";
                     begin
                         CurrPage.SetSelectionFilter(ProdOrder);
-                        ProdOrder.SetRange("RV Planning Status", ProdOrder."RV Planning Status"::Planning);
+                        ProdOrder.SetRange("RV_Planning Status", ProdOrder."RV_Planning Status"::Planning);
                         if ProdOrder.FindSet() then
                             repeat
-                                ProdOrder."RV Planning Status" := ProdOrder."RV Planning Status"::Fixed;
+                                ProdOrder."RV_Planning Status" := ProdOrder."RV_Planning Status"::Fixed;
                                 ProdOrder.Modify();
 
                                 ProdOrderLine.Reset();
@@ -78,10 +78,10 @@ pageextension 50613 "RV Firm Planned Prod. Orders" extends "Firm Planned Prod. O
                         ProdOrderLine: Record "Prod. Order Line";
                     begin
                         CurrPage.SetSelectionFilter(ProdOrder);
-                        ProdOrder.SetRange("RV Planning Status", ProdOrder."RV Planning Status"::Fixed);
+                        ProdOrder.SetRange("RV_Planning Status", ProdOrder."RV_Planning Status"::Fixed);
                         if ProdOrder.FindSet() then
                             repeat
-                                ProdOrder."RV Planning Status" := ProdOrder."RV Planning Status"::Planning;
+                                ProdOrder."RV_Planning Status" := ProdOrder."RV_Planning Status"::Planning;
                                 ProdOrder.Modify();
 
                                 ProdOrderLine.Reset();

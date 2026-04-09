@@ -6,7 +6,7 @@ tableextension 50104 "RV Item Ledger Entry Ext" extends "Item Ledger Entry"
 {
     fields
     {
-        field(50100; "RV Container No."; Code[20])
+        field(50100; "RV_Container No."; Code[20])
         {
             Caption = 'Container No.';
             DataClassification = ToBeClassified;

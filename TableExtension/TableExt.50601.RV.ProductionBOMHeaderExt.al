@@ -6,7 +6,7 @@ tableextension 50601 "RV Production BOM Header" extends "Production BOM Header"
 {
     fields
     {
-        field(50600; "RV Highly Restricted BOM"; Boolean)
+        field(50600; "RV_Highly Restricted BOM"; Boolean)
         {
             Caption = 'Highly Restricted BOM';
             Description = 'FDD014';

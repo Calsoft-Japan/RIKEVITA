@@ -15,8 +15,8 @@ codeunit 50600 "RV Check BOM Access "
     begin
         UserSetup.get(UserId);
         if BOMHeader.Get(ProductionBOMNo) then
-            if BOMHeader."RV Highly Restricted BOM" then
-                if not UserSetup."RV Acc Highly Restricted BOM" then
+            if BOMHeader."RV_Highly Restricted BOM" then
+                if not UserSetup."RV_Acc Highly Restricted BOM" then
                     Error(PermissionErrorMsg, ProductionBOMNo);
     end;
 

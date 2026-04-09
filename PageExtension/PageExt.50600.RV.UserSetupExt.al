@@ -9,7 +9,7 @@ pageextension 50600 "RV User Setup" extends "User Setup"
     {
         addafter("Service Invoice Posting Policy")
         {
-            field("RIKE Acc Highly Restricted BOM"; rec."RV Acc Highly Restricted BOM")
+            field("RIKE Acc Highly Restricted BOM"; rec."RV_Acc Highly Restricted BOM")
             {
                 ApplicationArea = All;
                 Description = 'FDD014';
@@ -18,22 +18,22 @@ pageextension 50600 "RV User Setup" extends "User Setup"
 
         addafter("User ID")
         {
-            field("Allow Edit of Container No."; Rec."Allow Edit of Container No.")
+            field("Allow Edit of Container No."; Rec."RV_Allow Edit of Container No.")
             {
                 ApplicationArea = All;
                 Description = 'FDD008';
             }
-            field("Allow Edit of B/L Date"; Rec."Allow Edit of B/L Date")
+            field("Allow Edit of B/L Date"; Rec."RV_Allow Edit of B/L Date")
             {
                 ApplicationArea = All;
                 Description = 'FDD008';
             }
-            field("Allow Edit of Closing Date"; Rec."Allow Edit of Closing Date")
+            field("Allow Edit of Closing Date"; Rec."RV_Allow Edit of Closing Date")
             {
                 ApplicationArea = All;
                 Description = 'FDD008';
             }
-            field("Allow Edit of Staffing Date"; Rec."Allow Edit of Staffing Date")
+            field("Allow Edit of Staffing Date"; Rec."RV_Allow Edit of Staffing Date")
             {
                 ApplicationArea = All;
                 Description = 'FDD008';

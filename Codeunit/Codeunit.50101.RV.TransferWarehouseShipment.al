@@ -7,7 +7,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post Line", OnBeforeInsertItemLedgEntry, '', false, false)]
     local procedure "Item Jnl.-Post Line_OnBeforeInsertItemLedgEntry"(var ItemLedgerEntry: Record "Item Ledger Entry"; ItemJournalLine: Record "Item Journal Line"; TransferItem: Boolean; OldItemLedgEntry: Record "Item Ledger Entry"; ItemJournalLineOrigin: Record "Item Journal Line")
     begin
-        ItemLedgerEntry."RV Container No." := ItemJournalLine."RV Container No.";
+        ItemLedgerEntry."RV_Container No." := ItemJournalLine."RV_Container No.";
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnBeforeItemJnlPostLine, '', false, false)]
@@ -27,7 +27,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
             ResvEntry.SetRange("Source ID", SalesLine."Document No.");
             ResvEntry.SetRange("Source Ref. No.", SalesLine."Line No.");
             if ResvEntry.FindFirst() then
-                ItemJournalLine."RV Container No." := ResvEntry."RV Container No.";
+                ItemJournalLine."RV_Container No." := ResvEntry."RV_Container No.";
         end;
     end;
 
@@ -49,7 +49,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
             ResvEntry.SetRange("Source ID", PurchaseLine."Document No.");
             ResvEntry.SetRange("Source Ref. No.", PurchaseLine."Line No.");
             if ResvEntry.FindFirst() then
-                ItemJnlLine."RV Container No." := ResvEntry."RV Container No.";
+                ItemJnlLine."RV_Container No." := ResvEntry."RV_Container No.";
         end;
     end;
 
