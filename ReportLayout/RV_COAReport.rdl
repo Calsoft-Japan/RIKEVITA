@@ -24,139 +24,6 @@
       <rd:DataSourceID>5dece200-3d77-474a-af76-1d16d2d8ec1d</rd:DataSourceID>
     </DataSource>
   </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-      <Fields>
-        <Field Name="QA_Header_No">
-          <DataField>QA_Header_No</DataField>
-        </Field>
-        <Field Name="TotalPageText">
-          <DataField>TotalPageText</DataField>
-        </Field>
-        <Field Name="DisplayQuantityPerLot">
-          <DataField>DisplayQuantityPerLot</DataField>
-        </Field>
-        <Field Name="DateWordingText">
-          <DataField>DateWordingText</DataField>
-        </Field>
-        <Field Name="DateWording_remarkText">
-          <DataField>DateWording_remarkText</DataField>
-        </Field>
-        <Field Name="METHOD_Caption">
-          <DataField>METHOD_Caption</DataField>
-        </Field>
-        <Field Name="SPECIFICATION_Caption">
-          <DataField>SPECIFICATION_Caption</DataField>
-        </Field>
-        <Field Name="SalesOrderNoText">
-          <DataField>SalesOrderNoText</DataField>
-        </Field>
-        <Field Name="CurrReport_PAGENO">
-          <DataField>CurrReport_PAGENO</DataField>
-        </Field>
-        <Field Name="PageCaptionLbl">
-          <DataField>PageCaptionLbl</DataField>
-        </Field>
-        <Field Name="MARKSText_1">
-          <DataField>MARKSText_1</DataField>
-        </Field>
-        <Field Name="MARKSText_2">
-          <DataField>MARKSText_2</DataField>
-        </Field>
-        <Field Name="MARKSText_3">
-          <DataField>MARKSText_3</DataField>
-        </Field>
-        <Field Name="MARKSText_4">
-          <DataField>MARKSText_4</DataField>
-        </Field>
-        <Field Name="PRODUCTText">
-          <DataField>PRODUCTText</DataField>
-        </Field>
-        <Field Name="QA_Header___No__">
-          <DataField>QA_Header___No__</DataField>
-        </Field>
-        <Field Name="DateText">
-          <DataField>DateText</DataField>
-        </Field>
-        <Field Name="CompanyInfo_Picture">
-          <DataField>CompanyInfo_Picture</DataField>
-        </Field>
-        <Field Name="OutputNo">
-          <DataField>OutputNo</DataField>
-        </Field>
-        <Field Name="PageLoop_Number">
-          <DataField>PageLoop_Number</DataField>
-        </Field>
-        <Field Name="ContainerNoNo">
-          <DataField>ContainerNoNo</DataField>
-        </Field>
-        <Field Name="Header_Quantity">
-          <DataField>Header_Quantity</DataField>
-        </Field>
-        <Field Name="QAShipmentLine_Item_No">
-          <DataField>QAShipmentLine_Item_No</DataField>
-        </Field>
-        <Field Name="Line_Quantity">
-          <DataField>Line_Quantity</DataField>
-        </Field>
-        <Field Name="UOM">
-          <DataField>UOM</DataField>
-        </Field>
-        <Field Name="QAShipmentLine_Line_No">
-          <DataField>QAShipmentLine_Line_No</DataField>
-        </Field>
-        <Field Name="Line_COANo">
-          <DataField>Line_COANo</DataField>
-        </Field>
-        <Field Name="LotNo">
-          <DataField>LotNo</DataField>
-        </Field>
-        <Field Name="PRODDATE">
-          <DataField>PRODDATE</DataField>
-        </Field>
-        <Field Name="BESTBEFOREDATE">
-          <DataField>BESTBEFOREDATE</DataField>
-        </Field>
-        <Field Name="ExternalQCLoop_Number">
-          <DataField>ExternalQCLoop_Number</DataField>
-        </Field>
-        <Field Name="SpecLineNo">
-          <DataField>SpecLineNo</DataField>
-        </Field>
-        <Field Name="QCParameterName">
-          <DataField>QCParameterName</DataField>
-        </Field>
-        <Field Name="METHOD">
-          <DataField>METHOD</DataField>
-        </Field>
-        <Field Name="SPECIFICATION">
-          <DataField>SPECIFICATION</DataField>
-        </Field>
-        <Field Name="result">
-          <DataField>result</DataField>
-        </Field>
-        <Field Name="Inventory_Comment_Line__Inventory_Comment_Line__Comment">
-          <DataField>Inventory_Comment_Line__Inventory_Comment_Line__Comment</DataField>
-        </Field>
-        <Field Name="RemarksCaption">
-          <DataField>RemarksCaption</DataField>
-        </Field>
-        <Field Name="Inventory_Comment_Line_Document_Type">
-          <DataField>Inventory_Comment_Line_Document_Type</DataField>
-        </Field>
-        <Field Name="Inventory_Comment_Line_No_">
-          <DataField>Inventory_Comment_Line_No_</DataField>
-        </Field>
-        <Field Name="Inventory_Comment_Line_Line_No_">
-          <DataField>Inventory_Comment_Line_Line_No_</DataField>
-        </Field>
-      </Fields>
-    </DataSet>
-  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -3617,12 +3484,6 @@ Fields!DateWording_remarkText.Value</Value>
       </Page>
     </ReportSection>
   </ReportSections>
-  <ReportParametersLayout>
-    <GridLayoutDefinition>
-      <NumberOfColumns>4</NumberOfColumns>
-      <NumberOfRows>2</NumberOfRows>
-    </GridLayoutDefinition>
-  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
@@ -3797,4 +3658,137 @@ HjXjf4OeKPid4H8VaF4i8UQx3kutjVPDWoWVoqtpaROklsrrx5jKytuJPIbrWbo3wn+JnjLxVp2ofE7x
   </EmbeddedImages>
   <Language>en-US</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="QA_Header_No">
+          <DataField>QA_Header_No</DataField>
+        </Field>
+        <Field Name="TotalPageText">
+          <DataField>TotalPageText</DataField>
+        </Field>
+        <Field Name="DisplayQuantityPerLot">
+          <DataField>DisplayQuantityPerLot</DataField>
+        </Field>
+        <Field Name="DateWordingText">
+          <DataField>DateWordingText</DataField>
+        </Field>
+        <Field Name="DateWording_remarkText">
+          <DataField>DateWording_remarkText</DataField>
+        </Field>
+        <Field Name="METHOD_Caption">
+          <DataField>METHOD_Caption</DataField>
+        </Field>
+        <Field Name="SPECIFICATION_Caption">
+          <DataField>SPECIFICATION_Caption</DataField>
+        </Field>
+        <Field Name="SalesOrderNoText">
+          <DataField>SalesOrderNoText</DataField>
+        </Field>
+        <Field Name="CurrReport_PAGENO">
+          <DataField>CurrReport_PAGENO</DataField>
+        </Field>
+        <Field Name="PageCaptionLbl">
+          <DataField>PageCaptionLbl</DataField>
+        </Field>
+        <Field Name="MARKSText_1">
+          <DataField>MARKSText_1</DataField>
+        </Field>
+        <Field Name="MARKSText_2">
+          <DataField>MARKSText_2</DataField>
+        </Field>
+        <Field Name="MARKSText_3">
+          <DataField>MARKSText_3</DataField>
+        </Field>
+        <Field Name="MARKSText_4">
+          <DataField>MARKSText_4</DataField>
+        </Field>
+        <Field Name="PRODUCTText">
+          <DataField>PRODUCTText</DataField>
+        </Field>
+        <Field Name="QA_Header___No__">
+          <DataField>QA_Header___No__</DataField>
+        </Field>
+        <Field Name="DateText">
+          <DataField>DateText</DataField>
+        </Field>
+        <Field Name="CompanyInfo_Picture">
+          <DataField>CompanyInfo_Picture</DataField>
+        </Field>
+        <Field Name="OutputNo">
+          <DataField>OutputNo</DataField>
+        </Field>
+        <Field Name="PageLoop_Number">
+          <DataField>PageLoop_Number</DataField>
+        </Field>
+        <Field Name="ContainerNoNo">
+          <DataField>ContainerNoNo</DataField>
+        </Field>
+        <Field Name="Header_Quantity">
+          <DataField>Header_Quantity</DataField>
+        </Field>
+        <Field Name="QAShipmentLine_Item_No">
+          <DataField>QAShipmentLine_Item_No</DataField>
+        </Field>
+        <Field Name="Line_Quantity">
+          <DataField>Line_Quantity</DataField>
+        </Field>
+        <Field Name="UOM">
+          <DataField>UOM</DataField>
+        </Field>
+        <Field Name="QAShipmentLine_Line_No">
+          <DataField>QAShipmentLine_Line_No</DataField>
+        </Field>
+        <Field Name="Line_COANo">
+          <DataField>Line_COANo</DataField>
+        </Field>
+        <Field Name="LotNo">
+          <DataField>LotNo</DataField>
+        </Field>
+        <Field Name="PRODDATE">
+          <DataField>PRODDATE</DataField>
+        </Field>
+        <Field Name="BESTBEFOREDATE">
+          <DataField>BESTBEFOREDATE</DataField>
+        </Field>
+        <Field Name="ExternalQCLoop_Number">
+          <DataField>ExternalQCLoop_Number</DataField>
+        </Field>
+        <Field Name="SpecLineNo">
+          <DataField>SpecLineNo</DataField>
+        </Field>
+        <Field Name="QCParameterName">
+          <DataField>QCParameterName</DataField>
+        </Field>
+        <Field Name="METHOD">
+          <DataField>METHOD</DataField>
+        </Field>
+        <Field Name="SPECIFICATION">
+          <DataField>SPECIFICATION</DataField>
+        </Field>
+        <Field Name="result">
+          <DataField>result</DataField>
+        </Field>
+        <Field Name="Inventory_Comment_Line__Inventory_Comment_Line__Comment">
+          <DataField>Inventory_Comment_Line__Inventory_Comment_Line__Comment</DataField>
+        </Field>
+        <Field Name="RemarksCaption">
+          <DataField>RemarksCaption</DataField>
+        </Field>
+        <Field Name="Inventory_Comment_Line_Document_Type">
+          <DataField>Inventory_Comment_Line_Document_Type</DataField>
+        </Field>
+        <Field Name="Inventory_Comment_Line_No_">
+          <DataField>Inventory_Comment_Line_No_</DataField>
+        </Field>
+        <Field Name="Inventory_Comment_Line_Line_No_">
+          <DataField>Inventory_Comment_Line_Line_No_</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
 </Report>
