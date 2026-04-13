@@ -6,13 +6,10 @@ page 50202 "RV ISO Document List"
 {
     ApplicationArea = All;
     Caption = 'ISO Document List';
-    PageType = ListPart;
+    PageType = List;
     UsageCategory = Lists;
     SourceTable = "RV ISO Document";
-    DelayedInsert = true;
-    LinksAllowed = false;
-    MultipleNewLines = true;
-    AutoSplitKey = false;
+
     layout
     {
         area(Content)

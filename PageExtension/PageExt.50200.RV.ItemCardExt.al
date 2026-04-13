@@ -5,7 +5,7 @@
 /// FDD014 2026/02/23: New. (Stephen)
 /// FDD020 2026/04/08：New.（Bobby.ji）
 /// </summary>
-pageextension 50200 "RV Item Card" extends "Item Card"
+pageextension 50200 "RV Item Card Ext" extends "Item Card"
 {
     layout
     {

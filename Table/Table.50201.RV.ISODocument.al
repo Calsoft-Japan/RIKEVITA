@@ -9,7 +9,7 @@ table 50201 "RV ISO Document"
 
     fields
     {
-        field(1; "Report Code"; Code[10])
+        field(1; "Report Code"; Code[50])
         {
             Caption = 'Report Code';
             Description = 'FDD020';

@@ -2,7 +2,7 @@
 /// PageExtension RV_Item Tracking Lines (ID 50201) extends "Item Tracking Lines"
 /// FDD001 FDD008 2026/03/12: New. (Bobby.ji)
 /// </summary>
-pageextension 50201 "RV Item Tracking Lines" extends "Item Tracking Lines"
+pageextension 50201 "RV Item Tracking Lines Ext" extends "Item Tracking Lines"
 {
     layout
     {
