@@ -11,76 +11,6 @@
       <rd:DataSourceID>954c61a0-5311-4824-910c-a6d8a50edaad</rd:DataSourceID>
     </DataSource>
   </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-      <Fields>
-        <Field Name="CompanyLogo">
-          <DataField>CompanyLogo</DataField>
-        </Field>
-        <Field Name="RegistrationNo">
-          <DataField>RegistrationNo</DataField>
-        </Field>
-        <Field Name="ReportTitle">
-          <DataField>ReportTitle</DataField>
-        </Field>
-        <Field Name="ISODocumentNo">
-          <DataField>ISODocumentNo</DataField>
-        </Field>
-        <Field Name="ISODocVersion">
-          <DataField>ISODocVersion</DataField>
-        </Field>
-        <Field Name="PrintDate">
-          <DataField>PrintDate</DataField>
-        </Field>
-        <Field Name="SoldToName">
-          <DataField>SoldToName</DataField>
-        </Field>
-        <Field Name="SoldToAddress">
-          <DataField>SoldToAddress</DataField>
-        </Field>
-        <Field Name="SoldToCity">
-          <DataField>SoldToCity</DataField>
-        </Field>
-        <Field Name="DeliveryNo">
-          <DataField>DeliveryNo</DataField>
-        </Field>
-        <Field Name="OrderNo">
-          <DataField>OrderNo</DataField>
-        </Field>
-        <Field Name="ContactName">
-          <DataField>ContactName</DataField>
-        </Field>
-        <Field Name="Terms">
-          <DataField>Terms</DataField>
-        </Field>
-        <Field Name="ShipToName">
-          <DataField>ShipToName</DataField>
-        </Field>
-        <Field Name="ShipToAddress">
-          <DataField>ShipToAddress</DataField>
-        </Field>
-        <Field Name="ShipToCity">
-          <DataField>ShipToCity</DataField>
-        </Field>
-        <Field Name="LotNo">
-          <DataField>LotNo</DataField>
-        </Field>
-        <Field Name="Description">
-          <DataField>Description</DataField>
-        </Field>
-        <Field Name="Quantity">
-          <DataField>Quantity</DataField>
-        </Field>
-        <Field Name="QuantityFormat">
-          <DataField>QuantityFormat</DataField>
-        </Field>
-      </Fields>
-    </DataSet>
-  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -418,12 +348,6 @@
       </Page>
     </ReportSection>
   </ReportSections>
-  <ReportParametersLayout>
-    <GridLayoutDefinition>
-      <NumberOfColumns>4</NumberOfColumns>
-      <NumberOfRows>2</NumberOfRows>
-    </GridLayoutDefinition>
-  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
@@ -463,4 +387,74 @@ End Function
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="CompanyLogo">
+          <DataField>CompanyLogo</DataField>
+        </Field>
+        <Field Name="RegistrationNo">
+          <DataField>RegistrationNo</DataField>
+        </Field>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
+        </Field>
+        <Field Name="ISODocumentNo">
+          <DataField>ISODocumentNo</DataField>
+        </Field>
+        <Field Name="ISODocVersion">
+          <DataField>ISODocVersion</DataField>
+        </Field>
+        <Field Name="PrintDate">
+          <DataField>PrintDate</DataField>
+        </Field>
+        <Field Name="SoldToName">
+          <DataField>SoldToName</DataField>
+        </Field>
+        <Field Name="SoldToAddress">
+          <DataField>SoldToAddress</DataField>
+        </Field>
+        <Field Name="SoldToCity">
+          <DataField>SoldToCity</DataField>
+        </Field>
+        <Field Name="DeliveryNo">
+          <DataField>DeliveryNo</DataField>
+        </Field>
+        <Field Name="OrderNo">
+          <DataField>OrderNo</DataField>
+        </Field>
+        <Field Name="ContactName">
+          <DataField>ContactName</DataField>
+        </Field>
+        <Field Name="Terms">
+          <DataField>Terms</DataField>
+        </Field>
+        <Field Name="ShipToName">
+          <DataField>ShipToName</DataField>
+        </Field>
+        <Field Name="ShipToAddress">
+          <DataField>ShipToAddress</DataField>
+        </Field>
+        <Field Name="ShipToCity">
+          <DataField>ShipToCity</DataField>
+        </Field>
+        <Field Name="LotNo">
+          <DataField>LotNo</DataField>
+        </Field>
+        <Field Name="Description">
+          <DataField>Description</DataField>
+        </Field>
+        <Field Name="Quantity">
+          <DataField>Quantity</DataField>
+        </Field>
+        <Field Name="QuantityFormat">
+          <DataField>QuantityFormat</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
 </Report>
