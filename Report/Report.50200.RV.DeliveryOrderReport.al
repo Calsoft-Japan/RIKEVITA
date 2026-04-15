@@ -16,113 +16,196 @@ report 50200 "RV Delivery Order Report"
         dataitem(Header; "Sales Shipment Header")
         {
             DataItemTableView = sorting("No.");
+            RequestFilterFields = "No.", "Bill-to Customer No.", "Sell-to Customer No.";
 
-            // A区：报表页眉
             column(CompanyLogo; CompanyInfo.Picture)
             {
             }
-
-            column(RegistrationNo; 'Registration No.: ' + CompanyInfo."Registration No.")
+            column(CompanyName; CompanyInfo.Name)
             {
             }
-            column(ReportTitle; 'DELIVERY ORDER')
+            column(RegistrationNo; 'Registration No. ' + CompanyInfo."Registration No.")
             {
             }
-
-            // ③ Related ISO Document Information
-            column(ISODocumentNo; ISODoc."ISO Document No.")
+            column(SSTRegNo; 'SST Reg No. ' + CompanyInfo."RV_SST Reg No.")
             {
             }
-            column(ISODocVersion; ISODoc."ISO Doc. Version No.")
+            column(CerfiticateNo; CerfiticateNo)
             {
             }
-
-            // ④ Print Date
-            column(PrintDate; Today())
+            column(ISODocumentNo; ISODocumentNo)
             {
             }
-
-            // ⑤ SOLD TO Address
-            column(SoldToName; Header."Sell-to Customer Name")
+            column(ISODocVersion; ISODocVersion)
             {
             }
-            column(SoldToAddress; Header."Sell-to Address")
+            column(PrintDate; Format(Today(), 0, '<Day,2>-<Month text,3>-<Year,2>'))
             {
             }
-            column(SoldToCity; Header."Sell-to City")
+            column(SellToName; Header."Sell-to Customer Name")
             {
             }
-
-            // ⑥ DELIVERY NO
+            column(SellToAddress; Header."Sell-to Address")
+            {
+            }
+            column(SellToAddress2; Header."Sell-to Address 2")
+            {
+            }
+            column(SellToPostCode; Header."Sell-to Post Code" + Header."Sell-to City")
+            {
+            }
+            column(SellToCountry; Header."Sell-to Country/Region Code")
+            {
+            }
             column(DeliveryNo; Header."No.")
             {
             }
-
-            // ⑦ ORDER NO
             column(OrderNo; Header."Order No.")
             {
             }
-
-            // ⑧ Customer contact name
             column(ContactName; Header."Sell-to Contact")
             {
             }
-
-            // ⑨ TERMS
-            column(Terms; PaymentTerms.Description)
+            column(Terms; Terms)
             {
             }
 
-            // B区：行数据
-            dataitem(Lines; "Sales Shipment Line")
+            dataitem(Lines; Integer)
             {
-                DataItemLink = "Document No." = field("No.");
-                DataItemTableView = sorting("Document No.", "Line No.");
+                DataItemTableView = sorting(Number);
+                column(CustomerOrderNo; Header."External Document No.")
+                {
 
-
-                // 根据文档 2.2.3.4，需要从 Item Ledger Entry 获取 Lot No.
-                column(LotNo; ILE."Lot No.")
+                }
+                column(LotNo; Templine."Lot No.")
                 {
                 }
 
-                column(Description; Item.Description)
+                column(Description; Description)
                 {
                 }
-
-                column(Quantity; Lines.Quantity)
+                column(Description2; Description2)
                 {
                 }
+                column(PackageInfo; PackageInfo)
+                {
+                }
+                column(Quantity; Format(Templine."Quantity (Base)") + ItemBUOM)
+                {
+                }
+                trigger OnPreDataItem()
+                begin
+                    SetRange(Number, 1, Templine.Count);
+                end;
 
                 trigger OnAfterGetRecord()
+                var
+                    RecItem: Record Item;
                 begin
-                    // 获取物料描述和分类账条目
-                    if Item.Get(Lines."No.") then;
+
+                    if Number = 1 then begin
+                        Templine.FindFirst();
+                    end else begin
+                        Templine.Next();
+                    end;
+
+                    if RecItem.Get(Templine."Item No.") then begin
+                        Description := RecItem.Description;
+                        Description2 := RecItem."Description 2";
+                    end;
+                    ItemBUOM := RecItem."Base Unit of Measure";
+                    PackageInfo := StrSubstNo('(%1 %2 X %3 %4 = %5 %6)',
+                        Templine."Quantity (Base)" / Templine."Qty. per Unit of Measure", Templine."Location Code", Templine."Qty. per Unit of Measure", ItemBUOM, Templine."Quantity (Base)", ItemBUOM);
+
                 end;
             }
 
-            // C区：Ship to Address
             column(ShipToName; Header."Ship-to Name")
             {
             }
             column(ShipToAddress; Header."Ship-to Address")
             {
             }
-            column(ShipToCity; Header."Ship-to City")
+            column(ShipToAddress2; Header."Ship-to Address 2")
+            {
+            }
+            column(ShipToPostCode; Header."Ship-to Post Code" + Header."Ship-to City")
+            {
+            }
+            column(ShipToCountry; Header."Ship-to Country/Region Code")
             {
             }
 
             trigger OnAfterGetRecord()
             var
-                CompanyInfo: Record "Company Information";
                 ISODoc: Record "RV ISO Document";
                 PaymentTerms: Record "Payment Terms";
+                SalesShipmentLine: Record "Sales Shipment Line";
+                RecItemLedgerEntry: Record "Item Ledger Entry";
+                TempNo: Integer;
+                RecItem: Record Item;
             begin
                 CompanyInfo.Get();
-                // 查找 ISO 文档信息 (假设 Report Code = 'DELIVERY ORDER')
-                ISODoc.SetRange("Report Code", 'DELIVERY ORDER');
-                if ISODoc.FindFirst() then;
+                CompanyInfo.CalcFields(Picture);
+                CerfiticateNo := '';
 
-                if PaymentTerms.Get(Header."Payment Terms Code") then;
+                ISODoc.Reset();
+                ISODoc.SetRange("Report Code", 'DELIVERY ORDER');
+                if ISODoc.FindFirst() then begin
+                    ISODocumentNo := ISODoc."ISO Document No.";
+                    ISODocVersion := ISODoc."ISO Doc. Version No.";
+                end;
+
+                if PaymentTerms.Get(Header."Payment Terms Code") then begin
+                    Terms := PaymentTerms.Description;
+                end;
+
+                Templine.Reset();
+                Templine.DeleteAll();
+                TempNo := 1;
+                SalesShipmentLine.Reset();
+                SalesShipmentLine.SetRange("Document No.", "No.");
+                SalesShipmentLine.SetRange(Type, SalesShipmentLine.Type::Item);
+                if SalesShipmentLine.FindSet() then begin
+                    repeat
+                        if RecItem.Get(SalesShipmentLine."No.") then begin
+                            if RecItem."RV_Print RSPO No." then begin
+                                CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
+                            end;
+                        end;
+
+                        RecItemLedgerEntry.Reset();
+                        RecItemLedgerEntry.SetRange("Document No.", "No.");
+                        RecItemLedgerEntry.SetRange("Entry Type", RecItemLedgerEntry."Entry Type"::Sale);
+                        RecItemLedgerEntry.SetRange("Item No.", SalesShipmentLine."No.");
+                        RecItemLedgerEntry.SetRange("Document Line No.", SalesShipmentLine."Line No.");
+                        if RecItemLedgerEntry.FindSet() then begin
+                            repeat
+                                Templine.Reset();
+                                Templine.SetRange("Item No.", RecItemLedgerEntry."Item No.");
+                                Templine.SetRange("Lot No.", RecItemLedgerEntry."Lot No.");
+                                Templine.SetRange("Location Code", RecItemLedgerEntry."Unit of Measure Code");
+                                if Templine.FindFirst() then begin
+                                    Templine."Quantity (Base)" += RecItemLedgerEntry.Quantity;
+                                    Templine.Modify();
+                                end else begin
+                                    RecItem.Get(RecItemLedgerEntry."Item No.");
+                                    Templine.Init();
+                                    Templine."Entry No." := TempNo;
+                                    Templine."Item No." := RecItemLedgerEntry."Item No.";
+                                    Templine."Quantity (Base)" := RecItemLedgerEntry.Quantity;
+                                    Templine."Lot No." := RecItemLedgerEntry."Lot No.";
+                                    Templine."Location Code" := RecItemLedgerEntry."Unit of Measure Code";
+                                    Templine."Qty. per Unit of Measure" := RecItemLedgerEntry."Qty. per Unit of Measure";
+                                    Templine.Insert();
+                                    TempNo := TempNo + 1;
+                                end;
+                            until RecItemLedgerEntry.Next() = 0;
+                        end;
+                    until SalesShipmentLine.Next() = 0;
+                    Templine.Reset();
+                end;
+
             end;
         }
     }
@@ -136,12 +219,7 @@ report 50200 "RV Delivery Order Report"
                 group(Options)
                 {
                     Caption = 'Options';
-                    /*field(PrintRSPO; PrintRSPOOption)
-                    {
-                        Caption = 'Print RSPO Information';
-                        OptionCaption = 'Yes,No';
-                    }
-                    */
+
                 }
             }
         }
@@ -150,8 +228,18 @@ report 50200 "RV Delivery Order Report"
     var
         CompanyInfo: Record "Company Information";
         Item: Record Item;
-        ILE: Record "Item Ledger Entry";
-        ISODoc: Record "RV ISO Document";
-        PaymentTerms: Record "Payment Terms";
-        PrintRSPOOption: Option "Yes","No";
+        ISODocumentNo: Text;
+        ISODocVersion: Text;
+        Terms: Text;
+        Description: Text;
+        Description2: Text;
+        Templine: Record "Tracking Specification" temporary;
+        PackageInfo: Text;
+        ItemBUOM: Text;
+        CerfiticateNo: Text;
+
+    trigger OnPreReport()
+    begin
+        CompanyInfo.Get();
+    end;
 }

@@ -3,7 +3,7 @@
 /// FDD001 2026/03/12: New. (Bobby.ji)
 /// FDD002 2026/03/16: New. (Bobby.ji)
 /// </summary>
-pageextension 50202 "RV_Planning Worksheet" extends "Planning Worksheet"
+pageextension 50202 "RV Planning Worksheet Ext" extends "Planning Worksheet"
 {
     layout
     {
