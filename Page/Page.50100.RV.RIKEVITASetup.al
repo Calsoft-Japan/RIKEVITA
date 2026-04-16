@@ -2,6 +2,7 @@
 /// Page RIKEVITA Setup (ID 50100).
 /// COMMON 2026/02/23: New. (Stephen)
 /// FDD008 2026/03/15: New field "Stuffing Date Calculation". (Liuyang)
+/// FDD017 2026/04/14: New group EPayment. (Liuyang)
 /// </summary>
 page 50100 "RIKEVITA Setup"/// 
 {
@@ -54,6 +55,55 @@ page 50100 "RIKEVITA Setup"///
                     ToolTip = 'Specifies the dimension code used for Site validation.';
                 }
 
+            }
+
+            group(EPayment)
+            {
+                Caption = 'Electronic Payment PIC Setup';
+                field("Recipient Ref. Code"; Rec."Recipient Ref. Code")
+                {
+                    Description = 'FDD017';
+                    ApplicationArea = All;
+                }
+                group(MUFG)
+                {
+                    ShowCaption = false;
+                    field("MUFG PIC 1"; Rec."MUFG PIC 1")
+                    {
+                        Description = 'FDD017';
+                        ApplicationArea = All;
+                    }
+                    field("MUFG PIC 2"; Rec."MUFG PIC 2")
+                    {
+                        Description = 'FDD017';
+                        ApplicationArea = All;
+                    }
+                    field("MUFG PIC 3"; Rec."MUFG PIC 3")
+                    {
+                        Description = 'FDD017';
+                        ApplicationArea = All;
+                    }
+                }
+
+                group(MayBank)
+                {
+                    ShowCaption = false;
+                    field("MayBank PIC 1"; Rec."MayBank PIC 1")
+                    {
+                        Description = 'FDD017';
+                        ApplicationArea = All;
+                    }
+                    field("MayBank PIC 2"; Rec."MayBank PIC 2")
+                    {
+                        Description = 'FDD017';
+                        ApplicationArea = All;
+                    }
+                    field("MayBank PIC 3"; Rec."MayBank PIC 3")
+                    {
+                        Description = 'FDD017';
+                        ApplicationArea = All;
+                    }
+                }
             }
         }
     }

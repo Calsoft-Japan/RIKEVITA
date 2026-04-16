@@ -1,14 +1,32 @@
 /// <summary>
 /// Page Extension RV_Vendor Card Ext (ID 50109).
-/// FDD013 2026/03/19: New (Liuyang)
-/// Adds an "ISO Certificates" action button to the Vendor Card page.
-/// When clicked, opens the Vendor ISO Certificate List pre-filtered
-/// to the current vendor, satisfying the FDD requirement:
-///   "When accessed through the Vendor card, this page must be
-///    automatically filtered by Vendor."
+/// FDD013 2026/03/19: New (Liuyang) Adds an "ISO Certificates" action button to the Vendor Card page.
+/// FDD017 2026/04/14 Liuyang Adds ID No./Passport No. field and only editable while Partner Type is Person.
 /// </summary>
 pageextension 50109 "RV Vendor Card Ext" extends "Vendor Card"
 {
+    layout
+    {
+        modify("Partner Type")
+        {
+            trigger OnAfterValidate()
+            begin
+                IDEditable := false;
+                if Rec."Partner Type" = "Partner Type"::Person then
+                    IDEditable := true;
+            end;
+        }
+        addafter("Partner Type")
+        {
+            field("RV_ID No./Passport No."; Rec."RV_ID No./Passport No.")
+            {
+                Description = 'FDD017';
+                ApplicationArea = All;
+                MaskType = Concealed;
+                Editable = IDEditable;
+            }
+        }
+    }
     actions
     {
         addafter(Attachments)//addlast("Ven&dor")//processing
@@ -41,4 +59,14 @@ pageextension 50109 "RV Vendor Card Ext" extends "Vendor Card"
             actionref(ISOCertificates_Promoted; ISOCertificates) { }
         }
     }
+
+    var
+        IDEditable: Boolean;
+
+    trigger OnAfterGetCurrRecord()
+    begin
+        IDEditable := false;
+        if (Rec."No." <> '') and (Rec."Partner Type" = "Partner Type"::Person) then
+            IDEditable := true;
+    end;
 }
