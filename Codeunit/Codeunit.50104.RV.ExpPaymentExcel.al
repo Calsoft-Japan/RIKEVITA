@@ -1,3 +1,7 @@
+/// <summary>
+/// codeunit RV Bank Payment to Excel (ID 50104) 
+/// FDD017 2026/04/13: New. (Liuyang)
+/// </summary>
 codeunit 50104 "RV Bank Payment to Excel"
 {
     trigger OnRun()
