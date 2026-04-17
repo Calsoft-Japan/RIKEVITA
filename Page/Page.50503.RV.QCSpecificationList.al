@@ -11,6 +11,7 @@ page 50503 "RV QC Specification List"
     SourceTable = "RV QC Specification";
     SourceTableView = sorting("QC Specification Name");
     CardPageId = "RV QC Specification Card";
+    Editable = false;
 
     layout
     {

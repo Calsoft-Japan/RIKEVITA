@@ -12,6 +12,7 @@ page 50509 "RV IQC Card"
     SourceTable = "RV QC Header";
     SourceTableView = WHERE("QC Type" = FILTER(IQC));
 
+
     layout
     {
         area(Content)
@@ -25,10 +26,10 @@ page 50509 "RV IQC Card"
                     trigger OnAssistEdit()
                     begin
                         RIKEVITASetup.Get();
-                        RIKEVITASetup.TestField("QC No. Nos.");
+                        RIKEVITASetup.TestField("IQC No. Nos.");
                         if (Rec."QC No." = '') then begin
-                            if NoSeries.LookupRelatedNoSeries(RIKEVITASetup."QC No. Nos.", Rec."QC No.") then begin
-                                Rec."QC No." := NoSeries.GetNextNo(RIKEVITASetup."QC No. Nos.");
+                            if NoSeries.LookupRelatedNoSeries(RIKEVITASetup."IQC No. Nos.", Rec."QC No.") then begin
+                                Rec."QC No." := NoSeries.GetNextNo(RIKEVITASetup."IQC No. Nos.");
                             end;
                         end;
                     end;
@@ -139,7 +140,7 @@ page 50509 "RV IQC Card"
                 Caption = 'Documents';
                 UpdatePropagation = Both;
                 SubPageLink = "Table ID" = const(Database::"RV QC Header"),
-                              "No." = field("QC No.");
+                              "No." = field("QC No."), "Line No." = const(0);
             }
         }
     }
@@ -209,5 +210,5 @@ page 50509 "RV IQC Card"
     }
     var
         NoSeries: Codeunit "No. Series";
-        RIKEVITASetup: Record "RV RIKEVITA Setup";
+        RIKEVITASetup: Record "RIKEVITA Setup";
 }

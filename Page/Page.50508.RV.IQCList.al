@@ -11,6 +11,8 @@ page 50508 "RV IQC List"
     SourceTable = "RV QC Header";
     SourceTableView = WHERE("QC Type" = FILTER(IQC));
     CardPageId = "RV IQC Card";
+    Editable = false;
+
 
     layout
     {

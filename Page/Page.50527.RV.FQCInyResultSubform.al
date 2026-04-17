@@ -20,14 +20,20 @@ page 50527 "RV FQC Iny. Result Subform"
                 field("QC No."; Rec."QC No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
                 }
                 field("QC Type"; Rec."QC Type")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
                 }
                 field("Line No."; Rec."Line No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
                 }
                 field("Inventory Type"; Rec."Inventory Type")
                 {

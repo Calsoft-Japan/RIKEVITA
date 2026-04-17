@@ -11,6 +11,7 @@ page 50520 "RV PQC List"
     SourceTable = "RV QC Header";
     SourceTableView = WHERE("QC Type" = FILTER(PQC));
     CardPageId = "RV PQC Card";
+    Editable = false;
 
     layout
     {

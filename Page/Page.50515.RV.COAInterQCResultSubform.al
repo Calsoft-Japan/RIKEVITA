@@ -20,14 +20,20 @@ page 50515 "RV COA InterQCResult Subform"
                 field("COA No."; Rec."COA No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
                 }
                 field("COA Lot Line No."; Rec."COA Lot Line No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
                 }
                 field("QC Internal Spec. Line No."; Rec."QC Internal Spec. Line No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
                 }
 
                 field("QC Parameter Name"; Rec."QC Parameter Name")
