@@ -93,16 +93,31 @@ page 50100 "RIKEVITA Setup"///
                     {
                         Description = 'FDD017';
                         ApplicationArea = All;
+
+                        trigger OnValidate()
+                        begin
+                            ValidateEmailAddress(Rec."MUFG PIC 1");
+                        end;
                     }
                     field("MUFG PIC 2"; Rec."MUFG PIC 2")
                     {
                         Description = 'FDD017';
                         ApplicationArea = All;
+
+                        trigger OnValidate()
+                        begin
+                            ValidateEmailAddress(Rec."MUFG PIC 2");
+                        end;
                     }
                     field("MUFG PIC 3"; Rec."MUFG PIC 3")
                     {
                         Description = 'FDD017';
                         ApplicationArea = All;
+
+                        trigger OnValidate()
+                        begin
+                            ValidateEmailAddress(Rec."MUFG PIC 3");
+                        end;
                     }
                 }
 
@@ -113,16 +128,31 @@ page 50100 "RIKEVITA Setup"///
                     {
                         Description = 'FDD017';
                         ApplicationArea = All;
+
+                        trigger OnValidate()
+                        begin
+                            ValidateEmailAddress(Rec."MayBank PIC 1");
+                        end;
                     }
                     field("MayBank PIC 2"; Rec."MayBank PIC 2")
                     {
                         Description = 'FDD017';
                         ApplicationArea = All;
+
+                        trigger OnValidate()
+                        begin
+                            ValidateEmailAddress(Rec."MayBank PIC 2");
+                        end;
                     }
                     field("MayBank PIC 3"; Rec."MayBank PIC 3")
                     {
                         Description = 'FDD017';
                         ApplicationArea = All;
+
+                        trigger OnValidate()
+                        begin
+                            ValidateEmailAddress(Rec."MayBank PIC 3");
+                        end;
                     }
                 }
             }
@@ -199,6 +229,17 @@ page 50100 "RIKEVITA Setup"///
             Rec.Init();
             Rec.Insert();
         end;
+    end;
+
+    procedure ValidateEmailAddress(EmailToValidate: Text)
+    var
+        MailManagement: Codeunit "Mail Management";
+    begin
+        if EmailToValidate = '' then
+            exit; // Or throw an error, depending on if the field is mandatory
+
+        // This will automatically throw an error if the format is invalid
+        MailManagement.CheckValidEmailAddresses(EmailToValidate);
     end;
 
     procedure UploadBankTemplateToSetup(ExpType: Option Domestic,Jompay,GIRO)
