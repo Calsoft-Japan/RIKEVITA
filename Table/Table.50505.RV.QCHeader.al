@@ -46,7 +46,7 @@ table 50505 "RV QC Header"
                 PurchRcptLine: Record "Purch. Rcpt. Line";
                 ProductionOrder: Record "Production Order";
                 ProdOrderLine: Record "Prod. Order Line";
-                RIKEVITASetup: Record "RIKEVITA Setup";
+                RIKEVITASetup: Record "RV RIKEVITA Setup";
             begin
 
                 if Rec."Ref. Order Type" = RefOrderType::"Purchase Order" then begin
@@ -298,7 +298,7 @@ table 50505 "RV QC Header"
     trigger OnInsert()
     var
         NoSeriesMgt: Codeunit "No. Series";
-        RIKEVITASetup: Record "RIKEVITA Setup";
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
     begin
         "QC Date" := Today;
         RIKEVITASetup.Get();

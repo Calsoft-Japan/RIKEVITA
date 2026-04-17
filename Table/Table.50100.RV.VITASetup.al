@@ -3,7 +3,7 @@
 /// FDD030 2026/02/23: New. (Stephen)
 /// FDD008 2026/03/15: New field "Stuffing Date Calculation". (Liuyang)
 /// </summary>
-table 50100 "RIKEVITA Setup"
+table 50100 "RV RIKEVITA Setup"
 {
     Caption = 'RIKEVITA Setup';
     DataClassification = ToBeClassified;
@@ -35,42 +35,76 @@ table 50100 "RIKEVITA Setup"
             Caption = 'ACC Site Analysis Code';
             Description = 'FDD034';
         }
-        field(12; "IQC No. Nos."; Code[20])
+        field(112; "IQC No. Nos."; Code[20])
         {
             DataClassification = CustomerContent;
             Caption = 'IQC No. Nos.';
             TableRelation = "No. Series";
         }
-        field(13; "COA No. Nos."; Code[20])
+        field(113; "COA No. Nos."; Code[20])
         {
             DataClassification = CustomerContent;
             Caption = 'COA No. Nos.';
             TableRelation = "No. Series";
         }
 
-        field(14; "FP Inventory Posting Group"; Code[20])
+        field(114; "FP Inventory Posting Group"; Code[20])
         {
             DataClassification = CustomerContent;
             Caption = 'FP Inventory Posting Group';
             TableRelation = "Inventory Posting Group";
         }
-        field(15; "WIP Inventory Posting Group"; Code[20])
+        field(115; "WIP Inventory Posting Group"; Code[20])
         {
             DataClassification = CustomerContent;
             Caption = 'WIP Inventory Posting Group';
             TableRelation = "Inventory Posting Group";
         }
-        field(16; "PQC No. Nos."; Code[20])
+        field(116; "PQC No. Nos."; Code[20])
         {
             DataClassification = CustomerContent;
             Caption = 'PQC No. Nos.';
             TableRelation = "No. Series";
         }
-        field(17; "FQC No. Nos."; Code[20])
+        field(117; "FQC No. Nos."; Code[20])
         {
             DataClassification = CustomerContent;
             Caption = 'FQC No. Nos.';
             TableRelation = "No. Series";
+        }
+        field(10; "Recipient Ref. Code"; Code[10])
+        {
+            Description = 'FDD017';
+        }
+        field(11; "MUFG PIC 1"; Text[80])
+        {
+            Description = 'FDD017';
+            Caption = 'MUFG PIC 1 Email';
+        }
+        field(12; "MUFG PIC 2"; Text[80])
+        {
+            Description = 'FDD017';
+            Caption = 'MUFG PIC 2 Email';
+        }
+        field(13; "MUFG PIC 3"; Text[80])
+        {
+            Description = 'FDD017';
+            Caption = 'MUFG PIC 3 Email';
+        }
+        field(14; "MayBank PIC 1"; Text[80])
+        {
+            Description = 'FDD017';
+            Caption = 'MayBank PIC 1 Email';
+        }
+        field(15; "MayBank PIC 2"; Text[80])
+        {
+            Description = 'FDD017';
+            Caption = 'MayBank PIC 2 Email';
+        }
+        field(16; "MayBank PIC 3"; Text[80])
+        {
+            Description = 'FDD017';
+            Caption = 'MayBank PIC 3 Email';
         }
     }
     keys

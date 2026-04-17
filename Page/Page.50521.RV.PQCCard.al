@@ -196,7 +196,7 @@ page 50521 "RV PQC Card"
     trigger OnNewRecord(BelowxRec: Boolean)
     var
         NoSeriesMgt: Codeunit "No. Series";
-        RIKEVITASetup: Record "RIKEVITA Setup";
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
     begin
         Rec."QC Type" := Rec."QC Type"::PQC;
         Rec."Ref. Order Type" := Rec."Ref. Order Type"::"Production Order";
@@ -204,5 +204,5 @@ page 50521 "RV PQC Card"
 
     var
         NoSeries: Codeunit "No. Series";
-        RIKEVITASetup: Record "RIKEVITA Setup";
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
 }

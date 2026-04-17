@@ -2,7 +2,6 @@
 /// Page RIKEVITA Setup (ID 50100).
 /// COMMON 2026/02/23: New. (Stephen)
 /// FDD008 2026/03/15: New field "Stuffing Date Calculation". (Liuyang)
-/// FDD017 2026/04/14: New group EPayment. (Liuyang)
 /// </summary>
 page 50100 "RIKEVITA Setup"/// 
 {
@@ -23,13 +22,35 @@ page 50100 "RIKEVITA Setup"///
             group(General)
             {
                 Caption = 'General';
-                field("QC No. Nos."; Rec."QC No. Nos.")
+                field("QC No. Nos."; Rec."IQC No. Nos.")
                 {
                     ApplicationArea = All;
+                    Description = 'FDD039';
+                }
+                field("PQC No. Nos."; Rec."PQC No. Nos.")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD039';
+                }
+                field("FQC No. Nos."; Rec."FQC No. Nos.")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD039';
                 }
                 field("COA No. Nos."; Rec."COA No. Nos.")
                 {
                     ApplicationArea = All;
+                    Description = 'FDD039';
+                }
+                field("FP Inventory Posting Group"; Rec."FP Inventory Posting Group")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD039';
+                }
+                field("WIP Inventory Posting Group"; Rec."WIP Inventory Posting Group")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD039';
                 }
                 field("Notification Calculation"; Rec."Notification Calculation")
                 {
