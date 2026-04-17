@@ -107,6 +107,70 @@ page 50100 "RIKEVITA Setup"///
             }
         }
     }
+
+    actions
+    {
+        area(Processing)
+        {
+            group(ExportExcel)
+            {
+                Description = 'FDD017';
+                Caption = 'Upload Payment Template';
+                Image = Template;
+                Visible = false;
+                action(UploadDomesticTemplate)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Upload Domestic Template';
+                    Image = ImportExcel;
+                    Promoted = true;
+                    PromotedCategory = Process;
+
+                    trigger OnAction()
+                    var
+                        ExpType: Option Domestic,Jompay,GIRO;
+                    begin
+                        UploadBankTemplateToSetup(ExpType::Domestic);
+                        CurrPage.Update(false); // Refresh the page to update the "Template Exists" boolean
+                    end;
+                }
+
+                action(UploadJompayTemplate)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Upload Jompay Template';
+                    Image = ImportExcel;
+                    Promoted = true;
+                    PromotedCategory = Process;
+
+                    trigger OnAction()
+                    var
+                        ExpType: Option Domestic,Jompay,GIRO;
+                    begin
+                        UploadBankTemplateToSetup(ExpType::Jompay);
+                        CurrPage.Update(false); // Refresh the page to update the "Template Exists" boolean
+                    end;
+                }
+
+                action(UploadGIROTemplate)
+                {
+                    ApplicationArea = All;
+                    Caption = 'Upload GIRO Template';
+                    Image = ImportExcel;
+                    Promoted = true;
+                    PromotedCategory = Process;
+
+                    trigger OnAction()
+                    var
+                        ExpType: Option Domestic,Jompay,GIRO;
+                    begin
+                        UploadBankTemplateToSetup(ExpType::GIRO);
+                        CurrPage.Update(false); // Refresh the page to update the "Template Exists" boolean
+                    end;
+                }
+            }
+        }
+    }
     trigger OnOpenPage()
     begin
         Rec.Reset();
@@ -114,5 +178,41 @@ page 50100 "RIKEVITA Setup"///
             Rec.Init();
             Rec.Insert();
         end;
+    end;
+
+    procedure UploadBankTemplateToSetup(ExpType: Option Domestic,Jompay,GIRO)
+    var
+        FileInStream: InStream;
+        BlobOutStream: OutStream;
+        FileName: Text;
+        UploadMsg: Label 'Please select the Bank Excel Template to upload';
+        FilterTxt: Label 'Excel Files (*.xlsx)|*.xlsx';
+    begin
+        if UploadIntoStream(UploadMsg, '', FilterTxt, FileName, FileInStream) then begin
+
+            case ExpType of
+                ExpType::Domestic:
+                    begin
+                        Clear(Rec."Demostic Excel Template");
+                        Rec."Demostic Excel Template".CreateOutStream(BlobOutStream);
+                    end;
+                ExpType::Jompay:
+                    begin
+                        Clear(Rec."Jompay Excel Template");
+                        Rec."Jompay Excel Template".CreateOutStream(BlobOutStream);
+                    end;
+                ExpType::GIRO:
+                    begin
+                        Clear(Rec."GIRO Excel Template");
+                        Rec."GIRO Excel Template".CreateOutStream(BlobOutStream);
+                    end;
+            end;
+
+            CopyStream(BlobOutStream, FileInStream);
+            Rec.Modify(true);
+
+            Message('Template %1 was successfully uploaded and saved.', FileName);
+        end else
+            Message('The upload was cancelled.');
     end;
 }

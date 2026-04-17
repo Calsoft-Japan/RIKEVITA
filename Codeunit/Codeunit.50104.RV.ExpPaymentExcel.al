@@ -10,7 +10,7 @@ codeunit 50104 "RV Bank Payment to Excel"
 
     var
         TempExcelBuffer: Record "Excel Buffer" temporary;
-        RowNo: Integer;
+        StartRow, RowNo : Integer;
 
     procedure ExportSelectedLines(var GenJournalLine: Record "Gen. Journal Line"; ExpTye: Option Domestic,Jompay,GIRO)
     begin
@@ -111,8 +111,8 @@ codeunit 50104 "RV Bank Payment to Excel"
                             WriteDomesticExcelRow(GenJnlLine, VendorLedgerEntry);
                         ExpTye::Jompay:
                             WriteJompayExcelRow(GenJnlLine, VendorLedgerEntry);
-                        ExpTye::GIRO:
-                            WriteGIROExcelRow(GenJnlLine, VendorLedgerEntry);
+                    //ExpTye::GIRO:
+                    //    WriteGIROExcelRow(GenJnlLine, VendorLedgerEntry); //GIRO is just for international Vendor
                     end;
                 end;
         end;
@@ -213,7 +213,7 @@ codeunit 50104 "RV Bank Payment to Excel"
             if Vend."Partner Type" = Vend."Partner Type"::Person then
                 PassportNo := Vend."RV_ID No./Passport No."
         end
-        else begin
+        else if (GenJnlLine."Account Type" = GenJnlLine."Account Type"::Employee) then begin
             Empl.Get(GenJnlLine."Account No.");
             BankAcctNo := Empl."Bank Account No.";
             Name1 := CopyStr(Empl.FullName(), 1, 40);
@@ -225,6 +225,7 @@ codeunit 50104 "RV Bank Payment to Excel"
             if Empl."RV_Expat Employee" then
                 PassportNo := Empl."RV_ID No./Passport No.";
         end;
+
 
         TempExcelBuffer.NewRow();
 
@@ -425,4 +426,145 @@ codeunit 50104 "RV Bank Payment to Excel"
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(AppliedAmt, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Number);
     end;
+
+
+    #region load from local file or presaved template in RV Setup table
+
+    procedure LoadBankTemplate(var BankTemplateBlobRef: Codeunit "Temp Blob")//Upload manully from local template file
+    var
+        FileInStream: InStream;
+        BlobOutStream: OutStream;
+        FileName: Text;
+        UploadMsg: Label 'Please select the Bank Excel Template';
+        FilterTxt: Label 'Excel Files (*.xlsx)|*.xlsx';
+    begin
+        // 1. Prompt the user to upload the Excel file
+        if UploadIntoStream(UploadMsg, '', FilterTxt, FileName, FileInStream) then begin
+
+            // 2. Clear any existing data in the Temp Blob just in case
+            Clear(BankTemplateBlobRef);
+
+            // 3. Create an OutStream to write into the Temp Blob
+            BankTemplateBlobRef.CreateOutStream(BlobOutStream);
+
+            // 4. Copy the uploaded file's data (InStream) into the Temp Blob (OutStream)
+            CopyStream(BlobOutStream, FileInStream);
+
+            Message('Template %1 loaded successfully.', FileName);
+        end else
+            Error('Template upload was cancelled.');
+    end;
+
+    procedure LoadBankTemplateFromSetup(var BankTemplateBlobRef: Codeunit "Temp Blob"; ExpType: Option Domestic,Jompay,GIRO)//Load from Blob
+    var
+        BankExportSetup: Record "RV RIKEVITA Setup"; // setup table
+        SetupInStream: InStream;
+        BlobOutStream: OutStream;
+    begin
+        // Get the setup record
+        BankExportSetup.Get();
+
+        case ExpType of
+            ExpType::Domestic:
+                begin
+                    BankExportSetup.CalcFields("Demostic Excel Template");
+
+                    if not BankExportSetup."Demostic Excel Template".HasValue() then
+                        Error('No Excel template has been uploaded to the setup table.');
+
+                    // Create an InStream to read from the setup table
+                    BankExportSetup."Demostic Excel Template".CreateInStream(SetupInStream);
+                end;
+            ExpType::Jompay:
+                begin
+                    BankExportSetup.CalcFields("Jompay Excel Template");
+
+                    if not BankExportSetup."Jompay Excel Template".HasValue() then
+                        Error('No Excel template has been uploaded to the setup table.');
+
+                    // Create an InStream to read from the setup table
+                    BankExportSetup."Jompay Excel Template".CreateInStream(SetupInStream);
+                end;
+            ExpType::GIRO:
+                begin
+                    BankExportSetup.CalcFields("GIRO Excel Template");
+
+                    if not BankExportSetup."GIRO Excel Template".HasValue() then
+                        Error('No Excel template has been uploaded to the setup table.');
+
+                    // Create an InStream to read from the setup table
+                    BankExportSetup."GIRO Excel Template".CreateInStream(SetupInStream);
+                end;
+        end;
+        // Create an OutStream to write into your Temp Blob
+        BankTemplateBlobRef.CreateOutStream(BlobOutStream);
+
+        // Copy the data
+        CopyStream(BlobOutStream, SetupInStream);
+    end;
+
+    procedure ExportToTemplate(var GenJournalLine: Record "Gen. Journal Line"; ExpTye: Option Domestic,Jompay,GIRO)
+    var
+
+        TempExcelBuffer: Record "Excel Buffer" temporary;
+        BankTemplateBlobRef: Codeunit "Temp Blob";
+    // Load the bank template from a setup table or Media field
+    begin
+        // 1. Load template binary into TempBlob
+        //LoadBankTemplate(BankTemplateBlobRef);
+        LoadBankTemplateFromSetup(BankTemplateBlobRef, ExpTye);
+
+        // 2. Open the template into Excel Buffer for editing
+        TempExcelBuffer.OpenBookStream(
+            BankTemplateBlobRef.CreateInStream(),
+            'Sheet1');      // Sheet name in the bank template
+
+        // 3. Write fixed header cells by exact row/column coordinate
+        // WriteCell(TempExcelBuffer, 5, 2, Format(TempBuffer."Posting Date"));   // B5
+        // WriteCell(TempExcelBuffer, 8, 3, TempBuffer."Account Name");            // C8
+        // WriteCell(TempExcelBuffer, 8, 4, TempBuffer."Beneficiary Bank Account");// D8
+
+        // 4. Write repeating invoice lines starting at row 10
+        StartRow := 10;
+        WriteInvoiceLines(TempExcelBuffer, GenJournalLine, StartRow, ExpTye);
+
+        // 5. Download the filled Excel
+        //DownloadExcel(TempExcelBuffer);
+        TempExcelBuffer.CreateNewBook('BankExport');
+        TempExcelBuffer.WriteSheet('Payments', CompanyName, UserId);
+        TempExcelBuffer.CloseBook();
+        TempExcelBuffer.SetFriendlyFilename('Bank_Payment_Export.xlsx');
+        TempExcelBuffer.OpenExcel();
+
+    end;
+
+    local procedure WriteCell(var ExcelBuffer: Record "Excel Buffer"; RowNo: Integer; ColNo: Integer; CellValue: Text)
+    begin
+        ExcelBuffer.Init();
+        ExcelBuffer.Validate("Row No.", RowNo);
+        ExcelBuffer.Validate("Column No.", ColNo);
+        ExcelBuffer."Cell Value as Text" := CopyStr(CellValue, 1, 250);
+        ExcelBuffer."Cell Type" := ExcelBuffer."Cell Type"::Text;
+        if not ExcelBuffer.Insert() then
+            ExcelBuffer.Modify();
+    end;
+
+    local procedure WriteInvoiceLines(var ExcelBuffer: Record "Excel Buffer"; var GenJournalLine: Record "Gen. Journal Line"; StartRow: Integer; ExpTye: Option Domestic,Jompay,GIRO)
+    var
+        VendorLedgerEntry: Record "Vendor Ledger Entry";
+        CurrentRow: Integer;
+    begin
+        CurrentRow := StartRow;
+        GenJournalLine.Reset();
+        if GenJournalLine.FindSet() then
+            repeat
+                WriteCell(ExcelBuffer, CurrentRow, 2, GenJournalLine."Payment Method Code");
+                WriteCell(ExcelBuffer, CurrentRow, 3, Format(GenJournalLine."Due Date"));
+                WriteCell(ExcelBuffer, CurrentRow, 4, Format(GenJournalLine."Amount (LCY)"));
+                WriteCell(ExcelBuffer, CurrentRow, 5, GenJournalLine."Description");
+                CurrentRow += 1;
+            until GenJournalLine.Next() = 0;
+    end;
+
+    #endregion
 }

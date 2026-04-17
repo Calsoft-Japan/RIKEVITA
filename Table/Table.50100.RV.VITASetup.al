@@ -94,6 +94,18 @@ table 50100 "RV RIKEVITA Setup"
             Description = 'FDD017';
             Caption = 'MayBank PIC 3 Email';
         }
+        field(17; "Demostic Excel Template"; Blob)
+        {
+            Description = 'FDD017';
+        }
+        field(18; "Jompay Excel Template"; Blob)
+        {
+            Description = 'FDD017';
+        }
+        field(19; "GIRO Excel Template"; Blob)
+        {
+            Description = 'FDD017';
+        }
     }
     keys
     {

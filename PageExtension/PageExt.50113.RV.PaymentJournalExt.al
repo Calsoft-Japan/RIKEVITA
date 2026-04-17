@@ -103,9 +103,16 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                     trigger OnAction()
                     var
                         CUExportExcel: Codeunit "RV Bank Payment to Excel";
+                    //RptExport: Report "RV Export Payment Inv Excel";
+                    //DesignTimeRptSelect: Codeunit "Design-time Report Selection";
                     begin
                         if Confirm(Text001) then
                             CUExportExcel.ExportSelectedLines(Rec, ExpType::Jompay);
+
+
+                        /* DesignTimeRptSelect.SetSelectedLayout('Jompay');
+                        RptExport.SetPaymentTempBatch(Rec."Journal Template Name", Rec."Journal Batch Name");
+                        RptExport.Run(); */
                     end;
                 }
                 action(GIROExp)
@@ -118,12 +125,6 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                         GenJnlLine: Record "Gen. Journal Line";
                         CUExportExcel: Codeunit "RV Bank Payment to Excel";
                     begin
-                        // Pass the currently filtered records on the page to the codeunit
-                        /* CurrPage.SetSelectionFilter(GenJnlLine);
-
-                        if GenJnlLine.IsEmpty then
-                            Error('Please select the lines you want to export.'); */
-
                         if Confirm(Text001) then
                             CUExportExcel.ExportSelectedLines(Rec, ExpType::GIRO);
                     end;
