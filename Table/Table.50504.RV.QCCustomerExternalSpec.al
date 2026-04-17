@@ -6,6 +6,7 @@ table 50504 "RV QC Customer External Spec."
 {
     Caption = 'QC Customer External Spec.';
     DataClassification = CustomerContent;
+    LookupPageID = "RV QC Customer External Spec.";
     fields
     {
         field(1; "QC Resource Group No."; Code[20])

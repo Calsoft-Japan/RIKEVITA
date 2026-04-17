@@ -175,6 +175,7 @@ table 50505 "RV QC Header"
         field(6; "Item No."; Code[20])
         {
             Caption = 'Item No.';
+            TableRelation = Item;
 
             /*
             trigger OnLookup()
@@ -301,13 +302,40 @@ table 50505 "RV QC Header"
     begin
         "QC Date" := Today;
         RIKEVITASetup.Get();
-        RIKEVITASetup.TestField("QC No. Nos.");
-        if "QC No." = '' then
-            "QC No." := NoSeriesMgt.GetNextNo(RIKEVITASetup."QC No. Nos.");
+
+        case "QC Type" of
+            "QC Type"::IQC:
+                begin
+                    RIKEVITASetup.TestField("IQC No. Nos.");
+                    if "QC No." = '' then
+                        "QC No." := NoSeriesMgt.GetNextNo(RIKEVITASetup."IQC No. Nos.");
+                end;
+
+            "QC Type"::PQC:
+                begin
+                    RIKEVITASetup.TestField("PQC No. Nos.");
+                    if "QC No." = '' then
+                        "QC No." := NoSeriesMgt.GetNextNo(RIKEVITASetup."PQC No. Nos.");
+                end;
+
+            "QC Type"::FQC:
+                begin
+                    RIKEVITASetup.TestField("FQC No. Nos.");
+                    if "QC No." = '' then
+                        "QC No." := NoSeriesMgt.GetNextNo(RIKEVITASetup."FQC No. Nos.");
+                end;
+        end;
     end;
 
-
+    trigger OnDelete()
     var
+        DocumentAttachment: Record "Document Attachment";
+    begin
+        DocumentAttachment.SetRange("Table ID", Database::"RV QC Header");
+        DocumentAttachment.SetRange("No.", Rec."QC No.");
+        if not DocumentAttachment.IsEmpty then
+            DocumentAttachment.DeleteAll();
+    end;
 
     procedure IsQCCheckAllowed(): Boolean
     var
@@ -420,8 +448,8 @@ table 50505 "RV QC Header"
         //ResourceQCGroup: Record "RV Resource QC Group";
         //TempResourceQCGroup: Record "RV Resource QC Group" temporary;
         QCResourceGroupApply: Record "RV QC Resource Group Apply";
-        QCCustExterSpec: Record "RV QC Customer External Spec.";
-        TempQCCustExterSpec: Record "RV QC Customer External Spec." temporary;
+        //QCCustExterSpec: Record "RV QC Customer External Spec.";
+        //TempQCCustExterSpec: Record "RV QC Customer External Spec." temporary;
 
         QCGroup: Record "RV QC Resource Group";
         QCSpecificationLine: Record "RV QC Specification Line";
@@ -448,78 +476,40 @@ table 50505 "RV QC Header"
         if not QCResourceGroupApply.Get("Item No.") then
             Error('Please Setup QC Resource Group Apply');
 
-        //clear TempQCCustExterSpec
-        TempQCCustExterSpec.Reset();
-        TempQCCustExterSpec.DeleteAll();
+        //QCGroup
+        QCGroup.Reset();
+        QCGroup.SetRange("QC Resource Group No.", QCResourceGroupApply."QC Resource Group No.");
+        QCGroup.SetFilter("Effective Date", '%1 | %2..', 0D, WorkDate());
+        if QCGroup.Find('-') then begin
 
-        //Insert QCCustExterSpec
-        QCCustExterSpec.Reset();
-        if QCCustExterSpec.Get(QCResourceGroupApply."QC Resource Group No.", "Customer No.", "Ship-to Code") then begin
-            TempQCCustExterSpec.Init();
-            TempQCCustExterSpec.TransferFields(QCCustExterSpec);
-            if TempQCCustExterSpec.Insert() then;
-        end else begin
-            //"Ship-to Code",  ''
-            QCCustExterSpec.Reset();
-            if QCCustExterSpec.Get(QCResourceGroupApply."QC Resource Group No.", "Customer No.", '') then begin
-                TempQCCustExterSpec.Init();
-                TempQCCustExterSpec.TransferFields(QCCustExterSpec);
-                if TempQCCustExterSpec.Insert() then;
-            end else begin
-                //"Customer No." , ''  "Ship-to Code",  ''
-                if QCCustExterSpec.Get(QCResourceGroupApply."QC Resource Group No.", '', '') then begin
-                    TempQCCustExterSpec.Init();
-                    TempQCCustExterSpec.TransferFields(QCCustExterSpec);
-                    if TempQCCustExterSpec.Insert() then;
-                end;
-            end;
+            //currSpecification
+            Clear(currSpecification);
+            if "QC Standard Type" = QCStandardType::Internal then
+                currSpecification := QCGroup."Internal Specification"
+            else if "QC Standard Type" = QCStandardType::External then
+                currSpecification := QCGroup."External Specification";
         end;
 
-        //curr Specification
-        TempQCCustExterSpec.Reset();
-        if TempQCCustExterSpec.FindFirst() then begin
 
-            if TempQCCustExterSpec."External Specification" <> '' then begin
-
-                //currSpecification
-                Clear(currSpecification);
-                currSpecification := TempQCCustExterSpec."External Specification";
-
-            end else begin
-                //QCGroup
-                QCGroup.Reset();
-                QCGroup.SetRange("QC Resource Group No.", TempQCCustExterSpec."QC Resource Group No.");
-                QCGroup.SetFilter("Effective Date", '%1 | %2..', 0D, WorkDate());
-                if QCGroup.Find('-') then begin
-
-                    //currSpecification
-                    Clear(currSpecification);
-                    if "QC Standard Type" = QCStandardType::Internal then
-                        currSpecification := QCGroup."Internal Specification"
-                    else if "QC Standard Type" = QCStandardType::External then
-                        currSpecification := QCGroup."External Specification";
+        //QCSpecificationLine
+        QCSpecificationLine.Reset();
+        QCSpecificationLine.SetRange("QC Specification Name", currSpecification);
+        if QCSpecificationLine.FindSet() then
+            repeat
+                //QCLine
+                LineNo := LineNo + 10000;
+                QCLine.Init();
+                QCLine."QC Type" := "QC Type";
+                QCLine."QC No." := "QC No.";
+                QCLine."Line No." := LineNo;
+                //QCParameter
+                if QCParameter.Get(QCSpecificationLine."QC Parameter Name") then begin
+                    QCLine."QC Parameter Name" := QCParameter."Parameter Name";
+                    QCLine.Type := QCParameter.Type;
+                    QCLine."Value Table Type" := QCParameter."Value Table Type";
                 end;
-            end;
-
-            //QCSpecificationLine
-            QCSpecificationLine.Reset();
-            QCSpecificationLine.SetRange("QC Specification Name", currSpecification);
-            if QCSpecificationLine.FindSet() then
-                repeat
-                    //QCLine
-                    LineNo := LineNo + 10000;
-                    QCLine.Init();
-                    QCLine."QC Type" := "QC Type";
-                    QCLine."QC No." := "QC No.";
-                    QCLine."Line No." := LineNo;
-                    //QCParameter
-                    if QCParameter.Get(QCSpecificationLine."QC Parameter Name") then begin
-                        QCLine."QC Parameter Name" := QCParameter."Parameter Name";
-                        QCLine.Type := QCParameter.Type;
-                        QCLine."Value Table Type" := QCParameter."Value Table Type";
-                    end;
-                    QCLine.Insert();
-                until QCSpecificationLine.Next() = 0;
-        end;
+                QCLine.Insert();
+            until QCSpecificationLine.Next() = 0;
     end;
+
 }

@@ -74,4 +74,111 @@ table 50509 "RV QA Shipment Lot No."
     }
 
     var
+    procedure CreateQAExternalQCResults()
+    var
+        QAExternalResults: Record "RV QA External QC Results";
+        QAHeader: Record "RV QA Header";
+
+        QCResourceGroupApply: Record "RV QC Resource Group Apply";
+        QCCustExterSpec: Record "RV QC Customer External Spec.";
+        TempQCCustExterSpec: Record "RV QC Customer External Spec." temporary;
+
+        QCGroup: Record "RV QC Resource Group";
+        QCSpecificationLine: Record "RV QC Specification Line";
+        QCParameter: Record "RV QC Parameter";
+        QCStandardType: enum "RV QC Standard Type";
+        LineNo: Integer;
+        currSpecification: Code[20];
+        ConfirmChangeLineQst: Label 'The detail line already exists.Do you want to recreate detail line?';
+    begin
+
+        if QAHeader.Get(Rec."COA No.") then;
+        QAExternalResults.Reset();
+        QAExternalResults.SetRange("COA No.", Rec."COA No.");
+        QAExternalResults.SetRange("COA Lot Line No.", Rec."COA Lot Line No.");
+        if not QAExternalResults.IsEmpty then begin
+            //clear QAExternalResults
+            QAExternalResults.DeleteAll();
+        end;
+
+        Clear(currSpecification);
+        Clear(LineNo);
+
+        //QCGroupApply
+        if not QCResourceGroupApply.Get(QAHeader."Item No.") then
+            Error('Please Setup QC Resource Group Apply');
+
+        //clear TempQCCustExterSpec
+        TempQCCustExterSpec.Reset();
+        TempQCCustExterSpec.DeleteAll();
+
+        //Insert QCCustExterSpec
+        QCCustExterSpec.Reset();
+        if QCCustExterSpec.Get(QCResourceGroupApply."QC Resource Group No.", QAHeader."Ship-to Customer No.", QAHeader."Ship-to Code") then begin
+            TempQCCustExterSpec.Init();
+            TempQCCustExterSpec.TransferFields(QCCustExterSpec);
+            if TempQCCustExterSpec.Insert() then;
+        end else begin
+            //"Ship-to Code",  ''
+            QCCustExterSpec.Reset();
+            if QCCustExterSpec.Get(QCResourceGroupApply."QC Resource Group No.", QAHeader."Ship-to Customer No.", '') then begin
+                TempQCCustExterSpec.Init();
+                TempQCCustExterSpec.TransferFields(QCCustExterSpec);
+                if TempQCCustExterSpec.Insert() then;
+            end else begin
+                //"Customer No." , ''  "Ship-to Code",  ''
+                if QCCustExterSpec.Get(QCResourceGroupApply."QC Resource Group No.", '', '') then begin
+                    TempQCCustExterSpec.Init();
+                    TempQCCustExterSpec.TransferFields(QCCustExterSpec);
+                    if TempQCCustExterSpec.Insert() then;
+                end;
+            end;
+        end;
+
+        //curr Specification
+        TempQCCustExterSpec.Reset();
+        if TempQCCustExterSpec.FindFirst() then begin
+
+            if TempQCCustExterSpec."External Specification" <> '' then begin
+
+                //currSpecification
+                Clear(currSpecification);
+                currSpecification := TempQCCustExterSpec."External Specification";
+
+            end else begin
+                //QCGroup
+                QCGroup.Reset();
+                QCGroup.SetRange("QC Resource Group No.", TempQCCustExterSpec."QC Resource Group No.");
+                QCGroup.SetFilter("Effective Date", '%1 | %2..', 0D, WorkDate());
+                if QCGroup.Find('-') then begin
+                    currSpecification := QCGroup."External Specification";
+                end;
+            end;
+
+            //QCSpecificationLine
+            QCSpecificationLine.Reset();
+            QCSpecificationLine.SetRange("QC Specification Name", currSpecification);
+            if QCSpecificationLine.FindSet() then
+                repeat
+                    //QCLine
+                    LineNo := LineNo + 10000;
+                    QAExternalResults.Init();
+                    QAExternalResults."COA No." := "COA No.";
+                    QAExternalResults."COA Lot Line No." := "COA Lot Line No.";
+                    QAExternalResults."QC External Spec. Line No." := LineNo;
+
+                    //QCParameter
+                    if QCParameter.Get(QCSpecificationLine."QC Parameter Name") then begin
+                        QAExternalResults."QC Parameter Name" := QCParameter."Parameter Name";
+                        QAExternalResults."QC Value" := QCParameter."Value Table Name";
+                        //QAExternalResults."COA Value" := 
+                        //QAExternalResults."Differ From QC Vaule":=
+                        //QAExternalResults."Alpha. Min"
+                        //QAExternalResults."Alpha. Max"
+
+                    end;
+                    QAExternalResults.Insert();
+                until QCSpecificationLine.Next() = 0;
+        end;
+    end;
 }

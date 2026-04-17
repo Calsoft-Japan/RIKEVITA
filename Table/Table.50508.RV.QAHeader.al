@@ -427,8 +427,4 @@ table 50508 "RV QA Header"
 
         end;
     end;
-
-
-
-
 }

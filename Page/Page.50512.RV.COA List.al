@@ -10,7 +10,7 @@ page 50512 "RV COA List"
     PageType = List;
     SourceTable = "RV QA Header";
     InsertAllowed = false;
-    //ModifyAllowed = false;
+    Editable = false;
 
     layout
     {
@@ -22,7 +22,12 @@ page 50512 "RV COA List"
                 field("COA No."; Rec."COA No.")
                 {
                     ApplicationArea = All;
-                    //Editable = false;
+                    Editable = false;
+                    trigger OnDrillDown()
+                    begin
+                        EditQAShipmentLotNo(Rec);
+                        CurrPage.Update(false);
+                    end;
                 }
                 field("COA Date"; Rec."COA Date")
                 {

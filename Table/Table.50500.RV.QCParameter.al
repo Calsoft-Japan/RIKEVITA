@@ -6,6 +6,7 @@ table 50500 "RV QC Parameter"
 {
     Caption = 'QC Parameter';
     DataClassification = CustomerContent;
+    LookupPageID = "RV QC Parameter List";
     fields
     {
         field(1; "Parameter Name"; Code[20])

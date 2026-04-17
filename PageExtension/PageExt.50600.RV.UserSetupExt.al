@@ -2,6 +2,7 @@
 /// PageExtension RIKE User Setup (ID 50600) extends User Setup page
 /// FDD014 2026/02/23: New. (Stephen)
 /// FDD008 2026/03/15: New field "Stuffing Date Calculation". (Liuyang)
+/// FDD039 2026/03/26: Add. "Allow QC Check" "Allow QC Approve"(Mike)
 /// </summary>
 pageextension 50600 "RV User Setup" extends "User Setup"
 {
@@ -38,6 +39,17 @@ pageextension 50600 "RV User Setup" extends "User Setup"
                 ApplicationArea = All;
                 Description = 'FDD008';
             }
+            field("Allow QC Check"; Rec."RV_Allow QC Check")
+            {
+                ApplicationArea = All;
+                Description = 'FDD039';
+            }
+            field("Allow QC Approve"; Rec."RV_Allow QC Approve")
+            {
+                ApplicationArea = All;
+                Description = 'FDD039';
+            }
+
         }
     }
 }

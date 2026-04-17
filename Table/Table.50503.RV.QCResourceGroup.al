@@ -6,6 +6,7 @@ table 50503 "RV QC Resource Group"
 {
     Caption = 'QC Resource Group';
     DataClassification = CustomerContent;
+    LookupPageID = "RV QC Resource Group List";
     fields
     {
         field(1; "QC Resource Group No."; Code[20])

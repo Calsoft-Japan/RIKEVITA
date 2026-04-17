@@ -25,10 +25,10 @@ page 50521 "RV PQC Card"
                     trigger OnAssistEdit()
                     begin
                         RIKEVITASetup.Get();
-                        RIKEVITASetup.TestField("QC No. Nos.");
+                        RIKEVITASetup.TestField("PQC No. Nos.");
                         if (Rec."QC No." = '') then begin
-                            if NoSeries.LookupRelatedNoSeries(RIKEVITASetup."QC No. Nos.", Rec."QC No.") then begin
-                                Rec."QC No." := NoSeries.GetNextNo(RIKEVITASetup."QC No. Nos.");
+                            if NoSeries.LookupRelatedNoSeries(RIKEVITASetup."PQC No. Nos.", Rec."QC No.") then begin
+                                Rec."QC No." := NoSeries.GetNextNo(RIKEVITASetup."PQC No. Nos.");
                             end;
                         end;
                     end;
@@ -123,7 +123,7 @@ page 50521 "RV PQC Card"
                 Caption = 'Documents';
                 UpdatePropagation = Both;
                 SubPageLink = "Table ID" = const(Database::"RV QC Header"),
-                              "No." = field("QC No.");
+                               "No." = field("QC No."), "Line No." = const(1);
             }
         }
     }
@@ -195,8 +195,8 @@ page 50521 "RV PQC Card"
 
     trigger OnNewRecord(BelowxRec: Boolean)
     var
-    //NoSeriesMgt: Codeunit "No. Series";
-    //RIKEVITASetup: Record "RIKEVITA Setup";
+        NoSeriesMgt: Codeunit "No. Series";
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
     begin
         Rec."QC Type" := Rec."QC Type"::PQC;
         Rec."Ref. Order Type" := Rec."Ref. Order Type"::"Production Order";

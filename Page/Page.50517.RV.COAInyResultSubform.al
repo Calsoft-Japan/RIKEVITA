@@ -20,14 +20,20 @@ page 50517 "RV COA Iny. Result Subform"
                 field("COA No."; Rec."COA No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
                 }
                 field("COA Lot Line No."; Rec."COA Lot Line No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
                 }
                 field("Line No."; Rec."Line No.")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
                 }
                 field("Inventory Type"; Rec."Inventory Type")
                 {

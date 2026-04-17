@@ -33,32 +33,44 @@ table 50100 "RV RIKEVITA Setup"
         field(5; "ACC Site Analysis Code"; Code[20])
         {
             Caption = 'ACC Site Analysis Code';
-            TableRelation = Dimension.Code;
             Description = 'FDD034';
         }
-        field(6; "QC No. Nos."; Code[20])
+        field(112; "IQC No. Nos."; Code[20])
         {
             DataClassification = CustomerContent;
-            Caption = 'QC No. Nos.';
+            Caption = 'IQC No. Nos.';
             TableRelation = "No. Series";
         }
-        field(7; "COA No. Nos."; Code[20])
+        field(113; "COA No. Nos."; Code[20])
         {
             DataClassification = CustomerContent;
             Caption = 'COA No. Nos.';
             TableRelation = "No. Series";
         }
-        field(8; "FP Inventory Posting Group"; Code[20])
+
+        field(114; "FP Inventory Posting Group"; Code[20])
         {
             DataClassification = CustomerContent;
             Caption = 'FP Inventory Posting Group';
             TableRelation = "Inventory Posting Group";
         }
-        field(9; "WIP Inventory Posting Group"; Code[20])
+        field(115; "WIP Inventory Posting Group"; Code[20])
         {
             DataClassification = CustomerContent;
             Caption = 'WIP Inventory Posting Group';
             TableRelation = "Inventory Posting Group";
+        }
+        field(116; "PQC No. Nos."; Code[20])
+        {
+            DataClassification = CustomerContent;
+            Caption = 'PQC No. Nos.';
+            TableRelation = "No. Series";
+        }
+        field(117; "FQC No. Nos."; Code[20])
+        {
+            DataClassification = CustomerContent;
+            Caption = 'FQC No. Nos.';
+            TableRelation = "No. Series";
         }
         field(10; "Recipient Ref. Code"; Code[10])
         {
