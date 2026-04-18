@@ -85,4 +85,17 @@ codeunit 50101 "RV TransferWarehouseShipment"
         end;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnDeleteAfterPostingOnBeforeDeleteSalesHeader, '', false, false)]
+    local procedure "Sales-Post_OnDeleteAfterPostingOnBeforeDeleteSalesHeader"(var SalesHeader: Record "Sales Header")
+    var
+        ItemTrackHist: Record "RV Item Tracking History Dtl.";
+    begin
+        ItemTrackHist.Reset();
+        ItemTrackHist.SetRange("Sales Order No.", SalesHeader."No.");
+        ItemTrackHist.DeleteAll();
+    end;
+
+    //FDD005 Item Tracking History Details
+
+
 }
