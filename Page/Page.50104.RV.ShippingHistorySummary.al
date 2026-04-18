@@ -110,6 +110,7 @@ page 50104 "RV Shipping History Summary"
     var
         PostedWhseShptLine: Record "Posted Whse. Shipment Line";
         PostedWhseShptHeader: Record "Posted Whse. Shipment Header";
+        PostShtList: List of [Text];
     begin
         ClearSummaryVars();
 
@@ -125,6 +126,12 @@ page 50104 "RV Shipping History Summary"
         if not PostedWhseShptLine.FindSet() then begin
             exit;
         end;
+
+        repeat
+            if not PostShtList.Contains(PostedWhseShptLine."No.") then
+                PostShtList.Add(PostedWhseShptLine."No.");
+        until PostedWhseShptLine.Next() = 0;
+        NoOfPostedShipments := PostShtList.Count;
 
         // FindLast() uses the current key (default: "No.", Line No.) and returns
         // the record with the highest "No." — the most recently created shipment.

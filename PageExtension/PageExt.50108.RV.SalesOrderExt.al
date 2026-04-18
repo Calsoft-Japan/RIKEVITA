@@ -29,7 +29,8 @@ pageextension 50108 "RV Sales Order Ext" extends "Sales Order"
                 Provider = SalesLines;
                 // "Order No." on Sales Shipment Line(Posted) = originating Sales Order No.
                 // "Order Line No."  on Sales Shipment Line(Posted) = line no. from the selected Sales Line.
-                SubPageLink = "Order No." = FIELD("Document No."),
+                SubPageLink = "Source Type" = const(Database::"Sales Shipment Line"),
+                              "Order No." = FIELD("Document No."),
                               "Order Line No." = FIELD("Line No.");
 
             }

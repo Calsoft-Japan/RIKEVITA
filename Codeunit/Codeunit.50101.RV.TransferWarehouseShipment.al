@@ -53,4 +53,36 @@ codeunit 50101 "RV TransferWarehouseShipment"
         end;
     end;
 
+    //FDD005 Item Tracking History Details
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnInsertShptEntryRelationOnAfterItemEntryRelationInsert, '', false, false)]
+    local procedure "Sales-Post_OnInsertShptEntryRelationOnAfterItemEntryRelationInsert"(SalesShipmentLine: Record "Sales Shipment Line"; var ItemEntryRelation: Record "Item Entry Relation"; xSalesLine: Record "Sales Line")
+    var
+        ItemTrackHist: Record "RV Item Tracking History Dtl.";
+        ILE: Record "Item Ledger Entry";
+    begin
+        ILE.SetRange("Entry No.", ItemEntryRelation."Item Entry No.");
+        if not ILE.FindFirst() then exit;
+
+        ItemTrackHist.LockTable();
+
+        ItemTrackHist.Reset();
+        ItemTrackHist.SetRange("Sales Order No.", xSalesLine."Document No.");
+        ItemTrackHist.SetRange("Sales Order Line No.", xSalesLine."Line No.");
+        ItemTrackHist.SetRange("Lot No.", ItemEntryRelation."Lot No.");
+        ItemTrackHist.SetRange("Container No.", ILE."RV_Container No.");
+        if ItemTrackHist.FindFirst() then begin
+            ItemTrackHist.Qty := ItemTrackHist.Qty + ILE.Quantity;
+            ItemTrackHist.Modify();
+        end else begin
+            Clear(ItemTrackHist);
+            ItemTrackHist.Init();
+            ItemTrackHist."Sales Order No." := xSalesLine."Document No.";
+            ItemTrackHist."Sales Order Line No." := xSalesLine."Line No.";
+            ItemTrackHist."Lot No." := ItemEntryRelation."Lot No.";
+            ItemTrackHist."Container No." := ILE."RV_Container No.";
+            ItemTrackHist.Qty := ILE.Quantity;
+            ItemTrackHist.Insert();
+        end;
+    end;
+
 }
