@@ -42,13 +42,14 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                 Caption = 'Check No.';
                 Description = 'FDD016';
                 ApplicationArea = All;
+                Editable = false;
             }
 
             field("RV_APV No."; Rec."RV_APV No.")
             {
                 Description = 'FDD016';
                 ApplicationArea = All;
-                Visible = false;
+                Editable = false;
             }
         }
     }
@@ -61,8 +62,10 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
             {
                 Description = 'FDD017';
                 Caption = 'Payment Voucher';
+                ApplicationArea = All;
                 Image = Print;
                 Ellipsis = true;
+
 
                 trigger OnAction()
                 var

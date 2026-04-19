@@ -55,13 +55,18 @@ tableextension 50109 "RV Payment Journal Line Ext" extends "Gen. Journal Line"
             var
                 Vend: Record Vendor;
                 Emp: Record Employee;
-                VenBankAcct: Record "Vendor Bank Account";
+                BankAcct: Record "Bank Account";
             begin
+                "RV_Expat Employee" := false;
+                "RV_ID No./Passport No." := '';
+                "Recipient Bank Account" := '';
+                "RV_Partner Type" := Vend."Partner Type"::" ";
+                "RV_Cheque No." := '';
+
                 if (Rec."Account Type" = "Account Type"::Employee) and (Rec."Account No." <> '') then begin
                     if Emp.Get("Account No.") then begin
                         "RV_Expat Employee" := Emp."RV_Expat Employee";
                         "RV_ID No./Passport No." := Emp."RV_ID No./Passport No.";
-
                         "Recipient Bank Account" := Emp."RV_Bank Account Code";
                     end;
                 end
@@ -72,6 +77,9 @@ tableextension 50109 "RV Payment Journal Line Ext" extends "Gen. Journal Line"
                             "Recipient Bank Account" := Vend."Preferred Bank Account Code";
                         end;
                     end;
+
+                if ("Recipient Bank Account" <> '') and BankAcct.Get("Recipient Bank Account") then
+                    "RV_Cheque No." := BankAcct."Last Check No.";
             end;
         }
     }
