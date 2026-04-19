@@ -16,16 +16,19 @@ pageextension 50106 "RV Warehouse Shipment Ext" extends "Warehouse Shipment"
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';
+                    Editable = AllowBLDate;
                 }
                 field("RV_Cosing Date"; Rec."RV_Cosing Date")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';
+                    Editable = AllowClosingDate;
                 }
                 field("RV_Stuffing Date"; Rec."RV_Stuffing Date")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';
+                    Editable = AllowStaffingDate;
                 }
                 field("RV_Country of Origin"; Rec."RV_Country of Origin")
                 {
@@ -96,4 +99,14 @@ pageextension 50106 "RV Warehouse Shipment Ext" extends "Warehouse Shipment"
             }
         }
     }
+
+    trigger OnOpenPage()
+    var
+        PermissionCheck: Codeunit "RV User Permission Check";
+    begin
+        PermissionCheck.GetCurUserPermission(AllowContainer, AllowBLDate, AllowClosingDate, AllowStaffingDate);
+    end;
+
+    var
+        AllowContainer, AllowBLDate, AllowClosingDate, AllowStaffingDate : Boolean;
 }

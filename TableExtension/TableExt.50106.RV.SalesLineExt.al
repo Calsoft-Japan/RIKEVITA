@@ -38,5 +38,46 @@ tableextension 50106 "RV Sales Line Ext." extends "Sales Line"
                 Validate("Unit Price");
             end;
         }
+
+        field(50100; "RV_B/L Date"; Date)
+        {
+            Caption = 'B/L Date';
+            Description = 'FDD012';
+            DataClassification = ToBeClassified;
+        }
+        field(50101; "RV_Cosing Date"; Date)
+        {
+            Caption = 'Cosing Date';
+            Description = 'FDD012';
+            DataClassification = ToBeClassified;
+
+            trigger OnValidate()
+            var
+                RVSteup: Record "RV RIKEVITA Setup";
+                DateFormulaVar: DateFormula;
+            begin
+                Clear(DateFormulaVar);
+                RVSteup.Reset();
+                if RVSteup.FindFirst() then begin
+                    DateFormulaVar := RVSteup."Stuffing Date Calculation";
+                end;
+
+                if (Format(DateFormulaVar) <> '') then
+                    "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
+            end;
+        }
+
+        field(50102; "RV_ETA"; Date)
+        {
+            Caption = 'ETA';
+            Description = 'FDD012';
+            DataClassification = ToBeClassified;
+        }
+        field(50103; "RV_ETD"; Date)
+        {
+            Caption = 'ETD';
+            Description = 'FDD012';
+            DataClassification = ToBeClassified;
+        }
     }
 }

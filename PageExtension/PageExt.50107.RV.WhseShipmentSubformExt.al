@@ -26,18 +26,21 @@ pageextension 50107 "RV Whse. Shipment Subform Ext" extends "Whse. Shipment Subf
                 ApplicationArea = All;
                 Caption = 'B/L Date';
                 Description = 'FDD008';
+                Editable = AllowBLDate;
             }
             field("RV_Cosing Date"; Rec."RV_Cosing Date")
             {
                 ApplicationArea = All;
                 Caption = 'Cosing Date';
                 Description = 'FDD008';
+                Editable = AllowClosingDate;
             }
             field("RV_Stuffing Date"; Rec."RV_Stuffing Date")
             {
                 ApplicationArea = All;
                 Caption = 'Stuffing Date';
                 Description = 'FDD008';
+                Editable = AllowStaffingDate;
             }
             field("RV_ETA"; Rec."RV_ETA")
             {
@@ -56,6 +59,7 @@ pageextension 50107 "RV Whse. Shipment Subform Ext" extends "Whse. Shipment Subf
     }
     var
         PrintRSPONo: Boolean;
+        AllowContainer, AllowBLDate, AllowClosingDate, AllowStaffingDate : Boolean;
 
     trigger OnAfterGetRecord()
     var
@@ -64,6 +68,13 @@ pageextension 50107 "RV Whse. Shipment Subform Ext" extends "Whse. Shipment Subf
         if Rec.CalcFields("RV_Print RSPO No.") then begin//FDD020
             PrintRSPONo := Rec."RV_Print RSPO No.";
         end;
+    end;
+
+    trigger OnOpenPage()
+    var
+        PermissionCheck: Codeunit "RV User Permission Check";
+    begin
+        PermissionCheck.GetCurUserPermission(AllowContainer, AllowBLDate, AllowClosingDate, AllowStaffingDate);
     end;
 
 }

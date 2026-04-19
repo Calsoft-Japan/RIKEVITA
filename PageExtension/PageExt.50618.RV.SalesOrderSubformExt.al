@@ -8,11 +8,6 @@ pageextension 50618 "RV_Sales Order Subform" extends "Sales Order Subform"
     {
         addafter("Shipment Date")
         {
-
-            field("RV_Stuffing Date"; Rec."RV_Stuffing Date")
-            {
-                ApplicationArea = All;
-            }
             field("RV_ECR Required"; Rec."RV_ECR Required")
             {
                 ApplicationArea = All;
@@ -23,6 +18,40 @@ pageextension 50618 "RV_Sales Order Subform" extends "Sales Order Subform"
                 ApplicationArea = All;
                 Editable = false;
             }
+        }
+
+
+        addafter("Line Discount %")
+        {
+            field("RV_B/L Date"; Rec."RV_B/L Date")
+            {
+                ApplicationArea = All;
+                Description = 'FDD012';
+                Editable = AllowBLDate;
+            }
+            field("RV_Cosing Date"; Rec."RV_Cosing Date")
+            {
+                ApplicationArea = All;
+                Description = 'FDD012';
+                Editable = AllowClosingDate;
+            }
+            field("RV_Stuffing Date"; Rec."RV_Stuffing Date")
+            {
+                ApplicationArea = All;
+                Description = 'FDD012';
+                Editable = AllowStaffingDate;
+            }
+            field(RV_ETD; Rec."RV_ETD")
+            {
+                ApplicationArea = All;
+                Description = 'FDD012';
+            }
+            field(RV_ETA; Rec."RV_ETA")
+            {
+                ApplicationArea = All;
+                Description = 'FDD012';
+            }
+
         }
     }
     actions
@@ -51,4 +80,14 @@ pageextension 50618 "RV_Sales Order Subform" extends "Sales Order Subform"
             }
         }
     }
+
+    trigger OnOpenPage()
+    var
+        PermissionCheck: Codeunit "RV User Permission Check";
+    begin
+        PermissionCheck.GetCurUserPermission(AllowContainer, AllowBLDate, AllowClosingDate, AllowStaffingDate);
+    end;
+
+    var
+        AllowContainer, AllowBLDate, AllowClosingDate, AllowStaffingDate : Boolean;
 }

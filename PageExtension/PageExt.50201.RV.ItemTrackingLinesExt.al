@@ -13,6 +13,7 @@ pageextension 50201 "RV Item Tracking Lines Ext" extends "Item Tracking Lines"
             {
                 Caption = 'Container No.';
                 ApplicationArea = All;
+                Editable = AllowContainer;
             }
             field("Manufacture Date"; Rec."RV_Manufacture Date")
             {
@@ -38,6 +39,7 @@ pageextension 50201 "RV Item Tracking Lines Ext" extends "Item Tracking Lines"
 
     var
         ShowManufactureDate: Boolean;
+        AllowContainer, AllowBLDate, AllowClosingDate, AllowStaffingDate : Boolean;
     //ShowExpirationDate: Boolean;
 
     /*
@@ -54,4 +56,13 @@ pageextension 50201 "RV Item Tracking Lines Ext" extends "Item Tracking Lines"
             end;
         end;
         */
+
+    trigger OnOpenPage()
+    var
+        PermissionCheck: Codeunit "RV User Permission Check";
+    begin
+        PermissionCheck.GetCurUserPermission(AllowContainer, AllowBLDate, AllowClosingDate, AllowStaffingDate);
+    end;
+
+
 }
