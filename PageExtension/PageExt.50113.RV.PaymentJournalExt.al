@@ -32,16 +32,53 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                 Description = 'FDD017';
                 ApplicationArea = All;
             }
+
+        }
+
+        addbefore("Amount (LCY)")
+        {
             field("RV_Cheque No."; Rec."RV_Cheque No.")
+            {
+                Caption = 'Check No.';
+                Description = 'FDD016';
+                ApplicationArea = All;
+            }
+
+            field("RV_APV No."; Rec."RV_APV No.")
             {
                 Description = 'FDD016';
                 ApplicationArea = All;
+                Visible = false;
             }
         }
     }
 
     actions
     {
+        addbefore(PrintCheck)
+        {
+            action(PrintVoucher)
+            {
+                Description = 'FDD017';
+                Caption = 'Payment Voucher';
+                Image = Print;
+                Ellipsis = true;
+
+                trigger OnAction()
+                var
+                    RptPayVoucher: Report "RV Payment Voucher";
+                begin
+                    Report.RunModal(Report::"RV Payment Voucher", true, false, Rec);
+                end;
+            }
+        }
+        addlast(Category_Category11)
+        {
+            actionref(PrintCheck_PrintVoucher; PrintVoucher)
+            {
+            }
+        }
+
         addlast(processing)
         {
             group(ExportExcel)

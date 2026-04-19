@@ -12,20 +12,27 @@ tableextension 50109 "RV Payment Journal Line Ext" extends "Gen. Journal Line"
             Caption = 'Cheque No.';
             DataClassification = ToBeClassified;
         }
-        field(50101; "RV_Description 2"; Text[300])
+
+        field(50101; "RV_APV No."; Code[20])
+        {
+            Description = 'FDD016';
+            Caption = 'APV No.';
+            DataClassification = ToBeClassified;
+        }
+        field(50102; "RV_Description 2"; Text[300])
         {
             Description = 'FDD017';
             Caption = 'Description 2';
             DataClassification = ToBeClassified;
         }
-        field(50102; "RV_Expat Employee"; Boolean)
+        field(50103; "RV_Expat Employee"; Boolean)
         {
             Description = 'FDD017';
             Caption = 'Expat Employee';
             DataClassification = ToBeClassified;
             Editable = false;
         }
-        field(50103; "RV_Partner Type"; Enum "Partner Type")
+        field(50104; "RV_Partner Type"; Enum "Partner Type")
         {
             Description = 'FDD017';
             Caption = 'Partner Type';
@@ -33,7 +40,7 @@ tableextension 50109 "RV Payment Journal Line Ext" extends "Gen. Journal Line"
             //TableRelation = Vendor."Partner Type";
             Editable = false;
         }
-        field(50104; "RV_ID No./Passport No."; Code[30])//Value should come from Vendor/Employee master same field
+        field(50105; "RV_ID No./Passport No."; Code[30])//Value should come from Vendor/Employee master same field
         {
             Description = 'FDD017';
             Caption = 'ID No./Passport No.';
