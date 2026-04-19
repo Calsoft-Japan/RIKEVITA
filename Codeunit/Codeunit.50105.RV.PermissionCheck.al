@@ -1,3 +1,8 @@
+/// <summary>
+/// codeunit RV User Permission Check (ID 50105)
+/// FDD008 2026/03/14: New. (Liuyang)
+/// FDD012 2026/04/19 Liuyang
+/// </summary>
 codeunit 50105 "RV User Permission Check"
 {
     procedure GetCurUserPermission(var AllowContainer: Boolean; var AllowBLDate: Boolean; var AllowClosingDate: Boolean; var AllowStaffingDate: Boolean)
