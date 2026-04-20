@@ -78,7 +78,18 @@ tableextension 50109 "RV Payment Journal Line Ext" extends "Gen. Journal Line"
                         end;
                     end;
 
-                if ("Recipient Bank Account" <> '') and BankAcct.Get("Recipient Bank Account") then
+                // if ("Recipient Bank Account" <> '') and BankAcct.Get("Recipient Bank Account") then
+                //     "RV_Cheque No." := BankAcct."Last Check No.";
+            end;
+        }
+
+        modify("Bal. Account No.")//FDD016
+        {
+            trigger OnAfterValidate()
+            var
+                BankAcct: Record "Bank Account";
+            begin
+                if ("Bal. Account Type" = "Gen. Journal Account Type"::"Bank Account") and ("Bal. Account No." <> '') and BankAcct.Get("Bal. Account No.") then
                     "RV_Cheque No." := BankAcct."Last Check No.";
             end;
         }

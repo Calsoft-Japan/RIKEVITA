@@ -33,9 +33,10 @@ page 50104 "RV Shipping History Summary"
                     var
                         PostedWhseShptLine: Record "Posted Whse. Shipment Line";
                         PostedWhseShptLinesPage: Page "Posted Whse. Shipment Lines";
+                    //PostedWhseShptsPage: page "Posted Whse. Shipment List";
                     begin
                         PostedWhseShptLine.SetRange("Source Type", Database::"Sales Line");
-                        PostedWhseShptLine.SetRange("Source No.", Rec."Document No.");
+                        //PostedWhseShptLine.SetRange("Source No.", Rec."Document No.");
                         PostedWhseShptLine.SetRange("Item No.", Rec."No.");
                         PostedWhseShptLinesPage.SetTableView(PostedWhseShptLine);
                         PostedWhseShptLinesPage.RunModal();
@@ -118,10 +119,8 @@ page 50104 "RV Shipping History Summary"
         if Rec."No." = '' then
             exit;
 
-        // Filter all Posted Whse. Shipment Lines for this Sales Order + Item.
+
         PostedWhseShptLine.SetRange("Source Type", Database::"Sales Line");
-        PostedWhseShptLine.SetRange("Source No.", Rec."Document No.");
-        PostedWhseShptLine.SetRange("Source Line No.", Rec."Line No.");
         PostedWhseShptLine.SetRange("Item No.", Rec."No.");
         if not PostedWhseShptLine.FindSet() then begin
             exit;
@@ -133,9 +132,10 @@ page 50104 "RV Shipping History Summary"
         until PostedWhseShptLine.Next() = 0;
         NoOfPostedShipments := PostShtList.Count;
 
-        // FindLast() uses the current key (default: "No.", Line No.) and returns
-        // the record with the highest "No." — the most recently created shipment.
-        // "No." follows a chronological number series, so this is the last shipment.
+        // Filter all Posted Whse. Shipment Lines for this Sales Order + Item.
+        PostedWhseShptLine.SetRange("Source No.", Rec."Document No.");
+        PostedWhseShptLine.SetRange("Source Line No.", Rec."Line No.");
+
         if PostedWhseShptLine.FindLast() then begin
             LastPostedShipmentNo := PostedWhseShptLine."No.";
             LastQty := PostedWhseShptLine.Quantity;
