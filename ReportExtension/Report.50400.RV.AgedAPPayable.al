@@ -8,10 +8,15 @@ reportextension 50400 "RV Aged AP Ext" extends "Aged Accounts Payable"
     {
         add(Vendor)
         {
-            column(VendorBankName; VendorBankName) { }
-            column(SwiftCode; SwiftCode) { }
-            column(BankAccountNo; BankAccountNo) { }
-            column(PaymentTermsCode; PaymentTermsCode) { }
+            // Header additions
+            column(RV_CurrencyFilter; GetFilter("Currency Filter")) { }
+            column(RV_PrintBankDetails; PrintBankDetails) { }
+
+            // Vendor master additions
+            column(RV_PaymentTermsCode; PaymentTermsCode) { }
+            column(RV_VendorBankName; VendorBankName) { }
+            column(RV_SwiftCode; SwiftCode) { }
+            column(RV_BankAccountNo; BankAccountNo) { }
         }
 
         modify(Vendor)
@@ -20,10 +25,10 @@ reportextension 50400 "RV Aged AP Ext" extends "Aged Accounts Payable"
             var
                 VendorBankAccount: Record "Vendor Bank Account";
             begin
+                Clear(PaymentTermsCode);
                 Clear(VendorBankName);
                 Clear(SwiftCode);
                 Clear(BankAccountNo);
-                Clear(PaymentTermsCode);
 
                 PaymentTermsCode := "Payment Terms Code";
 
@@ -38,9 +43,14 @@ reportextension 50400 "RV Aged AP Ext" extends "Aged Accounts Payable"
             end;
         }
 
-        add("Vendor Ledger Entry")
+        add(TempVendortLedgEntryLoop)
         {
-            column(RMEquivalent; "Amount (LCY)") { }
+            // Body additions
+            column(RV_RowPaymentTermsCode; PaymentTermsCode) { }
+            column(RV_RowVendorBankName; VendorBankName) { }
+            column(RV_RowSwiftCode; SwiftCode) { }
+            column(RV_RowBankAccountNo; BankAccountNo) { }
+            column(RV_RowPrintBankDetails; PrintBankDetails) { }
         }
     }
 
@@ -48,20 +58,22 @@ reportextension 50400 "RV Aged AP Ext" extends "Aged Accounts Payable"
     {
         layout
         {
-            addlast(Options)
+            addafter(PrintDetails)
             {
                 field(PrintBankDetails; PrintBankDetails)
                 {
                     ApplicationArea = All;
+                    Caption = 'Print Bank Details';
+                    ToolTip = 'Specifies whether vendor bank details are shown on the report.';
                 }
             }
         }
     }
 
     var
+        PaymentTermsCode: Code[20];
         VendorBankName: Text[100];
         SwiftCode: Code[20];
         BankAccountNo: Code[50];
-        PaymentTermsCode: Code[20];
         PrintBankDetails: Boolean;
 }
