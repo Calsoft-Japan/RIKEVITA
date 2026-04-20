@@ -5,9 +5,24 @@
 codeunit 50200 "RV Reservation Entry Fields"
 {
 
+    [EventSubscriber(ObjectType::Page, Page::"Item Tracking Lines", OnSetQtyToHandleAndInvoiceOnBeforeTrackingSpecModify, '', false, false)]
+    local procedure "Item Tracking Lines_OnSetQtyToHandleAndInvoiceOnBeforeTrackingSpecModify"(var TrackingSpecification: Record "Tracking Specification"; var TotalTrackingSpecification: Record "Tracking Specification"; var ModifyLine: Boolean)
+    var
+        Item: Record Item;
+    begin
+        TrackingSpecification."RV_Container No." := TotalTrackingSpecification."RV_Container No.";//FDD008
+        TrackingSpecification."RV_Manufacture Date" := TotalTrackingSpecification."RV_Manufacture Date";
+        if (TrackingSpecification."Item No." <> '') and (TrackingSpecification."RV_Manufacture Date" <> 0D) then begin
+            Item.Get(TotalTrackingSpecification."Item No.");
+            if Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date" then begin
+                TrackingSpecification."Expiration Date" := CalcDate(Item."Expiration Calculation", TrackingSpecification."RV_Manufacture Date");
+            end;
+        end;
+        ModifyLine := true;
+    end;
+
     [EventSubscriber(ObjectType::Page, Page::"Item Tracking Lines", OnAfterSetQtyToHandleAndInvoiceOnBeforeReservEntryModify, '', false, false)]
     local procedure "Item Tracking Lines_OnAfterSetQtyToHandleAndInvoiceOnBeforeReservEntryModify"(var ReservEntry: Record "Reservation Entry"; var TrackingSpecification: Record "Tracking Specification"; var TotalTrackingSpecification: Record "Tracking Specification"; var ModifyLine: Boolean)
-
     var
         Item: Record Item;
     begin
