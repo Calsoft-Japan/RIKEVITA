@@ -16,19 +16,21 @@ codeunit 50101 "RV TransferWarehouseShipment"
         WhsShipmentLine: Record "Warehouse Shipment Line";
         ResvEntry: Record "Reservation Entry";
     begin
-        WhsShipmentLine.Reset();
+        /* WhsShipmentLine.Reset();
         WhsShipmentLine.SetRange("Source Type", Database::"Sales Line");
         WhsShipmentLine.SetRange("Source Subtype", SalesLine."Document Type".AsInteger());
         WhsShipmentLine.SetRange("Source No.", SalesLine."Document No.");
         WhsShipmentLine.SetRange("Source Line No.", SalesLine."Line No.");
         if WhsShipmentLine.FindFirst() then begin
-            ResvEntry.SetRange("Source Type", Database::"Purchase Line");
-            ResvEntry.SetRange("Source Subtype", SalesLine."Document Type".AsInteger());
+            ResvEntry.Reset();
+            ResvEntry.SetRange("Source Type", Database::"Sales Line");
+            ResvEntry.SetRange("Source Subtype", 1);
             ResvEntry.SetRange("Source ID", SalesLine."Document No.");
             ResvEntry.SetRange("Source Ref. No.", SalesLine."Line No.");
+            ResvEntry.ReadIsolation(IsolationLevel::ReadUncommitted);
             if ResvEntry.FindFirst() then
                 ItemJournalLine."RV_Container No." := ResvEntry."RV_Container No.";
-        end;
+        end; */
     end;
 
 
@@ -38,7 +40,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
         WhsShipmentLine: Record "Warehouse Shipment Line";
         ResvEntry: Record "Reservation Entry";
     begin
-        WhsShipmentLine.Reset();
+        /* WhsShipmentLine.Reset();
         WhsShipmentLine.SetRange("Source Type", Database::"Purchase Line");
         WhsShipmentLine.SetRange("Source Subtype", PurchaseLine."Document Type".AsInteger());
         WhsShipmentLine.SetRange("Source No.", PurchaseLine."Document No.");
@@ -48,10 +50,18 @@ codeunit 50101 "RV TransferWarehouseShipment"
             ResvEntry.SetRange("Source Subtype", PurchaseLine."Document Type".AsInteger());
             ResvEntry.SetRange("Source ID", PurchaseLine."Document No.");
             ResvEntry.SetRange("Source Ref. No.", PurchaseLine."Line No.");
+            ResvEntry.ReadIsolation(IsolationLevel::ReadUncommitted);
             if ResvEntry.FindFirst() then
                 ItemJnlLine."RV_Container No." := ResvEntry."RV_Container No.";
-        end;
+        end; */
     end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post Line", OnRunWithCheckOnAfterRetrieveItemTracking, '', false, false)]
+    local procedure "Item Jnl.-Post Line_OnRunWithCheckOnAfterRetrieveItemTracking"(var ItemJournalLine: Record "Item Journal Line"; var TempTrackingSpecification: Record "Tracking Specification"; var TrackingSpecExists: Boolean; PostponeReservationHandling: Boolean)
+    begin
+        ItemJournalLine."RV_Container No." := TempTrackingSpecification."RV_Container No.";
+    end;
+
 
     //FDD005 Item Tracking History Details
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnInsertShptEntryRelationOnAfterItemEntryRelationInsert, '', false, false)]
