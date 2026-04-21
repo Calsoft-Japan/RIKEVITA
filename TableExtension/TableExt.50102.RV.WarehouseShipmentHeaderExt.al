@@ -1,6 +1,7 @@
 /// <summary>
 /// TableExtension Warehouse Shipment Header Ext (ID 50102) extends "Warehouse Shipment Header" table
 /// FDD008 2026/03/14: New. (Liuyang)
+/// FDD019 2026/04/21: New. (Bobby.ji)
 /// </summary>
 tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment Header"
 {
@@ -123,6 +124,37 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
             Caption = 'ETA';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
+        }
+        field(50200; "RV_Consignee Name"; Text[100])
+        {
+            Caption = 'Consignee Name';
+            Description = 'FDD019';
+        }
+        field(50201; "RV_Consignee Address"; Text[100])
+        {
+            Caption = 'Consignee Address';
+            Description = 'FDD019';
+        }
+        field(50202; "RV_Consignee Address 2"; Text[100])
+        {
+            Caption = 'Consignee Address 2';
+            Description = 'FDD019';
+        }
+        field(50203; "RV_Consignee City"; Text[30])
+        {
+            Caption = 'Consignee City';
+            Description = 'FDD019';
+        }
+        field(50204; "RV_Consignee Post Code"; Code[20])
+        {
+            Caption = 'Consignee Post Code';
+            Description = 'FDD019';
+        }
+        field(50205; "RV_Consignee Country/Region"; Code[10])
+        {
+            Caption = 'Consignee Country/Region';
+            Description = 'FDD019';
+            TableRelation = "Country/Region";
         }
     }
 }

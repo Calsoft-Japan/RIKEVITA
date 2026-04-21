@@ -1,0 +1,42 @@
+/// <summary>
+/// TableExtension RV Posted Whse Shipment Header (ID 50207) extends Posted Whse. Shipment Header table
+/// FDD019 2026/04/21: New. (Bobby.ji)
+/// </summary>
+tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Shipment Header"
+{
+    fields
+    {
+        field(50200; "RV_Consignee Name"; Text[100])
+        {
+            Caption = 'Consignee Name';
+            Description = 'FDD019';
+        }
+        field(50201; "RV_Consignee Address"; Text[100])
+        {
+            Caption = 'Consignee Address';
+            Description = 'FDD019';
+        }
+        field(50202; "RV_Consignee Address 2"; Text[100])
+        {
+            Caption = 'Consignee Address 2';
+            Description = 'FDD019';
+        }
+        field(50203; "RV_Consignee City"; Text[30])
+        {
+            Caption = 'Consignee City';
+            Description = 'FDD019';
+        }
+        field(50204; "RV_Consignee Post Code"; Code[20])
+        {
+            Caption = 'Consignee Post Code';
+            Description = 'FDD019';
+        }
+        field(50205; "RV_Consignee Country/Region"; Code[10])
+        {
+            Caption = 'Consignee Country/Region';
+            Description = 'FDD019';
+            FieldClass = FlowField;
+            CalcFormula = Lookup("Country/Region".Code WHERE("Code" = FIELD("RV_Consignee Country/Region")));
+        }
+    }
+}

@@ -14,7 +14,7 @@ codeunit 50200 "RV Reservation Entry Fields"
         ReservEntry."RV_Manufacture Date" := TrackingSpecification."RV_Manufacture Date";
         if (ReservEntry."Item No." <> '') and (ReservEntry."RV_Manufacture Date" <> 0D) then begin
             Item.Get(TrackingSpecification."Item No.");
-            if Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date" then begin
+            if (Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date") and (Format(Item."Expiration Calculation") <> '') then begin
                 ReservEntry."Expiration Date" := CalcDate(Item."Expiration Calculation", ReservEntry."RV_Manufacture Date");
             end;
         end;
@@ -38,7 +38,7 @@ codeunit 50200 "RV Reservation Entry Fields"
         ReservationEntry."RV_Manufacture Date" := ForReservEntry."RV_Manufacture Date";
         if (ReservationEntry."Item No." <> '') and (ReservationEntry."RV_Manufacture Date" <> 0D) then begin
             Item.Get(ReservationEntry."Item No.");
-            if Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date" then begin
+            if (Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date") and (Format(Item."Expiration Calculation") <> '') then begin
                 ReservationEntry."Expiration Date" := CalcDate(Item."Expiration Calculation", ReservationEntry."RV_Manufacture Date");
             end;
         end;

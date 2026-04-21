@@ -2,6 +2,7 @@
 /// TableExtension Warehouse Shipment Line Exit (ID 50103) extends "Warehouse Shipment Line" table
 /// FDD008 2026/03/14: New. (Liuyang)
 /// FDD020 2026/04/08: New. (Bobby.ji)
+/// FDD019 2026/04/21: New. (Bobby.ji)
 /// </summary>
 tableextension 50103 "RV Warehouse Shipment Ln Ext" extends "Warehouse Shipment Line"
 {
@@ -58,6 +59,13 @@ tableextension 50103 "RV Warehouse Shipment Ln Ext" extends "Warehouse Shipment 
             Description = 'FDD020';
             FieldClass = FlowField;
             CalcFormula = Lookup(Item."RV_Print RSPO No." WHERE("No." = FIELD("Item No.")));
+        }
+        field(50201; "RV_Symbol Display Packing List"; Boolean)
+        {
+            Caption = 'Print RSPO No.';
+            Description = 'FDD019';
+            FieldClass = FlowField;
+            CalcFormula = Lookup("RV Item Symbol Setting"."Symbol Display Packing List" WHERE("Item Code" = FIELD("No.")));
         }
     }
 }
