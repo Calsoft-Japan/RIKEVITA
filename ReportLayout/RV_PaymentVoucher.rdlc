@@ -10,109 +10,6 @@
       <rd:DataSourceID>4b398b8c-726c-40e9-81ad-d498650e4eca</rd:DataSourceID>
     </DataSource>
   </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-      <Fields>
-        <Field Name="JournalTempName_GenJnlLine">
-          <DataField>JournalTempName_GenJnlLine</DataField>
-        </Field>
-        <Field Name="JournalBatchName_GenJnlLine">
-          <DataField>JournalBatchName_GenJnlLine</DataField>
-        </Field>
-        <Field Name="LineNo_GenJnlLine">
-          <DataField>LineNo_GenJnlLine</DataField>
-        </Field>
-        <Field Name="Account_Type">
-          <DataField>Account_Type</DataField>
-        </Field>
-        <Field Name="Account_No_">
-          <DataField>Account_No_</DataField>
-        </Field>
-        <Field Name="RV_APV_No_">
-          <DataField>RV_APV_No_</DataField>
-        </Field>
-        <Field Name="GenJnlPostingDate">
-          <DataField>GenJnlPostingDate</DataField>
-        </Field>
-        <Field Name="GenPostDate_ddMMyy">
-          <DataField>GenPostDate_ddMMyy</DataField>
-        </Field>
-        <Field Name="GenJnlAmount__LCY_">
-          <DataField>GenJnlAmount__LCY_</DataField>
-        </Field>
-        <Field Name="GenJnlAmount__LCY_Format">
-          <DataField>GenJnlAmount__LCY_Format</DataField>
-        </Field>
-        <Field Name="AccountDescription">
-          <DataField>AccountDescription</DataField>
-        </Field>
-        <Field Name="Posting_Date_ByVID">
-          <DataField>Posting_Date_ByVID</DataField>
-        </Field>
-        <Field Name="Document_No_ByVID">
-          <DataField>Document_No_ByVID</DataField>
-        </Field>
-        <Field Name="Amount_to_Apply_ByVID">
-          <DataField>Amount_to_Apply_ByVID</DataField>
-        </Field>
-        <Field Name="Amount_to_Apply_ByVIDFormat">
-          <DataField>Amount_to_Apply_ByVIDFormat</DataField>
-        </Field>
-        <Field Name="VendID">
-          <DataField>VendID</DataField>
-        </Field>
-        <Field Name="Posting_Date_ByVDoc">
-          <DataField>Posting_Date_ByVDoc</DataField>
-        </Field>
-        <Field Name="Document_No_ByVDoc">
-          <DataField>Document_No_ByVDoc</DataField>
-        </Field>
-        <Field Name="Amount_to_Apply_ByVDoc">
-          <DataField>Amount_to_Apply_ByVDoc</DataField>
-        </Field>
-        <Field Name="Amount_to_Apply_ByVDocFormat">
-          <DataField>Amount_to_Apply_ByVDocFormat</DataField>
-        </Field>
-        <Field Name="VendDoc">
-          <DataField>VendDoc</DataField>
-        </Field>
-        <Field Name="Posting_Date_ByEID">
-          <DataField>Posting_Date_ByEID</DataField>
-        </Field>
-        <Field Name="Document_No_ByEID">
-          <DataField>Document_No_ByEID</DataField>
-        </Field>
-        <Field Name="Amount_to_Apply_ByEID">
-          <DataField>Amount_to_Apply_ByEID</DataField>
-        </Field>
-        <Field Name="Amount_to_Apply_ByEIDFormat">
-          <DataField>Amount_to_Apply_ByEIDFormat</DataField>
-        </Field>
-        <Field Name="EmplID">
-          <DataField>EmplID</DataField>
-        </Field>
-        <Field Name="Posting_Date_ByEDoc">
-          <DataField>Posting_Date_ByEDoc</DataField>
-        </Field>
-        <Field Name="Document_No_ByEDoc">
-          <DataField>Document_No_ByEDoc</DataField>
-        </Field>
-        <Field Name="Amount_to_Apply_ByEDoc">
-          <DataField>Amount_to_Apply_ByEDoc</DataField>
-        </Field>
-        <Field Name="Amount_to_Apply_ByEDocFormat">
-          <DataField>Amount_to_Apply_ByEDocFormat</DataField>
-        </Field>
-        <Field Name="EmplDoc">
-          <DataField>EmplDoc</DataField>
-        </Field>
-      </Fields>
-    </DataSet>
-  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -1202,12 +1099,6 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
       </Page>
     </ReportSection>
   </ReportSections>
-  <ReportParametersLayout>
-    <GridLayoutDefinition>
-      <NumberOfColumns>4</NumberOfColumns>
-      <NumberOfRows>2</NumberOfRows>
-    </GridLayoutDefinition>
-  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
@@ -1281,4 +1172,107 @@ End Function
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="JournalTempName_GenJnlLine">
+          <DataField>JournalTempName_GenJnlLine</DataField>
+        </Field>
+        <Field Name="JournalBatchName_GenJnlLine">
+          <DataField>JournalBatchName_GenJnlLine</DataField>
+        </Field>
+        <Field Name="LineNo_GenJnlLine">
+          <DataField>LineNo_GenJnlLine</DataField>
+        </Field>
+        <Field Name="Account_Type">
+          <DataField>Account_Type</DataField>
+        </Field>
+        <Field Name="Account_No_">
+          <DataField>Account_No_</DataField>
+        </Field>
+        <Field Name="RV_APV_No_">
+          <DataField>RV_APV_No_</DataField>
+        </Field>
+        <Field Name="GenJnlPostingDate">
+          <DataField>GenJnlPostingDate</DataField>
+        </Field>
+        <Field Name="GenPostDate_ddMMyy">
+          <DataField>GenPostDate_ddMMyy</DataField>
+        </Field>
+        <Field Name="GenJnlAmount__LCY_">
+          <DataField>GenJnlAmount__LCY_</DataField>
+        </Field>
+        <Field Name="GenJnlAmount__LCY_Format">
+          <DataField>GenJnlAmount__LCY_Format</DataField>
+        </Field>
+        <Field Name="AccountDescription">
+          <DataField>AccountDescription</DataField>
+        </Field>
+        <Field Name="Posting_Date_ByVID">
+          <DataField>Posting_Date_ByVID</DataField>
+        </Field>
+        <Field Name="Document_No_ByVID">
+          <DataField>Document_No_ByVID</DataField>
+        </Field>
+        <Field Name="Amount_to_Apply_ByVID">
+          <DataField>Amount_to_Apply_ByVID</DataField>
+        </Field>
+        <Field Name="Amount_to_Apply_ByVIDFormat">
+          <DataField>Amount_to_Apply_ByVIDFormat</DataField>
+        </Field>
+        <Field Name="VendID">
+          <DataField>VendID</DataField>
+        </Field>
+        <Field Name="Posting_Date_ByVDoc">
+          <DataField>Posting_Date_ByVDoc</DataField>
+        </Field>
+        <Field Name="Document_No_ByVDoc">
+          <DataField>Document_No_ByVDoc</DataField>
+        </Field>
+        <Field Name="Amount_to_Apply_ByVDoc">
+          <DataField>Amount_to_Apply_ByVDoc</DataField>
+        </Field>
+        <Field Name="Amount_to_Apply_ByVDocFormat">
+          <DataField>Amount_to_Apply_ByVDocFormat</DataField>
+        </Field>
+        <Field Name="VendDoc">
+          <DataField>VendDoc</DataField>
+        </Field>
+        <Field Name="Posting_Date_ByEID">
+          <DataField>Posting_Date_ByEID</DataField>
+        </Field>
+        <Field Name="Document_No_ByEID">
+          <DataField>Document_No_ByEID</DataField>
+        </Field>
+        <Field Name="Amount_to_Apply_ByEID">
+          <DataField>Amount_to_Apply_ByEID</DataField>
+        </Field>
+        <Field Name="Amount_to_Apply_ByEIDFormat">
+          <DataField>Amount_to_Apply_ByEIDFormat</DataField>
+        </Field>
+        <Field Name="EmplID">
+          <DataField>EmplID</DataField>
+        </Field>
+        <Field Name="Posting_Date_ByEDoc">
+          <DataField>Posting_Date_ByEDoc</DataField>
+        </Field>
+        <Field Name="Document_No_ByEDoc">
+          <DataField>Document_No_ByEDoc</DataField>
+        </Field>
+        <Field Name="Amount_to_Apply_ByEDoc">
+          <DataField>Amount_to_Apply_ByEDoc</DataField>
+        </Field>
+        <Field Name="Amount_to_Apply_ByEDocFormat">
+          <DataField>Amount_to_Apply_ByEDocFormat</DataField>
+        </Field>
+        <Field Name="EmplDoc">
+          <DataField>EmplDoc</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
 </Report>
