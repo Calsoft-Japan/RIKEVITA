@@ -142,10 +142,10 @@
                           </Paragraphs>
                           <Visibility>
                             <Hidden>=Code.SetData(CStr(First(Fields!TotalAmtText1.Value)) + Chr(177) +
-CStr(First(Fields!GenJnlAmount__LCY_.Value)) + Chr(177) +
+CStr(First(Fields!GenAmtLCY.Value)) + Chr(177) +
 CStr(First(Fields!AccountDescription.Value)) + Chr(177) +
 CStr(First(Fields!GenPostDate_ddMMyy.Value)) + Chr(177) +
-CStr(First(Fields!TotalAmtText1.Value)) + Chr(177) +
+CStr(First(Fields!TotalAmtText2.Value)) + Chr(177) +
 CStr(Last(Fields!VoidText.Value)), 3)</Hidden>
                           </Visibility>
                           <Style>
@@ -1065,6 +1065,9 @@ End Function
         </Field>
         <Field Name="TotalAmtText2">
           <DataField>TotalAmtText2</DataField>
+        </Field>
+        <Field Name="GenAmtLCY">
+          <DataField>GenAmtLCY</DataField>
         </Field>
         <Field Name="AmtToApply">
           <DataField>AmtToApply</DataField>

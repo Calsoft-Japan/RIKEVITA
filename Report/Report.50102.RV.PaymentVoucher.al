@@ -38,6 +38,9 @@ report 50102 "RV Payment Voucher"
             column(AccountDescription; Description)
             { }
 
+            column(GenAmtLCY; GenAmtLCY)
+            { }
+
             dataitem(VendorLedgerEntryApplyID; "Vendor Ledger Entry")
             {
                 DataItemLink = "Vendor No." = field("Account No."), "Applies-to ID" = field("Applies-to ID");
@@ -122,6 +125,7 @@ report 50102 "RV Payment Voucher"
             trigger OnAfterGetRecord()
             begin
                 GenPostDate := Format("Posting Date", 0, '<Closing><Day,2>/<Month,2>/<Year>');
+                GenAmtLCY := Format("Amount (LCY)", 0, '<Precision,2><Sign><Integer Thousand><Decimals>');
 
                 Clear(VendID);
                 Clear(VendDoc);
@@ -135,7 +139,7 @@ report 50102 "RV Payment Voucher"
     var
         AmtToApply, TotalAmt : decimal;
 
-        GenPostDate: Text;
+        GenPostDate, GenAmtLCY : Text;
 
         VendID, VendDoc, EmplID, EmplDoc : Boolean;
 

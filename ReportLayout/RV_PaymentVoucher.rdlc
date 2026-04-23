@@ -149,7 +149,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <Visibility>
-                            <Hidden>=Code.SetData(CStr(First(Fields!GenJnlAmount__LCY_.Value)) + Chr(177) +
+                            <Hidden>=Code.SetData(CStr(First(Fields!GenAmtLCY.Value)) + Chr(177) +
 CStr(First(Fields!AccountDescription.Value)) + Chr(177) +
 CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                           </Visibility>
@@ -1207,6 +1207,9 @@ End Function
         </Field>
         <Field Name="AccountDescription">
           <DataField>AccountDescription</DataField>
+        </Field>
+        <Field Name="GenAmtLCY">
+          <DataField>GenAmtLCY</DataField>
         </Field>
         <Field Name="Posting_Date_ByVID">
           <DataField>Posting_Date_ByVID</DataField>

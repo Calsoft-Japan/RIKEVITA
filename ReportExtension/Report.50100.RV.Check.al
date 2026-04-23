@@ -24,6 +24,8 @@ reportextension 50100 "RV Check" extends Check
             { }
             column(TotalAmtText2; TotalAmtText[2])
             { }
+            column(GenAmtLCY; GenAmtLCY)
+            { }
         }
 
         add(PrintSettledLoop)
@@ -51,6 +53,7 @@ reportextension 50100 "RV Check" extends Check
                 FormatNoText(TotalAmtText, "Amount (LCY)", "Currency Code");
                 TotalAmtText[1] := TotalAmtText[1].Replace('****', '');
                 GenPostDate := Format("Posting Date", 0, '<Closing><Day,2>/<Month,2>/<Year>');
+                GenAmtLCY := Format("Amount (LCY)", 0, '<Precision,2><Sign><Integer Thousand><Decimals>');
             end;
         }
 
@@ -121,5 +124,5 @@ reportextension 50100 "RV Check" extends Check
 
         TotalAmtText: array[2] of Text[80];
 
-        GenPostDate: Text;
+        GenPostDate, GenAmtLCY : Text;
 }
