@@ -140,5 +140,6 @@ permissionset 50100 GeneratedPermission
         page "Standard Cost Element Period" = X,
         query "Inventory Master File" = X,
         query "RV Prod. Result Journal Line G" = X,
-        codeunit "RV Bank Payment to Excel" = X;
+        codeunit "RV Bank Payment to Excel" = X,
+        codeunit "RV DocAttachmentSubscriber" = X;
 }

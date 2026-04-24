@@ -479,16 +479,16 @@ table 50505 "RV QC Header"
         //QCGroup
         QCGroup.Reset();
         QCGroup.SetRange("QC Resource Group No.", QCResourceGroupApply."QC Resource Group No.");
-        QCGroup.SetFilter("Effective Date", '%1 | %2..', 0D, WorkDate());
-        if QCGroup.Find('-') then begin
-
+        QCGroup.SetFilter("Effective Date", '%1|..%2', 0D, WorkDate());
+        if QCGroup.FindLast then begin
             //currSpecification
             Clear(currSpecification);
             if "QC Standard Type" = QCStandardType::Internal then
                 currSpecification := QCGroup."Internal Specification"
             else if "QC Standard Type" = QCStandardType::External then
                 currSpecification := QCGroup."External Specification";
-        end;
+        end else
+            Error('No QC specification found for item %1', "Item No.");
 
 
         //QCSpecificationLine
