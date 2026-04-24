@@ -6,7 +6,7 @@ page 50203 "ISO Symbol Setting"
 {
     ApplicationArea = All;
     Caption = 'ISO Symbol Setting';
-    PageType = List;
+    PageType = ListPlus;
     UsageCategory = Lists;
     SourceTable = "RV Item Symbol Setting";
 
@@ -31,8 +31,15 @@ page 50203 "ISO Symbol Setting"
             }
 
         }
+        area(FactBoxes)
+        {
+            part(ImagePart; "ISO Symbol Image FactBox")
+            {
+                ApplicationArea = All;
+                SubPageLink = "Item Code" = FIELD("Item Code");
+            }
+        }
     }
-
 
 }
 
