@@ -1,3 +1,7 @@
+/// <summary>
+/// reportextension RV Check (ID 50100) extends report 1401 Check
+/// FDD016 2026/04/22: New. (Liuyang)
+/// </summary>
 reportextension 50100 "RV Check" extends Check
 {
     RDLCLayout = '.\ReportLayout\RV_CheckWithDetail.rdlc';

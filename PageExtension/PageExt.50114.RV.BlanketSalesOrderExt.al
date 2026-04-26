@@ -1,3 +1,7 @@
+/// <summary>
+/// pageextension RV Blanket Sales Order Ext (ID 50114) extends "Blanket Sales Order" page
+/// FDD012 2026/04/19 New. (Liuyang)
+/// </summary>
 pageextension 50114 "RV Blanket Sales Order Ext" extends "Blanket Sales Order"
 {
     layout

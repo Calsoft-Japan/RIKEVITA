@@ -1,3 +1,7 @@
+/// <summary>
+/// report RV Payment Voucher (ID 50102) 
+/// FDD016 2026/04/22: New. (Liuyang)
+/// </summary>
 report 50102 "RV Payment Voucher"
 {
     ApplicationArea = All;

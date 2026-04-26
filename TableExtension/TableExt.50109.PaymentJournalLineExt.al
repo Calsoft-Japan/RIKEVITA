@@ -1,6 +1,6 @@
 /// <summary>
 /// TableExtension RV Payment Journal Line Ext (ID 50109) extends "Gen. Journal Line" table
-/// FDD017 2026/04/13: New. (Liuyang)
+/// FDD017 FDD016 2026/04/13: New. (Liuyang)
 /// </summary>
 tableextension 50109 "RV Payment Journal Line Ext" extends "Gen. Journal Line"
 {

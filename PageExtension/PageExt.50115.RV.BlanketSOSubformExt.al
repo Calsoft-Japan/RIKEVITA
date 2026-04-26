@@ -1,3 +1,7 @@
+/// <summary>
+/// pageextension RV Blanket SO Subform Ext (ID 50115) extends "Blanket Sales Order Subform" page
+/// FDD012 2026/04/19 New. (Liuyang)
+/// </summary>
 pageextension 50115 "RV Blanket SO Subform Ext" extends "Blanket Sales Order Subform"
 {
     layout
