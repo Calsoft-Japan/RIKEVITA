@@ -238,7 +238,7 @@ codeunit 50104 "RV Bank Payment to Excel"
         AppliedAmt := GenJnlLine."Amount (LCY)";
         if (GenJnlLine."Account Type" = GenJnlLine."Account Type"::Vendor) and (VLE."Document No." <> '') then begin
             // Calculate the specific applied amount for this VLE
-            VLE.CalcFields("Amount to Apply");
+            //VLE.CalcFields("Amount to Apply");
             AppliedAmt := VLE."Amount to Apply";
             if AppliedAmt = 0 then
                 AppliedAmt := VLE."Amount (LCY)"; // Fallback if Amount to apply isn't set manually
@@ -249,7 +249,7 @@ codeunit 50104 "RV Bank Payment to Excel"
             EmplLedgEntry.SetRange(Open, true);
             EmplLedgEntry.SetRange("Document No.", GenJnlLine."Applies-to Doc. No.");
             if EmplLedgEntry.FindFirst() then begin
-                EmplLedgEntry.CalcFields("Amount to Apply");
+                //EmplLedgEntry.CalcFields("Amount to Apply");
                 AppliedAmt := EmplLedgEntry."Amount to Apply";
                 if AppliedAmt = 0 then
                     AppliedAmt := EmplLedgEntry."Amount (LCY)";
@@ -261,7 +261,7 @@ codeunit 50104 "RV Bank Payment to Excel"
                 EmplLedgEntry.SetRange("Applies-to ID", GenJnlLine."Applies-to ID");
                 if EmplLedgEntry.FindSet() then
                     repeat
-                        EmplLedgEntry.CalcFields("Amount to Apply");
+                        //EmplLedgEntry.CalcFields("Amount to Apply");
                         if EmplLedgEntry."Amount to Apply" <> 0 then
                             AppliedAmt += EmplLedgEntry."Amount to Apply"
                         else
@@ -317,7 +317,7 @@ codeunit 50104 "RV Bank Payment to Excel"
         AppliedAmt := GenJnlLine."Amount (LCY)";
         if (GenJnlLine."Account Type" = GenJnlLine."Account Type"::Vendor) and (VLE."Document No." <> '') then begin
             // Calculate the specific applied amount for this VLE
-            VLE.CalcFields("Amount to Apply");
+            //VLE.CalcFields("Amount to Apply");
             AppliedAmt := VLE."Amount to Apply";
             if AppliedAmt = 0 then
                 AppliedAmt := VLE."Amount (LCY)"; // Fallback if Amount to apply isn't set manually
@@ -328,7 +328,7 @@ codeunit 50104 "RV Bank Payment to Excel"
             EmplLedgEntry.SetRange(Open, true);
             EmplLedgEntry.SetRange("Document No.", GenJnlLine."Applies-to Doc. No.");
             if EmplLedgEntry.FindFirst() then begin
-                EmplLedgEntry.CalcFields("Amount to Apply");
+                //EmplLedgEntry.CalcFields("Amount to Apply");
                 AppliedAmt := EmplLedgEntry."Amount to Apply";
                 if AppliedAmt = 0 then
                     AppliedAmt := EmplLedgEntry."Amount (LCY)";
@@ -340,7 +340,7 @@ codeunit 50104 "RV Bank Payment to Excel"
                 EmplLedgEntry.SetRange("Applies-to ID", GenJnlLine."Applies-to ID");
                 if EmplLedgEntry.FindSet() then
                     repeat
-                        EmplLedgEntry.CalcFields("Amount to Apply");
+                        //EmplLedgEntry.CalcFields("Amount to Apply");
                         if EmplLedgEntry."Amount to Apply" <> 0 then
                             AppliedAmt += EmplLedgEntry."Amount to Apply"
                         else
@@ -394,7 +394,7 @@ codeunit 50104 "RV Bank Payment to Excel"
         AppliedAmt := GenJnlLine."Amount (LCY)";
         if (GenJnlLine."Account Type" = GenJnlLine."Account Type"::Vendor) and (VLE."Document No." <> '') then begin
             // Calculate the specific applied amount for this VLE
-            VLE.CalcFields("Amount to Apply");
+            //VLE.CalcFields("Amount to Apply");
             AppliedAmt := VLE."Amount to Apply";
             if AppliedAmt = 0 then
                 AppliedAmt := VLE."Amount (LCY)"; // Fallback if Amount to apply isn't set manually
