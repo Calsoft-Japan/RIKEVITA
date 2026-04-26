@@ -9,6 +9,8 @@ reportextension 50400 "RV Aged AP Ext" extends "Aged Accounts Payable"
         add(Vendor)
         {
             // Header additions
+            column(RV_TradingPartnerFrom; TradingPartnerFrom) { }
+            column(RV_TradingPartnerTo; TradingPartnerTo) { }
             column(RV_CurrencyFilter; GetFilter("Currency Filter")) { }
             column(RV_PrintBankDetails; PrintBankDetails) { }
 
@@ -25,6 +27,8 @@ reportextension 50400 "RV Aged AP Ext" extends "Aged Accounts Payable"
             var
                 VendorBankAccount: Record "Vendor Bank Account";
             begin
+                SetTradingPartnerRange();
+
                 Clear(PaymentTermsCode);
                 Clear(VendorBankName);
                 Clear(SwiftCode);
@@ -76,4 +80,28 @@ reportextension 50400 "RV Aged AP Ext" extends "Aged Accounts Payable"
         SwiftCode: Code[20];
         BankAccountNo: Code[50];
         PrintBankDetails: Boolean;
+        TradingPartnerFrom: Code[20];
+        TradingPartnerTo: Code[20];
+
+    local procedure SetTradingPartnerRange()
+    var
+        FilterText: Text;
+        DotPos: Integer;
+    begin
+        Clear(TradingPartnerFrom);
+        Clear(TradingPartnerTo);
+
+        FilterText := Vendor.GetFilter("No.");
+        if FilterText = '' then
+            exit;
+
+        DotPos := StrPos(FilterText, '..');
+        if DotPos > 0 then begin
+            TradingPartnerFrom := CopyStr(FilterText, 1, DotPos - 1);
+            TradingPartnerTo := CopyStr(FilterText, DotPos + 2, MaxStrLen(TradingPartnerTo));
+        end else begin
+            TradingPartnerFrom := CopyStr(FilterText, 1, MaxStrLen(TradingPartnerFrom));
+            TradingPartnerTo := TradingPartnerFrom;
+        end;
+    end;
 }

@@ -63,7 +63,7 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                     RecRequisitionLine.CopyFilters("Requisition Line");
                     //"Requisition Line".SetRange("No.", RecRequisitionLine."No.");
                 end;
-
+                "Requisition Line".Reset();
             end;
         }
     }

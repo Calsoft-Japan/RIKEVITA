@@ -70,8 +70,16 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                 trigger OnAction()
                 var
                     RptPayVoucher: Report "RV Payment Voucher";
+                    GenJournalLine: Record "Gen. Journal Line";
                 begin
-                    Report.RunModal(Report::"RV Payment Voucher", true, false, Rec);
+                    //Report.RunModal(Report::"RV Payment Voucher", true, false, Rec);
+                    GenJournalLine.Reset();
+                    GenJournalLine.Copy(Rec);
+                    GenJournalLine.SetRange("Journal Template Name", Rec."Journal Template Name");
+                    GenJournalLine.SetRange("Journal Batch Name", Rec."Journal Batch Name");
+
+                    RptPayVoucher.SetTableView(GenJournalLine);
+                    RptPayVoucher.RunModal();
                 end;
             }
         }

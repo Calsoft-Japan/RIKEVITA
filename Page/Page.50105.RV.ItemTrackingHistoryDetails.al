@@ -89,7 +89,7 @@ page 50105 "RV Item Tracking Hst. - Sales"
 
         ItmLedgerEntry.SetRange("Entry No.", CurEntryNo);
         if ItmLedgerEntry.FindFirst() then
-            CurQty := Abs(ItmLedgerEntry.Quantity);
+            CurQty := Abs(ItmLedgerEntry.Quantity / ItmLedgerEntry."Qty. per Unit of Measure");
 
         /* ItmLedgerEntry.SetRange("DocumentType", ItmLedgerEntry."DocumentType"::"Sales Shipment");
         ItmLedgerEntry.SetRange("EntryType", ItmLedgerEntry."EntryType"::Sale);
