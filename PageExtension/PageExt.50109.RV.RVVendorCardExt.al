@@ -13,7 +13,9 @@ pageextension 50109 "RV Vendor Card Ext" extends "Vendor Card"
             begin
                 IDEditable := false;
                 if Rec."Partner Type" = "Partner Type"::Person then
-                    IDEditable := true;
+                    IDEditable := true
+                else
+                    Rec."RV_ID No./Passport No." := '';
             end;
         }
         addafter("Partner Type")
