@@ -20,4 +20,32 @@ codeunit 50201 "RV Planning Worksheet Fields"
         end;
     end;
 
+    [EventSubscriber(ObjectType::Table, Database::"Requisition Line", OnClearPlanningWorksheetOnBeforeRequisitionLineDelete, '', false, false)]
+    local procedure "Requisition Line_OnClearPlanningWorksheetOnBeforeRequisitionLineDelete"(var RequisitionLine: Record "Requisition Line")
+    var
+        VendorSelection: Record "RV Vendor Selection";
+    begin
+        VendorSelection.Reset();
+        VendorSelection.SetRange("Item No.", RequisitionLine."No.");
+        VendorSelection.SetRange("Journal Batch Name", RequisitionLine."Journal Batch Name");
+        VendorSelection.SetRange("Line No.", RequisitionLine."Line No.");
+        if VendorSelection.FindSet() then begin
+            VendorSelection.DeleteAll();
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Requisition Line", OnAfterDeleteMultiLevel, '', false, false)]
+    local procedure "Requisition Line_OnAfterDeleteMultiLevel"(var RequisitionLine: Record "Requisition Line")
+    var
+        VendorSelection: Record "RV Vendor Selection";
+    begin
+        VendorSelection.Reset();
+        VendorSelection.SetRange("Item No.", RequisitionLine."No.");
+        VendorSelection.SetRange("Journal Batch Name", RequisitionLine."Journal Batch Name");
+        VendorSelection.SetRange("Line No.", RequisitionLine."Line No.");
+        if VendorSelection.FindSet() then begin
+            VendorSelection.DeleteAll();
+        end;
+    end;
+
 }
