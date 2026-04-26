@@ -11,7 +11,7 @@ tableextension 50208 "RV Posted Whse Shipment Line" extends "Posted Whse. Shipme
             Caption = 'Print RSPO No.';
             Description = 'FDD019';
             FieldClass = FlowField;
-            CalcFormula = Lookup("RV Item Symbol Setting"."Symbol Display Packing List" WHERE("Item Code" = FIELD("No.")));
+            CalcFormula = Lookup("RV Item Symbol Setting"."Symbol Display Packing List" WHERE("Item Code" = FIELD("Item No.")));
         }
     }
 }

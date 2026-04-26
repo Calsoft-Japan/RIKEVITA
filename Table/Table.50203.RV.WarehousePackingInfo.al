@@ -4,7 +4,7 @@
 /// </summary>
 table 50203 "RV Warehouse Packing Info."
 {
-    Caption = 'RV Item Symbol Setting';
+    Caption = 'RV Warehouse Packing Info';
     DataClassification = ToBeClassified;
 
     fields
