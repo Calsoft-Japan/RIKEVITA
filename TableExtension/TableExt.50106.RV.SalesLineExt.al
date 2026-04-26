@@ -57,13 +57,18 @@ tableextension 50106 "RV Sales Line Ext." extends "Sales Line"
                 DateFormulaVar: DateFormula;
             begin
                 Clear(DateFormulaVar);
-                RVSteup.Reset();
-                if RVSteup.FindFirst() then begin
-                    DateFormulaVar := RVSteup."Stuffing Date Calculation";
-                end;
 
-                if (Format(DateFormulaVar) <> '') then
-                    "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
+                if Rec."RV_Cosing Date" = 0D then begin
+                    "RV_Stuffing Date" := 0D;
+                end else begin
+                    RVSteup.Reset();
+                    if RVSteup.FindFirst() then begin
+                        DateFormulaVar := RVSteup."Stuffing Date Calculation";
+                    end;
+
+                    if (Format(DateFormulaVar) <> '') then
+                        "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
+                end;
             end;
         }
 

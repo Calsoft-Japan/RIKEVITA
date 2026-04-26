@@ -41,12 +41,17 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
                 DateFormulaVar: DateFormula;
             begin
                 Clear(DateFormulaVar);
-                RVSteup.Reset();
-                if RVSteup.FindFirst() then begin
-                    DateFormulaVar := RVSteup."Stuffing Date Calculation";
+
+                if Rec."RV_Cosing Date" = 0D then begin
+                    "RV_Stuffing Date" := 0D;
+                end else begin
+                    RVSteup.Reset();
+                    if RVSteup.FindFirst() then begin
+                        DateFormulaVar := RVSteup."Stuffing Date Calculation";
+                    end;
+                    if (Format(DateFormulaVar) <> '') then
+                        "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
                 end;
-                if (Format(DateFormulaVar) <> '') then
-                    "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
 
                 WhsShtLine.Reset();
                 WhsShtLine.SetRange("No.", "No.");
@@ -118,12 +123,42 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
             Caption = 'ETD';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
+
+            trigger OnValidate()
+            var
+                WhsShtLine: Record "Warehouse Shipment Line";
+            begin
+                WhsShtLine.Reset();
+                WhsShtLine.SetRange("No.", "No.");
+                if WhsShtLine.FindFirst() then
+                    if Confirm('You have modified the field Stuffing Date. Do you want to update the line?') then begin
+                        repeat
+                            WhsShtLine."RV_ETD" := "RV_ETD";
+                            WhsShtLine.Modify();
+                        until WhsShtLine.Next() = 0;
+                    end;
+            end;
         }
         field(50109; "RV_ETA"; Date)
         {
             Caption = 'ETA';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
+
+            trigger OnValidate()
+            var
+                WhsShtLine: Record "Warehouse Shipment Line";
+            begin
+                WhsShtLine.Reset();
+                WhsShtLine.SetRange("No.", "No.");
+                if WhsShtLine.FindFirst() then
+                    if Confirm('You have modified the field Stuffing Date. Do you want to update the line?') then begin
+                        repeat
+                            WhsShtLine."RV_ETA" := "RV_ETA";
+                            WhsShtLine.Modify();
+                        until WhsShtLine.Next() = 0;
+                    end;
+            end;
         }
         field(50200; "RV_Consignee Name"; Text[100])
         {

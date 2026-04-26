@@ -26,13 +26,18 @@ tableextension 50103 "RV Warehouse Shipment Ln Ext" extends "Warehouse Shipment 
                 DateFormulaVar: DateFormula;
             begin
                 Clear(DateFormulaVar);
-                RVSteup.Reset();
-                if RVSteup.FindFirst() then begin
-                    DateFormulaVar := RVSteup."Stuffing Date Calculation";
-                end;
 
-                if (Format(DateFormulaVar) <> '') then
-                    "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
+                if Rec."RV_Cosing Date" = 0D then begin
+                    "RV_Stuffing Date" := 0D;
+                end else begin
+                    RVSteup.Reset();
+                    if RVSteup.FindFirst() then begin
+                        DateFormulaVar := RVSteup."Stuffing Date Calculation";
+                    end;
+
+                    if (Format(DateFormulaVar) <> '') then
+                        "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
+                end;
             end;
         }
         field(50102; "RV_Stuffing Date"; Date)
