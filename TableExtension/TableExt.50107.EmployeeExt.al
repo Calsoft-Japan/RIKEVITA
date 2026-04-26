@@ -12,8 +12,8 @@ tableextension 50107 "RV Employee Ext" extends Employee
             Caption = 'Expat Employee';
             trigger OnValidate()
             begin
-                if (UpperCase(Rec.Nationality) <> UpperCase('Malaysia')) and (not Rec."RV_Expat Employee") then begin
-                    Message('Nationality is Malaysia, Expat Employee must be TRUE.');
+                if (UpperCase(Rec.Nationality) <> UpperCase('Malaysian')) and (not Rec."RV_Expat Employee") then begin
+                    Message('Nationality is NOT Malaysian, Expat Employee must be TRUE.');
                     "RV_Expat Employee" := true;
                 end;
             end;
