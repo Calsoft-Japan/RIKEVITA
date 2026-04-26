@@ -45,7 +45,7 @@ tableextension 50109 "RV Payment Journal Line Ext" extends "Gen. Journal Line"
             Description = 'FDD017';
             Caption = 'ID No./Passport No.';
             DataClassification = ToBeClassified;
-            TableRelation = Vendor."RV_ID No./Passport No.";
+            //TableRelation = Vendor."RV_ID No./Passport No.";
             Editable = false;
         }
 
@@ -74,6 +74,7 @@ tableextension 50109 "RV Payment Journal Line Ext" extends "Gen. Journal Line"
                     if (Rec."Account Type" = "Account Type"::Vendor) and (Rec."Account No." <> '') then begin
                         if Vend.Get("Account No.") then begin
                             "RV_Partner Type" := Vend."Partner Type";
+                            "RV_ID No./Passport No." := Vend."RV_ID No./Passport No.";
                             "Recipient Bank Account" := Vend."Preferred Bank Account Code";
                         end;
                     end;
