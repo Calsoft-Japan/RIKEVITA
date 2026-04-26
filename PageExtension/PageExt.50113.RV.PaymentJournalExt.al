@@ -31,6 +31,7 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
             {
                 Description = 'FDD017';
                 ApplicationArea = All;
+                MaskType = Concealed;
             }
 
         }
