@@ -78,7 +78,7 @@ tableextension 50607 "RV_Sales Header" extends "Sales Header"
                 SalesLine.Reset();
                 SalesLine.SetRange("Document No.", "No.");
                 if SalesLine.FindFirst() then
-                    if Confirm('You have modified the field B/L Date. Do you want to update the line?') then begin
+                    if Confirm('You have modified the field ETA. Do you want to update the line?') then begin
                         repeat
                             SalesLine."RV_ETA" := "RV_ETA";
                             SalesLine.Modify();
@@ -99,7 +99,7 @@ tableextension 50607 "RV_Sales Header" extends "Sales Header"
                 SalesLine.Reset();
                 SalesLine.SetRange("Document No.", "No.");
                 if SalesLine.FindFirst() then
-                    if Confirm('You have modified the field B/L Date. Do you want to update the line?') then begin
+                    if Confirm('You have modified the field ETD. Do you want to update the line?') then begin
                         repeat
                             SalesLine."RV_ETD" := "RV_ETD";
                             SalesLine.Modify();
@@ -132,7 +132,7 @@ tableextension 50607 "RV_Sales Header" extends "Sales Header"
                 SalesLine.Reset();
                 SalesLine.SetRange("Document No.", "No.");
                 if SalesLine.FindFirst() then
-                    if Confirm('You have modified the field B/L Date. Do you want to update the line?') then begin
+                    if Confirm('You have modified the field Stuffing Date. Do you want to update the line?') then begin
                         repeat
                             SalesLine."RV_Stuffing Date" := "RV_Stuffing Date";
                             SalesLine.Modify();
