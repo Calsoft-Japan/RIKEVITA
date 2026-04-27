@@ -13,6 +13,7 @@ table 50202 "RV Item Symbol Setting"
         {
             Caption = 'Item Code';
             Description = 'FDD019';
+            TableRelation = Item;
         }
         field(2; "Item Description"; Text[100])
         {

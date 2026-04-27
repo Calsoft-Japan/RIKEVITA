@@ -35,8 +35,7 @@ tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Ship
         {
             Caption = 'Consignee Country/Region';
             Description = 'FDD019';
-            FieldClass = FlowField;
-            CalcFormula = Lookup("Country/Region".Code WHERE("Code" = FIELD("RV_Consignee Country/Region")));
+            TableRelation = "Country/Region";
         }
     }
 }

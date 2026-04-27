@@ -4,6 +4,55 @@
 /// </summary>
 codeunit 50101 "RV TransferWarehouseShipment"
 {
+    [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", OnSalesLineOnAfterCreateShptHeader, '', false, false)]
+    local procedure "Get Source Documents_OnSalesLineOnAfterCreateShptHeader"(var WhseShptHeader: Record "Warehouse Shipment Header"; WhseHeaderCreated: Boolean; SalesHeader: Record "Sales Header"; SalesLine: Record "Sales Line"; WarehouseRequest: Record "Warehouse Request")
+    begin
+        WhseShptHeader."RV_B/L Date" := SalesHeader."RV_B/L Date";
+        WhseShptHeader."RV_Cosing Date" := SalesHeader."RV_Cosing Date";
+        WhseShptHeader."RV_Stuffing Date" := SalesHeader."RV_Stuffing Date";
+        WhseShptHeader.RV_ETD := SalesHeader."RV_ETD";
+        WhseShptHeader.RV_ETA := SalesHeader."RV_ETA";
+        WhseShptHeader.Modify();
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Warehouse Mgt.", OnAfterCreateShptLineFromSalesLine, '', false, false)]
+    local procedure "Sales Warehouse Mgt._OnAfterCreateShptLineFromSalesLine"(var WarehouseShipmentLine: Record "Warehouse Shipment Line"; WarehouseShipmentHeader: Record "Warehouse Shipment Header"; SalesLine: Record "Sales Line"; SalesHeader: Record "Sales Header")
+    begin
+        WarehouseShipmentLine."RV_B/L Date" := SalesLine."RV_B/L Date";
+        WarehouseShipmentLine."RV_Cosing Date" := SalesLine."RV_Cosing Date";
+        WarehouseShipmentLine."RV_Stuffing Date" := SalesLine."RV_Stuffing Date";
+        WarehouseShipmentLine.RV_ETD := SalesLine."RV_ETD";
+        WarehouseShipmentLine.RV_ETA := SalesLine."RV_ETA";
+        WarehouseShipmentLine.Modify();
+    end;
+
+
+    [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", OnAfterCreateShptHeader, '', false, false)]
+    local procedure "Get Source Documents_OnAfterCreateShptHeader"(var WarehouseShipmentHeader: Record "Warehouse Shipment Header"; WarehouseRequest: Record "Warehouse Request"; SalesLine: Record "Sales Line"; PurchaseLine: Record "Purchase Line")
+    var
+        SOHeader: Record "Sales Header";
+        POHeader: Record "Purchase Header";
+    begin
+        if WarehouseRequest."Source Document" = "Warehouse Request Source Document"::"Sales Order" then begin
+            SOHeader.Get(SalesLine."Document Type", SalesLine."Document No.");
+            WarehouseShipmentHeader."RV_B/L Date" := SOHeader."RV_B/L Date";
+            WarehouseShipmentHeader."RV_Cosing Date" := SOHeader."RV_Cosing Date";
+            WarehouseShipmentHeader."RV_Stuffing Date" := SOHeader."RV_Stuffing Date";
+            WarehouseShipmentHeader.RV_ETD := SOHeader."RV_ETD";
+            WarehouseShipmentHeader.RV_ETA := SOHeader."RV_ETA";
+            WarehouseShipmentHeader.Modify();
+        end;
+
+        if WarehouseRequest."Source Document" = "Warehouse Request Source Document"::"Purchase Order" then begin
+            POHeader.Get(PurchaseLine."Document Type", PurchaseLine."Document No.");
+            WarehouseShipmentHeader.RV_ETD := POHeader."RV_ETD";
+            WarehouseShipmentHeader.RV_ETA := POHeader."RV_ETA";
+            WarehouseShipmentHeader.Modify();
+        end;
+    end;
+
+
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post Line", OnBeforeInsertItemLedgEntry, '', false, false)]
     local procedure "Item Jnl.-Post Line_OnBeforeInsertItemLedgEntry"(var ItemLedgerEntry: Record "Item Ledger Entry"; ItemJournalLine: Record "Item Journal Line"; TransferItem: Boolean; OldItemLedgEntry: Record "Item Ledger Entry"; ItemJournalLineOrigin: Record "Item Journal Line")
     begin
