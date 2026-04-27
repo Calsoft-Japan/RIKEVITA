@@ -24,7 +24,7 @@ pageextension 50201 "RV Item Tracking Lines Ext" extends "Item Tracking Lines"
                 begin
                     if Rec."RV_Manufacture Date" <> 0D then begin
                         Item.Get(Rec."Item No.");
-                        if Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date" then begin
+                        if (Item."RV_Expiration Base Date (RM)" = Item."RV_Expiration Base Date (RM)"::"Manufacture Date") and (Format(Item."Expiration Calculation") <> '') then begin
                             Rec."Expiration Date" := CalcDate(Item."Expiration Calculation", Rec."RV_Manufacture Date");
                         end;
                     end;
