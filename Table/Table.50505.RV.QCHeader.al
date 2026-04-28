@@ -20,7 +20,6 @@ table 50505 "RV QC Header"
         field(3; "Ref. Order Type"; Enum "RV Ref. Order Type")
         {
             Caption = 'Ref. Order Type';
-            ValuesAllowed = 0, 1;
             trigger OnValidate()
             begin
                 if (xRec."Ref. Order Type" <> Rec."Ref. Order Type") then begin
@@ -343,7 +342,6 @@ table 50505 "RV QC Header"
         TextCheckErr: Label 'You don''t have permission to Check!';
     begin
 
-
         if UserSetup.Get(UserId) then begin
             if not UserSetup."RV_Allow QC Check" then
                 Error(TextCheckErr);
@@ -351,7 +349,7 @@ table 50505 "RV QC Header"
             Error(TextCheckErr);
 
         if "QC Approved By" <> '' then
-            Error('You cannot check because it has been approved.');
+            Error('You can not check because it has been approved.');
     end;
 
     procedure IsQCApproveAllowed()
@@ -366,7 +364,7 @@ table 50505 "RV QC Header"
             Error(TextApproveErr);
 
         if "QC Checked By" = '' then
-            Error('You need to Check before Approve');
+            Error('You need to Check before Approve.');
     end;
 
     procedure CheckRemark_Input()
@@ -381,6 +379,7 @@ table 50505 "RV QC Header"
         RemarkText[1] := Rec."QC Checked Remark";// Remark
         RemarkText[2] := 'QC Check Remark'; //Caption       
 
+        RVQCRemarkInput.Caption := 'QA Remark Input';
         RVQCRemarkInput.SetParameter(RemarkText);
 
         IF RVQCRemarkInput.RUNMODAL = ACTION::OK then begin
@@ -405,6 +404,7 @@ table 50505 "RV QC Header"
         RemarkText[1] := Rec."QC Approved Remark";// MarkText
         RemarkText[2] := 'QC Approved Remark'; //Caption       
 
+        RVQCRemarkInput.Caption := 'QA Remark Input';
         RVQCRemarkInput.SetParameter(RemarkText);
 
         IF RVQCRemarkInput.RUNMODAL = ACTION::OK then begin
@@ -472,24 +472,30 @@ table 50505 "RV QC Header"
         Clear(currSpecification);
         Clear(LineNo);
 
+        //Item No.
+        if "Item No." = '' then
+            Error('Please Input Item No.');
+
         //QCGroupApply
         if not QCResourceGroupApply.Get("Item No.") then
-            Error('Please Setup QC Resource Group Apply');
+            Error('Please Setup QC Resource Group Apply.');
 
         //QCGroup
         QCGroup.Reset();
+        QCGroup.SetCurrentKey("QC Resource Group No.", "Effective Date");
         QCGroup.SetRange("QC Resource Group No.", QCResourceGroupApply."QC Resource Group No.");
-        QCGroup.SetFilter("Effective Date", '%1|..%2', 0D, WorkDate());
-        if QCGroup.FindLast then begin
+        QCGroup.SetFilter("Effective Date", '%1 | ..%2', 0D, WorkDate());
+        if QCGroup.Find('+') then begin
+
             //currSpecification
             Clear(currSpecification);
             if "QC Standard Type" = QCStandardType::Internal then
                 currSpecification := QCGroup."Internal Specification"
             else if "QC Standard Type" = QCStandardType::External then
                 currSpecification := QCGroup."External Specification";
-        end else
-            Error('No QC specification found for item %1', "Item No.");
-
+        end else begin
+            Error('No QC specifications were found for item %1.', "Item No.");
+        end;
 
         //QCSpecificationLine
         QCSpecificationLine.Reset();
@@ -510,6 +516,57 @@ table 50505 "RV QC Header"
                 end;
                 QCLine.Insert();
             until QCSpecificationLine.Next() = 0;
+    end;
+
+
+    procedure SetQCEnable(var CreateQCLineEnable: Boolean; var QCCheckEnable: Boolean; var QCApproveEnable: Boolean;
+                            var SubQCLineEnable: Boolean; var SubInventoryResultEnable: Boolean; var QCCardEnable: Boolean)
+    begin
+
+        CASE Rec."QC Status" OF
+            (Rec."QC Status"::Analyzing):
+                begin
+
+                    CreateQCLineEnable := true;
+                    QCCheckEnable := true;
+                    QCApproveEnable := false;
+
+                    SubQCLineEnable := true;
+                    SubInventoryResultEnable := true;
+                    QCCardEnable := true;
+                end;
+            (Rec."QC Status"::Checked):
+                begin
+                    CreateQCLineEnable := false;
+                    QCCheckEnable := false;
+                    QCApproveEnable := true;
+
+                    SubQCLineEnable := false;
+                    SubInventoryResultEnable := false;
+                    QCCardEnable := false;
+                end;
+            (Rec."QC Status"::Approved):
+                begin
+                    CreateQCLineEnable := false;
+                    QCCheckEnable := false;
+                    QCApproveEnable := false;
+
+                    SubQCLineEnable := false;
+                    SubInventoryResultEnable := false;
+                    QCCardEnable := false;
+                end;
+            (Rec."QC Status"::Rejected):
+                begin
+                    CreateQCLineEnable := false;
+                    QCCheckEnable := false;
+                    QCApproveEnable := false;
+
+                    SubQCLineEnable := false;
+                    SubInventoryResultEnable := false;
+                    QCCardEnable := false;
+                end;
+        END;
+
     end;
 
 }

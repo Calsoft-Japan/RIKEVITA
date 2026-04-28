@@ -179,11 +179,7 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         TempReservEntry: Record "Reservation Entry" temporary;
         LotNoInfo: Record "Lot No. Information";
     begin
-        ProdOrderRtngLine.get(ProdOrderRtngLine.Status::Released,
-                            ProdResultJournalLine."Prod. Order No.",
-                            ProdResultJournalLine."Prod. Order Line No.",
-                            ProdResultJournalLine."Routing No.",
-                            ProdResultJournalLine."Operation No.");
+
 
         ItemJnlLine.Init();
         ItemJnlLine."Journal Template Name" := ToTemplateName;
@@ -197,6 +193,7 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         ItemJnlLine.Validate("Item No.", ProdOrderLine."Item No.");
         ItemJnlLine.Validate("Variant Code", ProdOrderLine."Variant Code");
         ItemJnlLine.Validate("Location Code", ProdOrderLine."Location Code");
+        ItemJnlLine.Validate("Bin Code", ProdOrderLine."Bin Code");
         ItemJnlLine.Validate("Dimension Set ID", ProdOrderLine."Dimension Set ID");
         if ProdOrderLine."Bin Code" <> '' then
             ItemJnlLine.Validate("Bin Code", ProdOrderLine."Bin Code");
@@ -208,7 +205,12 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         ItemJnlLine.Validate("Run Time", 0);
         ItemJnlLine.Validate("Output Quantity", ProdResultJournalLine.Quantity);
         ItemJnlLine.Validate("Scrap Quantity", ProdResultJournalLine."Scrap Quantity");
-        ItemJnlLine."Flushing Method" := ProdOrderRtngLine."Flushing Method";
+        if ProdOrderRtngLine.get(ProdOrderRtngLine.Status::Released,
+                    ProdResultJournalLine."Prod. Order No.",
+                    ProdResultJournalLine."Prod. Order Line No.",
+                    ProdResultJournalLine."Routing No.",
+                    ProdResultJournalLine."Operation No.") then
+            ItemJnlLine."Flushing Method" := ProdOrderRtngLine."Flushing Method";
         ItemJnlLine.Insert();
         NextLineNo += 10000;
 
@@ -277,6 +279,7 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         ProdOrderComp.SetRange("Line No.", ProdResultJournalLine."Prod. Order Comp. Line No.");
         if ProdOrderComp.FindFirst() then begin
             ItemJnlLine.Validate("Location Code", ProdOrderComp."Location Code");
+            ItemJnlLine.Validate("Bin Code", ProdOrderLine."Bin Code");
             ItemJnlLine.Validate("Dimension Set ID", ProdOrderComp."Dimension Set ID");
             ItemJnlLine."Variant Code" := ProdOrderComp."Variant Code";
             ItemJnlLine.Validate("Prod. Order Comp. Line No.", ProdOrderComp."Line No.");
@@ -317,5 +320,11 @@ codeunit 50603 "RV Post Prod Result Line Proc."
     procedure CreateArchive()
     begin
 
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"WMS Management", 'OnBeforeConfirmExceededCapacity', '', false, false)]
+    local procedure WMSMgtOnBeforeConfirmExceededCapacity(var IsHandled: Boolean)
+    begin
+        IsHandled := true;
     end;
 }

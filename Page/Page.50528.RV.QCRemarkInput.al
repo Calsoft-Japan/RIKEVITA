@@ -6,7 +6,7 @@ page 50528 "RV QC Remark Input"
 {
     PageType = StandardDialog;
     ApplicationArea = All;
-    Caption = 'QC Remark Input';
+    Caption = 'Remark Input';
     layout
     {
         area(Content)

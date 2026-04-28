@@ -263,6 +263,160 @@ table 50508 "RV QA Header"
         QAShipmentLotNo.DeleteAll();
     end;
 
+    procedure IsQACheckAllowed(): Boolean
+    var
+        UserSetup: Record "User Setup";
+        TextCheckErr: Label 'You don''t have permission to Check!';
+    begin
+
+
+        if UserSetup.Get(UserId) then begin
+            if not UserSetup."RV_Allow QA Check" then
+                Error(TextCheckErr);
+        end else
+            Error(TextCheckErr);
+
+        if "QA Approved By" <> '' then
+            Error('You cannot check because it has been approved.');
+    end;
+
+    procedure IsQAApproveAllowed()
+    var
+        UserSetup: Record "User Setup";
+        TextApproveErr: Label 'You don''t have permission to Approve!';
+    begin
+        if UserSetup.Get(UserId) then begin
+            if not UserSetup."RV_Allow QA Approve" then
+                Error(TextApproveErr);
+        end else
+            Error(TextApproveErr);
+
+        if "QA Checked By" = '' then
+            Error('You need to Check before Approve.');
+    end;
+
+    procedure IsQARejectAllowed()
+    var
+        UserSetup: Record "User Setup";
+        TextRejectErr: Label 'You don''t have permission to Reject!';
+    begin
+        if UserSetup.Get(UserId) then begin
+            if not UserSetup."RV_Allow QA Reject" then
+                Error(TextRejectErr);
+        end else
+            Error(TextRejectErr);
+
+        if "QA Approved By" = '' then
+            Error('You can not Reject, because you need approval.');
+    end;
+
+    procedure CheckRemark_Input()
+    var
+        UserSetup: Record "User Setup";
+        RVQCRemarkInput: Page "RV QC Remark Input";
+        RemarkText: array[2] of Text;
+        QAShipmentLotNo: Record "RV QA Shipment Lot No.";
+    begin
+        //Page
+        Clear(RVQCRemarkInput);
+        Clear(RemarkText);
+        RemarkText[1] := Rec."QA Checked Remark";// Remark
+        RemarkText[2] := 'QA Check Remark'; //Caption       
+
+        RVQCRemarkInput.SetParameter(RemarkText);
+
+        IF RVQCRemarkInput.RUNMODAL = ACTION::OK then begin
+
+            CopyArray(RemarkText, RVQCRemarkInput.GetParameter(), 1, 2);
+            "QA Status" := Rec."QA Status"::Checked;
+            "QA Checked Remark" := RemarkText[1];// set Remark
+            "QA Checked By" := UserId;
+            Modify();
+
+            QAShipmentLotNo.Reset();
+            QAShipmentLotNo.SetRange("COA No.");
+            QAShipmentLotNo.ModifyAll("QA Status", "QA Status"::Checked);
+        end;
+    end;
+
+    procedure ApprovedRemark_Input()
+    var
+        UserSetup: Record "User Setup";
+        RVQCRemarkInput: Page "RV QC Remark Input";
+        RemarkText: array[2] of Text;
+        QAShipmentLotNo: Record "RV QA Shipment Lot No.";
+    begin
+        //Page
+        Clear(RVQCRemarkInput);
+        Clear(RemarkText);
+        RemarkText[1] := Rec."QA Approved Remark";// MarkText
+        RemarkText[2] := 'QA Approved Remark'; //Caption       
+
+        RVQCRemarkInput.SetParameter(RemarkText);
+
+        IF RVQCRemarkInput.RUNMODAL = ACTION::OK then begin
+
+            CopyArray(RemarkText, RVQCRemarkInput.GetParameter(), 1, 2);
+            Rec."QA Status" := Rec."QA Status"::Approved;
+            Rec."QA Approved Remark" := RemarkText[1];// set Remark
+            rec."QA Approved By" := UserId;
+            Modify();
+
+            QAShipmentLotNo.Reset();
+            QAShipmentLotNo.SetRange("COA No.");
+            QAShipmentLotNo.ModifyAll("QA Status", "QA Status"::Approved);
+        end;
+    end;
+
+    procedure SetQAEnable(var UpdateQALineEnable: Boolean; var QACheckEnable: Boolean;
+                        var QAApproveEnable: Boolean; var QARejectEnable: Boolean)
+    begin
+
+        CASE Rec."QA Status" OF
+            (Rec."QA Status"::Analyzing):
+                begin
+                    UpdateQALineEnable := true;
+                    QACheckEnable := true;
+                    QAApproveEnable := false;
+                    QARejectEnable := false;
+
+                    //SubQCLineEnable := true;
+                    //SubInventoryResultEnable := true;
+                end;
+            (Rec."QA Status"::Checked):
+                begin
+                    UpdateQALineEnable := false;
+                    QACheckEnable := false;
+                    QAApproveEnable := true;
+                    QARejectEnable := false;
+
+                    //SubQCLineEnable := false;
+                    //SubInventoryResultEnable := false;
+                end;
+            (Rec."QA Status"::Approved):
+                begin
+                    UpdateQALineEnable := false;
+                    QACheckEnable := false;
+                    QAApproveEnable := false;
+                    QARejectEnable := true;
+
+                    //SubQCLineEnable := false;
+                    //SubInventoryResultEnable := false;
+                end;
+            (Rec."QA Status"::Rejected):
+                begin
+                    UpdateQALineEnable := false;
+                    QACheckEnable := false;
+                    QAApproveEnable := false;
+                    QARejectEnable := false;
+
+                    //SubQCLineEnable := false;
+                    //SubInventoryResultEnable := false;
+                end;
+        END;
+
+    end;
+
     procedure ValidateOrderNo()
     var
         SalesShipmentHeader: Record "Sales Shipment Header";

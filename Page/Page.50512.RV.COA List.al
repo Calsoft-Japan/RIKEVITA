@@ -120,7 +120,7 @@ page 50512 "RV COA List"
         {
             action("New COA")
             {
-                ApplicationArea = Basic, Suite;
+                ApplicationArea = All;
                 Caption = 'New COA';
                 Image = OpenJournal;
                 trigger OnAction()
@@ -130,12 +130,22 @@ page 50512 "RV COA List"
             }
             action("Edit COA")
             {
-                ApplicationArea = Basic, Suite;
+                ApplicationArea = All;
                 Caption = 'Edit COA';
-                Image = OpenJournal;
+                Image = EditJournal;
                 trigger OnAction()
                 begin
                     EditQAShipmentLotNo(Rec);
+                end;
+            }
+            action("Delete COA")
+            {
+                ApplicationArea = All;
+                Caption = 'Delete COA';
+                Image = Delete;
+                trigger OnAction()
+                begin
+                    DeleteCOA();
                 end;
             }
         }
@@ -150,26 +160,27 @@ page 50512 "RV COA List"
                 actionref("Edit COA_Promoted"; "Edit COA")
                 {
                 }
+                actionref("Delete COA_Promoted"; "Delete COA")
+                {
+                }
             }
         }
     }
 
     trigger OnInit()
     begin
-        //SetRange("Journal Template Name");
+
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean)
     begin
-        //SetupNewBatch();
+
     end;
 
     trigger OnOpenPage()
     var
     begin
 
-        //ItemJnlMgt.OpenJnlBatch(Rec);
-        //QAMgt.OpenJnlBatch(Rec);
     end;
 
     var
@@ -178,14 +189,19 @@ page 50512 "RV COA List"
     procedure EditQAShipmentLotNo(var QAHeader: Record "RV QA Header")
     var
         QAShipmentLotNo: Record "RV QA Shipment Lot No.";
-    begin
+        ShipmentLotNoPage: Page "RV COA ShipmentLotNo";
 
+
+    begin
         QAShipmentLotNo.FilterGroup := 2;
         QAShipmentLotNo.SetRange("COA No.", QAHeader."COA No.");
         QAShipmentLotNo.FilterGroup := 0;
+        ShipmentLotNoPage.SetRecord(QAShipmentLotNo);
+        ShipmentLotNoPage.SetTableView(QAShipmentLotNo);
+        ShipmentLotNoPage.Run();
 
-        QAShipmentLotNo."COA No." := QAHeader."COA No.";
-        PAGE.Run(Page::"RV COA ShipmentLotNo", QAShipmentLotNo);
+        //QAShipmentLotNo."COA No." := QAHeader."COA No.";
+        //PAGE.Run(Page::"RV COA ShipmentLotNo", QAShipmentLotNo);
     end;
 
     procedure NewQAShipmentLotNo(var QAHeader: Record "RV QA Header")
@@ -209,6 +225,16 @@ page 50512 "RV COA List"
 
         PAGE.Run(Page::"RV COA ShipmentLotNo", QAShipmentLotNo);
 
+    end;
+
+    procedure DeleteCOA()
+    var
+        TextDeleteQst: Label 'Do you want to delete COA ?';
+    begin
+
+        if not Confirm(TextDeleteQst) then
+            exit;
+        Rec.Delete(true);
     end;
 }
 

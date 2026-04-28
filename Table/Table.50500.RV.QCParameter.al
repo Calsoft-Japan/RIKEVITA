@@ -14,7 +14,6 @@ table 50500 "RV QC Parameter"
             Caption = 'Parameter Name';
             NotBlank = true;
         }
-
         field(2; "Parameter Description"; Text[100])
         {
             Caption = 'Parameter Description';
@@ -31,7 +30,6 @@ table 50500 "RV QC Parameter"
         {
             Caption = 'Value Table Name';
         }
-
     }
     keys
     {
@@ -40,7 +38,19 @@ table 50500 "RV QC Parameter"
             Clustered = true;
         }
     }
-
-
-
+    procedure SetQCParameterEnable(var TypeEnable: Boolean; var ValueTableTypeEnable: Boolean)
+    var
+        QCLine: Record "RV QC Line";
+    begin
+        QCLine.Reset();
+        QCLine.SetRange("QC Parameter Name", "Parameter Name");
+        if QCLine.FindFirst() then
+            if QCLine.FindFirst() then begin
+                TypeEnable := false;
+                ValueTableTypeEnable := false;
+            end else begin
+                TypeEnable := true;
+                ValueTableTypeEnable := true;
+            end;
+    end;
 }

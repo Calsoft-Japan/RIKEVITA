@@ -30,10 +30,12 @@ page 50500 "RV QC Parameter List"
                 field(Type; Rec.Type)
                 {
                     ApplicationArea = All;
+                    Editable = TypeEnable;
                 }
                 field("Value Table Type"; Rec."Value Table Type")
                 {
                     ApplicationArea = All;
+                    Editable = ValueTableTypeEnable;
                 }
                 field("Value Table Name"; Rec."Value Table Name")
                 {
@@ -42,4 +44,24 @@ page 50500 "RV QC Parameter List"
             }
         }
     }
+    trigger OnOpenPage()
+    begin
+        Rec.SetQCParameterEnable(TypeEnable, ValueTableTypeEnable);
+    end;
+
+    trigger OnAfterGetRecord()
+    begin
+        Rec.SetQCParameterEnable(TypeEnable, ValueTableTypeEnable);
+    end;
+
+    trigger OnAfterGetCurrRecord()
+    begin
+        Rec.SetQCParameterEnable(TypeEnable, ValueTableTypeEnable);
+    end;
+
+    var
+        TypeEnable: Boolean;
+        ValueTableTypeEnable: Boolean;
+
+
 }

@@ -36,16 +36,21 @@ page 50510 "RV IQC Subform"
                 field("QC Parameter Name"; Rec."QC Parameter Name")
                 {
                     ApplicationArea = All;
+                    trigger OnValidate()
+                    begin
+                        Rec.SetQCLineEnable(TypeEnable, ValueTableTypeEnable);
+                    end;
+
                 }
                 field(Type; Rec.Type)
                 {
                     ApplicationArea = All;
-                    Editable = false;
+                    Editable = TypeEnable;
                 }
                 field("Value Table Type"; Rec."Value Table Type")
                 {
                     ApplicationArea = All;
-                    Editable = false;
+                    Editable = ValueTableTypeEnable;
                 }
                 field("QC Result"; Rec."QC Result")
                 {
@@ -60,16 +65,28 @@ page 50510 "RV IQC Subform"
         }
     }
 
+    trigger OnOpenPage()
+    begin
+        Rec.SetQCLineEnable(TypeEnable, ValueTableTypeEnable);
+    end;
+
     trigger OnAfterGetRecord()
     begin
+        Rec.SetQCLineEnable(TypeEnable, ValueTableTypeEnable);
+    end;
 
+    trigger OnAfterGetCurrRecord()
+    begin
+        Rec.SetQCLineEnable(TypeEnable, ValueTableTypeEnable);
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean)
     begin
-
+        Rec.SetQCLineEnable(TypeEnable, ValueTableTypeEnable);
     end;
 
     var
+        TypeEnable: Boolean;
+        ValueTableTypeEnable: Boolean;
 
 }

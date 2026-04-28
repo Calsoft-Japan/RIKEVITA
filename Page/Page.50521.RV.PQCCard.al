@@ -22,6 +22,7 @@ page 50521 "RV PQC Card"
                 field("QC No."; Rec."QC No.")
                 {
                     ApplicationArea = All;
+                    Editable = QCCardEnable;
                     trigger OnAssistEdit()
                     begin
                         RIKEVITASetup.Get();
@@ -41,11 +42,13 @@ page 50521 "RV PQC Card"
                 field("Ref. Order Type"; Rec."Ref. Order Type")
                 {
                     ApplicationArea = All;
+                    ValuesAllowed = 2;
                     Editable = false;
                 }
                 field("Order No."; Rec."Order No.")
                 {
                     ApplicationArea = All;
+                    Editable = QCCardEnable;
                 }
                 field("Item No."; Rec."Item No.")
                 {
@@ -55,14 +58,17 @@ page 50521 "RV PQC Card"
                 field("Lot No."; Rec."Lot No.")
                 {
                     ApplicationArea = All;
+                    Editable = QCCardEnable;
                 }
                 field("Manufacturing Date"; Rec."Manufacturing Date")
                 {
                     ApplicationArea = All;
+                    Editable = QCCardEnable;
                 }
                 field("Tan No."; Rec."Tan No.")
                 {
                     ApplicationArea = All;
+                    Editable = QCCardEnable;
                 }
                 field("QC Date"; Rec."QC Date")
                 {
@@ -72,6 +78,7 @@ page 50521 "RV PQC Card"
                 field("QC Standard Type"; Rec."QC Standard Type")
                 {
                     ApplicationArea = All;
+                    Editable = QCCardEnable;
                 }
                 field("QC Status"; Rec."QC Status")
                 {
@@ -106,6 +113,7 @@ page 50521 "RV PQC Card"
                 ApplicationArea = All;
                 SubPageLink = "QC No." = field("QC No."), "QC Type" = field("QC Type");
                 UpdatePropagation = Both;
+                Editable = SubQCLineEnable;
             }
             part(SubInventoryResult; "RV PQC Iny. Result Subform")
             {
@@ -113,6 +121,7 @@ page 50521 "RV PQC Card"
                 ApplicationArea = All;
                 SubPageLink = "QC No." = field("QC No."), "QC Type" = field("QC Type");
                 UpdatePropagation = Both;
+                Editable = SubInventoryResultEnable;
             }
         }
         area(factboxes)
@@ -137,6 +146,7 @@ page 50521 "RV PQC Card"
                 Caption = 'Create QC Line';
                 ApplicationArea = All;
                 Image = Create;
+                Enabled = CreateQCLineEnable;
 
                 trigger OnAction()
                 begin
@@ -149,6 +159,7 @@ page 50521 "RV PQC Card"
                 Caption = 'QC Check';
                 ApplicationArea = All;
                 Image = Check;
+                Enabled = QCCheckEnable;
 
                 trigger OnAction()
                 begin
@@ -157,6 +168,9 @@ page 50521 "RV PQC Card"
 
                     //CheckRemark_Input
                     Rec.CheckRemark_Input();
+
+                    //Enable
+                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
                 end;
             }
             action("QC Approve")
@@ -164,6 +178,7 @@ page 50521 "RV PQC Card"
                 Caption = 'QC Approve';
                 ApplicationArea = All;
                 Image = Approval;
+                Enabled = QCApproveEnable;
 
                 trigger OnAction()
                 begin
@@ -172,6 +187,9 @@ page 50521 "RV PQC Card"
 
                     //ApprovedRemark_Input
                     Rec.ApprovedRemark_Input();
+
+                    //Enable
+                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
                 end;
             }
         }
@@ -202,7 +220,23 @@ page 50521 "RV PQC Card"
         Rec."Ref. Order Type" := Rec."Ref. Order Type"::"Production Order";
     end;
 
+    trigger OnOpenPage()
+    begin
+        Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+    end;
+
+    trigger OnAfterGetCurrRecord()
+    begin
+        Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+    end;
+
     var
         NoSeries: Codeunit "No. Series";
         RIKEVITASetup: Record "RV RIKEVITA Setup";
+        QCCardEnable: Boolean;
+        CreateQCLineEnable: Boolean;
+        QCCheckEnable: Boolean;
+        QCApproveEnable: Boolean;
+        SubQCLineEnable: Boolean;
+        SubInventoryResultEnable: Boolean;
 }

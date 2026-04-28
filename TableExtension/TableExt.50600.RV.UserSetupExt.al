@@ -1,7 +1,8 @@
 /// <summary>
 /// TableExtension RV User Setup (ID 50600) extends User Setup table
 /// FDD014 2026/02/23: New. (Stephen)
-/// FDD039 2026/03/26: Add. "Allow QC Check" "Allow QC Approve"(Mike)
+/// FDD039 2026/03/26: Add. "Allow QC Check" "Allow QC Approve",
+///                         "Allow QA Check","RV_Allow QA Approve","RV_Allow QA Reject"(Mike)
 /// </summary>
 tableextension 50600 "RV User Setup" extends "User Setup"
 {
@@ -15,6 +16,21 @@ tableextension 50600 "RV User Setup" extends "User Setup"
         field(50501; "RV_Allow QC Approve"; Boolean)
         {
             Caption = 'Allow QC Approve';
+            Description = 'FDD039';
+        }
+        field(50502; "RV_Allow QA Check"; Boolean)
+        {
+            Caption = 'Allow QA Check';
+            Description = 'FDD039';
+        }
+        field(50503; "RV_Allow QA Approve"; Boolean)
+        {
+            Caption = 'Allow QA Approve';
+            Description = 'FDD039';
+        }
+        field(50504; "RV_Allow QA Reject"; Boolean)
+        {
+            Caption = 'Allow QA Reject';
             Description = 'FDD039';
         }
         field(50600; "RV_Acc Highly Restricted BOM"; Boolean)

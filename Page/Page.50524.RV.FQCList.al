@@ -32,6 +32,7 @@ page 50524 "RV FQC List"
                 field("Ref. Order Type"; Rec."Ref. Order Type")
                 {
                     ApplicationArea = All;
+                    ValuesAllowed = 2;
                     Editable = false;
                 }
                 field("Order No."; Rec."Order No.")

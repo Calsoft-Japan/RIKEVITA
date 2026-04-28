@@ -4,12 +4,9 @@
 /// </summary>
 page 50513 "RV COA ShipmentLotNo"
 {
-
     AutoSplitKey = true;
-    Caption = 'COA';
     DelayedInsert = true;
-    //PageType = Worksheet;
-    //PageType = Document;
+    Caption = 'COA';
     PageType = List;
     SaveValues = true;
     SourceTable = "RV QA Shipment Lot No.";
@@ -25,6 +22,7 @@ page 50513 "RV COA ShipmentLotNo"
                 ApplicationArea = All;
                 SubPageLink = "COA No." = field("COA No.");
                 UpdatePropagation = Both;
+                Editable = SubCOACardEditable;
             }
             group(Control22)
             {
@@ -35,46 +33,57 @@ page 50513 "RV COA ShipmentLotNo"
                     field("COA No."; Rec."COA No.")
                     {
                         ApplicationArea = All;
+                        Editable = false;
                     }
                     field("COA Lot Line No."; Rec."COA Lot Line No.")
                     {
                         ApplicationArea = All;
+                        Editable = false;
                     }
                     field("Lot No."; Rec."Lot No.")
                     {
                         ApplicationArea = All;
+                        Editable = ShipmentLotNoEditable;
                     }
                     field(Quantity; Rec.Quantity)
                     {
                         ApplicationArea = All;
+                        Editable = ShipmentLotNoEditable;
                     }
                     field(UOM; Rec.UOM)
                     {
                         ApplicationArea = All;
+                        Editable = ShipmentLotNoEditable;
                     }
                     field("Container No."; Rec."Container No.")
                     {
                         ApplicationArea = All;
+                        Editable = ShipmentLotNoEditable;
                     }
                     field("Manufacturing Date"; Rec."Manufacturing Date")
                     {
                         ApplicationArea = All;
+                        Editable = ShipmentLotNoEditable;
                     }
                     field("Expire Date"; Rec."Expire Date")
                     {
                         ApplicationArea = All;
+                        Editable = ShipmentLotNoEditable;
                     }
                     field("Sales Order No."; Rec."Sales Order No.")
                     {
                         ApplicationArea = All;
+                        Editable = ShipmentLotNoEditable;
                     }
                     field("QA Status"; Rec."QA Status")
                     {
                         ApplicationArea = All;
+                        Editable = false;
                     }
                     field("Qty. (Base)"; Rec."Qty. (Base)")
                     {
                         ApplicationArea = All;
+                        Editable = false;
                         Visible = false;
                     }
                 }
@@ -87,6 +96,7 @@ page 50513 "RV COA ShipmentLotNo"
                 ApplicationArea = All;
                 SubPageLink = "COA No." = field("COA No."), "COA Lot Line No." = field("COA Lot Line No.");
                 UpdatePropagation = Both;
+                Editable = SubInterQCResultEditable;
             }
             part(SubExterQCResult; "RV COA ExterQCResult Subform")
             {
@@ -94,6 +104,7 @@ page 50513 "RV COA ShipmentLotNo"
                 ApplicationArea = All;
                 SubPageLink = "COA No." = field("COA No."), "COA Lot Line No." = field("COA Lot Line No.");
                 UpdatePropagation = Both;
+                Editable = SubExterQCResultEditable;
             }
             part(SubInyResult; "RV COA Iny. Result Subform")
             {
@@ -101,6 +112,7 @@ page 50513 "RV COA ShipmentLotNo"
                 ApplicationArea = All;
                 SubPageLink = "COA No." = field("COA No."), "COA Lot Line No." = field("COA Lot Line No.");
                 UpdatePropagation = Both;
+                Editable = SubInyResultEditable;
             }
         }
 
@@ -108,40 +120,136 @@ page 50513 "RV COA ShipmentLotNo"
 
     actions
     {
+
+        area(processing)
+        {
+            action("UpdateQALine")
+            {
+                Caption = 'Update QA Line';
+                ApplicationArea = All;
+                Image = UpdateShipment;
+                Enabled = UpdateQALineEnable;
+
+                trigger OnAction()
+                begin
+                    CurrPage.SubCOACard.Page.UpdateQALine_Action();
+                    CurrPage.Update();
+                end;
+            }
+            action(ExternalSpecCheck)
+            {
+                Caption = 'External Spec. Check';
+                ApplicationArea = All;
+                Image = Check;
+                Enabled = QACheckEnable;
+                trigger OnAction()
+                begin
+                    CurrPage.SubCOACard.Page.ExternalSpecCheck_Action();
+                end;
+            }
+            action(COAApprove)
+            {
+                Caption = 'COA Approve';
+                ApplicationArea = All;
+                Image = Approval;
+                Enabled = QAApproveEnable;
+                trigger OnAction()
+                begin
+                    CurrPage.SubCOACard.Page.COAApprove_Action();
+                end;
+            }
+            action(COAReject)
+            {
+                Caption = 'COA Reject';
+                ApplicationArea = All;
+                Image = Approval;
+                Enabled = QARejectEnable;
+                trigger OnAction()
+                begin
+                    CurrPage.SubCOACard.Page.COAReject_Action();
+                end;
+            }
+            action(COAPrint)
+            {
+                Caption = 'COA Print';
+                ApplicationArea = All;
+                Image = Print;
+                trigger OnAction()
+                begin
+                    CurrPage.SubCOACard.Page.COAPrint_Action();
+                end;
+            }
+        }
+        area(Promoted)
+        {
+            group(Category_Process)
+            {
+                Caption = 'Process';
+                actionref("UpdateQALine_Promoted"; "UpdateQALine")
+                {
+                }
+                actionref("ExternalSpecCheck_Promoted"; "ExternalSpecCheck")
+                {
+                }
+                actionref("COAApprove_Promoted"; "COAApprove")
+                {
+                }
+                actionref("COAReject_Promoted"; "COAReject")
+                {
+                }
+                actionref("COAPrint_Promoted"; "COAPrint")
+                {
+                }
+            }
+        }
     }
 
     trigger OnAfterGetCurrRecord()
     begin
-        //ItemJnlMgt.GetItem(Rec."Item No.", ItemDescription);
-
+        //SetQAEnable
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable,
+            ShipmentLotNoEditable, SubCOACardEditable, SubInterQCResultEditable, SubExterQCResultEditable, SubInyResultEditable);
     end;
 
     trigger OnAfterGetRecord()
     begin
-
+        //SetQAEnable
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable,
+            ShipmentLotNoEditable, SubCOACardEditable, SubInterQCResultEditable, SubExterQCResultEditable, SubInyResultEditable);
     end;
 
     trigger OnDeleteRecord(): Boolean
     var
-
+        QAHeader: Record "RV QA Header";
     begin
-
+        if QAHeader.Get(Rec."COA No.") then begin
+            if QAHeader."QA Status" <> QAHeader."QA Status"::Analyzing then begin
+                Error('You cannot delete when the status is checked or Approved or Rejected.');
+            end;
+        end;
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean)
+    var
+        QAHeader: Record "RV QA Header";
     begin
+        if QAHeader.Get(Rec."COA No.") then begin
+            if QAHeader."QA Status" <> QAHeader."QA Status"::Analyzing then begin
+                Error('You cannot insert when the status is checked or Approved or Rejected.');
+            end;
+        end;
 
+        //SetQAEnable
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable,
+            ShipmentLotNoEditable, SubCOACardEditable, SubInterQCResultEditable, SubExterQCResultEditable, SubInyResultEditable);
     end;
 
     trigger OnOpenPage()
-    var
-
     begin
-        CurrPage.Editable := true;
-
         CurrentCOANo := Rec."COA No.";
-
-        //SetName(CurrentCOANo);
+        //SetQAEnable
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable,
+            ShipmentLotNoEditable, SubCOACardEditable, SubInterQCResultEditable, SubExterQCResultEditable, SubInyResultEditable);
     end;
 
     var
@@ -155,6 +263,19 @@ page 50513 "RV COA ShipmentLotNo"
         ItemDescription: Text[100];
 
         CurrentCOANo: Code[10];
+
+
+        UpdateQALineEnable: Boolean;
+        QACheckEnable: Boolean;
+        QAApproveEnable: Boolean;
+        QARejectEnable: Boolean;
+
+
+        ShipmentLotNoEditable: Boolean;
+        SubCOACardEditable: Boolean;
+        SubInterQCResultEditable: Boolean;
+        SubExterQCResultEditable: Boolean;
+        SubInyResultEditable: Boolean;
 
 
 

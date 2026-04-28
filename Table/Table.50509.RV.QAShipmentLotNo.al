@@ -74,6 +74,82 @@ table 50509 "RV QA Shipment Lot No."
     }
 
     var
+
+    trigger OnInsert()
+    var
+        QAHeader: Record "RV QA Header";
+    begin
+        if QAHeader.Get("COA No.") then
+            "QA Status" := QAHeader."QA Status";
+    end;
+
+    procedure SetQAEnable(var UpdateQALineEnable: Boolean; var QACheckEnable: Boolean;
+                        var QAApproveEnable: Boolean; var QARejectEnable: Boolean;
+                        var ShipmentLotNoEditable: Boolean; var SubCOACardEditable: Boolean;
+                        var SubInterQCResultEditable: Boolean; var SubExterQCResultEditable: Boolean;
+                         var SubInyResultEditable: Boolean)
+    var
+        QAHeader: Record "RV QA Header";
+    begin
+
+        if QAHeader.Get("COA No.") then;
+        CASE QAHeader."QA Status" OF
+            (QAHeader."QA Status"::Analyzing):
+                begin
+                    UpdateQALineEnable := true;
+                    QACheckEnable := true;
+                    QAApproveEnable := false;
+                    QARejectEnable := false;
+
+                    ShipmentLotNoEditable := true;
+                    SubCOACardEditable := true;
+                    SubInterQCResultEditable := true;
+                    SubExterQCResultEditable := true;
+                    SubInyResultEditable := true;
+                end;
+            (QAHeader."QA Status"::Checked):
+                begin
+                    UpdateQALineEnable := false;
+                    QACheckEnable := false;
+                    QAApproveEnable := true;
+                    QARejectEnable := true;
+
+                    ShipmentLotNoEditable := false;
+                    SubCOACardEditable := false;
+                    SubInterQCResultEditable := false;
+                    SubExterQCResultEditable := false;
+                    SubInyResultEditable := false;
+                end;
+            (QAHeader."QA Status"::Approved):
+                begin
+                    UpdateQALineEnable := false;
+                    QACheckEnable := false;
+                    QAApproveEnable := false;
+                    QARejectEnable := false;
+
+                    ShipmentLotNoEditable := false;
+                    SubCOACardEditable := false;
+                    SubInterQCResultEditable := false;
+                    SubExterQCResultEditable := false;
+                    SubInyResultEditable := false;
+                end;
+            (QAHeader."QA Status"::Rejected):
+                begin
+                    UpdateQALineEnable := false;
+                    QACheckEnable := false;
+                    QAApproveEnable := false;
+                    QARejectEnable := false;
+
+                    ShipmentLotNoEditable := false;
+                    SubCOACardEditable := false;
+                    SubInterQCResultEditable := false;
+                    SubExterQCResultEditable := false;
+                    SubInyResultEditable := false;
+                end;
+        END;
+
+    end;
+
     procedure CreateQAExternalQCResults()
     var
         QAExternalResults: Record "RV QA External QC Results";
@@ -148,10 +224,13 @@ table 50509 "RV QA Shipment Lot No."
             end else begin
                 //QCGroup
                 QCGroup.Reset();
+                QCGroup.SetCurrentKey("QC Resource Group No.", "Effective Date");
                 QCGroup.SetRange("QC Resource Group No.", TempQCCustExterSpec."QC Resource Group No.");
-                QCGroup.SetFilter("Effective Date", '%1 | %2..', 0D, WorkDate());
-                if QCGroup.Find('-') then begin
+                QCGroup.SetFilter("Effective Date", '%1 | ..%2', 0D, WorkDate());
+                if QCGroup.Find('+') then begin
                     currSpecification := QCGroup."External Specification";
+                end else begin
+                    Error('No QC specifications were found for item %1', QAHeader."Item No.");
                 end;
             end;
 

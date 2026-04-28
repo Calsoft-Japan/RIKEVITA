@@ -70,7 +70,18 @@ table 50506 "RV QC Line"
         }
     }
 
-    var
+
+    procedure SetQCLineEnable(var TypeEnable: Boolean; var ValueTableTypeEnable: Boolean)
+    begin
+
+        if "QC Parameter Name" = '' then begin
+            TypeEnable := true;
+            ValueTableTypeEnable := true;
+        end else begin
+            TypeEnable := false;
+            ValueTableTypeEnable := false;
+        end;
+    end;
 
     procedure CheckQCResultRange()
     var
