@@ -36,6 +36,7 @@ tableextension 50100 "RV Purchase Header Ext" extends "Purchase Header"
                 checkRVContractDate();
             end;
         }
+
     }
 
     /// <summary>

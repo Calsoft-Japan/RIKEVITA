@@ -1,4 +1,4 @@
-tableextension 50608 "RV_Lot No. Information" extends "Lot No. Information"
+tableextension 50608 "RV Lot No. Information" extends "Lot No. Information"
 {
     fields
     {
