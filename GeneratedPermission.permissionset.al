@@ -141,5 +141,19 @@ permissionset 50100 GeneratedPermission
         query "Inventory Master File" = X,
         query "RV Prod. Result Journal Line G" = X,
         codeunit "RV Bank Payment to Excel" = X,
-        codeunit "RV DocAttachmentSubscriber" = X;
+        codeunit "RV DocAttachmentSubscriber" = X,
+        tabledata "RV Item Symbol Setting" = RIMD,
+        tabledata "RV Item Tracking History Dtl." = RIMD,
+        tabledata "RV Warehouse Packing Info." = RIMD,
+        table "RV Item Symbol Setting" = X,
+        table "RV Item Tracking History Dtl." = X,
+        table "RV Warehouse Packing Info." = X,
+        report "RV Export Payment Inv Excel" = X,
+        report "RV Payment Voucher" = X,
+        codeunit "RV PaymentJournal Post" = X,
+        codeunit "RV User Permission Check" = X,
+        page "ISO Symbol Setting" = X,
+        codeunit "RV Post Warehouse Shipment" = X,
+        page "ISO Symbol Image FactBox" = X,
+        page "Warehouse Packing Info" = X;
 }
