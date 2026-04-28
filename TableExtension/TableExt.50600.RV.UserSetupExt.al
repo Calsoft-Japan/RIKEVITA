@@ -4,7 +4,7 @@
 /// FDD039 2026/03/26: Add. "Allow QC Check" "Allow QC Approve",
 ///                         "Allow QA Check","RV_Allow QA Approve","RV_Allow QA Reject"(Mike)
 /// </summary>
-tableextension 50600 "RV_User Setup" extends "User Setup"
+tableextension 50600 "RV User Setup" extends "User Setup"
 {
     fields
     {

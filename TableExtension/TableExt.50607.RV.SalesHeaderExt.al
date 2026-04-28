@@ -3,7 +3,7 @@
 /// FDD006 2026/03/31: New. (Stephen)
 /// FDD012 2026/04/19: Liuyang.
 /// </summary>
-tableextension 50607 "RV_Sales Header" extends "Sales Header"
+tableextension 50607 "RV Sales Header" extends "Sales Header"
 {
     fields
     {

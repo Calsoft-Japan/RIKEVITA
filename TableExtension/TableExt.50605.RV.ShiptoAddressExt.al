@@ -2,7 +2,7 @@
 /// TableExtension RV Ship-to Address (ID 50605) extends Ship-to Address table
 /// FDD006 2026/03/31: New. (Stephen)
 /// </summary>
-tableextension 50605 "RV_Ship-to Address" extends "Ship-to Address"
+tableextension 50605 "RV Ship-to Address" extends "Ship-to Address"
 {
     fields
     {

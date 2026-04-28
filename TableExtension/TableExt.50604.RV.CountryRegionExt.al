@@ -2,7 +2,7 @@
 /// TableExtension RV Country/Region (ID 50604) extends Country/Region table
 /// FDD006 2026/03/31: New. (Stephen)
 /// </summary>
-tableextension 50604 "RV_Country/Region Ext" extends "Country/Region"
+tableextension 50604 "RV Country/Region Ext" extends "Country/Region"
 {
     fields
     {

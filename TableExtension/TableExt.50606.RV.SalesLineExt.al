@@ -2,7 +2,7 @@
 /// TableExtension RV Sales Line (ID 50606) extends Sales Line table
 /// FDD006 2026/03/31: New. (Stephen)
 /// </summary>
-tableextension 50606 "RV_Sales Line" extends "Sales Line"
+tableextension 50606 "RV Sales Line" extends "Sales Line"
 {
     fields
     {

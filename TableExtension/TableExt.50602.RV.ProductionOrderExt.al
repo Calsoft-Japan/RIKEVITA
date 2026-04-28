@@ -2,7 +2,7 @@
 /// TableExtension RV Production Order (ID 50602) extends Production Order table
 /// FDD011 2026/03/15: New. (Stephen)
 /// </summary>
-tableextension 50602 "RV_Production Order" extends "Production Order"
+tableextension 50602 "RV Production Order" extends "Production Order"
 {
     fields
     {
