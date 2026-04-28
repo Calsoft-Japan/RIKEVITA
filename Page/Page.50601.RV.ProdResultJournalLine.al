@@ -149,10 +149,8 @@ page 50601 "RV Prod. Result Journal Line"
                     ProdResultLine: Record "RV Prod. Result Journal Line";
                     CalcConsumption: Report "RV Calc. Consumption";
                 begin
-                    CurrPage.SetSelectionFilter(ProdResultLine);
-                    ProdResultLine.SetFilter("Data Type", '%1|%2', ProdResultLine."Data Type"::"Adjust Output", ProdResultLine."Data Type"::"Planned Output");
-                    CalcConsumption.SetTableView(ProdResultLine);
-                    CalcConsumption.RunModal();
+                    CalcConsumption.SetBatchName(CurrentJnlBatchName);
+                    CalcConsumption.Run();
                 end;
             }
 

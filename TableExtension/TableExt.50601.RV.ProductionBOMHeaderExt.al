@@ -2,7 +2,7 @@
 /// TableExtension RIKE Production BOM Header (ID 50601) extends Production BOM Header table
 /// FDD014 2026/02/23: New. (Stephen)
 /// </summary>
-tableextension 50601 "RV Production BOM Header" extends "Production BOM Header"
+tableextension 50601 "RV_Production BOM Header" extends "Production BOM Header"
 {
     fields
     {

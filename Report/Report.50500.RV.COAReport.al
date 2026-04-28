@@ -21,9 +21,6 @@ report 50500 "RV_COA Report"
             column(QA_Header_No; "COA No.")
             {
             }
-            column(TotalPageText; TotalPageText)
-            {
-            }
             column(DisplayQuantityPerLot; DisplayQuantityPerLot)
             {
             }
@@ -48,12 +45,6 @@ report 50500 "RV_COA Report"
                 dataitem(PageLoop; "Integer")
                 {
                     DataItemTableView = sorting(Number) where(Number = const(1));
-                    column(CurrReport_PAGENO; StrSubstNo(Text002Txt, Format(1)))
-                    {
-                    }
-                    column(PageCaptionLbl; PageCaptionLbl)
-                    {
-                    }
                     column(MARKSText_1; MARKSText[1])
                     {
                     }
@@ -67,9 +58,6 @@ report 50500 "RV_COA Report"
                     {
                     }
                     column(PRODUCTText; PRODUCTText)
-                    {
-                    }
-                    column(QA_Header___No__; "QA Header"."COA No.")
                     {
                     }
                     column(DateText; Format_DateText)
@@ -248,27 +236,6 @@ report 50500 "RV_COA Report"
                                 FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date", 0, '<Day,2>-<Month Text,3>-<Year4>');
                         end;
                     }
-                    dataitem("Inventory Comment Line"; "Inventory Comment Line")
-                    {
-                        DataItemLink = "No." = field("COA No.");
-                        DataItemLinkReference = "QA Header";
-                        DataItemTableView = sorting("Document Type", "No.", "Line No.");
-                        column(Inventory_Comment_Line__Inventory_Comment_Line__Comment; "Inventory Comment Line".Comment)
-                        {
-                        }
-                        column(RemarksCaption; RemarksCaptionLbl)
-                        {
-                        }
-                        column(Inventory_Comment_Line_Document_Type; "Document Type")
-                        {
-                        }
-                        column(Inventory_Comment_Line_No_; "No.")
-                        {
-                        }
-                        column(Inventory_Comment_Line_Line_No_; "Line No.")
-                        {
-                        }
-                    }
                 }
 
                 trigger OnAfterGetRecord()
@@ -299,14 +266,11 @@ report 50500 "RV_COA Report"
 
                 CompanyInfo.Get();
                 CompanyInfo.CalcFields(Picture);
-
                 Format_DateText := Format(Today(), 0, '<Day,2>-<Month Text,3>-<Year4>');
 
-                Clear(TotalPageText);
-
                 QAShipmentLotNo.SetRange("COA No.", "COA No.");
-                TotalPageText := Format(QAShipmentLotNo.COUNT);
 
+                //SalesOrderNoText
                 Clear(SalesOrderNoText);
                 CollectUniqueSalesOrderNo("COA No.");
 
@@ -316,15 +280,14 @@ report 50500 "RV_COA Report"
                 Clear(DateWordingText);
                 Clear(DateWording_remarkText);
 
-
                 CustCOAReportSetting.Reset();
                 CustCOAReportSetting.SetRange("Customer No.", "Ship-to Customer No.");
                 CustCOAReportSetting.SetRange("Ship-to Code", "Ship-to Code");
                 if CustCOAReportSetting.FindFirst() then begin
                     DisplayQuantityPerLot := CustCOAReportSetting."Display Quantity Per Lot.";
-                    DateCalculation := CustCOAReportSetting."Date Calculation";
                     DisplayMethodCharsSpec := CustCOAReportSetting."Display Method&Chars Spec.";
-
+                    DateCalculation := CustCOAReportSetting."Date Calculation";
+                    //DateWording
                     if (CustCOAReportSetting."Date Wording" = DateWording::"Best Before Date") then begin
                         DateWordingText := 'BEST BEFORE DATE';
                         DateWording_remarkText := 'Best Before Date';
@@ -333,15 +296,15 @@ report 50500 "RV_COA Report"
                         DateWording_remarkText := 'Expiry Date';
                     end;
 
-
                 end else begin
                     CustCOAReportSetting.Reset();
                     CustCOAReportSetting.SetRange("Customer No.", "Ship-to Customer No.");
                     if CustCOAReportSetting.FindFirst() then begin
                         DisplayQuantityPerLot := CustCOAReportSetting."Display Quantity Per Lot.";
-                        DateCalculation := CustCOAReportSetting."Date Calculation";
                         DisplayMethodCharsSpec := CustCOAReportSetting."Display Method&Chars Spec.";
+                        DateCalculation := CustCOAReportSetting."Date Calculation";
 
+                        //DateWording
                         if (CustCOAReportSetting."Date Wording" = DateWording::"Best Before Date") then begin
                             DateWordingText := 'BEST BEFORE DATE';
                             DateWording_remarkText := 'Best Before Date';
@@ -355,22 +318,20 @@ report 50500 "RV_COA Report"
 
                 end;
 
+                //DisplayMethodCharsSpec
                 CASE DisplayMethodCharsSpec OF
                     DisplayMethodCharsSpec::Method:
                         begin
-
                             METHOD_Caption := 'METHOD';
                             SPECIFICATION_Caption := '';
                         end;
                     DisplayMethodCharsSpec::"Chars Spec.":
                         begin
-
                             METHOD_Caption := '';
                             SPECIFICATION_Caption := 'SPECIFICATION';
                         end;
                     DisplayMethodCharsSpec::"Method&Chars Spec.":
                         begin
-
                             METHOD_Caption := 'METHOD';
                             SPECIFICATION_Caption := 'SPECIFICATION';
                         end;
@@ -403,15 +364,6 @@ report 50500 "RV_COA Report"
         {
         }
     }
-    labels
-    {
-    }
-
-    trigger OnInitReport()
-    var
-    begin
-
-    end;
 
     trigger OnPreReport()
     begin
@@ -454,14 +406,7 @@ report 50500 "RV_COA Report"
         resultText: Text;
         SpecLineNoText: Text;
         PRODUCTText: Text;
-        TotalPageText: Text;
         Format_DateText: Text;
-
-        Text002Txt: Label 'Page %1';
-
-        RemarksCaptionLbl: Label 'Remarks';
-        PageCaptionLbl: Label 'Page';
-
 
     procedure CollectUniqueSalesOrderNo(ParCOANO: Code[20])
     var

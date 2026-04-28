@@ -11,7 +11,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.1.30001.02</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-04-06T09:28:40.0633174Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-04-06T11:43:49.0872638Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -104,7 +104,7 @@
                                 </TablixMembers>
                               </TablixRowHierarchy>
                               <Top>0.066cm</Top>
-                              <Left>18.31115cm</Left>
+                              <Left>17.99365cm</Left>
                               <Height>0.31745cm</Height>
                               <Width>0.31745cm</Width>
                               <Style />
@@ -1126,7 +1126,6 @@
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <rd:Selected>true</rd:Selected>
                                           <Textbox Name="METHOD_Caption2">
                                             <rd:DefaultName>METHOD_Caption</rd:DefaultName>
                                             <CanGrow>true</CanGrow>
@@ -1812,7 +1811,6 @@ Fields!QA_Header_No.Value</Value>
                                                                   <Value>=
 Fields!DateText.Value + Chr(255) + 
 Fields!QA_Header_No.Value + Chr(255) + 
-Fields!TotalPageText.Value + Chr(255) + 
 Fields!DateWording_remarkText.Value</Value>
                                                                   <Style>
                                                                     <FontSize>7pt</FontSize>
@@ -3356,7 +3354,7 @@ Fields!DateWording_remarkText.Value</Value>
                       </Style>
                     </TextRun>
                     <TextRun>
-                      <Value>=code.GetData(4,4)</Value>
+                      <Value>=code.GetData(3,4)</Value>
                       <Style>
                         <FontFamily>Meiryo</FontFamily>
                         <FontSize>8pt</FontSize>
@@ -3664,9 +3662,6 @@ HjXjf4OeKPid4H8VaF4i8UQx3kutjVPDWoWVoqtpaROklsrrx5jKytuJPIbrWbo3wn+JnjLxVp2ofE7x
         <Field Name="QA_Header_No">
           <DataField>QA_Header_No</DataField>
         </Field>
-        <Field Name="TotalPageText">
-          <DataField>TotalPageText</DataField>
-        </Field>
         <Field Name="DisplayQuantityPerLot">
           <DataField>DisplayQuantityPerLot</DataField>
         </Field>
@@ -3685,12 +3680,6 @@ HjXjf4OeKPid4H8VaF4i8UQx3kutjVPDWoWVoqtpaROklsrrx5jKytuJPIbrWbo3wn+JnjLxVp2ofE7x
         <Field Name="SalesOrderNoText">
           <DataField>SalesOrderNoText</DataField>
         </Field>
-        <Field Name="CurrReport_PAGENO">
-          <DataField>CurrReport_PAGENO</DataField>
-        </Field>
-        <Field Name="PageCaptionLbl">
-          <DataField>PageCaptionLbl</DataField>
-        </Field>
         <Field Name="MARKSText_1">
           <DataField>MARKSText_1</DataField>
         </Field>
@@ -3705,9 +3694,6 @@ HjXjf4OeKPid4H8VaF4i8UQx3kutjVPDWoWVoqtpaROklsrrx5jKytuJPIbrWbo3wn+JnjLxVp2ofE7x
         </Field>
         <Field Name="PRODUCTText">
           <DataField>PRODUCTText</DataField>
-        </Field>
-        <Field Name="QA_Header___No__">
-          <DataField>QA_Header___No__</DataField>
         </Field>
         <Field Name="DateText">
           <DataField>DateText</DataField>
@@ -3768,21 +3754,6 @@ HjXjf4OeKPid4H8VaF4i8UQx3kutjVPDWoWVoqtpaROklsrrx5jKytuJPIbrWbo3wn+JnjLxVp2ofE7x
         </Field>
         <Field Name="result">
           <DataField>result</DataField>
-        </Field>
-        <Field Name="Inventory_Comment_Line__Inventory_Comment_Line__Comment">
-          <DataField>Inventory_Comment_Line__Inventory_Comment_Line__Comment</DataField>
-        </Field>
-        <Field Name="RemarksCaption">
-          <DataField>RemarksCaption</DataField>
-        </Field>
-        <Field Name="Inventory_Comment_Line_Document_Type">
-          <DataField>Inventory_Comment_Line_Document_Type</DataField>
-        </Field>
-        <Field Name="Inventory_Comment_Line_No_">
-          <DataField>Inventory_Comment_Line_No_</DataField>
-        </Field>
-        <Field Name="Inventory_Comment_Line_Line_No_">
-          <DataField>Inventory_Comment_Line_Line_No_</DataField>
         </Field>
       </Fields>
       <Query>

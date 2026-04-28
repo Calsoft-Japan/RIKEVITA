@@ -9,36 +9,27 @@ report 50600 "RV Calc. Consumption"
 
     dataset
     {
-        dataitem("RV Prod. Result Journal Line"; "RV Prod. Result Journal Line")
+        dataitem(ProdOrderLine; "Prod. Order Line")
         {
-            RequestFilterFields = "Batch Name", "Journal Line No.", "Prod. Order No.";
-            dataitem("Production Order"; "Production Order")
-            {
-                DataItemTableView = sorting(Status, "No.") where(Status = const(Released));
-                DataItemLink = "No." = field("Prod. Order No.");
-                dataitem("Prod. Order Component"; "Prod. Order Component")
-                {
-                    DataItemLink = Status = field(Status), "Prod. Order No." = field("No.");
-                    RequestFilterFields = "Item No.";
+            DataItemTableView = sorting("Prod. Order No.", "Line No.") where(Status = const(Released));
+            RequestFilterFields = "Prod. Order No.";
 
-                    trigger OnAfterGetRecord()
-                    var
-                        NeededQty: Decimal;
-                        IsHandled: Boolean;
-                    begin
-                        NeededQty := GetNeededQtylocal(CalcBasedOn, true);
-                        AdjustQtyToReservedFromInventory(NeededQty, ReservedFromStock);
-                        CreateConsumpJnlLine("Location Code", "Bin Code", NeededQty);
-                    end;
-                }
-            }
+            trigger OnPreDataItem()
+            begin
+                RVProdResultJnlLine.Reset();
+                RVProdResultJnlLine.SetRange("Batch Name", GBatchName);
+                if RVProdResultJnlLine.FindLast() then
+                    LastLineNo := RVProdResultJnlLine."Journal Line No.";
+            end;
 
             trigger OnAfterGetRecord()
             begin
-                RVProdResultJnlLine.Reset();
-                RVProdResultJnlLine.SetRange("Batch Name", "RV Prod. Result Journal Line"."Batch Name");
-                if RVProdResultJnlLine.FindLast() then
-                    LastLineNo := RVProdResultJnlLine."Journal Line No.";
+                if PlannedOutput then
+                    CreateOutputJnlLine();
+                if PlannedConsumption then
+                    CreateConsumpJnlLine(CalcBasedOn::"Expected Output");
+                if AdjustConsumption then
+                    CreateConsumpJnlLine(CalcBasedOn::"Actual Output");
             end;
         }
     }
@@ -50,25 +41,39 @@ report 50600 "RV Calc. Consumption"
             {
                 group(Options)
                 {
-                    field(CalcBasedOn; CalcBasedOn)
+                    field("Planned Output"; PlannedOutput)
                     {
                         ApplicationArea = Manufacturing;
-                        Caption = 'Calculation Based on';
-                        OptionCaption = 'Actual Output,Expected Output';
-                        ToolTip = 'Specifies whether the calculation of the quantity to consume is based on the actual output or on the expected output (the quantity of finished goods that you expect to produce). The default value of this field can be set in the Manufacturing Setup.';
+                        Caption = 'Planned Output';
+                    }
+                    field("Planned Consumption"; PlannedConsumption)
+                    {
+                        ApplicationArea = Manufacturing;
+                        Caption = 'Planned Consumption';
+
+                        trigger OnValidate()
+                        begin
+                            AdjustConsumption := not PlannedConsumption;
+                        end;
+                    }
+                    field("Adjust Consumption"; AdjustConsumption)
+                    {
+                        ApplicationArea = Manufacturing;
+                        Caption = 'Adjust Consumption';
+
+                        trigger OnValidate()
+                        begin
+                            PlannedConsumption := not AdjustConsumption;
+                        end;
                     }
                 }
             }
         }
-        actions
-        {
-            area(Processing)
-            {
-            }
-        }
-        trigger OnOpenPage()
+        trigger OnQueryClosePage(CloseAction: Action): Boolean
         begin
-            InitializeRequest(GetDefaultCalcBasedOn());
+            if CloseAction = CloseAction::OK then
+                if not PlannedOutput and not PlannedConsumption and not AdjustConsumption then
+                    Error('At least one option must be selected.');
         end;
     }
 
@@ -79,90 +84,102 @@ report 50600 "RV Calc. Consumption"
         UOMMgt: Codeunit "Unit of Measure Management";
         LastLineNo: Integer;
         RVProdResultJnlLine: Record "RV Prod. Result Journal Line";
+        PlannedOutput: Boolean;
+        PlannedConsumption: Boolean;
+        AdjustConsumption: Boolean;
+        GBatchName: Code[20];
 
-    procedure InitializeRequest(NewCalcBasedOn: Option)
-    begin
-        CalcBasedOn := NewCalcBasedOn;
-    end;
-
-    local procedure GetDefaultCalcBasedOn(): Option
+    procedure CreateConsumpJnlLine(parCalcBasedOn: Option "Actual Output","Expected Output")
     var
-        ManufacturingSetup: Record "Manufacturing Setup";
-    begin
-        if ManufacturingSetup.Get() then
-            exit(ManufacturingSetup."Default Consum. Calc. Based on");
-
-        exit(ManufacturingSetup."Default Consum. Calc. Based on"::"Expected Output");
-    end;
-
-    procedure CreateConsumpJnlLine(LocationCode: Code[10]; BinCode: Code[20]; OriginalQtyToPost: Decimal)
-    var
-        Location: Record Location;
-        ManufacturingSetup: Record "Manufacturing Setup";
-        QtyToPost: Decimal;
-        ShouldAdjustQty: Boolean;
-    begin
-        QtyToPost := OriginalQtyToPost;
-
-        ShouldAdjustQty := "Prod. Order Component"."Flushing Method" in ["Prod. Order Component"."Flushing Method"::"Pick + Manual", "Prod. Order Component"."Flushing Method"::Forward, "Prod. Order Component"."Flushing Method"::"Pick + Forward"];
-        if ShouldAdjustQty then begin
-            Location.SetLoadFields("Prod. Consump. Whse. Handling");
-            if Location.Get(LocationCode) and (Location."Prod. Consump. Whse. Handling" = Location."Prod. Consump. Whse. Handling"::"Warehouse Pick (mandatory)") then
-                "Prod. Order Component".AdjustQtyToQtyPicked(QtyToPost);
-        end;
-
-        LastLineNo += 10000;
-        RVProdResultJnlLine.Init();
-        RVProdResultJnlLine."Batch Name" := "RV Prod. Result Journal Line"."Batch Name";
-        RVProdResultJnlLine."Journal Line No." := LastLineNo;
-        case "RV Prod. Result Journal Line"."Data Type" of
-            "RV Prod. Result Journal Line"."Data Type"::"Adjust Output":
-                begin
-                    RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Adjust Consumption";
-                end;
-            "RV Prod. Result Journal Line"."Data Type"::"Planned Output":
-                begin
-                    RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Planned Consumption";
-                end;
-        end;
-        RVProdResultJnlLine."Prod. Order No." := "RV Prod. Result Journal Line"."Prod. Order No.";
-        RVProdResultJnlLine."Item No." := "Prod. Order Component"."Item No.";
-        RVProdResultJnlLine.Quantity := QtyToPost;
-        RVProdResultJnlLine.UOM := "Prod. Order Component"."Unit of Measure Code";
-        RVProdResultJnlLine."Posting Date" := "RV Prod. Result Journal Line"."Posting Date";
-        RVProdResultJnlLine."Prod. Order Line No." := "Prod. Order Component"."Prod. Order Line No.";
-        RVProdResultJnlLine."Prod. Order Comp. Line No." := "Prod. Order Component"."Line No.";
-        RVProdResultJnlLine.Insert();
-    end;
-
-    procedure GetNeededQtylocal(CalcBasedOn: Option "Actual Output","Expected Output"; IncludePreviousPosting: Boolean): Decimal
-    var
-        ProdOrderLine: Record "Prod. Order Line";
-        ProdOrderRtngLine: Record "Prod. Order Routing Line";
-        CapLedgEntry: Record "Capacity Ledger Entry";
-        MfgCostCalcMgt: Codeunit "Mfg. Cost Calculation Mgt.";
-        OutputQtyBase: Decimal;
-        CompQtyBase: Decimal;
+        ProdOrderComp: Record "Prod. Order Component";
         NeededQty: Decimal;
-        RoundingPrecision: Decimal;
-        IsHandled: Boolean;
     begin
-        Item.Get("Prod. Order Component"."Item No.");
-        RoundingPrecision := Item."Rounding Precision";
-        if RoundingPrecision = 0 then
-            RoundingPrecision := UOMMgt.QtyRndPrecision();
+        ProdOrderComp.Reset();
+        ProdOrderComp.SetRange(Status, ProdOrderLine.Status);
+        ProdOrderComp.SetRange("Prod. Order No.", ProdOrderLine."Prod. Order No.");
+        ProdOrderComp.SetRange("Prod. Order Line No.", ProdOrderLine."Line No.");
+        ProdOrderComp.SetFilter("Item No.", '<>%1', '');
+        if ProdOrderComp.FindSet() then
+            repeat
+                NeededQty := ProdOrderComp.GetNeededQty(parCalcBasedOn, true);
+                if NeededQty <> 0 then begin
+                    LastLineNo += 10000;
+                    RVProdResultJnlLine.Init();
+                    RVProdResultJnlLine."Batch Name" := GBatchName;
+                    RVProdResultJnlLine."Journal Line No." := LastLineNo;
+                    if parCalcBasedOn = CalcBasedOn::"Expected Output" then
+                        RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Planned Consumption"
+                    else
+                        RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Adjust Consumption";
+                    RVProdResultJnlLine."Prod. Order No." := ProdOrderLine."Prod. Order No.";
+                    RVProdResultJnlLine."Item No." := ProdOrderComp."Item No.";
 
-        if CalcBasedOn = CalcBasedOn::"Actual Output" then begin
-            ProdOrderLine.Get("Prod. Order Component".Status,
-                            "Prod. Order Component"."Prod. Order No.",
-                            "Prod. Order Component"."Prod. Order Line No.");
+                    RVProdResultJnlLine.Quantity := NeededQty;
+                    RVProdResultJnlLine.UOM := ProdOrderComp."Unit of Measure Code";
+                    RVProdResultJnlLine."Posting Date" := WorkDate();
+                    RVProdResultJnlLine."Prod. Order Line No." := ProdOrderComp."Prod. Order Line No.";
+                    RVProdResultJnlLine."Prod. Order Comp. Line No." := ProdOrderComp."Line No.";
+                    RVProdResultJnlLine.Insert();
+                end;
+            until ProdOrderComp.Next() = 0;
+    end;
 
-            OutputQtyBase := "RV Prod. Result Journal Line".Quantity;
-            CompQtyBase := MfgCostCalcMgt.CalcActNeededQtyBase(ProdOrderLine, "Prod. Order Component", OutputQtyBase);
+    procedure CreateOutputJnlLine()
+    var
+        ProdOrderRtngLine: Record "Prod. Order Routing Line";
+    begin
+        ProdOrderRtngLine.Reset();
+        ProdOrderRtngLine.SetRange("Prod. Order No.", ProdOrderLine."Prod. Order No.");
+        ProdOrderRtngLine.SetRange("Routing No.", ProdOrderLine."Routing No.");
+        ProdOrderRtngLine.SetRange(Status, ProdOrderLine.Status);
+        ProdOrderRtngLine.SetRange("Routing Reference No.", ProdOrderLine."Routing Reference No.");
+        if ProdOrderRtngLine.FindSet() then begin
+            repeat
+                LastLineNo += 10000;
+                RVProdResultJnlLine.Init();
+                RVProdResultJnlLine."Batch Name" := GBatchName;
+                RVProdResultJnlLine."Journal Line No." := LastLineNo;
+                RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Planned Output";
+                RVProdResultJnlLine."Prod. Order No." := ProdOrderLine."Prod. Order No.";
+                RVProdResultJnlLine."Output Item No." := ProdOrderLine."Item No.";
+                RVProdResultJnlLine."Operation No." := ProdOrderRtngLine."Operation No.";
+                RVProdResultJnlLine."Work Center No." := ProdOrderRtngLine."Work Center No.";
 
-            NeededQty := UOMMgt.RoundToItemRndPrecision(CompQtyBase / "Prod. Order Component"."Qty. per Unit of Measure", RoundingPrecision);
-            exit(NeededQty);
+                if not IsLastOperation(ProdOrderRtngLine) then
+                    RVProdResultJnlLine.Quantity := 0
+                else
+                    RVProdResultJnlLine.Quantity := ProdOrderLine."Remaining Quantity";
+
+                RVProdResultJnlLine.UOM := ProdOrderLine."Unit of Measure Code";
+                RVProdResultJnlLine."Posting Date" := WorkDate();
+                RVProdResultJnlLine."Prod. Order Line No." := ProdOrderLine."Line No.";
+                RVProdResultJnlLine."Routing No." := ProdOrderLine."Routing No.";
+                RVProdResultJnlLine.Insert();
+            until ProdOrderRtngLine.Next() = 0;
+        end else begin
+            LastLineNo += 10000;
+            RVProdResultJnlLine.Init();
+            RVProdResultJnlLine."Batch Name" := GBatchName;
+            RVProdResultJnlLine."Journal Line No." := LastLineNo;
+            RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Planned Output";
+            RVProdResultJnlLine."Prod. Order No." := ProdOrderLine."Prod. Order No.";
+            RVProdResultJnlLine."Output Item No." := ProdOrderLine."Item No.";
+            RVProdResultJnlLine.Quantity := ProdOrderLine."Remaining Quantity";
+            RVProdResultJnlLine.UOM := ProdOrderLine."Unit of Measure Code";
+            RVProdResultJnlLine."Posting Date" := WorkDate();
+            RVProdResultJnlLine."Prod. Order Line No." := ProdOrderLine."Line No.";
+            RVProdResultJnlLine."Routing No." := ProdOrderLine."Routing No.";
+            RVProdResultJnlLine.Insert();
         end;
-        exit(Round("Prod. Order Component"."Remaining Quantity", RoundingPrecision));
+    end;
+
+    local procedure IsLastOperation(ProdOrderRoutingLine: Record "Prod. Order Routing Line") Result: Boolean
+    begin
+        Result := ProdOrderRoutingLine."Next Operation No." = '';
+    end;
+
+    procedure SetBatchName(BatchName: Code[20])
+    begin
+        GBatchName := BatchName;
     end;
 }
