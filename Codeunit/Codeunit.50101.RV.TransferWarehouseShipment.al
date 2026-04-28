@@ -15,6 +15,35 @@ codeunit 50101 "RV TransferWarehouseShipment"
         WhseShptHeader.Modify();
     end;
 
+    [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", OnSalesLineOnAfterGetRecordOnBeforeCreateShptHeader, '', false, false)]
+    local procedure "Get Source Documents_OnSalesLineOnAfterGetRecordOnBeforeCreateShptHeader"(var Sender: Report "Get Source Documents"; SalesLine: Record "Sales Line"; var WarehouseRequest: Record "Warehouse Request"; var WarehouseShipmentHeader: Record "Warehouse Shipment Header"; var WhseHeaderCreated: Boolean; var OneHeaderCreated: Boolean; var IsHandled: Boolean; var ErrorOccured: Boolean; var LinesCreated: Boolean)
+    var
+        SalesHeader: Record "Sales Header";
+    begin
+        if OneHeaderCreated and not WhseHeaderCreated then begin
+            //OneHeaderCreated := false;
+            SalesHeader.Reset();
+            if SalesHeader.Get(SalesLine."Document Type", SalesLine."Document No.") then begin
+
+                WarehouseShipmentHeader."External Document No." := SalesHeader."External Document No.";
+                WarehouseShipmentHeader."Shipment Method Code" := SalesHeader."Shipment Method Code";
+                WarehouseShipmentHeader."Shipping Agent Code" := SalesHeader."Shipping Agent Code";
+                WarehouseShipmentHeader."Shipping Agent Service Code" := SalesHeader."Shipping Agent Service Code";
+                WarehouseShipmentHeader."Shipment Date" := SalesHeader."Shipment Date";
+
+                WarehouseShipmentHeader."RV_B/L Date" := SalesHeader."RV_B/L Date";
+                WarehouseShipmentHeader."RV_Cosing Date" := SalesHeader."RV_Cosing Date";
+                WarehouseShipmentHeader."RV_Stuffing Date" := SalesHeader."RV_Stuffing Date";
+                WarehouseShipmentHeader.RV_ETD := SalesHeader."RV_ETD";
+                WarehouseShipmentHeader.RV_ETA := SalesHeader."RV_ETA";
+                WarehouseShipmentHeader.Modify();
+
+                WhseHeaderCreated := true;
+            end;
+        end;
+    end;
+
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales Warehouse Mgt.", OnAfterCreateShptLineFromSalesLine, '', false, false)]
     local procedure "Sales Warehouse Mgt._OnAfterCreateShptLineFromSalesLine"(var WarehouseShipmentLine: Record "Warehouse Shipment Line"; WarehouseShipmentHeader: Record "Warehouse Shipment Header"; SalesLine: Record "Sales Line"; SalesHeader: Record "Sales Header")
     begin
