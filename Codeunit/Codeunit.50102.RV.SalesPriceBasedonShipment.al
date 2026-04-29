@@ -43,15 +43,23 @@ codeunit 50102 "RV Sales Price Based on Shpt."
     var
         PriceCalculation: Interface "Price Calculation";
     begin
-        if SalesLine.FindSet(true) then
+        if SalesShipmentLine2.FindSet() then
             repeat
-                SalesLine."Shipment Date" := SalesHeader."Shipment Date";
-                SalesLine.GetPriceCalculationHandler("Price Type"::Sale, SalesHeader, PriceCalculation);
+                SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+                SalesLine.SetRange("Document No.", SalesHeader."No.");
+                SalesLine.SetRange("Shipment No.", SalesShipmentLine2."Document No.");
+                SalesLine.SetRange("Shipment Line No.", SalesShipmentLine2."Line No.");
+                if SalesLine.FindSet(true) then begin
+                    SalesLine."Shipment Date" := SalesShipmentLine2."Shipment Date";
+                    SalesLine.GetPriceCalculationHandler("Price Type"::Sale, SalesHeader, PriceCalculation);
 
-                SalesLine.ApplyPrice(SalesLine.FieldNo("Shipment Date"), PriceCalculation);
-                SalesLine.Validate("Unit Price");
-                SalesLine.Modify();
-            until SalesLine.Next() = 0;
+                    SalesLine.ApplyPrice(SalesLine.FieldNo("Shipment Date"), PriceCalculation);
+                    SalesLine.Validate("Unit Price");
+                    SalesLine.Modify();
+                end;
+                SalesLine.SetRange("Shipment No.");//cancel filter for report repeat
+                SalesLine.SetRange("Shipment Line No.");
+            until SalesShipmentLine2.Next() = 0;
     end;
 
 }
