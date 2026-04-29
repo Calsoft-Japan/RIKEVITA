@@ -122,90 +122,6 @@ page 50100 "RIKEVITA Setup"///
                     }
                 }
 
-                group(ChargeCalculation)
-                {
-                    Caption = 'Charge Calculation';
-                    field("No. Series for Chg. Calc."; Rec."No. Series for Chg. Calc.")
-                    {
-                        Caption = 'No. Series for Chg. Calc.';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-                    field("01-COO"; Rec."01-COO")
-                    {
-                        Caption = '01-COO';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-                    field("02-FORWARDING"; Rec."02-FORWARDING")
-                    {
-                        Caption = '02-FORWARDING';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-                    field("03-FUMIGATION"; Rec."03-FUMIGATION")
-                    {
-                        Caption = '03-FUMIGATION';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-                    field("04-HEALTH"; Rec."04-HEALTH")
-                    {
-                        Caption = '04-HEALTH';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-                    field("05-PALLETIZING"; Rec."05-PALLETIZING")
-                    {
-                        Caption = '05-PALLETIZING';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-                    field("06-PHYTO"; Rec."06-PHYTO")
-                    {
-                        Caption = '06-PHYTO';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-                    field("07-STUFFING"; Rec."07-STUFFING")
-                    {
-                        Caption = '07-STUFFING';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-                    field("08-TRANSPORT"; Rec."08-TRANSPORT")
-                    {
-                        Caption = '08-TRANSPORT';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-                    field("09-REACH"; Rec."09-REACH")
-                    {
-                        Caption = '09-REACH';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-                    field("99-OTHERS"; Rec."99-OTHERS")
-                    {
-                        Caption = '99-OTHERS';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-                    field("FREIGHT"; Rec."FREIGHT")
-                    {
-                        Caption = 'FREIGHT';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-                    field("HTP Adjustment"; Rec."HTP Adjustment")
-                    {
-                        Caption = 'HTP Adjustment';
-                        Description = 'FDD009';
-                        ApplicationArea = All;
-                    }
-
-                }
-
                 group(MayBank)
                 {
                     ShowCaption = false;
@@ -240,6 +156,90 @@ page 50100 "RIKEVITA Setup"///
                         end;
                     }
                 }
+            }
+
+            group(ChargeCalculation)
+            {
+                Caption = 'Charge Calculation';
+                field("No. Series for Chg. Calc."; Rec."No. Series for Chg. Calc.")
+                {
+                    Caption = 'No. Series for Chg. Calc.';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("01-COO"; Rec."01-COO")
+                {
+                    Caption = '01-COO';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("02-FORWARDING"; Rec."02-FORWARDING")
+                {
+                    Caption = '02-FORWARDING';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("03-FUMIGATION"; Rec."03-FUMIGATION")
+                {
+                    Caption = '03-FUMIGATION';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("04-HEALTH"; Rec."04-HEALTH")
+                {
+                    Caption = '04-HEALTH';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("05-PALLETIZING"; Rec."05-PALLETIZING")
+                {
+                    Caption = '05-PALLETIZING';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("06-PHYTO"; Rec."06-PHYTO")
+                {
+                    Caption = '06-PHYTO';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("07-STUFFING"; Rec."07-STUFFING")
+                {
+                    Caption = '07-STUFFING';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("08-TRANSPORT"; Rec."08-TRANSPORT")
+                {
+                    Caption = '08-TRANSPORT';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("09-REACH"; Rec."09-REACH")
+                {
+                    Caption = '09-REACH';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("99-OTHERS"; Rec."99-OTHERS")
+                {
+                    Caption = '99-OTHERS';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("FREIGHT"; Rec."FREIGHT")
+                {
+                    Caption = 'FREIGHT';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("HTP Adjustment"; Rec."HTP Adjustment")
+                {
+                    Caption = 'HTP Adjustment';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+
             }
         }
     }

@@ -129,73 +129,73 @@ table 50100 "RV RIKEVITA Setup"
         {
             Description = 'FDD009';
             Caption = '01-COO';
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
         field(24; "02-FORWARDING"; Code[20])
         {
             Description = 'FDD009';
             Caption = '02-FORWARDING';
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
         field(25; "03-FUMIGATION"; Code[20])
         {
             Description = 'FDD009';
             Caption = '03-FUMIGATION';
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
         field(26; "04-HEALTH"; Code[20])
         {
             Description = 'FDD009';
             Caption = '04-HEALTH';
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
         field(27; "05-PALLETIZING"; Code[20])
         {
             Description = 'FDD009';
             Caption = '05-PALLETIZING';
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
         field(28; "06-PHYTO"; Code[20])
         {
             Description = 'FDD009';
             Caption = '06-PHYTO';
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
         field(29; "07-STUFFING"; Code[20])
         {
             Description = 'FDD009';
             Caption = '07-STUFFING';
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
         field(30; "08-TRANSPORT"; Code[20])
         {
             Description = 'FDD009';
             Caption = '08-TRANSPORT';
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
         field(31; "09-REACH"; Code[20])
         {
             Description = 'FDD009';
             Caption = '09-REACH';
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
         field(32; "99-OTHERS"; Code[20])
         {
             Description = 'FDD009';
             Caption = '99-OTHERS';
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
         field(33; "FREIGHT"; Code[20])
         {
             Description = 'FDD009';
             Caption = 'FREIGHT';
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
         field(34; "HTP Adjustment"; Code[20])
         {
             Description = 'FDD009';
             Caption = 'HTP Adjustment';
-            TableRelation = Item."No.";
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
 
     }
