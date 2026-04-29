@@ -155,5 +155,6 @@ permissionset 50100 GeneratedPermission
         page "ISO Symbol Setting" = X,
         codeunit "RV Post Warehouse Shipment" = X,
         page "ISO Symbol Image FactBox" = X,
-        page "Warehouse Packing Info" = X;
+        page "Warehouse Packing Info" = X,
+        report "RV Cust Statement" = X;
 }

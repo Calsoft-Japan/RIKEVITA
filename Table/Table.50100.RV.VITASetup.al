@@ -1,7 +1,8 @@
 /// <summary>
 /// Table RIKEVITA Setup (ID 50100).
 /// FDD030 2026/02/23: New. (Stephen)
-/// FDD008 2026/03/15: New field "Stuffing Date Calculation". (Liuyang)
+/// FDD008 2026/03/15: New field "Stuffing Date Calculation". (Liuyang)/// 
+/// FDD009 2026/04/29: Charge Allocation fields Added. (Shawn)
 /// </summary>
 table 50100 "RV RIKEVITA Setup"
 {
@@ -118,6 +119,85 @@ table 50100 "RV RIKEVITA Setup"
         {
             Description = 'FDD017';
         }
+        field(22; "No. Series for Chg. Calc."; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = 'No. Series for Chg. Calc.';
+            TableRelation = "No. Series".Code;
+        }
+        field(23; "01-COO"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = '01-COO';
+            TableRelation = Item."No.";
+        }
+        field(24; "02-FORWARDING"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = '02-FORWARDING';
+            TableRelation = Item."No.";
+        }
+        field(25; "03-FUMIGATION"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = '03-FUMIGATION';
+            TableRelation = Item."No.";
+        }
+        field(26; "04-HEALTH"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = '04-HEALTH';
+            TableRelation = Item."No.";
+        }
+        field(27; "05-PALLETIZING"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = '05-PALLETIZING';
+            TableRelation = Item."No.";
+        }
+        field(28; "06-PHYTO"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = '06-PHYTO';
+            TableRelation = Item."No.";
+        }
+        field(29; "07-STUFFING"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = '07-STUFFING';
+            TableRelation = Item."No.";
+        }
+        field(30; "08-TRANSPORT"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = '08-TRANSPORT';
+            TableRelation = Item."No.";
+        }
+        field(31; "09-REACH"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = '09-REACH';
+            TableRelation = Item."No.";
+        }
+        field(32; "99-OTHERS"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = '99-OTHERS';
+            TableRelation = Item."No.";
+        }
+        field(33; "FREIGHT"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = 'FREIGHT';
+            TableRelation = Item."No.";
+        }
+        field(34; "HTP Adjustment"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = 'HTP Adjustment';
+            TableRelation = Item."No.";
+        }
+
     }
     keys
     {
