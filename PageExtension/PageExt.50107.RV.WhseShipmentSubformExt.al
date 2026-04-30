@@ -54,6 +54,12 @@ pageextension 50107 "RV Whse. Shipment Subform Ext" extends "Whse. Shipment Subf
                 Caption = 'ETD';
                 Description = 'FDD008';
             }
+            field("RV_SI Received Date"; Rec."RV_SI Received Date")
+            {
+                ApplicationArea = All;
+                Caption = 'SI Received Date';
+                Description = 'FDD008';
+            }
         }
 
     }

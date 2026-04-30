@@ -72,5 +72,11 @@ tableextension 50103 "RV Warehouse Shipment Ln Ext" extends "Warehouse Shipment 
             FieldClass = FlowField;
             CalcFormula = Lookup("RV Item Symbol Setting"."Symbol Display Packing List" WHERE("Item Code" = FIELD("No.")));
         }
+        field(50202; "RV_SI Received Date"; Date)
+        {
+            Caption = 'SI Received Date';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
     }
 }

@@ -119,6 +119,12 @@ table 50100 "RV RIKEVITA Setup"
         {
             Description = 'FDD017';
         }
+        field(20; "Freight Charge Item No"; Code[20])
+        {
+            Description = 'FDD017';
+            Caption = 'Freight Charge Item No';
+            TableRelation = "Item"."No." where(Type = const("Non-Inventory"));
+        }
         field(22; "No. Series for Chg. Calc."; Code[20])
         {
             Description = 'FDD009';
