@@ -5,7 +5,7 @@
 report 50103 "RV Cust Statement"
 {
     ApplicationArea = All;
-    Caption = 'Cust Statement';
+    Caption = 'Cust Statement Oversea';
     UsageCategory = ReportsAndAnalysis;
     DefaultRenderingLayout = "StandardStatementOversea.rdlc";
 
@@ -262,6 +262,54 @@ report 50103 "RV Cust Statement"
                             }
                             column(Currency2Code; TempCurrency2.Code)
                             {
+                            }
+
+                            dataitem("Sales Invoice Line"; "Sales Invoice Line")
+                            {
+                                DataItemLink = "Document No." = field("Document No.");
+                                DataItemLinkReference = DtldCustLedgEntries;
+                                DataItemTableView = sorting("Line No.") where(Type = const("Sales Line Type"::Item));
+
+                                column(Order_No_SInvLine; "Order No.")
+                                { }
+                                column(SInvLineAmt; SInvLineAmt)
+                                {
+                                    AutoFormatExpression = GetCurrencyCode();
+                                    AutoFormatType = 1;
+                                }
+                                column(SInvLineNo; SInvLineNo)
+                                { +}
+
+                                trigger OnAfterGetRecord()
+                                var
+                                    RVSetup: Record "RV RIKEVITA Setup";
+                                    ItemCard: Record Item;
+                                    CUST: Record Customer;
+                                begin
+                                    Clear(SInvLineAmt);
+
+                                    SInvLineNo += 1;
+
+                                    RVSetup.Reset();
+                                    RVSetup.FindSet();
+
+                                    ItemCard.Get("No.");
+                                    CUST.Get("Sell-to Customer No.");
+
+                                    if "No." = RVSetup."Freight Charge Item No" then begin
+                                        SInvLineAmt := Amount;// "Freight Charge";
+                                    end else
+                                        if ItemCard.Type = "Item Type"::Inventory then begin
+                                            SInvLineAmt := "Line Amount";// + "FOB Charge";
+                                        end
+                                        else
+                                            CurrReport.Skip();
+                                end;
+
+                                trigger OnPreDataItem()
+                                begin
+                                    Clear(SInvLineNo);
+                                end;
                             }
 
                             trigger OnAfterGetRecord()
@@ -950,14 +998,14 @@ report 50103 "RV Cust Statement"
         layout("StandardStatementOversea.rdlc")
         {
             Type = RDLC;
-            LayoutFile = '.\ReportLayout\StandardStatementOversea.rdlc';
+            LayoutFile = '.\ReportLayout\RV_StandardStatementOversea.rdlc';
             Caption = 'Standard Customer Statement (Oversea)';
             Summary = 'The Standard Customer Statement (Oversea) provides a detailed layout.';
         }
         layout("StandardStatementLocal.rdlc")
         {
             Type = RDLC;
-            LayoutFile = '.\ReportLayout\StandardStatementLocal.rdlc';
+            LayoutFile = '.\ReportLayout\RV_StandardStatementLocal.rdlc';
             Caption = 'Standard Customer Statement (Local)';
             Summary = 'The Standard Customer Statement (Local) provides a basic layout.';
         }
@@ -1106,6 +1154,8 @@ report 50103 "RV Cust Statement"
         TelemetryCategoryTxt: Label 'Report', Locked = true;
         CustomerStatementReportGeneratedTxt: Label 'Customer Statement report generated.', Locked = true;
         LegalOfficeTxt, LegalOfficeLbl : Text;
+        SInvLineAmt: Decimal;
+        SInvLineNo: Integer;
 
     protected var
         CompanyInfo: Record "Company Information";

@@ -5667,6 +5667,18 @@ End Function
         <Field Name="Currency2Code">
           <DataField>Currency2Code</DataField>
         </Field>
+        <Field Name="Order_No_SInvLine">
+          <DataField>Order_No_SInvLine</DataField>
+        </Field>
+        <Field Name="SInvLineAmt">
+          <DataField>SInvLineAmt</DataField>
+        </Field>
+        <Field Name="SInvLineAmtFormat">
+          <DataField>SInvLineAmtFormat</DataField>
+        </Field>
+        <Field Name="SInvLineNo">
+          <DataField>SInvLineNo</DataField>
+        </Field>
         <Field Name="CurrencyCode3_CustLedgEntryFooter">
           <DataField>CurrencyCode3_CustLedgEntryFooter</DataField>
         </Field>
