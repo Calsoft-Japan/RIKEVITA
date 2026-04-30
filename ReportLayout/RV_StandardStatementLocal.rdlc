@@ -5643,6 +5643,12 @@ End Function
         <Field Name="DueDate_DtldCustLedgEntries">
           <DataField>DueDate_DtldCustLedgEntries</DataField>
         </Field>
+        <Field Name="DocDate_DtldCustLedgEntries">
+          <DataField>DocDate_DtldCustLedgEntries</DataField>
+        </Field>
+        <Field Name="DocType_DtldCustLedgEntries">
+          <DataField>DocType_DtldCustLedgEntries</DataField>
+        </Field>
         <Field Name="CurrCode_DtldCustLedgEntries">
           <DataField>CurrCode_DtldCustLedgEntries</DataField>
         </Field>
@@ -5675,6 +5681,12 @@ End Function
         </Field>
         <Field Name="SInvLineAmtFormat">
           <DataField>SInvLineAmtFormat</DataField>
+        </Field>
+        <Field Name="SInvLnFreiCharge">
+          <DataField>SInvLnFreiCharge</DataField>
+        </Field>
+        <Field Name="SInvLnFreiChargeFormat">
+          <DataField>SInvLnFreiChargeFormat</DataField>
         </Field>
         <Field Name="SInvLineNo">
           <DataField>SInvLineNo</DataField>
@@ -5742,6 +5754,12 @@ End Function
         <Field Name="DueDate_CustLedgEntry2">
           <DataField>DueDate_CustLedgEntry2</DataField>
         </Field>
+        <Field Name="DocDate_CustLedgEntry2">
+          <DataField>DocDate_CustLedgEntry2</DataField>
+        </Field>
+        <Field Name="DocType_CustLedgEntry2">
+          <DataField>DocType_CustLedgEntry2</DataField>
+        </Field>
         <Field Name="OriginalAmt_CustLedgEntry2">
           <DataField>OriginalAmt_CustLedgEntry2</DataField>
         </Field>
@@ -5759,6 +5777,24 @@ End Function
         </Field>
         <Field Name="CustNo_CustLedgEntry2">
           <DataField>CustNo_CustLedgEntry2</DataField>
+        </Field>
+        <Field Name="OverDue_Order_No_SInvLine">
+          <DataField>OverDue_Order_No_SInvLine</DataField>
+        </Field>
+        <Field Name="OverDue_SInvLineAmt">
+          <DataField>OverDue_SInvLineAmt</DataField>
+        </Field>
+        <Field Name="OverDue_SInvLineAmtFormat">
+          <DataField>OverDue_SInvLineAmtFormat</DataField>
+        </Field>
+        <Field Name="OverDue_SInvLnFreiCharge">
+          <DataField>OverDue_SInvLnFreiCharge</DataField>
+        </Field>
+        <Field Name="OverDue_SInvLnFreiChargeFormat">
+          <DataField>OverDue_SInvLnFreiChargeFormat</DataField>
+        </Field>
+        <Field Name="OverDue_SInvLineNo">
+          <DataField>OverDue_SInvLineNo</DataField>
         </Field>
         <Field Name="OverdueBalance">
           <DataField>OverdueBalance</DataField>

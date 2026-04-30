@@ -242,6 +242,12 @@ report 50103 "RV Cust Statement"
                             column(DueDate_DtldCustLedgEntries; Format(DueDate))
                             {
                             }
+                            column(DocDate_DtldCustLedgEntries; Format(DocDate))
+                            {
+                            }
+                            column(DocType_DtldCustLedgEntries; DocType)
+                            {
+                            }
                             column(CurrCode_DtldCustLedgEntries; "Currency Code")
                             {
                             }
@@ -277,6 +283,11 @@ report 50103 "RV Cust Statement"
                                     AutoFormatExpression = GetCurrencyCode();
                                     AutoFormatType = 1;
                                 }
+                                column(SInvLnFreiCharge; SInvLnFreiCharge)
+                                {
+                                    AutoFormatExpression = GetCurrencyCode();
+                                    AutoFormatType = 1;
+                                }
                                 column(SInvLineNo; SInvLineNo)
                                 { }
 
@@ -287,6 +298,7 @@ report 50103 "RV Cust Statement"
                                     CUST: Record Customer;
                                 begin
                                     Clear(SInvLineAmt);
+                                    Clear(SInvLnFreiCharge);
 
                                     SInvLineNo += 1;
 
@@ -297,10 +309,10 @@ report 50103 "RV Cust Statement"
                                     CUST.Get("Sell-to Customer No.");
 
                                     if "No." = RVSetup."Freight Charge Item No" then begin
-                                        SInvLineAmt := Amount;// "Freight Charge";
+                                        SInvLnFreiCharge := "RV_Freight Charge";
                                     end else
-                                        if ItemCard.Type = "Item Type"::Inventory then begin
-                                            SInvLineAmt := "Line Amount";// + "FOB Charge";
+                                        if (ItemCard.Type = "Item Type"::Inventory) and (CUST."RV_Charge Type" = "RV Charge Type"::FOB) then begin
+                                            SInvLineAmt := "Line Amount" + "RV_Other Charge";
                                         end
                                         else
                                             CurrReport.Skip();
@@ -331,6 +343,9 @@ report 50103 "RV Cust Statement"
                                             YourReference := CustLedgerEntry."Your Reference";
                                             Description := CustLedgerEntry.Description;
                                             DueDate := CustLedgerEntry."Due Date";
+                                            DocDate := CustLedgerEntry."Document Date";
+                                            DocType := Format(CustLedgerEntry."Document Type");
+
                                             CustLedgerEntry.SetRange("Date Filter", 0D, EndDate);
                                             CustLedgerEntry.CalcFields("Remaining Amount");
                                             RemainingAmount := CustLedgerEntry."Remaining Amount";
@@ -484,6 +499,12 @@ report 50103 "RV Cust Statement"
                             column(DueDate_CustLedgEntry2; Format("Due Date"))
                             {
                             }
+                            column(DocDate_CustLedgEntry2; Format(OverDue_DocDate))
+                            {
+                            }
+                            column(DocType_CustLedgEntry2; OverDue_DocType)
+                            {
+                            }
                             column(OriginalAmt_CustLedgEntry2; "Original Amount")
                             {
                                 AutoFormatExpression = "Currency Code";
@@ -499,6 +520,60 @@ report 50103 "RV Cust Statement"
                             }
                             column(CustNo_CustLedgEntry2; "Customer No.")
                             {
+                            }
+
+                            Dataitem("OverDue_SalesInvoiceLine"; "Sales Invoice Line")
+                            {
+                                DataItemLink = "Document No." = field("Document No.");
+                                DataItemLinkReference = CustLedgEntry2;
+                                DataItemTableView = sorting("Line No.") where(Type = const("Sales Line Type"::Item));
+
+                                column(OverDue_Order_No_SInvLine; "Order No.")
+                                { }
+                                column(OverDue_SInvLineAmt; OverDue_SInvLineAmt)
+                                {
+                                    AutoFormatExpression = GetCurrencyCode();
+                                    AutoFormatType = 1;
+                                }
+                                column(OverDue_SInvLnFreiCharge; OverDue_SInvLnFreiCharge)
+                                {
+                                    AutoFormatExpression = GetCurrencyCode();
+                                    AutoFormatType = 1;
+                                }
+                                column(OverDue_SInvLineNo; OverDue_SInvLineNo)
+                                { }
+
+                                trigger OnAfterGetRecord()
+                                var
+                                    RVSetup: Record "RV RIKEVITA Setup";
+                                    ItemCard: Record Item;
+                                    CUST: Record Customer;
+                                begin
+                                    Clear(OverDue_SInvLineAmt);
+                                    Clear(OverDue_SInvLnFreiCharge);
+
+                                    OverDue_SInvLineNo += 1;
+
+                                    RVSetup.Reset();
+                                    RVSetup.FindSet();
+
+                                    ItemCard.Get("No.");
+                                    CUST.Get("Sell-to Customer No.");
+
+                                    if "No." = RVSetup."Freight Charge Item No" then begin
+                                        OverDue_SInvLnFreiCharge := "RV_Freight Charge";
+                                    end else
+                                        if (ItemCard.Type = "Item Type"::Inventory) and (CUST."RV_Charge Type" = "RV Charge Type"::FOB) then begin
+                                            OverDue_SInvLineAmt := "Line Amount" + "RV_Other Charge";
+                                        end
+                                        else
+                                            CurrReport.Skip();
+                                end;
+
+                                trigger OnPreDataItem()
+                                begin
+                                    Clear(OverDue_SInvLineNo);
+                                end;
                             }
 
                             trigger OnAfterGetRecord()
@@ -517,6 +592,10 @@ report 50103 "RV Cust Statement"
 
                                 if "Due Date" >= EndDate then
                                     CurrReport.Skip();
+
+                                OverDue_DueDate := CustLedgEntry."Due Date";
+                                OverDue_DocDate := CustLedgEntry."Document Date";
+                                OverDue_DocType := Format(CustLedgEntry."Document Type");
 
                                 CustBalance2 := CustBalance2 + CustLedgEntry."Remaining Amount";
                                 ClearCompanyPicture();
@@ -1155,7 +1234,17 @@ report 50103 "RV Cust Statement"
         CustomerStatementReportGeneratedTxt: Label 'Customer Statement report generated.', Locked = true;
         LegalOfficeTxt, LegalOfficeLbl : Text;
         SInvLineAmt: Decimal;
+        SInvLnFreiCharge: Decimal;
         SInvLineNo: Integer;
+        DocDate: Date;
+        DocType: Text;
+        OverDue_SInvLineAmt: Decimal;
+        OverDue_SInvLnFreiCharge: Decimal;
+        OverDue_SInvLineNo: Integer;
+        OverDue_DocDate: Date;
+        OverDue_DocType: Text;
+        OverDue_DueDate: Date;
+
 
     protected var
         CompanyInfo: Record "Company Information";

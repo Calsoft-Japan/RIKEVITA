@@ -7,7 +7,6 @@
         <DataProvider>SQL</DataProvider>
         <ConnectString />
       </ConnectionProperties>
-      <rd:SecurityType>None</rd:SecurityType>
       <rd:DataSourceID>b94148f2-a346-43d2-9f01-9142603a0f2d</rd:DataSourceID>
     </DataSource>
   </DataSources>
@@ -19,12 +18,12 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>17.93863cm</Width>
+                  <Width>18.84192cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>5.86059cm</Height>
+                  <Height>6.54851cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -952,7 +951,7 @@
                                   </FilterValues>
                                 </Filter>
                               </Filters>
-                              <Top>4.02645cm</Top>
+                              <Top>4.66145cm</Top>
                               <Height>1.83413cm</Height>
                               <Width>17.92433cm</Width>
                               <Style />
@@ -1082,7 +1081,6 @@ Cstr(Fields!CustBalanceCaption.Value)
                                               <PaddingBottom>2pt</PaddingBottom>
                                             </Style>
                                           </Textbox>
-                                          <rd:Selected>true</rd:Selected>
                                         </CellContents>
                                       </TablixCell>
                                     </TablixCells>
@@ -1112,12 +1110,12 @@ Cstr(Fields!CustBalanceCaption.Value)
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>17.93863cm</Width>
+                                    <Width>18.84192cm</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
                                   <TablixRow>
-                                    <Height>3.22057cm</Height>
+                                    <Height>3.9614cm</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -1133,13 +1131,19 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                       <Width>1.98768cm</Width>
                                                     </TablixColumn>
                                                     <TablixColumn>
-                                                      <Width>4.20624cm</Width>
-                                                    </TablixColumn>
-                                                    <TablixColumn>
                                                       <Width>1.98768cm</Width>
                                                     </TablixColumn>
                                                     <TablixColumn>
-                                                      <Width>1.7749cm</Width>
+                                                      <Width>1.61332cm</Width>
+                                                    </TablixColumn>
+                                                    <TablixColumn>
+                                                      <Width>1.56435cm</Width>
+                                                    </TablixColumn>
+                                                    <TablixColumn>
+                                                      <Width>1.16676cm</Width>
+                                                    </TablixColumn>
+                                                    <TablixColumn>
+                                                      <Width>1.70726cm</Width>
                                                     </TablixColumn>
                                                     <TablixColumn>
                                                       <Width>1.90023cm</Width>
@@ -1183,9 +1187,10 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                                 <PaddingRight>5pt</PaddingRight>
                                                               </Style>
                                                             </Textbox>
-                                                            <ColSpan>2</ColSpan>
+                                                            <ColSpan>3</ColSpan>
                                                           </CellContents>
                                                         </TablixCell>
+                                                        <TablixCell />
                                                         <TablixCell />
                                                         <TablixCell>
                                                           <CellContents>
@@ -1260,6 +1265,34 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                               </Paragraphs>
                                                               <rd:DefaultName>textbox12</rd:DefaultName>
                                                               <ZIndex>27</ZIndex>
+                                                              <Style>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Textbox2">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <FontWeight>Bold</FontWeight>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style />
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox2</rd:DefaultName>
                                                               <Style>
                                                                 <PaddingLeft>5pt</PaddingLeft>
                                                                 <PaddingRight>5pt</PaddingRight>
@@ -1384,6 +1417,34 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                         </TablixCell>
                                                         <TablixCell>
                                                           <CellContents>
+                                                            <Textbox Name="Textbox1">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontSize>7pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Left</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox1</rd:DefaultName>
+                                                              <Style>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
                                                             <Textbox Name="textbox39">
                                                               <KeepTogether>true</KeepTogether>
                                                               <Paragraphs>
@@ -1490,6 +1551,32 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                         </TablixCell>
                                                         <TablixCell>
                                                           <CellContents>
+                                                            <Textbox Name="Textbox16">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontSize>7pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style />
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox16</rd:DefaultName>
+                                                              <Style>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
                                                             <Textbox Name="textbox43">
                                                               <KeepTogether>true</KeepTogether>
                                                               <Paragraphs>
@@ -1577,14 +1664,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                       <TablixCells>
                                                         <TablixCell>
                                                           <CellContents>
-                                                            <Textbox Name="textbox81">
+                                                            <Textbox Name="DocDate_DtldCustLedgEntries">
                                                               <CanGrow>true</CanGrow>
                                                               <KeepTogether>true</KeepTogether>
                                                               <Paragraphs>
                                                                 <Paragraph>
                                                                   <TextRuns>
                                                                     <TextRun>
-                                                                      <Value>=Fields!PostDate_DtldCustLedgEntries.Value</Value>
+                                                                      <Value>=Fields!DocDate_DtldCustLedgEntries.Value</Value>
                                                                       <Style>
                                                                         <FontFamily>Segoe UI</FontFamily>
                                                                         <FontSize>8pt</FontSize>
@@ -1597,10 +1684,42 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                                   </Style>
                                                                 </Paragraph>
                                                               </Paragraphs>
-                                                              <rd:DefaultName>textbox81</rd:DefaultName>
+                                                              <rd:DefaultName>DocDate_DtldCustLedgEntries</rd:DefaultName>
                                                               <ZIndex>7</ZIndex>
                                                               <Style>
                                                                 <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="textbox85">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>=Fields!DueDate_DtldCustLedgEntries.Value</Value>
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <Format>d</Format>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Left</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>textbox85</rd:DefaultName>
+                                                              <ZIndex>4</ZIndex>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
                                                                 <PaddingRight>5pt</PaddingRight>
                                                               </Style>
                                                             </Textbox>
@@ -1638,13 +1757,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                         </TablixCell>
                                                         <TablixCell>
                                                           <CellContents>
-                                                            <Textbox Name="textbox84">
+                                                            <Textbox Name="Order_No_SInvLine">
+                                                              <CanGrow>true</CanGrow>
                                                               <KeepTogether>true</KeepTogether>
                                                               <Paragraphs>
                                                                 <Paragraph>
                                                                   <TextRuns>
                                                                     <TextRun>
-                                                                      <Value>=Fields!Description.Value</Value>
+                                                                      <Value>=Fields!Order_No_SInvLine.Value</Value>
                                                                       <Style>
                                                                         <FontFamily>Segoe UI</FontFamily>
                                                                         <FontSize>8pt</FontSize>
@@ -1656,8 +1776,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                                   </Style>
                                                                 </Paragraph>
                                                               </Paragraphs>
-                                                              <rd:DefaultName>textbox84</rd:DefaultName>
-                                                              <ZIndex>5</ZIndex>
+                                                              <rd:DefaultName>Order_No_SInvLine</rd:DefaultName>
                                                               <Style>
                                                                 <VerticalAlign>Middle</VerticalAlign>
                                                                 <PaddingLeft>5pt</PaddingLeft>
@@ -1668,18 +1787,16 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                         </TablixCell>
                                                         <TablixCell>
                                                           <CellContents>
-                                                            <Textbox Name="textbox85">
-                                                              <CanGrow>true</CanGrow>
+                                                            <Textbox Name="DocType_DtldCustLedgEntries">
                                                               <KeepTogether>true</KeepTogether>
                                                               <Paragraphs>
                                                                 <Paragraph>
                                                                   <TextRuns>
                                                                     <TextRun>
-                                                                      <Value>=Fields!DueDate_DtldCustLedgEntries.Value</Value>
+                                                                      <Value>=Fields!DocType_DtldCustLedgEntries.Value</Value>
                                                                       <Style>
                                                                         <FontFamily>Segoe UI</FontFamily>
                                                                         <FontSize>8pt</FontSize>
-                                                                        <Format>d</Format>
                                                                       </Style>
                                                                     </TextRun>
                                                                   </TextRuns>
@@ -1688,8 +1805,8 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                                   </Style>
                                                                 </Paragraph>
                                                               </Paragraphs>
-                                                              <rd:DefaultName>textbox85</rd:DefaultName>
-                                                              <ZIndex>4</ZIndex>
+                                                              <rd:DefaultName>DocType_DtldCustLedgEntries</rd:DefaultName>
+                                                              <ZIndex>5</ZIndex>
                                                               <Style>
                                                                 <VerticalAlign>Middle</VerticalAlign>
                                                                 <PaddingLeft>5pt</PaddingLeft>
@@ -1732,6 +1849,66 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                         </TablixCell>
                                                         <TablixCell>
                                                           <CellContents>
+                                                            <Textbox Name="SInvLineAmt">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>=Fields!SInvLineAmt.Value</Value>
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>SInvLineAmt</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="SInvLnFreiCharge">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>=Fields!SInvLnFreiCharge.Value</Value>
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>SInvLnFreiCharge</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
                                                             <Textbox Name="textbox86">
                                                               <CanGrow>true</CanGrow>
                                                               <KeepTogether>true</KeepTogether>
@@ -1754,38 +1931,6 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                               </Paragraphs>
                                                               <rd:DefaultName>textbox86</rd:DefaultName>
                                                               <ZIndex>2</ZIndex>
-                                                              <Style>
-                                                                <VerticalAlign>Middle</VerticalAlign>
-                                                                <PaddingLeft>5pt</PaddingLeft>
-                                                                <PaddingRight>5pt</PaddingRight>
-                                                              </Style>
-                                                            </Textbox>
-                                                          </CellContents>
-                                                        </TablixCell>
-                                                        <TablixCell>
-                                                          <CellContents>
-                                                            <Textbox Name="textbox87">
-                                                              <CanGrow>true</CanGrow>
-                                                              <KeepTogether>true</KeepTogether>
-                                                              <Paragraphs>
-                                                                <Paragraph>
-                                                                  <TextRuns>
-                                                                    <TextRun>
-                                                                      <Value>=Fields!RemainAmt_DtldCustLedgEntries.Value</Value>
-                                                                      <Style>
-                                                                        <FontFamily>Segoe UI</FontFamily>
-                                                                        <FontSize>8pt</FontSize>
-                                                                        <Format>=Fields!RemainAmt_DtldCustLedgEntriesFormat.Value</Format>
-                                                                      </Style>
-                                                                    </TextRun>
-                                                                  </TextRuns>
-                                                                  <Style>
-                                                                    <TextAlign>Right</TextAlign>
-                                                                  </Style>
-                                                                </Paragraph>
-                                                              </Paragraphs>
-                                                              <rd:DefaultName>textbox87</rd:DefaultName>
-                                                              <ZIndex>1</ZIndex>
                                                               <Style>
                                                                 <VerticalAlign>Middle</VerticalAlign>
                                                                 <PaddingLeft>5pt</PaddingLeft>
@@ -1827,6 +1972,309 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                       </TablixCells>
                                                     </TablixRow>
                                                     <TablixRow>
+                                                      <Height>0.39837cm</Height>
+                                                      <TablixCells>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Textbox22">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Left</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox22</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Textbox23">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Left</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox23</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Textbox24">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Left</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox24</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Order_No_SInvLine2">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>=Fields!Order_No_SInvLine.Value</Value>
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Left</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Order_No_SInvLine</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Textbox47">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Left</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox47</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Textbox48">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Left</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox48</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="SInvLineAmt2">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>=Fields!SInvLineAmt.Value</Value>
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>SInvLineAmt</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="SInvLnFreiCharge2">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value>=Fields!SInvLnFreiCharge.Value</Value>
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>SInvLnFreiCharge</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Textbox51">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox51</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Textbox52">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox52</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                      </TablixCells>
+                                                    </TablixRow>
+                                                    <TablixRow>
                                                       <Height>0.17638cm</Height>
                                                       <TablixCells>
                                                         <TablixCell>
@@ -1854,6 +2302,37 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                               <rd:DefaultName>Textbox68</rd:DefaultName>
                                                               <Style>
                                                                 <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Textbox6">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <FontWeight>Bold</FontWeight>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox6</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
                                                                 <PaddingRight>5pt</PaddingRight>
                                                               </Style>
                                                             </Textbox>
@@ -1975,6 +2454,37 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                                 </Paragraph>
                                                               </Paragraphs>
                                                               <rd:DefaultName>Textbox72</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Textbox50">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <FontWeight>Bold</FontWeight>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox50</rd:DefaultName>
                                                               <Style>
                                                                 <VerticalAlign>Middle</VerticalAlign>
                                                                 <PaddingLeft>5pt</PaddingLeft>
@@ -2118,6 +2628,37 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                         </TablixCell>
                                                         <TablixCell>
                                                           <CellContents>
+                                                            <Textbox Name="Textbox10">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <FontWeight>Bold</FontWeight>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox10</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
                                                             <Textbox Name="Textbox77">
                                                               <CanGrow>true</CanGrow>
                                                               <KeepTogether>true</KeepTogether>
@@ -2232,6 +2773,37 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                                 </Paragraph>
                                                               </Paragraphs>
                                                               <rd:DefaultName>Textbox80</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
+                                                            <Textbox Name="Textbox53">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <FontWeight>Bold</FontWeight>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox53</rd:DefaultName>
                                                               <Style>
                                                                 <VerticalAlign>Middle</VerticalAlign>
                                                                 <PaddingLeft>5pt</PaddingLeft>
@@ -2369,6 +2941,37 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                         </TablixCell>
                                                         <TablixCell>
                                                           <CellContents>
+                                                            <Textbox Name="Textbox15">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <FontWeight>Bold</FontWeight>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox15</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
                                                             <Textbox Name="textbox19">
                                                               <KeepTogether>true</KeepTogether>
                                                               <Paragraphs>
@@ -2493,6 +3096,37 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                         </TablixCell>
                                                         <TablixCell>
                                                           <CellContents>
+                                                            <Textbox Name="Textbox54">
+                                                              <CanGrow>true</CanGrow>
+                                                              <KeepTogether>true</KeepTogether>
+                                                              <Paragraphs>
+                                                                <Paragraph>
+                                                                  <TextRuns>
+                                                                    <TextRun>
+                                                                      <Value />
+                                                                      <Style>
+                                                                        <FontFamily>Segoe UI</FontFamily>
+                                                                        <FontSize>8pt</FontSize>
+                                                                        <FontWeight>Bold</FontWeight>
+                                                                      </Style>
+                                                                    </TextRun>
+                                                                  </TextRuns>
+                                                                  <Style>
+                                                                    <TextAlign>Right</TextAlign>
+                                                                  </Style>
+                                                                </Paragraph>
+                                                              </Paragraphs>
+                                                              <rd:DefaultName>Textbox54</rd:DefaultName>
+                                                              <Style>
+                                                                <VerticalAlign>Middle</VerticalAlign>
+                                                                <PaddingLeft>5pt</PaddingLeft>
+                                                                <PaddingRight>5pt</PaddingRight>
+                                                              </Style>
+                                                            </Textbox>
+                                                          </CellContents>
+                                                        </TablixCell>
+                                                        <TablixCell>
+                                                          <CellContents>
                                                             <Textbox Name="textbox28">
                                                               <KeepTogether>true</KeepTogether>
                                                               <Paragraphs>
@@ -2599,6 +3233,8 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                     <TablixMember />
                                                     <TablixMember />
                                                     <TablixMember />
+                                                    <TablixMember />
+                                                    <TablixMember />
                                                   </TablixMembers>
                                                 </TablixColumnHierarchy>
                                                 <TablixRowHierarchy>
@@ -2636,6 +3272,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                                 <Hidden>=IIF(Fields!DocNo_DtldCustLedgEntries.Value="",TRUE,FALSE) OR IIF(Fields!PrintLine.Value=FALSE AND Fields!DtldCustLedgEntryType.Value="2",TRUE,FALSE)</Hidden>
                                                               </Visibility>
                                                             </TablixMember>
+                                                            <TablixMember />
                                                           </TablixMembers>
                                                           <DataElementName>Detail_Collection</DataElementName>
                                                           <DataElementOutput>Output</DataElementOutput>
@@ -2664,8 +3301,9 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                     </TablixMember>
                                                   </TablixMembers>
                                                 </TablixRowHierarchy>
-                                                <Height>1.76388cm</Height>
-                                                <Width>17.93863cm</Width>
+                                                <DataSetName>DataSet_Result</DataSetName>
+                                                <Height>2.16225cm</Height>
+                                                <Width>18.00918cm</Width>
                                                 <Style />
                                               </Tablix>
                                               <Tablix Name="table2">
@@ -3759,7 +4397,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                     </FilterValues>
                                                   </Filter>
                                                 </Filters>
-                                                <Top>1.80947cm</Top>
+                                                <Top>2.44447cm</Top>
                                                 <Height>1.4111cm</Height>
                                                 <Width>16.30192cm</Width>
                                                 <ZIndex>1</ZIndex>
@@ -3804,8 +4442,8 @@ Cstr(Fields!CustBalanceCaption.Value)
                               </TablixRowHierarchy>
                               <DataSetName>DataSet_Result</DataSetName>
                               <Top>0.03171cm</Top>
-                              <Height>3.22057cm</Height>
-                              <Width>17.93863cm</Width>
+                              <Height>3.9614cm</Height>
+                              <Width>18.84192cm</Width>
                               <ZIndex>2</ZIndex>
                               <Style />
                             </Tablix>
@@ -3840,15 +4478,16 @@ Cstr(Fields!CustBalanceCaption.Value)
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
+            <DataSetName>DataSet_Result</DataSetName>
             <PageBreak>
               <BreakLocation>End</BreakLocation>
             </PageBreak>
-            <Height>5.86059cm</Height>
-            <Width>17.93863cm</Width>
+            <Height>6.54851cm</Height>
+            <Width>18.84192cm</Width>
             <Style />
           </Tablix>
         </ReportItems>
-        <Height>2.30732in</Height>
+        <Height>2.70315in</Height>
         <Style />
       </Body>
       <Width>19cm</Width>
@@ -5077,7 +5716,7 @@ Cstr(Fields!CustBalanceCaption.Value)
               <Top>9.30244cm</Top>
               <Left>4.02767cm</Left>
               <Height>27.80009pt</Height>
-              <Width>4.20623cm</Width>
+              <Width>1.98769cm</Width>
               <ZIndex>46</ZIndex>
               <Style>
                 <VerticalAlign>Bottom</VerticalAlign>
@@ -5643,6 +6282,12 @@ End Function
         <Field Name="DueDate_DtldCustLedgEntries">
           <DataField>DueDate_DtldCustLedgEntries</DataField>
         </Field>
+        <Field Name="DocDate_DtldCustLedgEntries">
+          <DataField>DocDate_DtldCustLedgEntries</DataField>
+        </Field>
+        <Field Name="DocType_DtldCustLedgEntries">
+          <DataField>DocType_DtldCustLedgEntries</DataField>
+        </Field>
         <Field Name="CurrCode_DtldCustLedgEntries">
           <DataField>CurrCode_DtldCustLedgEntries</DataField>
         </Field>
@@ -5675,6 +6320,12 @@ End Function
         </Field>
         <Field Name="SInvLineAmtFormat">
           <DataField>SInvLineAmtFormat</DataField>
+        </Field>
+        <Field Name="SInvLnFreiCharge">
+          <DataField>SInvLnFreiCharge</DataField>
+        </Field>
+        <Field Name="SInvLnFreiChargeFormat">
+          <DataField>SInvLnFreiChargeFormat</DataField>
         </Field>
         <Field Name="SInvLineNo">
           <DataField>SInvLineNo</DataField>
@@ -5742,6 +6393,12 @@ End Function
         <Field Name="DueDate_CustLedgEntry2">
           <DataField>DueDate_CustLedgEntry2</DataField>
         </Field>
+        <Field Name="DocDate_CustLedgEntry2">
+          <DataField>DocDate_CustLedgEntry2</DataField>
+        </Field>
+        <Field Name="DocType_CustLedgEntry2">
+          <DataField>DocType_CustLedgEntry2</DataField>
+        </Field>
         <Field Name="OriginalAmt_CustLedgEntry2">
           <DataField>OriginalAmt_CustLedgEntry2</DataField>
         </Field>
@@ -5759,6 +6416,24 @@ End Function
         </Field>
         <Field Name="CustNo_CustLedgEntry2">
           <DataField>CustNo_CustLedgEntry2</DataField>
+        </Field>
+        <Field Name="OverDue_Order_No_SInvLine">
+          <DataField>OverDue_Order_No_SInvLine</DataField>
+        </Field>
+        <Field Name="OverDue_SInvLineAmt">
+          <DataField>OverDue_SInvLineAmt</DataField>
+        </Field>
+        <Field Name="OverDue_SInvLineAmtFormat">
+          <DataField>OverDue_SInvLineAmtFormat</DataField>
+        </Field>
+        <Field Name="OverDue_SInvLnFreiCharge">
+          <DataField>OverDue_SInvLnFreiCharge</DataField>
+        </Field>
+        <Field Name="OverDue_SInvLnFreiChargeFormat">
+          <DataField>OverDue_SInvLnFreiChargeFormat</DataField>
+        </Field>
+        <Field Name="OverDue_SInvLineNo">
+          <DataField>OverDue_SInvLineNo</DataField>
         </Field>
         <Field Name="OverdueBalance">
           <DataField>OverdueBalance</DataField>

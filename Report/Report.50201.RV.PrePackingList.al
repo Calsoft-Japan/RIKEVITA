@@ -101,7 +101,7 @@ report 50201 "RV Pre Packing List Report"
                     if SalesHeader.FindFirst() then begin
                         //FromValue := SalesHeader."RV_Country of Origin";
                         ToValue := SalesHeader."Ship-to Name";
-                        SailingOnOrAbout := SalesHeader."RV_SAILING ON OR ABOUT";
+                        //SailingOnOrAbout := SalesHeader."RV_SAILING ON OR ABOUT";
                     end;
                 end;
 
