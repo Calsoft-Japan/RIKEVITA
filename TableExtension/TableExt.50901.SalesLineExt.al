@@ -16,5 +16,12 @@ tableextension 50901 "RV SalesLine Ext" extends "Sales Line"
             Description = 'FDD009';
             Caption = 'Other Charge';
         }
+        field(50902; "RV_Charge Type"; Enum "RV Charge Type")
+        {
+            Description = 'FDD009';
+            Caption = 'Charge Type';
+            FieldClass = FlowField;
+            CalcFormula = lookup(Customer."RV_Charge Type" where("No." = field("Sell-to Customer No.")));
+        }
     }
 }
