@@ -278,7 +278,7 @@ report 50103 "RV Cust Statement"
                                     AutoFormatType = 1;
                                 }
                                 column(SInvLineNo; SInvLineNo)
-                                { +}
+                                { }
 
                                 trigger OnAfterGetRecord()
                                 var
