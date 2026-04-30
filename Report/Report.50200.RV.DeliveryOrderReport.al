@@ -51,7 +51,7 @@ report 50200 "RV Delivery Order Report"
             column(SellToAddress2; Header."Sell-to Address 2")
             {
             }
-            column(SellToPostCode; Header."Sell-to Post Code" + Header."Sell-to City")
+            column(SellToPostCode; Header."Sell-to Post Code" + ' ' + Header."Sell-to City")
             {
             }
             column(SellToCountry; Header."Sell-to Country/Region Code")

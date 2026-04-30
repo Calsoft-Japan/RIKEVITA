@@ -50,5 +50,45 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
             }
         }
     }
+    actions
+    {
+        addbefore("Delete Qty. to Ship")
+        {
+            action("CreatePackingInfo")
+            {
+                Caption = 'Create Packing Info';
+                Image = ViewPage;
+                ApplicationArea = all;
+                trigger OnAction()
+                var
+                    PackingInfo: Record "RV Warehouse Packing Info.";
+                begin
+                    if Confirm('Do you want to create or updating the packing information for the warehouse order?', false) then begin
+                        PackingInfo.SetRange("Warehouse Shipment No.", Rec."No.");
+                        PAGE.Run(PAGE::"Warehouse Packing Info", PackingInfo);
+                    end;
+                end;
+            }
+            action("PrePackingList")
+            {
+                Caption = 'Pre Packing List';
+                Image = Report;
+                ApplicationArea = all;
+                trigger OnAction()
+                begin
+                    Report.Run(Report::"RV Pre Packing List Report");
+                end;
+            }
+        }
+        addafter("Category_Qty. to Ship")
+        {
+            actionref("CreatePackingInfo_Promoted"; "CreatePackingInfo")
+            {
+            }
+            actionref("PrePackingList_Promoted"; "PrePackingList")
+            {
+            }
+        }
+    }
 
 }
