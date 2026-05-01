@@ -831,6 +831,9 @@ report 50103 "RV Cust Statement"
                     CurrReport.Skip();
 
                 FormatAddress.Customer(CustomerAddress, Customer);
+                CustomerAddress[7] := Customer."Phone No.";
+                CustomerAddress[8] := Customer."Fax No.";
+
                 PrintedCustomersList.Add("No.");
                 UpdatePictures();
                 FirstRecordPrinted := false;
@@ -846,6 +849,7 @@ report 50103 "RV Cust Statement"
                 CompanyInfo.Get();
                 FormatAddress.Company(CompanyAddress, CompanyInfo);
                 CompanyInfo.CalcFields(Picture);
+                CompanyAddress[7] := CompanyInfo."Fax No.";
 
                 PopulateTempCurrencies();
 

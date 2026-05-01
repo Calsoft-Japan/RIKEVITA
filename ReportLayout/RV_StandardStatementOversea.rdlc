@@ -1241,10 +1241,15 @@ Cstr(Fields!Desc_CustLedgEntry2Caption.Value) + Chr(177) +
 Cstr(Fields!DueDate_CustLedgEntry2Caption.Value) + Chr(177) + 
 Cstr(Fields!OriginalAmt_CustLedgEntry2Caption.Value) + Chr(177) + 
 Cstr(Fields!RemainAmtCustLedgEntry2Caption.Value) + Chr(177) + 
-Cstr(Fields!CustBalanceCaption.Value)
+Cstr(Fields!CustBalanceCaption.Value) + Chr(177) + 
+Cstr(Fields!CompanyAddr5.Value) + Chr(177) + 
+Cstr(Fields!CompanyAddr6.Value)
 , 1)</Hidden>
                                             </Visibility>
                                             <Style>
+                                              <Border>
+                                                <Style>None</Style>
+                                              </Border>
                                               <PaddingLeft>2pt</PaddingLeft>
                                               <PaddingRight>2pt</PaddingRight>
                                               <PaddingTop>2pt</PaddingTop>
@@ -5816,7 +5821,7 @@ Cstr(Fields!CustBalanceCaption.Value)
       <Width>18.84192cm</Width>
       <Page>
         <PageHeader>
-          <Height>4.54181in</Height>
+          <Height>4.19806in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -6050,14 +6055,10 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>4.315cm</Top>
-              <Left>12.3668cm</Left>
+              <Top>6.432cm</Top>
               <Height>11pt</Height>
-              <Width>3.02467cm</Width>
+              <Width>1.53711cm</Width>
               <ZIndex>8</ZIndex>
-              <Visibility>
-                <Hidden>true</Hidden>
-              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -6095,7 +6096,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Code.GetData(16,1)</Value>
+                      <Value>=Code.GetData(15,1)</Value>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
@@ -6108,9 +6109,9 @@ Cstr(Fields!CustBalanceCaption.Value)
                 </Paragraph>
               </Paragraphs>
               <Top>6.432cm</Top>
-              <Left>0.00007cm</Left>
+              <Left>8.39806cm</Left>
               <Height>11pt</Height>
-              <Width>11.70697cm</Width>
+              <Width>3.30898cm</Width>
               <ZIndex>10</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
@@ -6122,7 +6123,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Code.GetData(15,1)</Value>
+                      <Value>=Code.GetData(54,1)</Value>
                       <Style>
                         <FontFamily>Segoe UI</FontFamily>
                         <FontSize>8pt</FontSize>
@@ -6159,10 +6160,10 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>10.87104cm</Top>
-              <Left>0.00007cm</Left>
+              <Top>9.99858cm</Top>
+              <Left>8.36278cm</Left>
               <Height>11pt</Height>
-              <Width>11.70697cm</Width>
+              <Width>3.34426cm</Width>
               <ZIndex>12</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
@@ -6184,10 +6185,10 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>10.44804cm</Top>
-              <Left>0.00007cm</Left>
+              <Top>9.99858cm</Top>
+              <Left>1.60119cm</Left>
               <Height>11pt</Height>
-              <Width>11.70697cm</Width>
+              <Width>3.16787cm</Width>
               <ZIndex>13</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
@@ -6443,12 +6444,18 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>10.02504cm</Top>
-              <Left>0.00007cm</Left>
+              <Top>9.99858cm</Top>
+              <Left>12.36302cm</Left>
               <Height>11pt</Height>
-              <Width>11.70697cm</Width>
+              <Width>6.14885cm</Width>
               <ZIndex>22</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
             </Textbox>
@@ -6466,18 +6473,15 @@ Cstr(Fields!CustBalanceCaption.Value)
                     </TextRun>
                   </TextRuns>
                   <Style>
-                    <TextAlign>Right</TextAlign>
+                    <TextAlign>Left</TextAlign>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>4.315cm</Top>
-              <Left>15.39145cm</Left>
+              <Top>6.432cm</Top>
+              <Left>1.60119cm</Left>
               <Height>11pt</Height>
               <Width>3.16787cm</Width>
               <ZIndex>23</ZIndex>
-              <Visibility>
-                <Hidden>true</Hidden>
-              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -6498,7 +6502,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>9.60204cm</Top>
+              <Top>9.57525cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6989,6 +6993,90 @@ Cstr(Fields!CustBalanceCaption.Value)
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
                 <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="PhoneNo_CompanyInfoCaption12">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value EvaluationMode="Constant">Fax No.</Value>
+                      <Style>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>6.432cm</Top>
+              <Left>7.15199cm</Left>
+              <Height>11pt</Height>
+              <Width>1.21079cm</Width>
+              <ZIndex>42</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Textbox Name="PhoneNo_CompanyInfoCaption13">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value EvaluationMode="Constant">Fax No.</Value>
+                      <Style>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>9.99858cm</Top>
+              <Left>7.15199cm</Left>
+              <Height>11pt</Height>
+              <Width>1.21079cm</Width>
+              <ZIndex>43</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Textbox Name="PhoneNo_CompanyInfoCaption14">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Phone No.</Value>
+                      <Style>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>9.99858cm</Top>
+              <Left>0.00353cm</Left>
+              <Height>11pt</Height>
+              <Width>1.53358cm</Width>
+              <ZIndex>44</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
               </Style>
             </Textbox>
           </ReportItems>
