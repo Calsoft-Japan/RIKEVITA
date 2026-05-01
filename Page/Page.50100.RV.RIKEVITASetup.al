@@ -227,7 +227,7 @@ page 50100 "RIKEVITA Setup"///
                     Description = 'FDD009';
                     ApplicationArea = All;
                 }
-                field("FREIGHT"; Rec."FREIGHT")
+                field("FREIGHT"; Rec."Freight Charge Item No")
                 {
                     Caption = 'FREIGHT';
                     Description = 'FDD009';
