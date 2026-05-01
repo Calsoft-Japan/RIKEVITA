@@ -42,12 +42,13 @@ table 50901 "RV Charge Calc. Line"
                 SalesLineView.SetRange("Document Type", Enum::"Sales Document Type"::Order);
                 SalesLineView.SetRange(Type, Enum::"Sales Line Type"::Item);
                 SalesLineView.SetRange("RV_Charge Type", ChargeCalcHeader."Charge Type");
-                pagSalesLine.SetTableView(SalesLineView);
-                if pagSalesLine.RunModal() = Action::OK then begin
-                    pagSalesLine.GetRecord(SalesLineLookup);
-                    "Sales Order No." := SalesLineLookup."Document No.";
-                    "Sales Order Line No." := SalesLineLookup."Line No.";
+
+                if Page.RunModal(Page::"Sales Lines", SalesLineView) = Action::LookupOK then begin
+
+                    "Sales Order No." := SalesLineView."Document No.";
+                    "Sales Order Line No." := SalesLineView."Line No.";
                     Modify();
+
                 end;
             end;
 

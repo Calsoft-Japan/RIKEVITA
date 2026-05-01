@@ -7,6 +7,7 @@ page 50900 "RV Charge Calculations"
     ApplicationArea = All;
     Caption = 'Charge Calculations';
     PageType = List;
+    CardPageID = "RV Charge Calculation";
     SourceTable = "RV Charge Calc. Header";
     UsageCategory = Lists;
     Editable = false;

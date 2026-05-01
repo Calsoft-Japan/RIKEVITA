@@ -8,7 +8,9 @@ page 50902 "RV Charge Calculation Subform"
     Caption = 'Charge Calculation Subform';
     PageType = ListPart;
     SourceTable = "RV Charge Calc. Line";
-    AutoSplitKey = true;
+    DelayedInsert = true;
+    LinksAllowed = false;
+    MultipleNewLines = true;
 
     layout
     {
@@ -102,6 +104,27 @@ page 50902 "RV Charge Calculation Subform"
                 field("Final Charge (KG)"; Rec."Final Charge (KG)")
                 {
                 }
+            }
+        }
+    }
+
+    actions
+    {
+
+        area(processing)
+        {
+            action("Calculate Charge")
+            {
+                Caption = 'Calculate Charge';
+                ApplicationArea = All;
+                Image = Calculate;
+
+                trigger OnAction()
+                begin
+
+                    Message('Under Construction.');
+
+                end;
             }
         }
     }

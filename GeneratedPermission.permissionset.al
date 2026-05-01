@@ -156,5 +156,13 @@ permissionset 50100 GeneratedPermission
         codeunit "RV Post Warehouse Shipment" = X,
         page "ISO Symbol Image FactBox" = X,
         page "Warehouse Packing Info" = X,
-        report "RV Cust Statement" = X;
+        report "RV Cust Statement" = X,
+        tabledata "RV Charge Calc. Header" = RIMD,
+        tabledata "RV Charge Calc. Line" = RIMD,
+        table "RV Charge Calc. Header" = X,
+        table "RV Charge Calc. Line" = X,
+        report "RV Pre Packing List Report" = X,
+        page "RV Charge Calculation" = X,
+        page "RV Charge Calculation Subform" = X,
+        page "RV Charge Calculations" = X;
 }

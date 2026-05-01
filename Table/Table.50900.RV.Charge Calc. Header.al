@@ -137,7 +137,7 @@ table 50900 "RV Charge Calc. Header"
     procedure CarryOutEnable() IsEditable: Boolean;
     begin
 
-        IsEditable := rec.Status <> Enum::"RV Charge Calc. Status"::WIP;
+        IsEditable := rec.Status = Enum::"RV Charge Calc. Status"::WIP;
 
     end;
 

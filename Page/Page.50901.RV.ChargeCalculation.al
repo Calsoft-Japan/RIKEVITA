@@ -38,6 +38,12 @@ page 50901 "RV Charge Calculation"
                 }
                 field("Charge Type"; Rec."Charge Type")
                 {
+                    trigger OnValidate()
+                    begin
+
+                        IsChargeLinesEditable := Rec.ChargeLinesEditable();
+                        CurrPage.Update();
+                    end;
                 }
                 field("Calculation Date"; Rec."Calculation Date")
                 {
@@ -47,6 +53,12 @@ page 50901 "RV Charge Calculation"
                 }
                 field(Status; Rec.Status)
                 {
+                    trigger OnValidate()
+                    begin
+
+                        IsCarryOutEnable := Rec.CarryOutEnable();
+                        CurrPage.Update();
+                    end;
                 }
             }
 
@@ -94,6 +106,7 @@ page 50901 "RV Charge Calculation"
             part(ChargeLines; "RV Charge Calculation Subform")
             {
                 ApplicationArea = All;
+                Caption = 'Lines';
                 Editable = IsChargeLinesEditable;
                 Enabled = IsChargeLinesEditable;
                 SubPageLink = "Document No." = field("No.");
@@ -112,6 +125,9 @@ page 50901 "RV Charge Calculation"
                 Caption = 'Carry Out';
                 ApplicationArea = All;
                 Image = CarryOutActionMessage;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
                 Enabled = IsCarryOutEnable;
 
                 trigger OnAction()
@@ -119,7 +135,7 @@ page 50901 "RV Charge Calculation"
 
                     Rec.TestField(Status, Enum::"RV Charge Calc. Status"::WIP);
 
-
+                    Message('Under Construction.');
                 end;
             }
         }
