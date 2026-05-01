@@ -295,7 +295,6 @@ report 50103 "RV Cust Statement"
                                 var
                                     RVSetup: Record "RV RIKEVITA Setup";
                                     ItemCard: Record Item;
-                                    CUST: Record Customer;
                                 begin
                                     Clear(SInvLineAmt);
                                     Clear(SInvLnFreiCharge);
@@ -306,12 +305,12 @@ report 50103 "RV Cust Statement"
                                     RVSetup.FindSet();
 
                                     ItemCard.Get("No.");
-                                    CUST.Get("Sell-to Customer No.");
+                                    CalcFields("RV_Charge Type");
 
                                     if "No." = RVSetup."Freight Charge Item No" then begin
                                         SInvLnFreiCharge := "RV_Freight Charge";
                                     end else
-                                        if (ItemCard.Type = "Item Type"::Inventory) and (CUST."RV_Charge Type" = "RV Charge Type"::FOB) then begin
+                                        if (ItemCard.Type = "Item Type"::Inventory) and ("RV_Charge Type" = "RV Charge Type"::FOB) then begin
                                             SInvLineAmt := "Line Amount" + "RV_Other Charge";
                                         end
                                         else
@@ -547,7 +546,6 @@ report 50103 "RV Cust Statement"
                                 var
                                     RVSetup: Record "RV RIKEVITA Setup";
                                     ItemCard: Record Item;
-                                    CUST: Record Customer;
                                 begin
                                     Clear(OverDue_SInvLineAmt);
                                     Clear(OverDue_SInvLnFreiCharge);
@@ -556,14 +554,14 @@ report 50103 "RV Cust Statement"
 
                                     RVSetup.Reset();
                                     RVSetup.FindSet();
-
                                     ItemCard.Get("No.");
-                                    CUST.Get("Sell-to Customer No.");
+
+                                    CalcFields("RV_Charge Type");
 
                                     if "No." = RVSetup."Freight Charge Item No" then begin
                                         OverDue_SInvLnFreiCharge := "RV_Freight Charge";
                                     end else
-                                        if (ItemCard.Type = "Item Type"::Inventory) and (CUST."RV_Charge Type" = "RV Charge Type"::FOB) then begin
+                                        if (ItemCard.Type = "Item Type"::Inventory) and ("RV_Charge Type" = "RV Charge Type"::FOB) then begin
                                             OverDue_SInvLineAmt := "Line Amount" + "RV_Other Charge";
                                         end
                                         else
