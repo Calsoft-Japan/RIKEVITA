@@ -783,9 +783,16 @@ report 50103 "RV Cust Statement"
                         column(AgingDateHeader4; AgingDateHeader4)
                         {
                         }
+                        column(PrintAgeTotal; PrintAgeTotal)
+                        { }
 
                         trigger OnAfterGetRecord()
                         begin
+                            if AgeHeaderStyle = AgeHeaderStyle::"Number of Months" then
+                                PrintAgeTotal := true
+                            else
+                                PrintAgeTotal := false;
+
                             if Number = 1 then begin
                                 ClearCompanyPicture();
                                 if not TempAgingBandBuf.Find('-') then
@@ -818,6 +825,8 @@ report 50103 "RV Cust Statement"
                 column(ClosingText; ClosingLbl)
                 {
                 }
+                column(Footer_lbl; Footer_lbl)
+                { }
             }
 
             trigger OnAfterGetRecord()
@@ -926,6 +935,13 @@ report 50103 "RV Cust Statement"
                         Caption = 'Show Overdue Entries';
                         ToolTip = 'Specifies if you want overdue entries to be shown separately for each currency.';
                     }
+                    field(lbl001; Footer_lbl)
+                    {
+                        ApplicationArea = All;
+                        Caption = 'Comment';
+                        //StyleExpr = 'Unfavorable';
+                        Style = Attention;
+                    }
 
                     group(Include)
                     {
@@ -981,6 +997,20 @@ report 50103 "RV Cust Statement"
                             ApplicationArea = Basic, Suite;
                             Caption = 'Include Aging Band';
                             ToolTip = 'Specifies if you want an aging band to be included in the document. If you place a check mark here, you must also fill in the Aging Band Period Length and Aging Band by fields.';
+                        }
+
+                        field(AgeHeaderStyle; AgeHeaderStyle)
+                        {
+                            ApplicationArea = All;
+                            Caption = 'Heading Type';
+
+                            trigger OnValidate()
+                            begin
+                                if AgeHeaderStyle = AgeHeaderStyle::"Number of Months" then
+                                    PrintAgeTotal := true
+                                else
+                                    PrintAgeTotal := false;
+                            end;
                         }
                         field(AgingBandPeriodLengt; PeriodLength)
                         {
@@ -1242,7 +1272,7 @@ report 50103 "RV Cust Statement"
         OverDue_DocDate: Date;
         OverDue_DocType: Text;
         OverDue_DueDate: Date;
-
+        Footer_lbl: Text;
 
     protected var
         CompanyInfo: Record "Company Information";
@@ -1268,6 +1298,8 @@ report 50103 "RV Cust Statement"
         PrintReversedEntries: Boolean;
         DateChoice: Option "Due Date","Posting Date";
         StatementStyle: Option "Balance","Open Item";
+        AgeHeaderStyle: Option "Number of Months","Date Intervals";
+        PrintAgeTotal: Boolean;
 
     local procedure GetDate(PostingDate: Date; DueDate: Date): Date
     begin
@@ -1407,6 +1439,10 @@ report 50103 "RV Cust Statement"
         UpdateReqPageParameters();
 
         ShowPrintIfEmailIsMissing := SupportedOutputMethod = SupportedOutputMethod::Email;
+
+        AgeHeaderStyle := AgeHeaderStyle::"Number of Months";
+        PrintAgeTotal := true;
+        Footer_lbl := 'N.B.: Please Ignore this statement if payment has been made.';
     end;
 
     local procedure InitInteractionLog()

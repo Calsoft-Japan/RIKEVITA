@@ -23,7 +23,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>9.03558cm</Height>
+                  <Height>8.69163cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -146,7 +146,8 @@
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="textbox159">
+                                          <Textbox Name="Textbox21">
+                                            <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
                                               <Paragraph>
@@ -163,9 +164,11 @@
                                                 <Style />
                                               </Paragraph>
                                             </Paragraphs>
-                                            <rd:DefaultName>textbox159</rd:DefaultName>
-                                            <ZIndex>24</ZIndex>
+                                            <rd:DefaultName>Textbox21</rd:DefaultName>
                                             <Style>
+                                              <Border>
+                                                <Style>None</Style>
+                                              </Border>
                                               <PaddingLeft>5pt</PaddingLeft>
                                             </Style>
                                           </Textbox>
@@ -213,7 +216,7 @@
                                                   <TextRun>
                                                     <Value>Currency Code</Value>
                                                     <Style>
-                                                      <FontSize>7pt</FontSize>
+                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
@@ -243,7 +246,7 @@
                                                   <TextRun>
                                                     <Value>CURRENT</Value>
                                                     <Style>
-                                                      <FontSize>7pt</FontSize>
+                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
@@ -274,7 +277,7 @@
                                                   <TextRun>
                                                     <Value>1 MNTH</Value>
                                                     <Style>
-                                                      <FontSize>7pt</FontSize>
+                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
@@ -305,7 +308,7 @@
                                                   <TextRun>
                                                     <Value>2 MNTHS</Value>
                                                     <Style>
-                                                      <FontSize>7pt</FontSize>
+                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
@@ -336,7 +339,7 @@
                                                   <TextRun>
                                                     <Value>3 MNTHS</Value>
                                                     <Style>
-                                                      <FontSize>7pt</FontSize>
+                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
@@ -367,7 +370,7 @@
                                                   <TextRun>
                                                     <Value>3 MNTHS+</Value>
                                                     <Style>
-                                                      <FontSize>7pt</FontSize>
+                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
@@ -398,7 +401,7 @@
                                                   <TextRun>
                                                     <Value>TOTAL</Value>
                                                     <Style>
-                                                      <FontSize>7pt</FontSize>
+                                                      <FontSize>8pt</FontSize>
                                                       <FontWeight>Bold</FontWeight>
                                                     </Style>
                                                   </TextRun>
@@ -420,7 +423,7 @@
                                     </TablixCells>
                                   </TablixRow>
                                   <TablixRow>
-                                    <Height>0.35278cm</Height>
+                                    <Height>0.45862cm</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -444,6 +447,7 @@
                                             <rd:DefaultName>textbox142</rd:DefaultName>
                                             <ZIndex>17</ZIndex>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
                                           </Textbox>
@@ -475,6 +479,7 @@
                                             <rd:DefaultName>textbox143</rd:DefaultName>
                                             <ZIndex>16</ZIndex>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
@@ -507,6 +512,7 @@
                                             <rd:DefaultName>textbox144</rd:DefaultName>
                                             <ZIndex>15</ZIndex>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
@@ -539,6 +545,7 @@
                                             <rd:DefaultName>textbox149</rd:DefaultName>
                                             <ZIndex>14</ZIndex>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
@@ -571,6 +578,7 @@
                                             <rd:DefaultName>textbox155</rd:DefaultName>
                                             <ZIndex>13</ZIndex>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
@@ -599,6 +607,7 @@
                                             <rd:DefaultName>textbox161</rd:DefaultName>
                                             <ZIndex>12</ZIndex>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingLeft>5pt</PaddingLeft>
                                             </Style>
                                           </Textbox>
@@ -626,6 +635,7 @@
                                             </Paragraphs>
                                             <rd:DefaultName>Textbox259</rd:DefaultName>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingLeft>5pt</PaddingLeft>
                                             </Style>
                                           </Textbox>
@@ -634,7 +644,7 @@
                                     </TablixCells>
                                   </TablixRow>
                                   <TablixRow>
-                                    <Height>0.35278cm</Height>
+                                    <Height>0.45862cm</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -658,6 +668,7 @@
                                             <rd:DefaultName>textbox145</rd:DefaultName>
                                             <ZIndex>11</ZIndex>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
                                           </Textbox>
@@ -689,6 +700,7 @@
                                             <rd:DefaultName>textbox146</rd:DefaultName>
                                             <ZIndex>10</ZIndex>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
@@ -721,6 +733,7 @@
                                             <rd:DefaultName>textbox147</rd:DefaultName>
                                             <ZIndex>9</ZIndex>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
@@ -753,6 +766,7 @@
                                             <rd:DefaultName>textbox150</rd:DefaultName>
                                             <ZIndex>8</ZIndex>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
@@ -785,6 +799,7 @@
                                             <rd:DefaultName>textbox156</rd:DefaultName>
                                             <ZIndex>7</ZIndex>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingLeft>5pt</PaddingLeft>
                                               <PaddingRight>5pt</PaddingRight>
                                             </Style>
@@ -817,6 +832,7 @@
                                             <rd:DefaultName>textbox162</rd:DefaultName>
                                             <ZIndex>6</ZIndex>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingLeft>5pt</PaddingLeft>
                                             </Style>
                                           </Textbox>
@@ -846,6 +862,7 @@
                                             </Paragraphs>
                                             <rd:DefaultName>Textbox260</rd:DefaultName>
                                             <Style>
+                                              <BackgroundColor>LightBlue</BackgroundColor>
                                               <PaddingLeft>5pt</PaddingLeft>
                                             </Style>
                                           </Textbox>
@@ -1059,6 +1076,9 @@
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
+                                            <Visibility>
+                                              <Hidden>=NOT (Fields!PrintAgeTotal.Value=true)</Hidden>
+                                            </Visibility>
                                             <Style>
                                               <Border>
                                                 <Style>None</Style>
@@ -1090,14 +1110,23 @@
                                     <KeepTogether>true</KeepTogether>
                                   </TablixMember>
                                   <TablixMember>
+                                    <Visibility>
+                                      <Hidden>=NOT (Fields!PrintAgeTotal.Value=true)</Hidden>
+                                    </Visibility>
                                     <KeepWithGroup>After</KeepWithGroup>
                                     <KeepTogether>true</KeepTogether>
                                   </TablixMember>
                                   <TablixMember>
+                                    <Visibility>
+                                      <Hidden>=Fields!PrintAgeTotal.Value=true</Hidden>
+                                    </Visibility>
                                     <KeepWithGroup>After</KeepWithGroup>
                                     <KeepTogether>true</KeepTogether>
                                   </TablixMember>
                                   <TablixMember>
+                                    <Visibility>
+                                      <Hidden>=Fields!PrintAgeTotal.Value=true</Hidden>
+                                    </Visibility>
                                     <KeepWithGroup>After</KeepWithGroup>
                                     <KeepTogether>true</KeepTogether>
                                   </TablixMember>
@@ -1123,8 +1152,8 @@
                                   </FilterValues>
                                 </Filter>
                               </Filters>
-                              <Top>7.20145cm</Top>
-                              <Height>1.83413cm</Height>
+                              <Top>6.56645cm</Top>
+                              <Height>2.04581cm</Height>
                               <Width>18.51189cm</Width>
                               <Style />
                             </Tablix>
@@ -1287,7 +1316,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                                 </TablixColumns>
                                 <TablixRows>
                                   <TablixRow>
-                                    <Height>6.68661cm</Height>
+                                    <Height>6.26328cm</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -5995,7 +6024,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                                                     </FilterValues>
                                                   </Filter>
                                                 </Filters>
-                                                <Top>3.71447cm</Top>
+                                                <Top>3.39697cm</Top>
                                                 <Height>2.73402cm</Height>
                                                 <Width>18.51187cm</Width>
                                                 <ZIndex>1</ZIndex>
@@ -6040,7 +6069,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                               </TablixRowHierarchy>
                               <DataSetName>DataSet_Result</DataSetName>
                               <Top>0.03171cm</Top>
-                              <Height>6.68661cm</Height>
+                              <Height>6.26328cm</Height>
                               <Width>18.84192cm</Width>
                               <ZIndex>2</ZIndex>
                               <Style />
@@ -6080,18 +6109,18 @@ Cstr(Fields!CustBalanceCaption.Value)
             <PageBreak>
               <BreakLocation>End</BreakLocation>
             </PageBreak>
-            <Height>9.03558cm</Height>
+            <Height>8.69163cm</Height>
             <Width>18.84192cm</Width>
             <Style />
           </Tablix>
         </ReportItems>
-        <Height>3.61981in</Height>
+        <Height>3.44274in</Height>
         <Style />
       </Body>
       <Width>18.84192cm</Width>
       <Page>
         <PageHeader>
-          <Height>5.18764in</Height>
+          <Height>4.54181in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -6111,7 +6140,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>91.50554pt</Top>
+              <Top>46.50554pt</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>3.13051cm</Width>
@@ -6135,7 +6164,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>4.44562cm</Top>
+              <Top>2.85812cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>3.13051cm</Width>
@@ -6160,7 +6189,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>4.05437cm</Top>
+              <Top>2.46687cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>3.13051cm</Width>
@@ -6185,7 +6214,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>80.0555pt</Top>
+              <Top>35.0555pt</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>3.13051cm</Width>
@@ -6210,11 +6239,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>3.28834in</Top>
+              <Top>2.66334in</Top>
               <Left>12.3668cm</Left>
               <Height>11pt</Height>
               <Width>3.02467cm</Width>
               <ZIndex>4</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -6235,11 +6267,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>7.95433cm</Top>
+              <Top>6.36683cm</Top>
               <Left>12.3668cm</Left>
               <Height>11pt</Height>
               <Width>3.02467cm</Width>
               <ZIndex>5</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -6260,11 +6295,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>7.5525cm</Top>
+              <Top>5.965cm</Top>
               <Left>12.3668cm</Left>
               <Height>11pt</Height>
               <Width>3.02467cm</Width>
               <ZIndex>6</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -6285,11 +6323,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>7.14537cm</Top>
+              <Top>5.55787cm</Top>
               <Left>12.3668cm</Left>
               <Height>11pt</Height>
               <Width>3.02467cm</Width>
               <ZIndex>7</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -6310,11 +6351,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>5.9025cm</Top>
+              <Top>4.315cm</Top>
               <Left>12.3668cm</Left>
               <Height>11pt</Height>
               <Width>3.02467cm</Width>
               <ZIndex>8</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -6334,11 +6378,11 @@ Cstr(Fields!CustBalanceCaption.Value)
                     </TextRun>
                   </TextRuns>
                   <Style>
-                    <TextAlign>Right</TextAlign>
+                    <TextAlign>Left</TextAlign>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.75844cm</Top>
+              <Top>0.17094cm</Top>
               <Height>20pt</Height>
               <Width>17.93147cm</Width>
               <ZIndex>9</ZIndex>
@@ -6364,7 +6408,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>8.0195cm</Top>
+              <Top>6.432cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6391,7 +6435,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>7.5965cm</Top>
+              <Top>6.009cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6416,7 +6460,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>12.45854cm</Top>
+              <Top>10.87104cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6441,7 +6485,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>12.03554cm</Top>
+              <Top>10.44804cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6469,7 +6513,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>91.50554pt</Top>
+              <Top>46.50554pt</Top>
               <Left>3.20113cm</Left>
               <Height>11pt</Height>
               <Width>8.5059cm</Width>
@@ -6497,7 +6541,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>4.44562cm</Top>
+              <Top>2.85812cm</Top>
               <Left>3.20113cm</Left>
               <Height>11pt</Height>
               <Width>8.5059cm</Width>
@@ -6525,7 +6569,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>4.05437cm</Top>
+              <Top>2.46687cm</Top>
               <Left>3.20113cm</Left>
               <Height>11pt</Height>
               <Width>8.5059cm</Width>
@@ -6552,7 +6596,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>80.0555pt</Top>
+              <Top>35.0555pt</Top>
               <Left>3.20113cm</Left>
               <Height>11pt</Height>
               <Width>8.5059cm</Width>
@@ -6579,11 +6623,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>3.28834in</Top>
+              <Top>2.66334in</Top>
               <Left>15.39145cm</Left>
               <Height>11pt</Height>
               <Width>3.16787cm</Width>
               <ZIndex>18</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -6606,11 +6653,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>7.95433cm</Top>
+              <Top>6.36683cm</Top>
               <Left>15.39145cm</Left>
               <Height>11pt</Height>
               <Width>3.16787cm</Width>
               <ZIndex>19</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -6633,11 +6683,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>7.5525cm</Top>
+              <Top>5.965cm</Top>
               <Left>15.39145cm</Left>
               <Height>11pt</Height>
               <Width>3.16787cm</Width>
               <ZIndex>20</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -6660,11 +6713,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>7.14537cm</Top>
+              <Top>5.55787cm</Top>
               <Left>15.39145cm</Left>
               <Height>11pt</Height>
               <Width>3.16787cm</Width>
               <ZIndex>21</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -6685,7 +6741,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>11.61254cm</Top>
+              <Top>10.02504cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6712,11 +6768,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>5.9025cm</Top>
+              <Top>4.315cm</Top>
               <Left>15.39145cm</Left>
               <Height>11pt</Height>
               <Width>3.16787cm</Width>
               <ZIndex>23</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -6737,7 +6796,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>11.18954cm</Top>
+              <Top>9.60204cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6764,7 +6823,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>7.1735cm</Top>
+              <Top>5.586cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6789,7 +6848,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>10.76654cm</Top>
+              <Top>9.17904cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6816,7 +6875,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>6.7505cm</Top>
+              <Top>5.163cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6841,7 +6900,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>10.34354cm</Top>
+              <Top>8.75604cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6868,7 +6927,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>6.3275cm</Top>
+              <Top>4.74cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6893,7 +6952,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>9.92054cm</Top>
+              <Top>8.33304cm</Top>
               <Left>0.00007cm</Left>
               <Height>11pt</Height>
               <Width>11.70697cm</Width>
@@ -6920,7 +6979,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>5.50772cm</Top>
+              <Top>3.92022cm</Top>
               <Left>0.00007cm</Left>
               <Height>20pt</Height>
               <Width>11.70697cm</Width>
@@ -6948,7 +7007,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>9.20205cm</Top>
+              <Top>7.61455cm</Top>
               <Left>0.00007cm</Left>
               <Height>20pt</Height>
               <Width>11.70697cm</Width>
@@ -6979,7 +7038,7 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>3.65287cm</Top>
+              <Top>2.06537cm</Top>
               <Left>3.20113cm</Left>
               <Height>11pt</Height>
               <Width>8.5059cm</Width>
@@ -7006,11 +7065,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>2.53455cm</Top>
+              <Top>0.94705cm</Top>
               <Left>17.50681cm</Left>
               <Height>11pt</Height>
               <Width>0.42466cm</Width>
               <ZIndex>34</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
                 <PaddingLeft>1pt</PaddingLeft>
@@ -7034,11 +7096,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>2.53455cm</Top>
+              <Top>0.94705cm</Top>
               <Left>11.7461cm</Left>
               <Height>11pt</Height>
               <Width>5.76071cm</Width>
               <ZIndex>35</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -7060,11 +7125,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>179.0555pt</Top>
+              <Top>134.0555pt</Top>
               <Left>350.55518pt</Left>
               <Height>11pt</Height>
               <Width>1.19081in</Width>
               <ZIndex>36</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -7088,11 +7156,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>190.50554pt</Top>
+              <Top>145.50554pt</Top>
               <Left>4.86733in</Left>
               <Height>11pt</Height>
               <Width>3.02843cm</Width>
               <ZIndex>37</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -7118,11 +7189,14 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>179.0555pt</Top>
+              <Top>134.0555pt</Top>
               <Left>15.39145cm</Left>
               <Height>11pt</Height>
               <Width>1.24719in</Width>
               <ZIndex>38</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -7148,70 +7222,20 @@ Cstr(Fields!CustBalanceCaption.Value)
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>190.50554pt</Top>
+              <Top>145.50554pt</Top>
               <Left>15.39145cm</Left>
               <Height>11pt</Height>
               <Width>1.24719in</Width>
               <ZIndex>39</ZIndex>
+              <Visibility>
+                <Hidden>true</Hidden>
+              </Visibility>
               <Style>
                 <Border>
                   <Style>None</Style>
                 </Border>
               </Style>
             </Textbox>
-            <Image Name="Imageleft">
-              <Source>Database</Source>
-              <Value>=Convert.ToBase64String(Fields!CompanyInfo1Picture.Value)</Value>
-              <MIMEType>image/bmp</MIMEType>
-              <Sizing>FitProportional</Sizing>
-              <Height>14mm</Height>
-              <Width>40mm</Width>
-              <ZIndex>40</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(IsNothing(Fields!CompanyInfo1Picture.Value)=TRUE,TRUE,FALSE)</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
-            <Image Name="ImageCenter">
-              <Source>Database</Source>
-              <Value>=Convert.ToBase64String(Fields!CompanyInfo2Picture.Value)</Value>
-              <MIMEType>image/bmp</MIMEType>
-              <Sizing>FitProportional</Sizing>
-              <Left>7.5cm</Left>
-              <Height>14mm</Height>
-              <Width>40mm</Width>
-              <ZIndex>41</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(ISNOTHING(Fields!CompanyInfo2Picture.Value) =  TRUE, TRUE, FALSE)</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
-            <Image Name="ImageRight">
-              <Source>Database</Source>
-              <Value>=Convert.ToBase64String(Fields!CompanyInfo3Picture.Value)</Value>
-              <MIMEType>image/bmp</MIMEType>
-              <Sizing>FitProportional</Sizing>
-              <Left>14.6825cm</Left>
-              <Height>14mm</Height>
-              <Width>40mm</Width>
-              <ZIndex>42</ZIndex>
-              <Visibility>
-                <Hidden>=IIF(ISNOTHING(Fields!CompanyInfo3Picture.Value) =  TRUE, TRUE, FALSE)</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
             <Textbox Name="DocumentDateCaption">
               <KeepTogether>true</KeepTogether>
               <Paragraphs>
@@ -7228,10 +7252,10 @@ Cstr(Fields!CustBalanceCaption.Value)
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>3.66631cm</Top>
+              <Top>2.07881cm</Top>
               <Height>11pt</Height>
               <Width>3.13051cm</Width>
-              <ZIndex>43</ZIndex>
+              <ZIndex>40</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
@@ -7251,10 +7275,10 @@ Cstr(Fields!CustBalanceCaption.Value)
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox293</rd:DefaultName>
-              <Top>1.91334in</Top>
+              <Top>1.28834in</Top>
               <Height>10pt</Height>
               <Width>4.61056in</Width>
-              <ZIndex>44</ZIndex>
+              <ZIndex>41</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -7268,14 +7292,56 @@ Cstr(Fields!CustBalanceCaption.Value)
           </ReportItems>
           <Style />
         </PageHeader>
+        <PageFooter>
+          <Height>0.44792in</Height>
+          <PrintOnFirstPage>true</PrintOnFirstPage>
+          <PrintOnLastPage>true</PrintOnLastPage>
+          <ReportItems>
+            <Textbox Name="Footer_lbl">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Last(Fields!Footer_lbl.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontFamily>Segoe UI</FontFamily>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.14962in</Top>
+              <Height>0.25in</Height>
+              <Width>7.28815in</Width>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+          </ReportItems>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </PageFooter>
         <PageHeight>11.69in</PageHeight>
         <PageWidth>8.27in</PageWidth>
         <InteractiveHeight>11in</InteractiveHeight>
         <InteractiveWidth>8.5in</InteractiveWidth>
-        <LeftMargin>0.5in</LeftMargin>
-        <RightMargin>0.4in</RightMargin>
-        <TopMargin>0.4in</TopMargin>
-        <BottomMargin>0.5in</BottomMargin>
+        <LeftMargin>0.3in</LeftMargin>
+        <RightMargin>0.2in</RightMargin>
+        <TopMargin>0.3in</TopMargin>
+        <BottomMargin>0.3in</BottomMargin>
         <Style />
       </Page>
     </ReportSection>
@@ -7834,6 +7900,9 @@ End Function
         <Field Name="AgingDateHeader4">
           <DataField>AgingDateHeader4</DataField>
         </Field>
+        <Field Name="PrintAgeTotal">
+          <DataField>PrintAgeTotal</DataField>
+        </Field>
         <Field Name="GreetingText">
           <DataField>GreetingText</DataField>
         </Field>
@@ -7842,6 +7911,9 @@ End Function
         </Field>
         <Field Name="ClosingText">
           <DataField>ClosingText</DataField>
+        </Field>
+        <Field Name="Footer_lbl">
+          <DataField>Footer_lbl</DataField>
         </Field>
       </Fields>
       <Query>
