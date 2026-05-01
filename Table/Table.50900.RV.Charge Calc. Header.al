@@ -100,10 +100,45 @@ table 50900 "RV Charge Calc. Header"
         }
     }
 
+    var
+
+        DeleteOnCompletedErr: Label 'Cannot delete the compeleted data.';
+
 
     trigger OnInsert()
+    var
+        NoSeries: Codeunit "No. Series";
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
     begin
+        RIKEVITASetup.Get();
+        RIKEVITASetup.TestField("No. Series for Chg. Calc.");
+        Rec."No." := NoSeries.GetNextNo(RIKEVITASetup."No. Series for Chg. Calc.");
+
         "Calculation Date" := WorkDate();
+        "Calculated By" := UserId;
+
+    end;
+
+    trigger OnDelete()
+    begin
+
+        if Status = Enum::"RV Charge Calc. Status"::Completed then
+            Error(DeleteOnCompletedErr);
+
+    end;
+
+    procedure ChargeLinesEditable() IsEditable: Boolean;
+    begin
+
+        IsEditable := Rec."Charge Type" <> Enum::"RV Charge Type"::" ";
+
+    end;
+
+    procedure CarryOutEnable() IsEditable: Boolean;
+    begin
+
+        IsEditable := rec.Status <> Enum::"RV Charge Calc. Status"::WIP;
+
     end;
 
 }

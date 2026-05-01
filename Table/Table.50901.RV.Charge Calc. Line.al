@@ -59,18 +59,38 @@ table 50901 "RV Charge Calc. Line"
         field(5; "Customer No."; Code[20])
         {
             Caption = 'Customer No.';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Line"."Sell-to Customer No."
+                                where("Document Type" = const(Order),
+                                        "Document No." = field("Sales Order No."),
+                                        "Line No." = field("Sales Order Line No.")));
         }
         field(6; "Item No."; Code[20])
         {
             Caption = 'Item No.';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Line"."No."
+                                where("Document Type" = const(Order),
+                                        "Document No." = field("Sales Order No."),
+                                        "Line No." = field("Sales Order Line No.")));
         }
         field(7; "Sales Quantity"; Decimal)
         {
             Caption = 'Sales Quantity';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Line"."Quantity"
+                                where("Document Type" = const(Order),
+                                        "Document No." = field("Sales Order No."),
+                                        "Line No." = field("Sales Order Line No.")));
         }
         field(8; "Sales Unit of Measure Code"; Code[10])
         {
             Caption = 'Sales Unit of Measure Code';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Line"."Unit of Measure Code"
+                                where("Document Type" = const(Order),
+                                        "Document No." = field("Sales Order No."),
+                                        "Line No." = field("Sales Order Line No.")));
         }
         field(9; "Quantity (KG)"; Decimal)
         {
@@ -135,16 +155,30 @@ table 50901 "RV Charge Calc. Line"
         field(24; "Currency Code"; Code[10])
         {
             Caption = 'Currency Code';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Line"."Currency Code"
+                                where("Document Type" = const(Order),
+                                        "Document No." = field("Sales Order No."),
+                                        "Line No." = field("Sales Order Line No.")));
         }
-        field(25; "Order Unit Price (KG)"; Decimal)
+        field(25; "Order Unit Price"; Decimal)
+        {
+            Caption = 'Order Unit Price';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Sales Line"."Unit Price"
+                                where("Document Type" = const(Order),
+                                        "Document No." = field("Sales Order No."),
+                                        "Line No." = field("Sales Order Line No.")));
+        }
+        field(26; "Order Unit Price (KG)"; Decimal)
         {
             Caption = 'Order Unit Price (KG)';
         }
-        field(26; "Invoice Unit Price (KG)"; Decimal)
+        field(27; "Invoice Unit Price (KG)"; Decimal)
         {
             Caption = 'Invoice Unit Price (KG)';
         }
-        field(27; "Final Charge (KG)"; Decimal)
+        field(28; "Final Charge (KG)"; Decimal)
         {
             Caption = 'Final Charge (KG)';
         }
