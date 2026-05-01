@@ -19,16 +19,27 @@ table 50101 "RV HS Code Management"
         {
             Caption = 'Item No.';
             TableRelation = Item."No.";
+
+            trigger OnValidate()
+            var
+                ItemCard: Record Item;
+            begin
+                if Rec."Item No." <> xRec."Item No." then begin
+                    ItemCard.Get("Item No.");
+                    Rec.Description := ItemCard.Description;
+                    Rec.Description2 := ItemCard."Description 2";
+                end;
+            end;
         }
         field(3; Description; Text[100])
         {
             Caption = 'Description';
-            TableRelation = Item.Description;
+            //TableRelation = Item.Description;
         }
         field(4; Description2; Text[100])
         {
             Caption = 'Description2';
-            TableRelation = Item."Description 2";
+            //TableRelation = Item."Description 2";
         }
         field(5; "Prev. HS Code"; Text[100])
         {

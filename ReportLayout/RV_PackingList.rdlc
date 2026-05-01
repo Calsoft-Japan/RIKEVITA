@@ -644,6 +644,15 @@ End Function
         <Field Name="VIA">
           <DataField>VIA</DataField>
         </Field>
+        <Field Name="FromValue">
+          <DataField>FromValue</DataField>
+        </Field>
+        <Field Name="ToValue">
+          <DataField>ToValue</DataField>
+        </Field>
+        <Field Name="SailingOnOrAbout">
+          <DataField>SailingOnOrAbout</DataField>
+        </Field>
       </Fields>
       <Query>
         <DataSourceName>DataSource</DataSourceName>
