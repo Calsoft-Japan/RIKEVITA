@@ -1,3 +1,7 @@
+/// <summary>
+/// Enum RV Customer Type (ID 50102) 
+/// FDD024 2026/04/28: New. (Liuyang)
+/// </summary>
 enum 50102 "RV Customer Type"
 {
     Extensible = true;

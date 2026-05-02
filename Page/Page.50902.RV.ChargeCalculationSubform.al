@@ -28,6 +28,37 @@ page 50902 "RV Charge Calculation Subform"
                 }
                 field("Sales Order No."; Rec."Sales Order No.")
                 {
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        ChargeCalcHeader: Record "RV Charge Calc. Header";
+                        SalesLineView: Record "Sales line";
+                        SalesLineLookup: Record "Sales line";
+                        pagSalesLine: Page "Sales Lines";
+
+                        ChargeTypeBlankErr: Label 'Charge Type is blank!';
+
+                    begin
+
+                        ChargeCalcHeader.Get(Rec."Document No.");
+
+                        if ChargeCalcHeader."Charge Type" = Enum::"RV Charge Type"::" " then
+                            Error(ChargeTypeBlankErr);
+
+                        Clear(pagSalesLine);
+                        SalesLineView.Reset();
+                        SalesLineView.SetRange("Document Type", Enum::"Sales Document Type"::Order);
+                        SalesLineView.SetRange(Type, Enum::"Sales Line Type"::Item);
+                        SalesLineView.SetRange("RV_Charge Type", ChargeCalcHeader."Charge Type");
+
+                        if Page.RunModal(Page::"Sales Lines", SalesLineView) = Action::LookupOK then begin
+
+                            Rec."Sales Order No." := SalesLineView."Document No.";
+                            Rec."Sales Order Line No." := SalesLineView."Line No.";
+                        end;
+
+                        CurrPage.Update();
+                    end;
+
                 }
                 field("Sales Order Line No."; Rec."Sales Order Line No.")
                 {

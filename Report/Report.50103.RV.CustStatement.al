@@ -5,9 +5,10 @@
 report 50103 "RV Cust Statement"
 {
     ApplicationArea = All;
-    Caption = 'Cust Statement Oversea';
+    Caption = 'Cust Statement Report';
     UsageCategory = ReportsAndAnalysis;
     DefaultRenderingLayout = "StandardStatementOversea.rdlc";
+    //DefaultRenderingLayout = "StandardStatementLocal.rdlc";
 
     dataset
     {
@@ -261,6 +262,12 @@ report 50103 "RV Cust Statement"
                                 AutoFormatExpression = "Currency Code";
                                 AutoFormatType = 1;
                             }
+
+                            column(OriginalAmt_DtldCustLedgEntries; OriginalAmount)
+                            {
+                                AutoFormatExpression = "Currency Code";
+                                AutoFormatType = 1;
+                            }
                             column(CustBalance; CustBalance)
                             {
                                 AutoFormatExpression = "Currency Code";
@@ -310,8 +317,11 @@ report 50103 "RV Cust Statement"
                                     if "No." = RVSetup."Freight Charge Item No" then begin
                                         SInvLnFreiCharge := "RV_Freight Charge";
                                     end else
-                                        if (ItemCard.Type = "Item Type"::Inventory) and ("RV_Charge Type" = "RV Charge Type"::FOB) then begin
-                                            SInvLineAmt := "Line Amount" + "RV_Other Charge";
+                                        if (ItemCard.Type = "Item Type"::Inventory) then begin
+                                            if ("RV_Charge Type" = "RV Charge Type"::FOB) then
+                                                SInvLineAmt := "Line Amount" + "RV_Other Charge"
+                                            else
+                                                SInvLineAmt := "Line Amount";
                                         end
                                         else
                                             CurrReport.Skip();
@@ -348,6 +358,9 @@ report 50103 "RV Cust Statement"
                                             CustLedgerEntry.SetRange("Date Filter", 0D, EndDate);
                                             CustLedgerEntry.CalcFields("Remaining Amount");
                                             RemainingAmount := CustLedgerEntry."Remaining Amount";
+
+                                            CustLedgerEntry.CalcFields("Original Amount");
+                                            OriginalAmount := CustLedgerEntry."Original Amount";
                                             CustLedgerEntry.SetRange("Date Filter");
                                         end;
                                     "Entry Type"::Application:
@@ -507,6 +520,12 @@ report 50103 "RV Cust Statement"
                             column(OriginalAmt_CustLedgEntry2; "Original Amount")
                             {
                                 AutoFormatExpression = "Currency Code";
+                                AutoFormatType = 1;
+                            }
+                            column(FreightAmt_CustLedgEntry2; "RV_Freight Charge")
+                            {
+                                AutoFormatExpression = "Currency Code";
+                                AutoFormatType = 1;
                             }
                             column(CurrCode_CustLedgEntry2; "Currency Code")
                             {
@@ -521,58 +540,6 @@ report 50103 "RV Cust Statement"
                             {
                             }
 
-                            Dataitem("OverDue_SalesInvoiceLine"; "Sales Invoice Line")
-                            {
-                                DataItemLink = "Document No." = field("Document No.");
-                                DataItemLinkReference = CustLedgEntry2;
-                                DataItemTableView = sorting("Line No.") where(Type = const("Sales Line Type"::Item));
-
-                                column(OverDue_Order_No_SInvLine; "Order No.")
-                                { }
-                                column(OverDue_SInvLineAmt; OverDue_SInvLineAmt)
-                                {
-                                    AutoFormatExpression = GetCurrencyCode();
-                                    AutoFormatType = 1;
-                                }
-                                column(OverDue_SInvLnFreiCharge; OverDue_SInvLnFreiCharge)
-                                {
-                                    AutoFormatExpression = GetCurrencyCode();
-                                    AutoFormatType = 1;
-                                }
-                                column(OverDue_SInvLineNo; OverDue_SInvLineNo)
-                                { }
-
-                                trigger OnAfterGetRecord()
-                                var
-                                    RVSetup: Record "RV RIKEVITA Setup";
-                                    ItemCard: Record Item;
-                                begin
-                                    Clear(OverDue_SInvLineAmt);
-                                    Clear(OverDue_SInvLnFreiCharge);
-
-                                    OverDue_SInvLineNo += 1;
-
-                                    RVSetup.Reset();
-                                    RVSetup.FindSet();
-                                    ItemCard.Get("No.");
-
-                                    CalcFields("RV_Charge Type");
-
-                                    if "No." = RVSetup."Freight Charge Item No" then begin
-                                        OverDue_SInvLnFreiCharge := "RV_Freight Charge";
-                                    end else
-                                        if (ItemCard.Type = "Item Type"::Inventory) and ("RV_Charge Type" = "RV Charge Type"::FOB) then begin
-                                            OverDue_SInvLineAmt := "Line Amount" + "RV_Other Charge";
-                                        end
-                                        else
-                                            CurrReport.Skip();
-                                end;
-
-                                trigger OnPreDataItem()
-                                begin
-                                    Clear(OverDue_SInvLineNo);
-                                end;
-                            }
 
                             trigger OnAfterGetRecord()
                             var
@@ -585,6 +552,8 @@ report 50103 "RV Cust Statement"
                                 CustLedgEntry.SetRange("Date Filter", 0D, EndDate);
                                 CustLedgEntry.CalcFields("Remaining Amount");
                                 "Remaining Amount" := CustLedgEntry."Remaining Amount";
+                                CustLedgEntry.CalcFields("Original Amount");
+                                "Original Amount" := CustLedgEntry."Original Amount";
                                 if CustLedgEntry."Remaining Amount" = 0 then
                                     CurrReport.Skip();
 
@@ -862,6 +831,9 @@ report 50103 "RV Cust Statement"
                     CurrReport.Skip();
 
                 FormatAddress.Customer(CustomerAddress, Customer);
+                CustomerAddress[7] := Customer."Phone No.";
+                CustomerAddress[8] := Customer."Fax No.";
+
                 PrintedCustomersList.Add("No.");
                 UpdatePictures();
                 FirstRecordPrinted := false;
@@ -877,6 +849,7 @@ report 50103 "RV Cust Statement"
                 CompanyInfo.Get();
                 FormatAddress.Company(CompanyAddress, CompanyInfo);
                 CompanyInfo.CalcFields(Picture);
+                CompanyAddress[7] := CompanyInfo."Fax No.";
 
                 PopulateTempCurrencies();
 
@@ -1106,14 +1079,14 @@ report 50103 "RV Cust Statement"
         {
             Type = RDLC;
             LayoutFile = '.\ReportLayout\RV_StandardStatementOversea.rdlc';
-            Caption = 'Standard Customer Statement (Oversea)';
+            Caption = 'Customer Statement (Oversea)';
             Summary = 'The Standard Customer Statement (Oversea) provides a detailed layout.';
         }
         layout("StandardStatementLocal.rdlc")
         {
             Type = RDLC;
             LayoutFile = '.\ReportLayout\RV_StandardStatementLocal.rdlc';
-            Caption = 'Standard Customer Statement (Local)';
+            Caption = 'Customer Statement (Local)';
             Summary = 'The Standard Customer Statement (Local) provides a basic layout.';
         }
     }
@@ -1273,7 +1246,7 @@ report 50103 "RV Cust Statement"
         OverDue_DocType: Text;
         OverDue_DueDate: Date;
         Footer_lbl: Text;
-
+    //=IIF((Fields!DocNo_DtldCustLedgEntries.Value="") OR (Fields!PrintLine.Value=FALSE AND Fields!DtldCustLedgEntryType.Value="2") OR NOT Fields!IsNewCustCurrencyGroup.Value,TRUE,FALSE)
     protected var
         CompanyInfo: Record "Company Information";
         CompanyInfo1: Record "Company Information";
@@ -1300,6 +1273,7 @@ report 50103 "RV Cust Statement"
         StatementStyle: Option "Balance","Open Item";
         AgeHeaderStyle: Option "Number of Months","Date Intervals";
         PrintAgeTotal: Boolean;
+        OriginalAmount: Decimal;
 
     local procedure GetDate(PostingDate: Date; DueDate: Date): Date
     begin
