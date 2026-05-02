@@ -1079,14 +1079,14 @@ report 50103 "RV Cust Statement"
         {
             Type = RDLC;
             LayoutFile = '.\ReportLayout\RV_StandardStatementOversea.rdlc';
-            Caption = 'Standard Customer Statement (Oversea)';
+            Caption = 'Customer Statement (Oversea)';
             Summary = 'The Standard Customer Statement (Oversea) provides a detailed layout.';
         }
         layout("StandardStatementLocal.rdlc")
         {
             Type = RDLC;
             LayoutFile = '.\ReportLayout\RV_StandardStatementLocal.rdlc';
-            Caption = 'Standard Customer Statement (Local)';
+            Caption = 'Customer Statement (Local)';
             Summary = 'The Standard Customer Statement (Local) provides a basic layout.';
         }
     }
