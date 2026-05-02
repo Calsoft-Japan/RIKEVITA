@@ -103,6 +103,24 @@ page 50901 "RV Charge Calculation"
                 {
                 }
             }
+
+            group(Total)
+            {
+                Caption = 'Total';
+                field("Total Part Cost"; Rec."Total Cost")
+                {
+                }
+                field("Total Part HTP Adjustment Price"; Rec."HTP Adjustment Price")
+                {
+                }
+                field("Total Part FREIGHT"; Rec.FREIGHT)
+                {
+                }
+                field("Total Part Quantity (KG)"; Rec."Total Quantity (KG)")
+                {
+                }
+            }
+
             part(ChargeLines; "RV Charge Calculation Subform")
             {
                 ApplicationArea = All;

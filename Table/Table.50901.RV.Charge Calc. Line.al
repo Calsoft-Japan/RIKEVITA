@@ -162,5 +162,23 @@ table 50901 "RV Charge Calc. Line"
         }
     }
 
+    procedure CalcQtyKG()
+    var
+        Item: Record Item;
+        RVSetup: Record "RV RIKEVITA Setup";
+        ItemOUM: Record "Item Unit of Measure";
+    begin
+        RVSetup.Get();
+        RVSetup.TestField("Chg. Calc. UOM (KG)");
+
+        TestField("Item No.");
+
+        Item.Get("Item No.");
+        ItemOUM.Get("Item No.", RVSetup."Chg. Calc. UOM (KG)");
+
+        "Quantity (KG)" := "Sales Quantity" * ItemOUM.Weight;
+
+    end;
+
 
 }

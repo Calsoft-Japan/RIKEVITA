@@ -90,6 +90,16 @@ table 50900 "RV Charge Calc. Header"
         {
             Caption = 'FREIGHT';
         }
+        field(31; "Total Cost"; Decimal)
+        {
+            Caption = 'Cost';
+        }
+        field(32; "Total Quantity (KG)"; Decimal)
+        {
+            Caption = 'Quantity (KG)';
+            FieldClass = FlowField;
+            CalcFormula = sum("RV Charge Calc. Line"."Quantity (KG)" where("Document No." = field("No.")));
+        }
 
     }
     keys
