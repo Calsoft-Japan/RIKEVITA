@@ -1,6 +1,7 @@
 /// <summary>
 /// TableExtension Customer Ext (ID 50900)
 /// FDD009 2026/04/29: New. (Shawn)
+/// FDD024 2026/04/29: Liuyang
 /// </summary>
 tableextension 50900 "RV Customer Ext" extends Customer
 {

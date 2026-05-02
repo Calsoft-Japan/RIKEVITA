@@ -1,6 +1,7 @@
 /// <summary>
 /// PageExtension RV_Customer Card (ID 50901) extends "Customer List"
 /// FDD009 2026/04/29: New. (Shawn)
+/// FDD024 2026/04/29: Liuyang
 /// </summary>
 pageextension 50901 "RV Customer List Ext" extends "Customer List"
 {
