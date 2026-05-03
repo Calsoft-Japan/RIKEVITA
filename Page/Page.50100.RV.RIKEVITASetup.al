@@ -77,6 +77,22 @@ page 50100 "RIKEVITA Setup"///
                     ToolTip = 'Specifies the dimension code used for Site validation.';
                 }
 
+                field("Calc. Item No."; Rec."Calc. Item No.")
+                {
+                    Description = 'FDD100';
+                    ApplicationArea = All;
+                }
+                field("ILE Last Entry No."; Rec."ILE Last Entry No.")
+                {
+                    Description = 'FDD100';
+                    ApplicationArea = All;
+                }
+                field("VE Last Entry No."; Rec."VE Last Entry No.")
+                {
+                    Description = 'FDD100';
+                    ApplicationArea = All;
+                }
+
             }
 
             group(EPayment)
