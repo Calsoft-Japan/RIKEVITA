@@ -35,11 +35,17 @@ page 50109 "RV RSPO Ratio"
                 field("Output Quantity (KG)"; Rec."Output Quantity (KG)")
                 {
                     ApplicationArea = All;
+                    DecimalPlaces = 0 : 5;
                 }
-
+                field("Consumption Quantity (KG)"; Rec."Consumption Quantity (KG)")
+                {
+                    ApplicationArea = All;
+                    DecimalPlaces = 0 : 10;
+                }
                 field("RSPO Ratio %"; Rec."RSPO Ratio %")
                 {
                     ApplicationArea = All;
+                    DecimalPlaces = 0 : 10;
                 }
             }
         }
