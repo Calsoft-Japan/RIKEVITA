@@ -167,6 +167,12 @@ page 50100 "RIKEVITA Setup"///
                     Description = 'FDD009';
                     ApplicationArea = All;
                 }
+                field("Chg. Calc. UOM (KG)"; Rec."Chg. Calc. UOM (KG)")
+                {
+                    Caption = 'Chg. Calc. UOM (KG)';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
                 field("01-COO"; Rec."01-COO")
                 {
                     Caption = '01-COO';
