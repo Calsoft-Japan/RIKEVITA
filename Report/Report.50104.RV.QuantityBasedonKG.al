@@ -8,6 +8,9 @@ report 50104 "RV Quantity on KG JobQueue"
     Caption = 'RV Quantity Based on KG';
     UsageCategory = Tasks;
     ProcessingOnly = true;
+    Permissions =
+        tabledata "Item Ledger Entry" = rm,
+        tabledata "Value Entry" = rm;
 
     dataset
     {

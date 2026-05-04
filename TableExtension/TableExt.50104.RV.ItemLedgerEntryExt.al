@@ -16,14 +16,14 @@ tableextension 50104 "RV Item Ledger Entry Ext" extends "Item Ledger Entry"
         field(50101; "RV_Base Unit of Measure Code"; Code[20])
         {
             Description = 'FDD100';
-            Caption = 'RV_Base Unit of Measure Code';
+            Caption = 'Base Unit of Measure Code';
             FieldClass = FlowField;
             CalcFormula = Lookup(Item."Base Unit of Measure" where("No." = field("Item No.")));
         }
         field(50102; "RV_Quantity (KG)"; Decimal)
         {
             Description = 'FDD100';
-            Caption = 'RV_Quantity (KG)';
+            Caption = 'Quantity (KG)';
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
         }
