@@ -151,11 +151,24 @@ page 50901 "RV Charge Calculation"
                 Enabled = IsCarryOutEnable;
 
                 trigger OnAction()
+                var
+
+                    ChargeCalcMgt: Codeunit "RV Charge Calc. Mgt";
+
+                    CarryOutQst: Label 'This calculation will be carried out to Sales Orders.';
+                    CarryOutOkMsg: Label 'Carry out completed.';
                 begin
 
                     Rec.TestField(Status, Enum::"RV Charge Calc. Status"::WIP);
 
-                    Message('Under Construction.');
+                    if not Confirm(CarryOutQst) then
+                        exit;
+
+                    ChargeCalcMgt.SetDocNo(Rec."No.");
+                    ChargeCalcMgt.CarryOutCharge();
+
+                    Message(CarryOutOkMsg);
+
                 end;
             }
         }
