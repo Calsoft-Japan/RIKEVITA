@@ -160,7 +160,7 @@ table 50608 "RV Order Listing"
             Caption = 'ECR Date';
             DataClassification = ToBeClassified;
         }
-        field(29; "Holding Requirement"; Date)
+        field(29; "Holding Requirement"; DateFormula)
         {
             Caption = 'Holding Requirement';
             DataClassification = ToBeClassified;
@@ -176,7 +176,7 @@ table 50608 "RV Order Listing"
             Caption = 'Packing Line No.';
             DataClassification = ToBeClassified;
         }
-        field(32; "Closing Date & Time"; DateTime)
+        field(32; "Closing Date & Time"; Date)
         {
             Caption = 'Closing Date & Time';
             DataClassification = ToBeClassified;

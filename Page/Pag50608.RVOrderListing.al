@@ -1,3 +1,6 @@
+/// <summary>
+/// COMMON 2026/05/02: New. (Stephen)
+/// </summary>
 page 50608 "RV Order Listing"
 {
     ApplicationArea = All;
@@ -249,6 +252,8 @@ page 50608 "RV Order Listing"
                     ReservationEntry: Record "Reservation Entry";
                     SalesCommentLine: Record "Sales Comment Line";
                     OrderListing: Record "RV Order Listing";
+                    ItemUnitOfMeasure: Record "Item Unit of Measure";
+                    SLReserveEntry: Record "Reservation Entry";
                     EntryNo: Integer;
                     Counts: Integer;
                 begin
@@ -274,8 +279,13 @@ page 50608 "RV Order Listing"
                     SalesLine.reset;
                     SalesLine.setrange("Document Type", SalesHeader."Document Type"::Order);
                     SalesLine.SetFilter("Outstanding Quantity", '>0');
+                    SalesLine.SetAutoCalcFields("Reserved Quantity", "Reserved Qty. (Base)");
                     if SalesLine.FindSet() then begin
                         repeat
+                            TransferOrderNo := '';
+                            TransferOrderLineNo := '';
+                            ProdOrderNo := '';
+                            ProdOrderLineNo := '';
                             EntryNo += 1;
                             SalesHeader.Get(SalesLine."Document Type", SalesLine."Document No.");
                             OrderListing.Init();
@@ -287,7 +297,8 @@ page 50608 "RV Order Listing"
                             OrderListing."Item No." := SalesLine."No.";
                             OrderListing."Item Description" := SalesLine."Description";
                             OrderListing."Order Qty. (UOM)" := SalesLine."Quantity";
-                            OrderListing."Order Unit of Measure" := SalesLine."Unit of Measure";
+                            OrderListing."Reserved Qty. (UOM)" := SalesLine."Reserved Quantity";
+                            OrderListing."Order Unit of Measure" := SalesLine."Unit of Measure Code";
                             OrderListing."Order Qty. (Base)" := SalesLine."Quantity (Base)";
                             OrderListing."Requested Delivery Date" := SalesLine."Requested Delivery Date";
                             OrderListing."Customer No." := SalesHeader."Sell-to Customer No.";
@@ -295,15 +306,27 @@ page 50608 "RV Order Listing"
                             OrderListing."Ship-to Country" := SalesHeader."Ship-to Country/Region Code";
                             OrderListing.ETA := SalesLine.RV_ETA;
                             OrderListing.ETD := SalesLine.RV_ETD;
-                            //OrderListing."Order Lead Time (Days)" := SalesLine."Requested Delivery Date" - SalesHeader."Order Date";
+                            IF SalesLine."Requested Delivery Date" <> 0D then
+                                OrderListing."Order Lead Time (Days)" := SalesLine."Requested Delivery Date" - SalesHeader."Order Date"
+                            else
+                                OrderListing."Order Lead Time (Days)" := SalesLine."Planned Delivery Date" - SalesHeader."Order Date";
                             OrderListing."Packing Date" := SalesLine."RV_Stuffing Date";
                             OrderListing."ECR Date" := SalesLine."RV_ECR Date";
+
                             //KG quantity calculation.
-                            //OrderListing."Order Qty. (KG)" := SalesLine.Quantity;
+                            IF SalesLine."Unit of Measure Code" = 'KG' THEN begin
+                                OrderListing."Order Qty. (KG)" := SalesLine.Quantity;
+                                OrderListing."Reserved Qty. (KG)" := SalesLine."Reserved Quantity";
+                            end else begin
+                                IF ItemUnitOfMeasure.Get(SalesLine."No.", 'KG') then begin
+                                    OrderListing."Order Qty. (KG)" := Round(SalesLine."Quantity (Base)" / ItemUnitOfMeasure."Qty. per Unit of Measure", 0.00001);
+                                    OrderListing."Reserved Qty. (KG)" := Round(SalesLine."Reserved Qty. (Base)" / ItemUnitOfMeasure."Qty. per Unit of Measure", 0.00001);
+                                end;
+                            end;
 
                             //Logistics Information
                             IF ShiptoAddress.get(SalesHeader."Sell-to Customer No.", SalesHeader."Ship-to Code") THEN BEGIN
-                                //OrderListing."Holding Requirement" := ShiptoAddress."RV_Sailing Period";
+                                OrderListing."Holding Requirement" := ShiptoAddress."RV_Sailing Period";
                                 OrderListing."Bypass Holding Requirement" := ShiptoAddress."RV_Bypass ECR";
                             END;
 
@@ -312,21 +335,17 @@ page 50608 "RV Order Listing"
                             WhseshipmentLine.setrange("Source No.", SalesLine."Document No.");
                             WhseshipmentLine.SetRange("Source Line No.", SalesLine."Line No.");
                             if WhseshipmentLine.findlast then begin
-                                //OrderListing."Closing Date & Time" := WhseshipmentLine."RV_Cosing Date";
+                                OrderListing."Closing Date & Time" := WhseshipmentLine."RV_Cosing Date";
                                 OrderListing."SI Received Date" := WhseshipmentLine."RV_SI Received Date";
                             end;
-
-                            //Reserved Quantity calculation.
-                            //OrderListing."Reserved Qty. (UOM)"
-                            //OrderListing."Reserved Qty. (KG)"
 
                             //related information
                             OrderListing."Blanket Sales Order No." := SalesLine."Blanket Order No.";
                             OrderListing."Blanket Sales Order Line No." := SalesLine."Blanket Order Line No.";
-                            //OrderListing."Prod. Order No." := SalesLine."Prod. Order No.";
-                            //OrderListing."Prod. Order Line No." := SalesLine."Prod. Order Line No.";
-                            //OrderListing."Transfer Order No." := SalesLine."Transfer Order No.";
-                            //OrderListing."Transfer Order Line No." := SalesLine."Transfer Order Line No.";
+                            OrderListing."Prod. Order No." := ProdOrderNo;
+                            OrderListing."Prod. Order Line No." := ProdOrderLineNo;
+                            OrderListing."Transfer Order No." := TransferOrderNo;
+                            OrderListing."Transfer Order Line No." := TransferOrderLineNo;
 
                             //Status Update
                             //OrderListing.Status := SalesLine.Status;
@@ -335,16 +354,248 @@ page 50608 "RV Order Listing"
                             SalesCommentLine.SetRange("Document Type", SalesLine."Document Type");
                             SalesCommentLine.SetRange("No.", SalesLine."Document No.");
                             if SalesCommentLine.FindFirst() then
-                                Rec.Comment := SalesCommentLine.Comment;
+                                OrderListing.Comment := SalesCommentLine.Comment;
                             OrderListing.Insert();
                             Counts += 1;
                         until SalesLine.Next() = 0;
                     end;
                     if GuiAllowed Then
                         Message('Data collection completed. %1 records have been updated.', Counts);
-                    CurrPage.Update(TRUE);
+                    CurrPage.Update(false);
                 end;
             }
         }
     }
+    procedure FindReservationEntry(var OrderListing: Record "RV Order Listing")
+    var
+        ResEntryPlus: Record "Reservation Entry";
+        ResEntryMinus: Record "Reservation Entry";
+        ReqLine: Record "Requisition Line";
+        ReqLineDataType: Record "Requisition Line";
+        TransferLine: Record "Transfer Line";
+        ILEntry: Record "Item Ledger Entry";
+        OutputILEntry: Record "Item Ledger Entry";
+        ResEntryTransfer: Record "Reservation Entry";
+        PlanBOM: Record "Planning Component";
+        SalesLine: Record "Sales Line";
+    begin
+        ResEntryPlus.Reset();
+        ResEntryPlus.setrange("Source Type", 37);
+        ResEntryPlus.setrange("Source ID", OrderListing."Sales Order No.");
+        ResEntryPlus.SetRange("Source Ref. No.", OrderListing."Sales Order Line No.");
+        ResEntryPlus.SetRange("Positive", true);
+        if ResEntryPlus.FindSet() then
+            repeat
+                case ResEntryPlus."Source Type" of
+                    Database::"Requisition Line":
+                        begin
+                            if ReqLineDataType.get(ResEntryPlus."Source ID", ResEntryPlus."Source Batch Name", ResEntryPlus."Source Ref. No.") then begin
+                                case ReqLineDataType."Ref. Order Type" of
+                                    //just do tranfer order case, because may be the production order has been created but transfer order is not created.
+                                    ReqLineDataType."Ref. Order Type"::Transfer:
+                                        begin
+                                            ResEntryMinus.Reset();
+                                            ResEntryMinus.setrange("Source Type", Database::"Requisition Line");
+                                            ResEntryMinus.setrange("Source ID", ReqLineDataType."Worksheet Template Name");
+                                            ResEntryMinus.SetRange("Source Batch Name", ReqLineDataType."Journal Batch Name");
+                                            ResEntryMinus.SetRange("Source Ref. No.", ReqLineDataType."Line No.");
+                                            ResEntryMinus.SetRange("Positive", false);
+                                            //FindReservationEntry(ResEntryMinus);
+                                        end;
+                                end;
+                            end;
+                        end;
+                    Database::"Transfer Line":
+                        begin
+                            if TransferLine.get(ResEntryPlus."Source ID", ResEntryPlus."Source Ref. No.") then begin
+                                IF TransferOrderNo = '' then
+                                    TransferOrderNo := TransferLine."Document No."
+                                else
+                                    TransferOrderNo := TransferOrderNo + '|' + TransferLine."Document No.";
+                                if TransferOrderLineNo = '' then
+                                    TransferOrderLineNo := FORMAT(TransferLine."Line No.")
+                                else
+                                    TransferOrderLineNo := TransferOrderLineNo + '|' + FORMAT(TransferLine."Line No.");
+                                FindTransferLineReservationEntry(TransferLine."Document No.", TransferLine."Line No.");
+
+                            end;
+                        end;
+                    Database::"Item Ledger Entry":
+                        begin
+                            ILEntry.get(ResEntryPlus."Source Ref. No.");
+                            if ILEntry."Document Type" = ILEntry."Entry Type"::Output then begin
+                                IF ProdOrderNo = '' then
+                                    ProdOrderNo := ResEntryPlus."Source ID"
+                                else
+                                    ProdOrderNo := ProdOrderNo + '|' + ResEntryPlus."Source ID";
+                                if ProdOrderLineNo = '' then
+                                    ProdOrderLineNo := FORMAT(ResEntryPlus."Source Prod. Order Line")
+                                else
+                                    ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(ResEntryPlus."Source Prod. Order Line");
+                            end else begin
+                                if ILEntry."Entry Type" = ILEntry."Entry Type"::Transfer then begin
+                                    IF TransferOrderNo = '' then
+                                        TransferOrderNo := ILEntry."Order No."
+                                    else
+                                        TransferOrderNo := TransferOrderNo + '|' + ILEntry."Order No.";
+                                    if TransferOrderLineNo = '' then
+                                        TransferOrderLineNo := FORMAT(ILEntry."Order Line No.")
+                                    else
+                                        TransferOrderLineNo := TransferOrderLineNo + '|' + FORMAT(ILEntry."Order Line No.");
+                                end;
+                                //Since the inventory is transfered, the production has been completed. just get related item ledger entry by lot no.                                 IF ILEntry."Lot No." <> '' then begin
+                                OutputILEntry.reset;
+                                OutputILEntry.SetRange("Entry Type", OutputILEntry."Entry Type"::Output);
+                                OutputILEntry.SetRange("Item No.", ILEntry."Item No.");
+                                OutputILEntry.SetRange("Lot No.", ILEntry."Lot No.");
+                                if OutputILEntry.FindFirst() then begin
+                                    IF ProdOrderNo = '' then
+                                        ProdOrderNo := OutputILEntry."Document No."
+                                    else
+                                        ProdOrderNo := ProdOrderNo + '|' + OutputILEntry."Document No.";
+                                    if ProdOrderLineNo = '' then
+                                        ProdOrderLineNo := FORMAT(OutputILEntry."Order Line No.")
+                                    else
+                                        ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(OutputILEntry."Order Line No.");
+                                end;
+                            end;
+                        end;
+                    Database::"Prod. Order Line":
+                        begin
+                            IF ProdOrderNo = '' then
+                                ProdOrderNo := ResEntryPlus."Source ID"
+                            else
+                                ProdOrderNo := ProdOrderNo + '|' + ResEntryPlus."Source ID";
+                            if ProdOrderLineNo = '' then
+                                ProdOrderLineNo := FORMAT(ResEntryPlus."Source Prod. Order Line")
+                            else
+                                ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(ResEntryPlus."Source Prod. Order Line");
+
+                        end;
+                end;
+            until ResEntryPlus.Next() = 0;
+    end;
+
+    procedure FindTransferLineReservationEntry(var TransferOrderNo: Code[20]; var TransferLineNo: Integer)
+    var
+        ResEntryPlus: Record "Reservation Entry";
+        ResEntryMinus: Record "Reservation Entry";
+        ReqLine: Record "Requisition Line";
+        ReqLineDataType: Record "Requisition Line";
+        TransferLine: Record "Transfer Line";
+        ILEntry: Record "Item Ledger Entry";
+        OutputILEntry: Record "Item Ledger Entry";
+        ResEntryTransfer: Record "Reservation Entry";
+        PlanBOM: Record "Planning Component";
+        SalesLine: Record "Sales Line";
+    begin
+        ResEntryMinus.Reset();
+        ResEntryMinus.setrange("Source Type", 5741);
+        ResEntryMinus.setrange("Source ID", TransferOrderNo);
+        ResEntryMinus.SetRange("Source Ref. No.", TransferLineNo);
+        if ResEntryMinus.findset then begin
+            repeat
+                ResEntryPlus.Reset();
+                ResEntryPlus.setrange("Entry No.", ResEntryMinus."Entry No.");
+                ResEntryPlus.setrange("Positive", true);
+                if ResEntryPlus.FindSet() then begin
+                    repeat
+                        case ResEntryPlus."Source Type" of
+                            Database::"Requisition Line":
+                                begin
+                                    if ReqLineDataType.get(ResEntryPlus."Source ID", ResEntryPlus."Source Batch Name", ResEntryPlus."Source Ref. No.") then begin
+                                        case ReqLineDataType."Ref. Order Type" of
+                                            //just do tranfer order case, because may be the production order has been created but transfer order is not created.
+                                            ReqLineDataType."Ref. Order Type"::Transfer:
+                                                begin
+                                                    ResEntryMinus.Reset();
+                                                    ResEntryMinus.setrange("Source Type", Database::"Requisition Line");
+                                                    ResEntryMinus.setrange("Source ID", ReqLineDataType."Worksheet Template Name");
+                                                    ResEntryMinus.SetRange("Source Batch Name", ReqLineDataType."Journal Batch Name");
+                                                    ResEntryMinus.SetRange("Source Ref. No.", ReqLineDataType."Line No.");
+                                                    ResEntryMinus.SetRange("Positive", false);
+                                                    //FindReservationEntry(ResEntryMinus);
+                                                end;
+                                        end;
+                                    end;
+                                end;
+                            Database::"Transfer Line":
+                                begin
+                                    if TransferLine.get(ResEntryPlus."Source ID", ResEntryPlus."Source Ref. No.") then begin
+                                        IF TransferOrderNo = '' then
+                                            TransferOrderNo := TransferLine."Document No."
+                                        else
+                                            TransferOrderNo := TransferOrderNo + '|' + TransferLine."Document No.";
+                                        if TransferOrderLineNo = '' then
+                                            TransferOrderLineNo := FORMAT(TransferLine."Line No.")
+                                        else
+                                            TransferOrderLineNo := TransferOrderLineNo + '|' + FORMAT(TransferLine."Line No.");
+                                        FindTransferLineReservationEntry(TransferLine."Document No.", TransferLine."Line No.");
+
+                                    end;
+                                end;
+                            Database::"Item Ledger Entry":
+                                begin
+                                    ILEntry.get(ResEntryPlus."Source Ref. No.");
+                                    if ILEntry."Document Type" = ILEntry."Entry Type"::Output then begin
+                                        IF ProdOrderNo = '' then
+                                            ProdOrderNo := ResEntryPlus."Source ID"
+                                        else
+                                            ProdOrderNo := ProdOrderNo + '|' + ResEntryPlus."Source ID";
+                                        if ProdOrderLineNo = '' then
+                                            ProdOrderLineNo := FORMAT(ResEntryPlus."Source Prod. Order Line")
+                                        else
+                                            ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(ResEntryPlus."Source Prod. Order Line");
+                                    end else begin
+                                        if ILEntry."Entry Type" = ILEntry."Entry Type"::Transfer then begin
+                                            IF TransferOrderNo = '' then
+                                                TransferOrderNo := ILEntry."Order No."
+                                            else
+                                                TransferOrderNo := TransferOrderNo + '|' + ILEntry."Order No.";
+                                            if TransferOrderLineNo = '' then
+                                                TransferOrderLineNo := FORMAT(ILEntry."Order Line No.")
+                                            else
+                                                TransferOrderLineNo := TransferOrderLineNo + '|' + FORMAT(ILEntry."Order Line No.");
+                                        end;
+                                        //Since the inventory is transfered, the production has been completed. just get related item ledger entry by lot no.                                 IF ILEntry."Lot No." <> '' then begin
+                                        OutputILEntry.reset;
+                                        OutputILEntry.SetRange("Entry Type", OutputILEntry."Entry Type"::Output);
+                                        OutputILEntry.SetRange("Item No.", ILEntry."Item No.");
+                                        OutputILEntry.SetRange("Lot No.", ILEntry."Lot No.");
+                                        if OutputILEntry.FindFirst() then begin
+                                            IF ProdOrderNo = '' then
+                                                ProdOrderNo := OutputILEntry."Document No."
+                                            else
+                                                ProdOrderNo := ProdOrderNo + '|' + OutputILEntry."Document No.";
+                                            if ProdOrderLineNo = '' then
+                                                ProdOrderLineNo := FORMAT(OutputILEntry."Order Line No.")
+                                            else
+                                                ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(OutputILEntry."Order Line No.");
+                                        end;
+                                    end;
+                                end;
+                            Database::"Prod. Order Line":
+                                begin
+                                    IF ProdOrderNo = '' then
+                                        ProdOrderNo := ResEntryPlus."Source ID"
+                                    else
+                                        ProdOrderNo := ProdOrderNo + '|' + ResEntryPlus."Source ID";
+                                    if ProdOrderLineNo = '' then
+                                        ProdOrderLineNo := FORMAT(ResEntryPlus."Source Prod. Order Line")
+                                    else
+                                        ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(ResEntryPlus."Source Prod. Order Line");
+
+                                end;
+                        end;
+                    until ResEntryPlus.Next() = 0;
+                end;
+            until ResEntryMinus.Next() = 0;
+        end;
+    end;
+
+    var
+        TransferOrderNo: Text[250];
+        TransferOrderLineNo: Text[250];
+        ProdOrderNo: Text[250];
+        ProdOrderLineNo: Text[250];
 }
