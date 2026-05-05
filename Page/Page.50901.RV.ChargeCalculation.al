@@ -103,6 +103,26 @@ page 50901 "RV Charge Calculation"
                 {
                 }
             }
+
+            group(Total)
+            {
+                Caption = 'Total';
+                Editable = false;
+                Enabled = false;
+                field("Total Part Cost"; Rec."Total Cost")
+                {
+                }
+                field("Total Part HTP Adjustment Price"; Rec."HTP Adjustment Price")
+                {
+                }
+                field("Total Part FREIGHT"; Rec.FREIGHT)
+                {
+                }
+                field("Total Part Quantity (KG)"; Rec."Total Quantity (KG)")
+                {
+                }
+            }
+
             part(ChargeLines; "RV Charge Calculation Subform")
             {
                 ApplicationArea = All;
@@ -131,11 +151,24 @@ page 50901 "RV Charge Calculation"
                 Enabled = IsCarryOutEnable;
 
                 trigger OnAction()
+                var
+
+                    ChargeCalcMgt: Codeunit "RV Charge Calc. Mgt";
+
+                    CarryOutQst: Label 'This calculation will be carried out to Sales Orders.';
+                    CarryOutOkMsg: Label 'Carry out completed.';
                 begin
 
                     Rec.TestField(Status, Enum::"RV Charge Calc. Status"::WIP);
 
-                    Message('Under Construction.');
+                    if not Confirm(CarryOutQst) then
+                        exit;
+
+                    ChargeCalcMgt.SetDocNo(Rec."No.");
+                    ChargeCalcMgt.CarryOutCharge();
+
+                    Message(CarryOutOkMsg);
+
                 end;
             }
         }

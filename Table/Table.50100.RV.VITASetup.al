@@ -197,6 +197,27 @@ table 50100 "RV RIKEVITA Setup"
             Caption = 'HTP Adjustment';
             TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
+        field(35; "Chg. Calc. UOM (KG)"; Code[10])
+        {
+            Description = 'FDD009';
+            Caption = 'Chg. Calc. UOM (KG)';
+            TableRelation = "Unit of Measure".Code;
+        }
+        field(36; "ILE Last Entry No."; Integer)
+        {
+            Description = 'FDD100';
+            Caption = 'Last Item Ledger Entry#';
+        }
+        field(37; "VE Last Entry No."; Integer)
+        {
+            Description = 'FDD100';
+            Caption = 'Last Value Entry#';
+        }
+        field(38; "Calc. Item No."; Text[100])
+        {
+            Description = 'FDD100';
+            Caption = 'Calc. Item Filter';
+        }
 
     }
     keys

@@ -5,149 +5,47 @@
 page 50109 "RV RSPO Ratio"
 {
     ApplicationArea = All;
+    UsageCategory = ReportsAndAnalysis;
     Caption = 'RSPO Ratio';
     PageType = Worksheet;
     DeleteAllowed = false;
     InsertAllowed = false;
-    SourceTable = "BOM Buffer";
-    SourceTableTemporary = true;
+    Editable = false;
+    SourceTable = "RV_RSPO Ratio";
 
     layout
     {
         area(content)
         {
-            grid(Option)
-            {
-                Caption = 'Option';
-                field(ItemFilter; ItemFilter)
-                {
-                    ApplicationArea = Assembly;
-                    Caption = 'Item Filter';
-                    ToolTip = 'Specifies the items that are shown in the BOM Structure window.';
-
-                    trigger OnLookup(var Text: Text): Boolean
-                    var
-                        Item: Record Item;
-                        ItemList: Page "Item List";
-                    begin
-                        Item.Reset();
-                        Item.SetRange("Inventory Posting Group", 'FP');
-                        Item.SetFilter("Production BOM No.", '<>""');
-
-                        ItemList.SetTableView(Item);
-                        ItemList.LookupMode := true;
-                        if ItemList.RunModal() = Action::LookupOK then begin
-                            ItemList.GetRecord(Item);
-                            Text := Item."No.";
-                            exit(true);
-                        end;
-                        exit(false);
-                    end;
-
-                    trigger OnValidate()
-                    begin
-                        RefreshPage();
-                    end;
-                }
-            }
             repeater(Group)
             {
                 Caption = 'Lines';
-                IndentationColumn = Rec.Indentation;
-                ShowAsTree = true;
-                field(Type; Rec.Type)
+                field("Item No. (FP)"; Rec."Item No. (FP)")
                 {
-                    ApplicationArea = Assembly;
-                    ToolTip = 'Specifies the item''s position in the BOM structure. Lower-level items are indented under their parents.';
+                    ApplicationArea = All;
                 }
-                field("No."; Rec."No.")
+                field("Production BOM No."; Rec."Production BOM No.")
                 {
-                    ApplicationArea = Assembly;
-                    Editable = false;
-                    Style = Strong;
-                    StyleExpr = IsParentExpr;
-                    ToolTip = 'Specifies the number of the involved entry or record, according to the specified number series.';
+                    ApplicationArea = All;
                 }
-                field(Description; Rec.Description)
+                field("Item No. (RM)"; Rec."Item No. (RM)")
                 {
-                    ApplicationArea = Assembly;
-                    Editable = false;
-                    Style = Strong;
-                    StyleExpr = IsParentExpr;
-                    ToolTip = 'Specifies the item''s description.';
+                    ApplicationArea = All;
                 }
-                field(HasWarning; HasWarning)
+                field("Output Quantity (KG)"; Rec."Output Quantity (KG)")
                 {
-                    ApplicationArea = Assembly;
-                    BlankZero = true;
-                    Caption = 'Warning';
-                    Editable = false;
-                    Style = Attention;
-                    StyleExpr = HasWarning;
-                    ToolTip = 'Specifies if the BOM line has setup or data issues.';
-
-                    trigger OnDrillDown()
-                    begin
-                        if HasWarning then
-                            ShowWarnings();
-                    end;
-                }
-                field("Low-Level Code"; Rec."Low-Level Code")
-                {
-                    ApplicationArea = Basic, Suite;
-                    ToolTip = 'Specifies the item''s level in the BOM structure.';
-                    Visible = false;
-                }
-                field("Variant Code"; Rec."Variant Code")
-                {
-                    ApplicationArea = Planning;
-                    ToolTip = 'Specifies the variant code that you entered in the Variant Filter field in the Item Availability by BOM Level window.';
-                    Visible = false;
-                }
-                field("Qty. per Parent"; Rec."Qty. per Parent")
-                {
-                    ApplicationArea = Assembly;
+                    ApplicationArea = All;
                     DecimalPlaces = 0 : 5;
-                    Editable = false;
-                    ToolTip = 'Specifies how many units of the component are required to assemble or produce one unit of the parent.';
                 }
-                field("Qty. per Top Item"; Rec."Qty. per Top Item")
+                field("Consumption Quantity (KG)"; Rec."Consumption Quantity (KG)")
                 {
-                    ApplicationArea = Assembly;
-                    DecimalPlaces = 0 : 5;
-                    Editable = false;
-                    ToolTip = 'Specifies how many units of the component are required to assemble or produce one unit of the top item.';
-                    Visible = false;
+                    ApplicationArea = All;
+                    DecimalPlaces = 0 : 10;
                 }
-                field("Unit of Measure Code"; Rec."Unit of Measure Code")
+                field("RSPO Ratio %"; Rec."RSPO Ratio %")
                 {
-                    ApplicationArea = Assembly;
-                    Editable = false;
-                    ToolTip = 'Specifies how each unit of the item or resource is measured, such as in pieces or hours. By default, the value in the Base Unit of Measure field on the item or resource card is inserted.';
-                }
-                field("Replenishment System"; Rec."Replenishment System")
-                {
-                    ApplicationArea = Assembly;
-                    Editable = false;
-                    ToolTip = 'Specifies the item''s replenishment system.';
-                }
-                field("Lead-Time Offset"; Rec."Lead-Time Offset")
-                {
-                    ApplicationArea = Basic, Suite;
-                    ToolTip = 'Specifies the total number of days that are required to assemble or produce the item.';
-                    Visible = false;
-                }
-                field("Safety Lead Time"; Rec."Safety Lead Time")
-                {
-                    ApplicationArea = Planning;
-                    ToolTip = 'Specifies any safety lead time that is defined for the item.';
-                    Visible = false;
-                }
-                field("Lead Time Calculation"; Rec."Lead Time Calculation")
-                {
-                    ApplicationArea = Basic, Suite;
-                    ToolTip = 'Specifies how long it takes to replenish the item, by purchase, assembly, or production.';
-                    Visible = false;
+                    ApplicationArea = All;
+                    DecimalPlaces = 0 : 10;
                 }
             }
         }
@@ -155,98 +53,16 @@ page 50109 "RV RSPO Ratio"
 
     actions
     {
-        area(navigation)
-        {
-            group("&Item Availability by")
-            {
-                Caption = '&Item Availability by';
-                Image = ItemAvailability;
-                action("Event")
-                {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Event';
-                    Image = "Event";
-                    ToolTip = 'View how the actual and the projected available balance of an item will develop over time according to supply and demand events.';
-
-                    trigger OnAction()
-                    begin
-                        ShowItemAvailability("Item Availability Type"::"Event");
-                    end;
-                }
-                action(Period)
-                {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'Period';
-                    Image = Period;
-                    ToolTip = 'View the projected quantity of the item over time according to time periods, such as day, week, or month.';
-
-                    trigger OnAction()
-                    begin
-                        ShowItemAvailability("Item Availability Type"::Period);
-                    end;
-                }
-                action(Variant)
-                {
-                    ApplicationArea = Planning;
-                    Caption = 'Variant';
-                    Image = ItemVariant;
-                    ToolTip = 'View or edit the item''s variants. Instead of setting up each color of an item as a separate item, you can set up the various colors as variants of the item.';
-
-                    trigger OnAction()
-                    begin
-                        ShowItemAvailability("Item Availability Type"::Variant);
-                    end;
-                }
-                action(Location)
-                {
-                    AccessByPermission = TableData Location = R;
-                    ApplicationArea = Location;
-                    Caption = 'Location';
-                    Image = Warehouse;
-                    ToolTip = 'View the actual and projected quantity of the item per location.';
-
-                    trigger OnAction()
-                    begin
-                        ShowItemAvailability("Item Availability Type"::Location);
-                    end;
-                }
-                action(Lot)
-                {
-                    ApplicationArea = ItemTracking;
-                    Caption = 'Lot';
-                    Image = LotInfo;
-                    RunObject = Page "Item Availability by Lot No.";
-                    RunPageLink = "No." = field("No."),
-                            "Location Filter" = field("Location Code"),
-                            "Variant Filter" = field("Variant Code");
-                    ToolTip = 'View the current and projected quantity of the item in each lot.';
-                }
-                action("BOM Level")
-                {
-                    ApplicationArea = Basic, Suite;
-                    Caption = 'BOM Level';
-                    Image = BOMLevel;
-                    ToolTip = 'View availability figures for items on bills of materials that show how many units of a parent item you can make based on the availability of child items.';
-
-                    trigger OnAction()
-                    begin
-                        ShowItemAvailability("Item Availability Type"::BOM);
-                    end;
-                }
-            }
-        }
         area(processing)
         {
-            action("Show Warnings")
+            action(refresh)
             {
-                ApplicationArea = Basic, Suite;
-                Caption = 'Show Warnings';
-                Image = ErrorLog;
-                ToolTip = 'View details about bottlenecks.';
-
+                ApplicationArea = All;
+                Caption = 'Refresh';
+                Image = Refresh;
                 trigger OnAction()
                 begin
-                    ShowWarningsForAllLines();
+                    RefreshPage();
                 end;
             }
         }
@@ -256,66 +72,29 @@ page 50109 "RV RSPO Ratio"
             {
                 Caption = 'Process', Comment = 'Generated from the PromotedActionCategories property index 1.';
 
-                actionref("Show Warnings_Promoted"; "Show Warnings")
+                actionref("refresh_Promoted"; "refresh")
                 {
                 }
             }
-            group(Category_Category4)
-            {
-                Caption = 'Item Availability by', Comment = 'Generated from the PromotedActionCategories property index 3.';
 
-                actionref(Event_Promoted; "Event")
-                {
-                }
-                actionref(Period_Promoted; Period)
-                {
-                }
-                actionref(Variant_Promoted; Variant)
-                {
-                }
-                actionref(Location_Promoted; Location)
-                {
-                }
-                actionref(Lot_Promoted; Lot)
-                {
-                }
-                actionref("BOM Level_Promoted"; "BOM Level")
-                {
-                }
-            }
-            group(Category_Report)
-            {
-                Caption = 'Report', Comment = 'Generated from the PromotedActionCategories property index 2.';
-            }
         }
     }
 
-    trigger OnAfterGetRecord()
-    var
-        DummyBOMWarningLog: Record "BOM Warning Log";
-    begin
-        IsParentExpr := not Rec."Is Leaf";
-
-        HasWarning := not Rec.IsLineOk(false, DummyBOMWarningLog);
-
-        if Rec.Type = Rec.Type::Item then
-            Rec."Low-Level Code" := Rec.Indentation;
-    end;
 
     trigger OnOpenPage()
     begin
-        RefreshPage();
+        Rec.Reset();
+        CurrPage.Update();
     end;
 
     var
+        TempBOMBuff: Record "BOM Buffer" temporary;
         Item: Record Item;
         SourceRecordVar: Variant;
         IsParentExpr: Boolean;
         HasWarning: Boolean;
         CouldNotFindBOMLevelsErr: Label 'Could not find items with BOM levels.';
-#pragma warning disable AA0074
-        Text001: Label 'There are no warnings.';
-#pragma warning restore AA0074
+
 
     protected var
         ItemFilter: Code[250];
@@ -342,10 +121,8 @@ page 50109 "RV RSPO Ratio"
         ErrorText: Text;
         IsHandled: Boolean;
     begin
-        IsHandled := false;
-
-        if IsHandled then
-            exit;
+        TempBOMBuff.Reset();
+        TempBOMBuff.DeleteAll();
 
         Item.Reset();
         Item.SetRange("Inventory Posting Group", 'FP');
@@ -362,47 +139,110 @@ page 50109 "RV RSPO Ratio"
                     ErrorText := CouldNotFindBOMLevelsErr;
                     if RaiseError then
                         Error(ErrorText);
-                    CalculateBOMTree.GenerateTreeForManyItems(Item, Rec, "BOM Tree Type"::" ");
+                    CalculateBOMTree.GenerateTreeForManyItems(Item, TempBOMBuff, "BOM Tree Type"::" ");
                 end;
             else
-                CalculateBOMTree.GenerateTreeForSource(SourceRecordVar, Rec, "BOM Tree Type"::" ", ShowBy, WorkDate());
+                CalculateBOMTree.GenerateTreeForSource(SourceRecordVar, TempBOMBuff, "BOM Tree Type"::" ", ShowBy, WorkDate());
         end;
+
+        GenerateRSPORatioFromBOM();
     end;
 
-    local procedure ShowWarnings()
+    procedure GenerateRSPORatioFromBOM()
     var
-        TempBOMWarningLog: Record "BOM Warning Log" temporary;
+        ItemCard: Record Item;
+        ItemUOM: Record "Item Unit of Measure";
+        PrdBomHdr: Record "Production BOM Header";
+        PrdBOMLine: Record "Production BOM Line";
+        BOMList: List of [Text];
+        CurFPNo, CurBOMNo : Text;
+        CurFPConsumQtyKG: Decimal;
+        BOMLineQtyper, KGQtyper : Decimal;
     begin
-        if Rec.IsLineOk(true, TempBOMWarningLog) then
-            Message(Text001)
-        else
-            Page.RunModal(Page::"BOM Warning Log", TempBOMWarningLog);
+        Rec.Reset();
+        if Rec.FindSet() then
+            Rec.DeleteAll();
+
+        //TempBOMBuff.SetRange("Replenishment System", "Replenishment System"::Purchase);
+        if TempBOMBuff.FindSet() then begin
+            repeat
+                if TempBOMBuff.Indentation = 0 then begin
+                    //Calculate the Ratio for last FG here.
+                    if CurFPConsumQtyKG > 0 then begin
+                        Rec.Reset();
+                        Rec.SetRange("Item No. (FP)", CurFPNo);
+                        if Rec.FindSet() then
+                            repeat
+                                Rec."RSPO Ratio %" := Rec."Consumption Quantity (KG)" / CurFPConsumQtyKG;
+                                Rec.Modify();
+                            until Rec.Next() = 0;
+
+                        Rec.Reset();
+                    end;
+
+                    CurFPNo := TempBOMBuff."No.";
+                    ItemCard.Get(CurFPNo);
+                    CurBOMNo := ItemCard."Production BOM No.";
+
+                    CurFPConsumQtyKG := 0;
+                    Clear(BOMList);
+                end;
+
+                IF TempBOMBuff."Replenishment System" <> "Replenishment System"::Purchase then
+                    continue;
+
+                Clear(BOMLineQtyper);
+                BOMLineQtyper := TempBOMBuff."Qty. per Top Item";//TempBOMBuff."Qty. per BOM Line";
+
+                /* PrdBOMLine.Reset();
+                PrdBOMLine.SetRange("Production BOM No.", CurBOMNo);
+                PrdBOMLine.SetRange("No.", TempBOMBuff."No.");
+                if PrdBOMLine.FindFirst() then
+                    BOMLineQtyper := PrdBOMLine."Quantity per"; */
+
+                Clear(KGQtyper);
+                if ItemUOM.Get(TempBOMBuff."No.", 'KG') then
+                    KGQtyper := ItemUOM."Qty. per Unit of Measure";
+
+                if BOMList.Contains(TempBOMBuff."No.") then begin
+                    Rec.Reset();
+                    Rec.Get(CurFPNo, TempBOMBuff."No.");
+
+                    Rec."Consumption Quantity (KG)" += BOMLineQtyper * KGQtyper;
+                    Rec."RSPO Ratio %" := 0;
+
+                    Rec.Modify();
+                    CurFPConsumQtyKG += BOMLineQtyper * KGQtyper;
+                end else begin
+                    Rec.Init();
+                    Rec."Item No. (FP)" := CurFPNo;
+                    Rec."Production BOM No." := CurBOMNo;
+                    Rec."Item No. (RM)" := TempBOMBuff."No.";
+                    Rec."Output Quantity (KG)" := KGQtyper;
+                    Rec."Consumption Quantity (KG)" := BOMLineQtyper * KGQtyper;
+                    Rec."RSPO Ratio %" := 0;
+
+                    Rec.Insert();
+
+                    CurFPConsumQtyKG += Rec."Consumption Quantity (KG)";
+                    BOMList.Add(TempBOMBuff."No.");
+                end;
+            until TempBOMBuff.Next() = 0;
+
+            //Calculate the Ratio for last FG here. last FG case
+            if (CurFPConsumQtyKG > 0) and (Rec."RSPO Ratio %" = 0) then begin
+                Rec.Reset();
+                Rec.SetRange("Item No. (FP)", CurFPNo);
+                if Rec.FindSet() then
+                    repeat
+                        Rec."RSPO Ratio %" := Rec."Consumption Quantity (KG)" / CurFPConsumQtyKG;
+                        Rec.Modify();
+                    until Rec.Next() = 0;
+
+                Rec.Reset();
+            end;
+        end;
+
     end;
 
-    local procedure ShowWarningsForAllLines()
-    var
-        TempBOMWarningLog: Record "BOM Warning Log" temporary;
-    begin
-        if Rec.AreAllLinesOk(TempBOMWarningLog) then
-            Message(Text001)
-        else
-            Page.RunModal(Page::"BOM Warning Log", TempBOMWarningLog);
-    end;
-
-    local procedure ShowItemAvailability(AvailType: Enum "Item Availability Type")
-    var
-        ItemForShowAvailability: Record Item;
-        ItemAvailabilityFormsMgt: Codeunit "Item Availability Forms Mgt";
-    begin
-        Rec.TestField(Type, Rec.Type::Item);
-
-        ItemForShowAvailability.Get(Rec."No.");
-        ItemForShowAvailability.SetRange("No.", Rec."No.");
-        ItemForShowAvailability.SetRange("Date Filter", 0D, Rec."Needed by Date");
-        ItemForShowAvailability.SetFilter("Variant Filter", Rec."Variant Code");
-        if ShowBy <> ShowBy::Item then
-            ItemForShowAvailability.SetFilter("Location Filter", Rec."Location Code");
-
-        ItemAvailabilityFormsMgt.ShowItemAvailabilityFromItem(ItemForShowAvailability, AvailType);
-    end;
 }

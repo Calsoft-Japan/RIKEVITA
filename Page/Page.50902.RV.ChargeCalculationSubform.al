@@ -151,10 +151,19 @@ page 50902 "RV Charge Calculation Subform"
                 Image = Calculate;
 
                 trigger OnAction()
+                var
+                    ChargeCalcMgt: Codeunit "RV Charge Calc. Mgt";
+
+                    ChargeCalcOkMsg: Label 'Charge Calculation completed.';
                 begin
 
-                    Message('Under Construction.');
+                    //Message('Under Construction.');
+                    ChargeCalcMgt.SetDocNo(Rec."Document No.");
+                    ChargeCalcMgt.CalcCharge();
 
+                    CurrPage.Update();
+
+                    Message(ChargeCalcOkMsg);
                 end;
             }
         }

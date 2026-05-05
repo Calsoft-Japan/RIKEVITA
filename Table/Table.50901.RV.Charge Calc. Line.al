@@ -113,6 +113,8 @@ table 50901 "RV Charge Calc. Line"
         field(21; "HTP Adjustment Price"; Decimal)
         {
             Caption = 'HTP Adjustment Price';
+            FieldClass = FlowField;
+            CalcFormula = lookup("RV Charge Calc. Header"."HTP Adjustment Price" where("No." = field("Document No.")));
         }
         field(22; "Total Charge (KG)"; Decimal)
         {
@@ -161,6 +163,33 @@ table 50901 "RV Charge Calc. Line"
             Clustered = true;
         }
     }
+
+    procedure CalcKGFields()
+    var
+        Item: Record Item;
+        RVSetup: Record "RV RIKEVITA Setup";
+        ItemOUM: Record "Item Unit of Measure";
+    begin
+        RVSetup.Get();
+        RVSetup.TestField("Chg. Calc. UOM (KG)");
+
+        CalcFields("Item No.", "Sales Quantity", "Sales Unit of Measure Code", "Order Unit Price");
+        TestField("Item No.");
+
+        Item.Get("Item No.");
+        ItemOUM.Get("Item No.", RVSetup."Chg. Calc. UOM (KG)");
+
+        ItemOUM.TestField(Weight);
+
+        if "Sales Unit of Measure Code" = RVSetup."Chg. Calc. UOM (KG)" then begin
+            "Quantity (KG)" := "Sales Quantity";
+            "Order Unit Price (KG)" := "Order Unit Price";
+        end else begin
+            "Quantity (KG)" := "Sales Quantity" * ItemOUM.Weight;
+            "Order Unit Price (KG)" := "Order Unit Price" / ItemOUM.Weight;
+        end;
+
+    end;
 
 
 }
