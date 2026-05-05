@@ -290,8 +290,13 @@ page 50604 "RV MPS Rescheduling Worksheet"
         ImportBatchLineNo: Integer;
         ImportQty: Decimal;
         ImportDate: Date;
+        NewWK1: Code[20];
+        NewWK2: Code[20];
+        NewWK3: Code[20];
         UploadExcelMsg: Label 'Please Choose the Excel file.';
         NoFileFoundMsg: Label 'No Excel file found!';
+        ErrNewWK1Blank: Label 'New Work Center No. 1 can not be blank when New Work Center No. 2 or New Work Center No. 3 is not blank for data filter “Batch No.” %1 and “Batch Line No.” %2.';
+        ErrNewWK2Blank: Label 'New Work Center No. 2 can not be blank when New Work Center No. 3 is not blank for data filter “Batch No.” %1 and “Batch Line No.” %2.';
         NoFindMsg: Label 'No data was found by data filter “Batch No.” %1 and “Batch Line No.” %2.';
         NonEditMsg: Label 'Some non-editable data was different from the imported line got by data filter “Batch No.” %1 and “Batch Line No.” %2.';
         InvalidStartDateMsg: Label 'The line''s "Starting Date" is later than "Ending Date" got by "Batch No." %1 and "Batch Line No." %2.';
@@ -350,9 +355,22 @@ page 50604 "RV MPS Rescheduling Worksheet"
                     Error(InvalidStartDateMsg, ImportBatchName, ImportBatchLineNo);
                 if DT2Date(MPSReschedulingLine."New Ending Date") > MPSReschedulingLine."Due Date" then
                     Error(InvalidEndDateMsg, ImportBatchName, ImportBatchLineNo);
-                MPSReschedulingLine."New Work Center No. 1" := GetValueAtCell(RowNo, 16);
-                MPSReschedulingLine."New Work Center No. 2" := GetValueAtCell(RowNo, 17);
-                MPSReschedulingLine."New Work Center No. 3" := GetValueAtCell(RowNo, 18);
+
+                NewWK1 := GetValueAtCell(RowNo, 16);
+                NewWK2 := GetValueAtCell(RowNo, 17);
+                NewWK3 := GetValueAtCell(RowNo, 18);
+
+                if NewWK1 = '' then
+                    if (NewWK2 <> '')
+                    or (NewWK3 <> '') then
+                        Error(ErrNewWK1Blank, ImportBatchName, ImportBatchLineNo);
+                if NewWK2 = '' then
+                    if NewWK3 <> '' then
+                        Error(ErrNewWK2Blank, ImportBatchName, ImportBatchLineNo);
+
+                MPSReschedulingLine."New Work Center No. 1" := NewWK1;
+                MPSReschedulingLine."New Work Center No. 2" := NewWK2;
+                MPSReschedulingLine."New Work Center No. 3" := NewWK3;
                 Evaluate(MPSReschedulingLine."Planning Status", GetValueAtCell(RowNo, 19));
                 MPSReschedulingLine.Modify();
             end else
@@ -373,6 +391,7 @@ page 50604 "RV MPS Rescheduling Worksheet"
     var
         MPSReschedulingLine: Record "RV MPS Rescheduling Line";
         MPSReschedulingUpdateBatch: Codeunit "RV MPS Reschedul Update Batch";
+        MsgProcessFinish: Label 'MPS Rescheduling data update is finished.';
     begin
         MPSReschedulingLine.Reset();
         MPSReschedulingLine.CopyFilters(Rec);
@@ -385,6 +404,7 @@ page 50604 "RV MPS Rescheduling Worksheet"
                     MPSReschedulingLine.Modify();
                 end;
             until MPSReschedulingLine.Next() = 0;
+        Message(MsgProcessFinish);
     end;
 
     procedure ResetData()

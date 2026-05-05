@@ -37,10 +37,15 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
         RoutingCount := ProdOrderRoutingLine.Count();
         case RoutingCount of
             0:
-                if MPSReschedulingLine."New Work Center No. 1" <> '' then
-                    Error(ErrNotHaveRouting);
+                begin
+                    if (MPSReschedulingLine."New Work Center No. 1" <> '')
+                    or (MPSReschedulingLine."New Work Center No. 2" <> '')
+                    or (MPSReschedulingLine."New Work Center No. 3" <> '') then
+                        Error(ErrNotHaveRouting);
+                end;
             1:
-                if MPSReschedulingLine."New Work Center No. 2" <> '' then
+                if (MPSReschedulingLine."New Work Center No. 2" <> '')
+                or (MPSReschedulingLine."New Work Center No. 3" <> '') then
                     Error(ErrNotHaveRouting);
             2:
                 if MPSReschedulingLine."New Work Center No. 3" <> '' then
@@ -60,10 +65,10 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
                             if MPSReschedulingLine."new Work Center No. 1" <> '' then
                                 if ProdOrderRoutingLine."No." <> MPSReschedulingLine."new Work Center No. 1" then begin
                                     ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."new Work Center No. 1");
-                                    ProdOrderRoutingLine."Setup Time" := oldSetupTime;
-                                    ProdOrderRoutingLine."Run Time" := oldRunningTime;
-                                    ProdOrderRoutingLine."Wait Time" := oldWaitTime;
-                                    ProdOrderRoutingLine."Move Time" := oldMoveTime;
+                                    ProdOrderRoutingLine.Validate("Setup Time", oldSetupTime);
+                                    ProdOrderRoutingLine.Validate("Run Time", oldRunningTime);
+                                    ProdOrderRoutingLine.Validate("Wait Time", oldWaitTime);
+                                    ProdOrderRoutingLine.Validate("Move Time", oldMoveTime);
                                     ProdOrderRoutingLine.Modify();
                                 end;
                         end;
@@ -72,10 +77,10 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
                             if MPSReschedulingLine."new Work Center No. 2" <> '' then
                                 if ProdOrderRoutingLine."No." <> MPSReschedulingLine."new Work Center No. 2" then begin
                                     ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."new Work Center No. 2");
-                                    ProdOrderRoutingLine."Setup Time" := oldSetupTime;
-                                    ProdOrderRoutingLine."Run Time" := oldRunningTime;
-                                    ProdOrderRoutingLine."Wait Time" := oldWaitTime;
-                                    ProdOrderRoutingLine."Move Time" := oldMoveTime;
+                                    ProdOrderRoutingLine.Validate("Setup Time", oldSetupTime);
+                                    ProdOrderRoutingLine.Validate("Run Time", oldRunningTime);
+                                    ProdOrderRoutingLine.Validate("Wait Time", oldWaitTime);
+                                    ProdOrderRoutingLine.Validate("Move Time", oldMoveTime);
                                     ProdOrderRoutingLine.Modify();
                                 end;
                         end;
@@ -84,10 +89,10 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
                             if MPSReschedulingLine."new Work Center No. 3" <> '' then
                                 if ProdOrderRoutingLine."No." <> MPSReschedulingLine."new Work Center No. 3" then begin
                                     ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."new Work Center No. 3");
-                                    ProdOrderRoutingLine."Setup Time" := oldSetupTime;
-                                    ProdOrderRoutingLine."Run Time" := oldRunningTime;
-                                    ProdOrderRoutingLine."Wait Time" := oldWaitTime;
-                                    ProdOrderRoutingLine."Move Time" := oldMoveTime;
+                                    ProdOrderRoutingLine.Validate("Setup Time", oldSetupTime);
+                                    ProdOrderRoutingLine.Validate("Run Time", oldRunningTime);
+                                    ProdOrderRoutingLine.Validate("Wait Time", oldWaitTime);
+                                    ProdOrderRoutingLine.Validate("Move Time", oldMoveTime);
                                     ProdOrderRoutingLine.Modify();
                                 end;
                         end;

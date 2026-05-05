@@ -281,6 +281,7 @@ page 50601 "RV Prod. Result Journal Line"
                     var
                         PostProdResultLineBatch: codeunit "RV Post Prod Result Line Batch";
                     begin
+                        PostProdResultLineBatch.SetBatchName(CurrentJnlBatchName);
                         PostProdResultLineBatch.Run();
                     end;
                 }

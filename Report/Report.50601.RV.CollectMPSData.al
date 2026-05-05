@@ -108,7 +108,23 @@ report 50601 "RV Collect MPS Data"
             {
             }
         }
+        trigger OnQueryClosePage(CloseAction: Action): Boolean
+        begin
+            if CloseAction = Action::OK then begin
+                if (StartingDate = 0D)
+               and (EndingDate = 0D) then
+                    Error(ErrDateBlank);
+
+                if StartingDate > EndingDate then
+                    Error(ErrStartDateAfterEndDate);
+            end;
+        end;
     }
+
+    trigger OnPostReport()
+    begin
+        Message(MsgProcessFinish);
+    end;
 
     var
         MPSReschedulingLine: Record "RV MPS Rescheduling Line";
@@ -117,6 +133,9 @@ report 50601 "RV Collect MPS Data"
         LastLineNo: Integer;
         StartingDate: Date;
         EndingDate: Date;
+        ErrDateBlank: label 'Both Starting Date and Ending Date cannot be blank.';
+        ErrStartDateAfterEndDate: label 'Starting Date cannot be later than Ending Date.';
+        MsgProcessFinish: label 'MPS data collection is completed.';
 
     procedure SetBatchName(BatchName: Code[10])
     begin

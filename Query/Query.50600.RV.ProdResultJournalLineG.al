@@ -11,6 +11,9 @@ query 50600 "RV Prod. Result Journal Line G"
     {
         dataitem(RVProdResultJournalLine; "RV Prod. Result Journal Line")
         {
+            column(Batch_Name; "Batch Name")
+            {
+            }
             column(Status; Status)
             {
             }
