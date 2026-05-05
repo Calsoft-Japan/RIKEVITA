@@ -326,7 +326,7 @@ page 50608 "RV Order Listing"
 
                             //Logistics Information
                             IF ShiptoAddress.get(SalesHeader."Sell-to Customer No.", SalesHeader."Ship-to Code") THEN BEGIN
-                                OrderListing."Holding Requirement" := ShiptoAddress."RV_Sailing Period";
+                                OrderListing."Holding Requirement 1" := ShiptoAddress."RV_Sailing Period";
                                 OrderListing."Bypass Holding Requirement" := ShiptoAddress."RV_Bypass ECR";
                             END;
 
@@ -335,7 +335,7 @@ page 50608 "RV Order Listing"
                             WhseshipmentLine.setrange("Source No.", SalesLine."Document No.");
                             WhseshipmentLine.SetRange("Source Line No.", SalesLine."Line No.");
                             if WhseshipmentLine.findlast then begin
-                                OrderListing."Closing Date & Time" := WhseshipmentLine."RV_Cosing Date";
+                                OrderListing."Closing Date & Time 2" := WhseshipmentLine."RV_Cosing Date";
                                 OrderListing."SI Received Date" := WhseshipmentLine."RV_SI Received Date";
                             end;
 
