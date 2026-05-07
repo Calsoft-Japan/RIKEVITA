@@ -52,7 +52,7 @@ codeunit 50900 "RV Charge Calc. Mgt"
         CCLine.SetRange("Document No.", ChargeDocNo);
         if CCLine.FindSet() then
             repeat
-                CCLine.CalcKGFields();
+                CCLine.CalcBaseFields();
                 CCLine.Modify();
             until CCLine.Next() = 0;
 
@@ -69,6 +69,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                 CCLine."07-STUFFING" := Round(CCHeader."07-STUFFING" * CCLine."Quantity (KG)" / CCHeader."Total Quantity (KG)", 0.00001);
                 CCLine."08-TRANSPORT" := Round(CCHeader."08-TRANSPORT" * CCLine."Quantity (KG)" / CCHeader."Total Quantity (KG)", 0.00001);
                 CCLine."09-REACH" := Round(CCHeader."09-REACH" * CCLine."Quantity (KG)" / CCHeader."Total Quantity (KG)", 0.00001);
+                CCLine."10-Label" := Round(CCHeader."10-Label" * CCLine."Quantity (KG)" / CCHeader."Total Quantity (KG)", 0.00001);
+                CCLine."11-OF" := Round(CCHeader."11-OF" * CCLine."Quantity (KG)" / CCHeader."Total Quantity (KG)", 0.00001);
                 CCLine."99-OTHERS" := Round(CCHeader."99-OTHERS" * CCLine."Quantity (KG)" / CCHeader."Total Quantity (KG)", 0.00001);
 
                 CCLine."Total Charge (KG)" := Round(CCLine."01-COO"
@@ -80,11 +82,49 @@ codeunit 50900 "RV Charge Calc. Mgt"
                                                     + CCLine."07-STUFFING"
                                                     + CCLine."08-TRANSPORT"
                                                     + CCLine."09-REACH"
+                                                    + CCLine."10-Label"
+                                                    + CCLine."11-OF"
                                                     + CCLine."99-OTHERS"
-                                                    + CCLine."FREIGHT", 0.00001);
+                                                    + CCLine."FREIGHT",
+                                                    0.00001);
 
                 CCLine.CalcFields("HTP Adjustment Price");
                 CCLine."Unit Charge (KG)" := Round(CCLine."Total Charge (KG)" / CCLine."Quantity (KG)" + CCLine."HTP Adjustment Price", 0.00001);
+                CCLine."Invoice Unit Price (KG)" := CCLine."Order Unit Price (KG)" + CCLine."Unit Charge (KG) (Ord Curr.)";
+                CCLine."Invoice Amount (KG)" := CCLine."Invoice Unit Price (KG)" * CCLine."Quantity (KG)";
+
+                //Calculate Order Currency related fields.
+                CCline."01-COO (Order Curr.)" := Round(CCLine."01-COO" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."02-FORWARDING (Order Curr.)" := Round(CCLine."02-FORWARDING" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."03-FUMIGATION (Order Curr.)" := Round(CCLine."03-FUMIGATION" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."04-HEALTH (Order Curr.)" := Round(CCLine."04-HEALTH" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."05-PALLETIZING (Order Curr.)" := Round(CCLine."05-PALLETIZING" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."06-PHYTO (Order Curr.)" := Round(CCLine."06-PHYTO" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."07-STUFFING (Order Curr.)" := Round(CCLine."07-STUFFING" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."08-TRANSPORT (Order Curr.)" := Round(CCLine."08-TRANSPORT" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."09-REACH (Order Curr.)" := Round(CCLine."09-REACH" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."10-Label (Order Curr.)" := Round(CCLine."10-Label" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."11-OF (Order Curr.)" := Round(CCLine."11-OF" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."99-OTHERS (Order Curr.)" := Round(CCLine."99-OTHERS" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."FREIGHT (Order Curr.)" := Round(CCLine."FREIGHT" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+
+                CCLine."Total Charge (KG) (Ord Curr.)" := Round(CCLine."01-COO (Order Curr.)"
+                                                                + CCLine."02-FORWARDING (Order Curr.)"
+                                                                + CCLine."03-FUMIGATION (Order Curr.)"
+                                                                + CCLine."04-HEALTH (Order Curr.)"
+                                                                + CCLine."05-PALLETIZING (Order Curr.)"
+                                                                + CCLine."06-PHYTO (Order Curr.)"
+                                                                + CCLine."07-STUFFING (Order Curr.)"
+                                                                + CCLine."08-TRANSPORT (Order Curr.)"
+                                                                + CCLine."09-REACH (Order Curr.)"
+                                                                + CCLine."10-Label (Order Curr.)"
+                                                                + CCLine."11-OF (Order Curr.)"
+                                                                + CCLine."99-OTHERS (Order Curr.)"
+                                                                + CCLine."FREIGHT (Order Curr.)",
+                                                                0.00001);
+
+                CCline."HTP Adj. Price (Order Curr.)" := Round(CCLine."HTP Adjustment Price" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."Unit Charge (KG) (Ord Curr.)" := Round(CCLine."Unit Charge (KG)" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
 
                 CCLine.Modify();
             until CCLine.Next() = 0;
@@ -136,8 +176,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                 //Update the Existing Sales Order Line
                 if SalesLine.Get(Enum::"Sales Document Type"::Order, CCLine."Sales Order No.", CCLine."Sales Order Line No.") then begin
 
-                    SalesLine."RV_Freight Charge" := CCLine.FREIGHT;
-                    SalesLine."RV_Other Charge" := CCLine."Total Charge (KG)" - CCLine.FREIGHT;
+                    SalesLine."RV_Freight Charge" := CCLine."FREIGHT (Order Curr.)";
+                    SalesLine."RV_Other Charge" := CCLine."Total Charge (KG) (Ord Curr.)" - CCLine."FREIGHT (Order Curr.)";
                     SalesLine.Modify();
                 end;
 
@@ -148,114 +188,133 @@ codeunit 50900 "RV Charge Calc. Mgt"
                 SalesLine.FindLast();
                 SOLastLineNo := SalesLine."Line No.";
 
-                if CCLine."01-COO" > 0 then begin
+                if CCLine."01-COO (Order Curr.)" > 0 then begin
                     SOLastLineNo += 10000;
                     InitFOBSOLine(SalesLine, SOLastLineNo);
                     SalesLine.Validate("No.", RVSetup."01-COO");
                     SalesLine.Validate(Quantity, 1);
-                    SalesLine.Validate("Unit Price", CCLine."01-COO");
+                    SalesLine.Validate("Unit Price", CCLine."01-COO (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
                 end;
 
-                if CCLine."02-FORWARDING" > 0 then begin
+                if CCLine."02-FORWARDING (Order Curr.)" > 0 then begin
                     SOLastLineNo += 10000;
                     InitFOBSOLine(SalesLine, SOLastLineNo);
                     SalesLine.Validate("No.", RVSetup."02-FORWARDING");
                     SalesLine.Validate(Quantity, 1);
-                    SalesLine.Validate("Unit Price", CCLine."02-FORWARDING");
+                    SalesLine.Validate("Unit Price", CCLine."02-FORWARDING (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
                 end;
 
-                if CCLine."03-FUMIGATION" > 0 then begin
+                if CCLine."03-FUMIGATION (Order Curr.)" > 0 then begin
                     SOLastLineNo += 10000;
                     InitFOBSOLine(SalesLine, SOLastLineNo);
                     SalesLine.Validate("No.", RVSetup."03-FUMIGATION");
                     SalesLine.Validate(Quantity, 1);
-                    SalesLine.Validate("Unit Price", CCLine."03-FUMIGATION");
+                    SalesLine.Validate("Unit Price", CCLine."03-FUMIGATION (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
                 end;
 
-                if CCLine."04-HEALTH" > 0 then begin
+                if CCLine."04-HEALTH (Order Curr.)" > 0 then begin
                     SOLastLineNo += 10000;
                     InitFOBSOLine(SalesLine, SOLastLineNo);
                     SalesLine.Validate("No.", RVSetup."04-HEALTH");
                     SalesLine.Validate(Quantity, 1);
-                    SalesLine.Validate("Unit Price", CCLine."04-HEALTH");
+                    SalesLine.Validate("Unit Price", CCLine."04-HEALTH (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
                 end;
 
-                if CCLine."05-PALLETIZING" > 0 then begin
+                if CCLine."05-PALLETIZING (Order Curr.)" > 0 then begin
                     SOLastLineNo += 10000;
                     InitFOBSOLine(SalesLine, SOLastLineNo);
                     SalesLine.Validate("No.", RVSetup."05-PALLETIZING");
                     SalesLine.Validate(Quantity, 1);
-                    SalesLine.Validate("Unit Price", CCLine."05-PALLETIZING");
+                    SalesLine.Validate("Unit Price", CCLine."05-PALLETIZING (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
                 end;
 
-                if CCLine."06-PHYTO" > 0 then begin
+                if CCLine."06-PHYTO (Order Curr.)" > 0 then begin
                     SOLastLineNo += 10000;
                     InitFOBSOLine(SalesLine, SOLastLineNo);
                     SalesLine.Validate("No.", RVSetup."06-PHYTO");
                     SalesLine.Validate(Quantity, 1);
-                    SalesLine.Validate("Unit Price", CCLine."06-PHYTO");
+                    SalesLine.Validate("Unit Price", CCLine."06-PHYTO (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
                 end;
 
-                if CCLine."07-STUFFING" > 0 then begin
+                if CCLine."07-STUFFING (Order Curr.)" > 0 then begin
                     SOLastLineNo += 10000;
                     InitFOBSOLine(SalesLine, SOLastLineNo);
                     SalesLine.Validate("No.", RVSetup."07-STUFFING");
                     SalesLine.Validate(Quantity, 1);
-                    SalesLine.Validate("Unit Price", CCLine."07-STUFFING");
+                    SalesLine.Validate("Unit Price", CCLine."07-STUFFING (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
                 end;
 
-                if CCLine."08-TRANSPORT" > 0 then begin
+                if CCLine."08-TRANSPORT (Order Curr.)" > 0 then begin
                     SOLastLineNo += 10000;
                     InitFOBSOLine(SalesLine, SOLastLineNo);
                     SalesLine.Validate("No.", RVSetup."08-TRANSPORT");
                     SalesLine.Validate(Quantity, 1);
-                    SalesLine.Validate("Unit Price", CCLine."08-TRANSPORT");
+                    SalesLine.Validate("Unit Price", CCLine."08-TRANSPORT (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
                 end;
 
-                if CCLine."09-REACH" > 0 then begin
+                if CCLine."09-REACH (Order Curr.)" > 0 then begin
                     SOLastLineNo += 10000;
                     InitFOBSOLine(SalesLine, SOLastLineNo);
                     SalesLine.Validate("No.", RVSetup."09-REACH");
                     SalesLine.Validate(Quantity, 1);
-                    SalesLine.Validate("Unit Price", CCLine."09-REACH");
+                    SalesLine.Validate("Unit Price", CCLine."09-REACH (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
                 end;
 
-                if CCLine.FREIGHT > 0 then begin
+                if CCLine."10-Label (Order Curr.)" > 0 then begin
+                    SOLastLineNo += 10000;
+                    InitFOBSOLine(SalesLine, SOLastLineNo);
+                    SalesLine.Validate("No.", RVSetup."10-Label");
+                    SalesLine.Validate(Quantity, 1);
+                    SalesLine.Validate("Unit Price", CCLine."10-Label (Order Curr.)");
+                    SalesLine.Validate("Qty. to Ship", 1);
+                    SalesLine.Insert(true);
+                end;
+
+                if CCLine."11-OF (Order Curr.)" > 0 then begin
+                    SOLastLineNo += 10000;
+                    InitFOBSOLine(SalesLine, SOLastLineNo);
+                    SalesLine.Validate("No.", RVSetup."11-OF");
+                    SalesLine.Validate(Quantity, 1);
+                    SalesLine.Validate("Unit Price", CCLine."11-OF (Order Curr.)");
+                    SalesLine.Validate("Qty. to Ship", 1);
+                    SalesLine.Insert(true);
+                end;
+
+                if CCLine."FREIGHT (Order Curr.)" > 0 then begin
                     SOLastLineNo += 10000;
                     InitFOBSOLine(SalesLine, SOLastLineNo);
                     SalesLine.Validate("No.", RVSetup."Freight Charge Item No");
                     SalesLine.Validate(Quantity, 1);
-                    SalesLine.Validate("Unit Price", CCLine.FREIGHT);
+                    SalesLine.Validate("Unit Price", CCLine."FREIGHT (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
                 end;
 
                 //Insert New Sales Order Lines for HTP Adjustment
-                CCLine.CalcFields("HTP Adjustment Price");
-                if CCLine."HTP Adjustment Price" > 0 then begin
+                if CCLine."HTP Adj. Price (Order Curr.)" > 0 then begin
                     SOLastLineNo += 10000;
                     InitFOBSOLine(SalesLine, SOLastLineNo);
                     SalesLine.Validate("No.", RVSetup."HTP Adjustment");
                     SalesLine.Validate(Quantity, 1);
-                    SalesLine.Validate("Unit Price", CCLine."HTP Adjustment Price" * CCLine."Quantity (KG)");
+                    SalesLine.Validate("Unit Price", CCLine."HTP Adj. Price (Order Curr.)" * CCLine."Quantity (KG)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
                 end;

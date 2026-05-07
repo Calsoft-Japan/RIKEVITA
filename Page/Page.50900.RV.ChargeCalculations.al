@@ -27,6 +27,9 @@ page 50900 "RV Charge Calculations"
                 field("Charge Type"; Rec."Charge Type")
                 {
                 }
+                field("Invoice Currency Code"; Rec."Invoice Currency Code")
+                {
+                }
                 field("Calculation Date"; Rec."Calculation Date")
                 {
                 }
@@ -64,6 +67,12 @@ page 50900 "RV Charge Calculations"
                 {
                 }
                 field("09-REACH"; Rec."09-REACH")
+                {
+                }
+                field("10-Label"; Rec."10-Label")
+                {
+                }
+                field("11-OF"; Rec."11-OF")
                 {
                 }
                 field("99-OTHERS"; Rec."99-OTHERS")
