@@ -9,6 +9,9 @@ page 50515 "RV COA InterQCResult Subform"
     UsageCategory = None;
     SourceTable = "RV QA Internal QC Results";
     AutoSplitKey = true;
+    InsertAllowed = false;
+    DeleteAllowed = false;
+    Editable = false;
 
     layout
     {
@@ -35,42 +38,50 @@ page 50515 "RV COA InterQCResult Subform"
                     Editable = false;
                     Visible = false;
                 }
-
                 field("QC Parameter Name"; Rec."QC Parameter Name")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("QC Result"; Rec."QC Result")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("QC Type"; Rec."QC Type")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Check Status"; Rec."Check Status")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Value Table Type"; Rec."Value Table Type")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Alpha. Min"; Rec."Alpha. Min")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Alpha. Max"; Rec."Alpha. Max")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("QC Checked Remark"; Rec."QC Checked Remark")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("QC Approved Remark"; Rec."QC Approved Remark")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
             }
         }

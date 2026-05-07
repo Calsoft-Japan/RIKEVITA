@@ -7,9 +7,8 @@ page 50530 "RV External Spec. Description"
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
-    Caption = 'External Spec. Description';
+    Caption = 'QC External Spec. Description';
     SourceTable = "RV External Spec. Description";
-    //SourceTableView = sorting("QC Resource Group No.");
     DelayedInsert = true;
 
     layout

@@ -17,6 +17,7 @@ page 50528 "RV QC Remark Input"
                 field("Remark Text"; RemarkText[1])
                 {
                     ApplicationArea = all;
+                    MultiLine = true;
                     CaptionClass = RemarkText[2];
                 }
             }

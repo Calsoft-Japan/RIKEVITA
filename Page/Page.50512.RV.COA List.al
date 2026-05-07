@@ -66,7 +66,6 @@ page 50512 "RV COA List"
                     Visible = false;
                     Editable = false;
                 }
-
                 field("QA Status"; Rec."QA Status")
                 {
                     ApplicationArea = All;
@@ -96,7 +95,6 @@ page 50512 "RV COA List"
                     Visible = false;
                     Editable = false;
                 }
-
                 field("Mark"; Rec."Mark")
                 {
                     ApplicationArea = All;
@@ -109,7 +107,6 @@ page 50512 "RV COA List"
                     Visible = false;
                     Editable = false;
                 }
-
             }
         }
     }
@@ -190,41 +187,43 @@ page 50512 "RV COA List"
     var
         QAShipmentLotNo: Record "RV QA Shipment Lot No.";
         ShipmentLotNoPage: Page "RV COA ShipmentLotNo";
-
-
     begin
         QAShipmentLotNo.FilterGroup := 2;
         QAShipmentLotNo.SetRange("COA No.", QAHeader."COA No.");
         QAShipmentLotNo.FilterGroup := 0;
+        if not QAShipmentLotNo.FindFirst() then begin
+            QAShipmentLotNo.Init();
+            QAShipmentLotNo."COA No." := QAHeader."COA No.";
+        end;
         ShipmentLotNoPage.SetRecord(QAShipmentLotNo);
         ShipmentLotNoPage.SetTableView(QAShipmentLotNo);
         ShipmentLotNoPage.Run();
-
-        //QAShipmentLotNo."COA No." := QAHeader."COA No.";
-        //PAGE.Run(Page::"RV COA ShipmentLotNo", QAShipmentLotNo);
     end;
 
     procedure NewQAShipmentLotNo(var QAHeader: Record "RV QA Header")
     var
         QAShipmentLotNo: Record "RV QA Shipment Lot No.";
+        ShipmentLotNoPage: Page "RV COA ShipmentLotNo";
         NoSeriesMgt: Codeunit "No. Series";
         RIKEVITASetup: Record "RV RIKEVITA Setup";
-    //COANo: Code[20];
     begin
         RIKEVITASetup.Get();
         RIKEVITASetup.TestField("COA No. Nos.");
         QAHeader.Init();
         QAHeader."COA No." := NoSeriesMgt.GetNextNo(RIKEVITASetup."COA No. Nos.", WorkDate(), true);
+        QAHeader."Ref. Order Type QA" := QAHeader."Ref. Order Type QA"::"Posted Whse. Shipment";
         QAHeader.Insert();
-
-        QAShipmentLotNo."COA No." := QAHeader."COA No.";
 
         QAShipmentLotNo.FilterGroup := 2;
         QAShipmentLotNo.SetRange("COA No.", QAHeader."COA No.");
         QAShipmentLotNo.FilterGroup := 0;
 
-        PAGE.Run(Page::"RV COA ShipmentLotNo", QAShipmentLotNo);
+        QAShipmentLotNo.Init();
+        QAShipmentLotNo."COA No." := QAHeader."COA No.";
 
+        ShipmentLotNoPage.SetRecord(QAShipmentLotNo);
+        ShipmentLotNoPage.SetTableView(QAShipmentLotNo);
+        ShipmentLotNoPage.Run();
     end;
 
     procedure DeleteCOA()

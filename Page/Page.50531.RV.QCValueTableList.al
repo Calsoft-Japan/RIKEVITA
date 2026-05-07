@@ -1,28 +1,28 @@
 /// <summary>
-/// Page RV QC Parameter List (ID 50500).
+/// Page RV QC Value Table (ID 50531).
 /// FDD039 2026/02/23: New. (Mike)
 /// </summary>
-page 50500 "RV QC Parameter List"
+page 50531 "RV QC Value Table List"
 {
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;
-    Caption = 'QC Parameter List';
-    SourceTable = "RV QC Parameter";
-    SourceTableView = sorting("Parameter Name");
-
+    Caption = 'QC Value Table';
+    SourceTable = "RV QC Value Table";
+    Editable = false;
+    CardPageId = "RV QC Value Table Card";
     layout
     {
         area(Content)
         {
             repeater(General)
             {
-                field("Parameter Name"; Rec."Parameter Name")
+                field("Value Table Name"; Rec."Value Table Name")
                 {
                     ApplicationArea = All;
                     NotBlank = true;
                 }
-                field("Parameter Description"; Rec."Parameter Description")
+                field("Value Table Type"; Rec."Value Table Type")
                 {
                     ApplicationArea = All;
                 }
@@ -30,17 +30,13 @@ page 50500 "RV QC Parameter List"
                 {
                     ApplicationArea = All;
                 }
-                field("Value Table Type"; Rec."Value Table Type")
+                field("Minimum Value"; Rec."Minimum Value")
                 {
                     ApplicationArea = All;
                 }
-                field("Value Table Name"; Rec."Value Table Name")
+                field("Maximum Value"; Rec."Maximum Value")
                 {
                     ApplicationArea = All;
-                    trigger OnValidate()
-                    begin
-                        CurrPage.Update();
-                    end;
                 }
             }
         }

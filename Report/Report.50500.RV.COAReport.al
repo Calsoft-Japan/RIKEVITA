@@ -21,15 +21,6 @@ report 50500 "RV_COA Report"
             column(QA_Header_No; "COA No.")
             {
             }
-            column(DisplayQuantityPerLot; DisplayQuantityPerLot)
-            {
-            }
-            column(DateWordingText; DateWordingText)
-            {
-            }
-            column(DateWording_remarkText; DateWording_remarkText)
-            {
-            }
             column(METHOD_Caption; METHOD_Caption)
             {
             }
@@ -64,6 +55,21 @@ report 50500 "RV_COA Report"
                     {
                     }
                     column(CompanyInfo_Picture; CompanyInfo.Picture)
+                    {
+                    }
+                    column(CompanyInfo_Name; CompanyInfo.Name)
+                    {
+                    }
+                    column(CompanyInfo_Registration; 'Registration No. ' + CompanyInfo."Registration No.")
+                    {
+                    }
+                    column(DisplayQuantityPerLot; DisplayQuantityPerLot)
+                    {
+                    }
+                    column(DateWordingText; DateWordingText)
+                    {
+                    }
+                    column(DateWording_remarkText; DateWording_remarkText)
                     {
                     }
                     column(OutputNo; OutputNo)
@@ -108,6 +114,7 @@ report 50500 "RV_COA Report"
                         column(BESTBEFOREDATE; FormatExpireDateText)
                         {
                         }
+
                         dataitem(ExternalQCLoop; "Integer")
                         {
                             DataItemTableView = sorting(Number);
@@ -166,7 +173,7 @@ report 50500 "RV_COA Report"
                                             METHODText := '';
                                             SPECIFICATIONText := ExternalQCResults."Alpha. Max" + ExternalQCResults."Alpha. Min";
                                         end;
-                                    DisplayMethodCharsSpec::"Method&Chars Spec.":
+                                    DisplayMethodCharsSpec::"Method &Chars Spec.":
                                         begin
 
                                             METHODText := ExternalQCResults."QC Value";
@@ -313,9 +320,10 @@ report 50500 "RV_COA Report"
                             DateWording_remarkText := 'Expiry Date';
                         end;
 
-                    end else
+                    end else begin
                         DisplayQuantityPerLot := false;
-
+                        Error('Please Setup RV Cust. COA Report Setting.');
+                    end;
                 end;
 
                 //DisplayMethodCharsSpec
@@ -330,7 +338,7 @@ report 50500 "RV_COA Report"
                             METHOD_Caption := '';
                             SPECIFICATION_Caption := 'SPECIFICATION';
                         end;
-                    DisplayMethodCharsSpec::"Method&Chars Spec.":
+                    DisplayMethodCharsSpec::"Method &Chars Spec.":
                         begin
                             METHOD_Caption := 'METHOD';
                             SPECIFICATION_Caption := 'SPECIFICATION';

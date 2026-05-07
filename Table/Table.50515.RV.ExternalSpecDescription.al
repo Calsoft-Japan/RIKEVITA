@@ -50,7 +50,7 @@ table 50515 "RV External Spec. Description"
     }
     keys
     {
-        key(PK; "QC Resource Group No.", "Customer No.", "Ship-to Code", "External Spec. Name")
+        key(PK; "QC Resource Group No.", "QC Parameter Name", "Customer No.", "Ship-to Code", "External Spec. Name")
         {
             Clustered = true;
         }

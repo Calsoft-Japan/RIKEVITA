@@ -21,15 +21,23 @@ table 50500 "RV QC Parameter"
         field(3; "Type"; Enum "RV Type")
         {
             Caption = 'Type';
+            FieldClass = FlowField;
+            CalcFormula = lookup("RV QC Value Table".Type where("Value Table Name" = field("Value Table Name")));
+            Editable = false;
         }
         field(4; "Value Table Type"; Enum "RV Value Table Type")
         {
             Caption = 'Value Table Type';
+            FieldClass = FlowField;
+            CalcFormula = lookup("RV QC Value Table"."Value Table Type" where("Value Table Name" = field("Value Table Name")));
+            Editable = false;
         }
-        field(5; "Value Table Name"; Text[100])
+        field(5; "Value Table Name"; Code[100])
         {
             Caption = 'Value Table Name';
+            TableRelation = "RV QC Value Table"."Value Table Name";
         }
+
     }
     keys
     {
@@ -38,19 +46,4 @@ table 50500 "RV QC Parameter"
             Clustered = true;
         }
     }
-    procedure SetQCParameterEnable(var TypeEnable: Boolean; var ValueTableTypeEnable: Boolean)
-    var
-        QCLine: Record "RV QC Line";
-    begin
-        QCLine.Reset();
-        QCLine.SetRange("QC Parameter Name", "Parameter Name");
-        if QCLine.FindFirst() then
-            if QCLine.FindFirst() then begin
-                TypeEnable := false;
-                ValueTableTypeEnable := false;
-            end else begin
-                TypeEnable := true;
-                ValueTableTypeEnable := true;
-            end;
-    end;
 }

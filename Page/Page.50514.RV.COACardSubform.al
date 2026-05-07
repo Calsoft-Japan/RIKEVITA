@@ -116,6 +116,7 @@ page 50514 "RV COA Card Subform"
                 field("Mark"; Rec."Mark")
                 {
                     ApplicationArea = All;
+                    MultiLine = true;
                 }
                 field("QA Status"; Rec."QA Status")
                 {
@@ -131,6 +132,7 @@ page 50514 "RV COA Card Subform"
                 {
                     ApplicationArea = All;
                     Editable = false;
+                    MultiLine = true;
                 }
                 field("QA Approved By"; Rec."QA Approved By")
                 {
@@ -141,6 +143,7 @@ page 50514 "RV COA Card Subform"
                 {
                     ApplicationArea = All;
                     Editable = false;
+                    MultiLine = true;
                 }
                 field("COA Date"; Rec."COA Date")
                 {
@@ -427,7 +430,7 @@ page 50514 "RV COA Card Subform"
                         repeat
                             QAInternalQCResults.Init();
                             QAInternalQCResults."COA No." := Rec."COA No.";
-                            QAInternalQCResults."COA Lot Line No." := Rec."Line No.";
+                            QAInternalQCResults."COA Lot Line No." := QAShipmentLotNo."COA Lot Line No.";
                             QAInternalQCResults."QC Internal Spec. Line No." := FQCLine."Line No.";
                             QAInternalQCResults."QC Parameter Name" := FQCLine."QC Parameter Name";
                             QAInternalQCResults."QC Result" := FQCLine."QC Result";
@@ -441,6 +444,8 @@ page 50514 "RV COA Card Subform"
                             QAInternalQCResults.Insert();
                         until FQCLine.Next() = 0;
                     end;
+                end else begin
+                    Error('Before QA,Please first create FQC Line for Item %1 and lot %2.', Rec."Item No.", QAShipmentLotNo."Lot No.");
                 end;
                 //Create external QC results based on the applied QC Resource Group and related External Specification
                 QCResourceGroupApply.Reset();
@@ -453,6 +458,8 @@ page 50514 "RV COA Card Subform"
                         Error('No QC Resource found for group %1', QCResourceGroupApply."QC Resource Group No.");
                 end Else
                     Error('No QC Resource found for group %1', QCResourceGroupApply."QC Resource Group No.");
+
+                //Clear(ExternalSpecNo);
                 CustomerExternalSpec.Reset();
                 CustomerExternalSpec.SetRange("QC Resource Group No.", QCResource."QC Resource Group No.");
                 CustomerExternalSpec.SetRange("Customer No.", rec."Ship-to Customer No.");
@@ -464,12 +471,15 @@ page 50514 "RV COA Card Subform"
                     CustomerExternalSpec.SetRange("QC Resource Group No.", QCResource."QC Resource Group No.");
                     CustomerExternalSpec.SetRange("Customer No.", rec."Ship-to Customer No.");
                     if CustomerExternalSpec.FindLast() then
-                        ExternalSpecNo := CustomerExternalSpec."External Specification"
+                        ExternalSpecNo := CustomerExternalSpec."External Specification";
                 end;
+
                 IF ExternalSpecNo = '' then
                     ExternalSpecNo := QCResource."External Specification";
+
                 if ExternalSpecNo = '' then
                     Error('No External Specification found for QC Resource Group %1', QCResource."QC Resource Group No.");
+
                 QCSpecification.Reset;
                 QCSpecification.SetRange("QC Specification Name", ExternalSpecNo);
 
@@ -478,7 +488,7 @@ page 50514 "RV COA Card Subform"
                 if QCSpecificationLine.findset then begin
                     QAExternalQCResults.Reset();
                     QAExternalQCResults.SetRange("COA No.", Rec."COA No.");
-                    QAExternalQCResults.SetRange("COA Lot Line No.", Rec."Line No.");
+                    QAExternalQCResults.SetRange("COA Lot Line No.", QAShipmentLotNo."COA Lot Line No.");
                     if QAExternalQCResults.FindSet() then begin
                         if Confirm('External QC results already exist. Do you want to overwrite them?', true) then begin
                             repeat
@@ -492,9 +502,9 @@ page 50514 "RV COA Card Subform"
                         QAExternalQCResults.Init();
 
                         QAExternalQCResults."COA No." := Rec."COA No.";
-                        QAExternalQCResults."COA Lot Line No." := Rec."Line No.";
+                        QAExternalQCResults."COA Lot Line No." := QAShipmentLotNo."COA Lot Line No.";
                         QAExternalQCResults."QC External Spec. Line No." := ExternalSpecLineNo;
-                        QAExternalQCResults."QC Parameter Name" := QCSpecificationLine."QC Parameter Name";
+                        QAExternalQCResults.Validate("QC Parameter Name", QCSpecificationLine."QC Parameter Name");
 
                         //QAExternalQCResults."Alpha. Max"
                         //QAExternalQCResults."Alpha. Min"

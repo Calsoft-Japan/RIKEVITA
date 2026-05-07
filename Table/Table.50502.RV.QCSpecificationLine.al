@@ -17,15 +17,10 @@ table 50502 "RV QC Specification Line"
             Caption = 'QC Parameter Name';
             TableRelation = "RV QC Parameter";
         }
-
         field(3; "Value Table Type"; Enum "RV Value Table Type")
         {
             Caption = 'Value Table Type';
-            FieldClass = FlowField;
-            CalcFormula = lookup("RV QC Parameter"."Value Table Type" where("Parameter Name" = field("QC Parameter Name")));
-            Editable = false;
         }
-
         field(4; "Target Value ib Base UM"; Text[100])
         {
             Caption = 'Target Value ib Base UM';

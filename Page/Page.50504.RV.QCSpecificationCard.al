@@ -7,9 +7,7 @@ page 50504 "RV QC Specification Card"
     Caption = 'QC Specification';
     PageType = Card;
     ApplicationArea = All;
-    UsageCategory = Documents;
     SourceTable = "RV QC Specification";
-    DelayedInsert = true;
 
     layout
     {
@@ -38,22 +36,4 @@ page 50504 "RV QC Specification Card"
             }
         }
     }
-
-    actions
-    {
-        area(Processing)
-        {
-        }
-    }
-
-    trigger OnOpenPage()
-    var
-
-    begin
-
-    end;
-
-
-    var
-
 }

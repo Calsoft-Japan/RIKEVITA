@@ -85,6 +85,7 @@ page 50509 "RV IQC Card"
                 field("QC Checked Remark"; Rec."QC Checked Remark")
                 {
                     ApplicationArea = All;
+                    MultiLine = true;
                     Editable = false;
                 }
                 field("QC Approved By"; Rec."QC Approved By")
@@ -95,6 +96,7 @@ page 50509 "RV IQC Card"
                 field("QC Approved Remark"; Rec."QC Approved Remark")
                 {
                     ApplicationArea = All;
+                    MultiLine = true;
                     Editable = false;
                 }
                 field("Line No."; Rec."Line No.")

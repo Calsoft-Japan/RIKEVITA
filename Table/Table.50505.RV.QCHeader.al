@@ -77,7 +77,6 @@ table 50505 "RV QC Header"
                     end;
                 end else if Rec."Ref. Order Type" = RefOrderType::"Production Order" then begin
 
-
                     ProdOrderLine.Reset();
                     ProdOrderLine.SetRange(Status, ProdOrderLine.Status::Released);
                     RIKEVITASetup.Get();
@@ -89,11 +88,12 @@ table 50505 "RV QC Header"
                         ProdOrderLine.SetRange("Inventory Posting Group", RIKEVITASetup."WIP Inventory Posting Group");
                     end;
 
-
                     if (Page.RunModal(Page::"Prod. Order Line List", ProdOrderLine) = Action::LookupOK) then begin
                         "Order No." := ProdOrderLine."Prod. Order No.";
                         "Line No." := ProdOrderLine."Line No.";
                         "Item No." := ProdOrderLine."Item No.";
+                        "Tan No." := ProdOrderLine."Location Code";
+                        "Bin Code" := ProdOrderLine."Bin Code";
                         //"Customer No." := ProdOrderLine."Buy-from Vendor No.";
                         ProductionOrder.get(ProductionOrder.Status::Released, ProdOrderLine."Prod. Order No.");
                         //"Ship-to Code" := ProdOrderLine."Ship-to Code";
@@ -113,122 +113,11 @@ table 50505 "RV QC Header"
         field(5; "Lot No."; Code[20])
         {
             Caption = 'Lot No.';
-
-            /*
-            trigger OnLookup()
-            var
-                ReservationEntry: Record "Reservation Entry";
-                //TrackingLinesPage: Page "Item Tracking Lines";
-                RefOrderType: Enum "RV Ref. Order Type";
-                Purchaseline: Record "Purchase line";
-                JobPlanningLine: Record "Job Planning Line";
-                PurchRcptLine: Record "Purch. Rcpt. Line";
-                ItemLedgerEntry: Record "Item Ledger Entry";
-            begin
-                
-                if "Ref. Order Type" = RefOrderType::"Purchase Order" then begin
-                    Purchaseline.get(Purchaseline."Document Type"::Order, "Order No.", "Line No.");
-                    ReservationEntry.SetRange("Source Type", Database::"Purchase Line");
-                    ReservationEntry.SetRange("Source Subtype", Purchaseline."Document Type".AsInteger());
-                    ReservationEntry.SetRange("Source Ref. No.", Purchaseline."Line No.");
-                    if not ReservationEntry.IsEmpty then begin
-                        Page.RunModal(Page::"Item Tracking Lines", ReservationEntry);
-                    end else begin
-                        Message('No Lot Numbers have been assigned to this line yet.');
-                    end;
-                end else if "Ref. Order Type" = RefOrderType::"Posted Purchase Receipt" then begin
-                    PurchRcptLine.get("Order No.", "Line No.");
-                    ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Purchase Receipt");
-                    ItemLedgerEntry.SetRange("Document No.", PurchRcptLine."Document No.");
-                    ItemLedgerEntry.SetRange("Document Line No.", PurchRcptLine."Line No.");
-
-                    if not ItemLedgerEntry.IsEmpty then begin
-                        Page.RunModal(Page::"Item Ledger Entries", ItemLedgerEntry);
-                    end else begin
-                        Message('No Lot Numbers were recorded for this receipt line.');
-                    end;
-                end else if "Ref. Order Type" = RefOrderType::"Production Order" then begin
-
-
-
-                    JobPlanningLine.get(Purchaseline."Document Type"::Order, "Order No.", "Job Task No.", "Line No.");
-                    ReservationEntry.SetRange("Source Type", Database::"Job Planning Line");
-                    // Note: Job Planning Lines don't use Subtypes like Purchase (0/1/2)
-                    // They usually map Source Subtype to 0
-                    ReservationEntry.SetRange("Source Subtype", 0);
-                    ReservationEntry.SetRange("Source ID", JobPlanningLine."Job No.");
-                    ReservationEntry.SetRange("Source Ref. No.", JobPlanningLine."Line No.");
-                    ReservationEntry.SetRange("Source Batch Name", JobPlanningLine."Job Task No.");
-
-                    if not ReservationEntry.IsEmpty then begin
-                        Page.RunModal(Page::"Item Tracking Lines", ReservationEntry);
-                    end else begin
-                        Message('No Lot Numbers are currently tracked/reserved for this Project Planning Line.');
-                    end;
-                end;
-                
-            end;
-            */
-
         }
         field(6; "Item No."; Code[20])
         {
             Caption = 'Item No.';
             TableRelation = Item;
-
-            /*
-            trigger OnLookup()
-            var
-                RefOrderType: Enum "RV Ref. Order Type";
-                Purchaseline: Record "Purchase line";
-                PurchRcptLine: Record "Purch. Rcpt. Line";
-                JobPlanningLine: Record "Job Planning Line";
-            begin
-
-                if "Ref. Order Type" = RefOrderType::"Purchase Order" then begin
-
-                    Purchaseline.Reset();
-                    Purchaseline.SetRange("Document Type", Purchaseline."Document Type"::Order);
-                    Purchaseline.SetRange("Document No.", "Order No.");
-                    if (Page.RunModal(Page::"Purchase Lines", Purchaseline) = Action::LookupOK) then begin
-                        "Order No." := Purchaseline."Document No.";
-                        "Line No." := Purchaseline."Line No.";
-                    end;
-
-                end else if "Ref. Order Type" = RefOrderType::"Posted Purchase Receipt" then begin
-
-                    PurchRcptLine.Reset();
-                    PurchRcptLine.SetRange("Document No.", "Order No.");
-                    if (Page.RunModal(Page::"Posted Purchase Receipt Lines", PurchRcptLine) = Action::LookupOK) then begin
-                        "Order No." := PurchRcptLine."Document No.";
-                        "Line No." := PurchRcptLine."Line No.";
-                    end;
-
-                end else if "Ref. Order Type" = RefOrderType::"Production Order" then begin
-
-                    JobPlanningLine.Reset();
-                    JobPlanningLine.SetRange("Job No.", "Order No.");
-                    if (Page.RunModal(Page::"Job Planning Lines", JobPlanningLine) = Action::LookupOK) then begin
-                        "Order No." := JobPlanningLine."Document No.";
-                        "Line No." := JobPlanningLine."Line No.";
-                        "Job Task No." := JobPlanningLine."Job Task No.";
-
-                    end;
-
-                end;
-            end;
-
-            trigger OnValidate()
-            var
-                QCLine: Record "RV QC Line";
-            begin
-                "Lot No." := '';
-
-                QCLine.SetRange("QC No.", "QC No.");
-                QCLine.DeleteAll();
-
-            end;
-            */
         }
         field(7; "QC Date"; Date)
         {
@@ -267,6 +156,11 @@ table 50505 "RV QC Header"
         {
             Caption = 'Tan No.';
             TableRelation = Location;
+        }
+        field(16; "Bin Code"; Code[20])
+        {
+            Caption = 'Bin Code';
+            TableRelation = Bin.Code where("Location Code" = field("Tan No."));
         }
         field(100; "Line No."; Integer)
         {
@@ -422,6 +316,8 @@ table 50505 "RV QC Header"
         "Order No." := '';
         "Item No." := '';
         "Lot No." := '';
+        "Tan No." := '';
+        "Bin Code" := '';
         "QC Date" := 0D;
 
         "QC Standard Type" := "QC Standard Type"::Internal;
@@ -454,6 +350,7 @@ table 50505 "RV QC Header"
         QCGroup: Record "RV QC Resource Group";
         QCSpecificationLine: Record "RV QC Specification Line";
         QCParameter: Record "RV QC Parameter";
+        QCListValue: Record "RV QC List Value";
         QCStandardType: enum "RV QC Standard Type";
         LineNo: Integer;
         currSpecification: Code[20];
@@ -509,10 +406,21 @@ table 50505 "RV QC Header"
                 QCLine."QC No." := "QC No.";
                 QCLine."Line No." := LineNo;
                 //QCParameter
+                QCParameter.Reset();
                 if QCParameter.Get(QCSpecificationLine."QC Parameter Name") then begin
+                    QCParameter.CalcFields(Type, "Value Table Type");
                     QCLine."QC Parameter Name" := QCParameter."Parameter Name";
                     QCLine.Type := QCParameter.Type;
                     QCLine."Value Table Type" := QCParameter."Value Table Type";
+                    QCLine."Value Table Name" := QCParameter."Value Table Name";
+                    if QCLine."Value Table Type" = QCLine."Value Table Type"::Single then begin
+                        QCListValue.Reset();
+                        QCListValue.SetRange("Value Table Name", QCParameter."Value Table Name");
+                        if QCListValue.FindFirst() then begin
+                            QCLine."QC Result" := QCListValue."List Value";
+                            QCLine."Check Status" := QCListValue."Check Status";
+                        end;
+                    end;
                 end;
                 QCLine.Insert();
             until QCSpecificationLine.Next() = 0;
@@ -568,5 +476,4 @@ table 50505 "RV QC Header"
         END;
 
     end;
-
 }

@@ -55,6 +55,7 @@ page 50510 "RV IQC Subform"
                 field("QC Result"; Rec."QC Result")
                 {
                     ApplicationArea = All;
+
                 }
                 field("Check Status"; Rec."Check Status")
                 {

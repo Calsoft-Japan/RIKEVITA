@@ -70,6 +70,11 @@ page 50521 "RV PQC Card"
                     ApplicationArea = All;
                     Editable = QCCardEnable;
                 }
+                field("Bin Code"; Rec."Bin Code")
+                {
+                    ApplicationArea = All;
+                    Editable = QCCardEnable;
+                }
                 field("QC Date"; Rec."QC Date")
                 {
                     ApplicationArea = All;
@@ -93,6 +98,7 @@ page 50521 "RV PQC Card"
                 field("QC Checked Remark"; Rec."QC Checked Remark")
                 {
                     ApplicationArea = All;
+                    MultiLine = true;
                     Editable = false;
                 }
                 field("QC Approved By"; Rec."QC Approved By")
@@ -103,6 +109,7 @@ page 50521 "RV PQC Card"
                 field("QC Approved Remark"; Rec."QC Approved Remark")
                 {
                     ApplicationArea = All;
+                    MultiLine = true;
                     Editable = false;
                 }
             }

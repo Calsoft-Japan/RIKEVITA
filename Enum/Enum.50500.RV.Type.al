@@ -5,7 +5,8 @@
 enum 50500 "RV Type"
 {
     Extensible = true;
-    value(0; "Alphanumeric") { Caption = 'Alphanumeric'; }
-    value(1; "Numeric") { Caption = 'Numeric'; }
-    value(2; "Blooean") { Caption = 'Blooean'; }
+    value(0; " ") { Caption = ' '; }
+    value(1; "Alphanumeric") { Caption = 'Alphanumeric'; }
+    value(2; "Numeric") { Caption = 'Numeric'; }
+    value(3; "Blooean") { Caption = 'Blooean'; }
 }

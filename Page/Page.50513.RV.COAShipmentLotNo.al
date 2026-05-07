@@ -11,6 +11,7 @@ page 50513 "RV COA ShipmentLotNo"
     SaveValues = true;
     SourceTable = "RV QA Shipment Lot No.";
     DataCaptionFields = "COA No.";
+    DeleteAllowed = false;
 
     layout
     {
@@ -43,37 +44,37 @@ page 50513 "RV COA ShipmentLotNo"
                     field("Lot No."; Rec."Lot No.")
                     {
                         ApplicationArea = All;
-                        Editable = ShipmentLotNoEditable;
+                        Editable = false;
                     }
                     field(Quantity; Rec.Quantity)
                     {
                         ApplicationArea = All;
-                        Editable = ShipmentLotNoEditable;
+                        Editable = false;
                     }
                     field(UOM; Rec.UOM)
                     {
                         ApplicationArea = All;
-                        Editable = ShipmentLotNoEditable;
+                        Editable = false;
                     }
                     field("Container No."; Rec."Container No.")
                     {
                         ApplicationArea = All;
-                        Editable = ShipmentLotNoEditable;
+                        Editable = false;
                     }
                     field("Manufacturing Date"; Rec."Manufacturing Date")
                     {
                         ApplicationArea = All;
-                        Editable = ShipmentLotNoEditable;
+                        Editable = false;
                     }
                     field("Expire Date"; Rec."Expire Date")
                     {
                         ApplicationArea = All;
-                        Editable = ShipmentLotNoEditable;
+                        Editable = false;
                     }
                     field("Sales Order No."; Rec."Sales Order No.")
                     {
                         ApplicationArea = All;
-                        Editable = ShipmentLotNoEditable;
+                        Editable = false;
                     }
                     field("QA Status"; Rec."QA Status")
                     {
@@ -89,14 +90,13 @@ page 50513 "RV COA ShipmentLotNo"
                 }
             }
 
-
             part(SubInterQCResult; "RV COA InterQCResult Subform")
             {
                 Caption = 'Interal Specification';
                 ApplicationArea = All;
                 SubPageLink = "COA No." = field("COA No."), "COA Lot Line No." = field("COA Lot Line No.");
                 UpdatePropagation = Both;
-                Editable = SubInterQCResultEditable;
+                Editable = false;
             }
             part(SubExterQCResult; "RV COA ExterQCResult Subform")
             {
@@ -208,14 +208,14 @@ page 50513 "RV COA ShipmentLotNo"
     begin
         //SetQAEnable
         Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable,
-            ShipmentLotNoEditable, SubCOACardEditable, SubInterQCResultEditable, SubExterQCResultEditable, SubInyResultEditable);
+            SubCOACardEditable, SubExterQCResultEditable, SubInyResultEditable);
     end;
 
     trigger OnAfterGetRecord()
     begin
         //SetQAEnable
         Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable,
-            ShipmentLotNoEditable, SubCOACardEditable, SubInterQCResultEditable, SubExterQCResultEditable, SubInyResultEditable);
+            SubCOACardEditable, SubExterQCResultEditable, SubInyResultEditable);
     end;
 
     trigger OnDeleteRecord(): Boolean
@@ -241,7 +241,7 @@ page 50513 "RV COA ShipmentLotNo"
 
         //SetQAEnable
         Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable,
-            ShipmentLotNoEditable, SubCOACardEditable, SubInterQCResultEditable, SubExterQCResultEditable, SubInyResultEditable);
+            SubCOACardEditable, SubExterQCResultEditable, SubInyResultEditable);
     end;
 
     trigger OnOpenPage()
@@ -249,7 +249,7 @@ page 50513 "RV COA ShipmentLotNo"
         CurrentCOANo := Rec."COA No.";
         //SetQAEnable
         Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable,
-            ShipmentLotNoEditable, SubCOACardEditable, SubInterQCResultEditable, SubExterQCResultEditable, SubInyResultEditable);
+            SubCOACardEditable, SubExterQCResultEditable, SubInyResultEditable);
     end;
 
     var
@@ -271,9 +271,9 @@ page 50513 "RV COA ShipmentLotNo"
         QARejectEnable: Boolean;
 
 
-        ShipmentLotNoEditable: Boolean;
+        //ShipmentLotNoEditable: Boolean;
         SubCOACardEditable: Boolean;
-        SubInterQCResultEditable: Boolean;
+        //SubInterQCResultEditable: Boolean;
         SubExterQCResultEditable: Boolean;
         SubInyResultEditable: Boolean;
 

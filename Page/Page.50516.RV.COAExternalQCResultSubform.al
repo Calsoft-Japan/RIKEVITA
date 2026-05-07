@@ -6,18 +6,17 @@ page 50516 "RV COA ExterQCResult Subform"
 {
     PageType = ListPart;
     ApplicationArea = All;
-
     UsageCategory = None;
     SourceTable = "RV QA External QC Results";
     AutoSplitKey = true;
-
+    InsertAllowed = false;
+    DeleteAllowed = false;
     layout
     {
         area(Content)
         {
             repeater(Line)
             {
-
                 field("COA No."; Rec."COA No.")
                 {
                     ApplicationArea = All;
@@ -36,14 +35,15 @@ page 50516 "RV COA ExterQCResult Subform"
                     Editable = false;
                     Visible = false;
                 }
-
                 field("QC Parameter Name"; Rec."QC Parameter Name")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("QC Value"; Rec."QC Value")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("COA Value"; Rec."COA Value")
                 {
@@ -52,29 +52,24 @@ page 50516 "RV COA ExterQCResult Subform"
                 field("Differ From QC Vaule"; Rec."Differ From QC Vaule")
                 {
                     ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Check Status"; Rec."Check Status")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Alpha. Min"; Rec."Alpha. Min")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Alpha. Max"; Rec."Alpha. Max")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
             }
         }
     }
-
-    trigger OnAfterGetRecord()
-    begin
-
-    end;
-
-    trigger OnNewRecord(BelowxRec: Boolean)
-    begin
-
-    end;
-
-    var
-
 }

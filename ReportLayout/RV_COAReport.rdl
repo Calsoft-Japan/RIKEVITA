@@ -11,7 +11,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.1.30001.02</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-04-06T11:43:49.0872638Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-04-30T09:01:36.3872263Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -113,13 +113,13 @@
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>3.75656cm</Width>
+                                    <Width>1.08956cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
                                     <Width>0.58cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>2.00508cm</Width>
+                                    <Width>4.67208cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
                                     <Width>1.77826cm</Width>
@@ -896,8 +896,8 @@
                                       </TablixCell>
                                       <TablixCell>
                                         <CellContents>
-                                          <Textbox Name="Textbox93">
-                                            <rd:DefaultName>Textbox93</rd:DefaultName>
+                                          <Textbox Name="Textbox3">
+                                            <rd:DefaultName>Textbox3</rd:DefaultName>
                                             <CanGrow>true</CanGrow>
                                             <KeepTogether>true</KeepTogether>
                                             <Paragraphs>
@@ -2313,6 +2313,9 @@ Fields!DateWording_remarkText.Value</Value>
                                     <RepeatOnNewPage>true</RepeatOnNewPage>
                                   </TablixMember>
                                   <TablixMember>
+                                    <Visibility>
+                                      <Hidden>=IIF(First(Fields!DisplayQuantityPerLot.Value),FALSE,TRUE)</Hidden>
+                                    </Visibility>
                                     <KeepWithGroup>After</KeepWithGroup>
                                     <RepeatOnNewPage>true</RepeatOnNewPage>
                                   </TablixMember>
@@ -2541,7 +2544,7 @@ Fields!DateWording_remarkText.Value</Value>
                 </Paragraph>
               </Paragraphs>
               <Height>0.31746cm</Height>
-              <Width>0.95238cm</Width>
+              <Width>0.45849cm</Width>
               <ZIndex>1</ZIndex>
               <Visibility>
                 <Hidden>=code.SetData(ReportItems!To.Value,1)</Hidden>
@@ -2571,9 +2574,9 @@ Fields!DateWording_remarkText.Value</Value>
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Left>1.26984cm</Left>
+              <Left>0.63484cm</Left>
               <Height>0.31746cm</Height>
-              <Width>0.95238cm</Width>
+              <Width>0.54747cm</Width>
               <ZIndex>2</ZIndex>
               <Visibility>
                 <Hidden>=code.SetData(ReportItems!From.Value,2)</Hidden>
@@ -2603,9 +2606,9 @@ Fields!DateWording_remarkText.Value</Value>
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Left>2.53968cm</Left>
+              <Left>1.26968cm</Left>
               <Height>0.31746cm</Height>
-              <Width>0.95238cm</Width>
+              <Width>0.49263cm</Width>
               <ZIndex>3</ZIndex>
               <Visibility>
                 <Hidden>=code.SetData(ReportItems!Comment.Value,3)</Hidden>
@@ -2635,9 +2638,9 @@ Fields!DateWording_remarkText.Value</Value>
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Left>3.80952cm</Left>
+              <Left>1.90452cm</Left>
               <Height>0.31746cm</Height>
-              <Width>0.95238cm</Width>
+              <Width>0.59984cm</Width>
               <ZIndex>4</ZIndex>
               <Visibility>
                 <Hidden>=code.SetData(ReportItems!Head.Value,4)</Hidden>
@@ -2719,9 +2722,9 @@ Fields!DateWording_remarkText.Value</Value>
               <MIMEType>image/bmp</MIMEType>
               <Sizing>FitProportional</Sizing>
               <Top>0.14131cm</Top>
-              <Left>4.4444cm</Left>
+              <Left>2.2219cm</Left>
               <Height>1.90476cm</Height>
-              <Width>10.03126cm</Width>
+              <Width>2.28549cm</Width>
               <ZIndex>7</ZIndex>
               <Style>
                 <Border>
@@ -3253,6 +3256,71 @@ Fields!DateWording_remarkText.Value</Value>
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
+            <Textbox Name="textbox61">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!CompanyInfo_Name.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontFamily>Meiryo</FontFamily>
+                        <FontSize>20pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Left</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.14131cm</Top>
+              <Left>4.54267cm</Left>
+              <Height>1.37568cm</Height>
+              <Width>10.28474cm</Width>
+              <ZIndex>26</ZIndex>
+              <Style>
+                <VerticalAlign>Bottom</VerticalAlign>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="textbox62">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!CompanyInfo_Registration.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontFamily>Meiryo</FontFamily>
+                        <FontWeight>Bold</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>1.51699cm</Top>
+              <Left>4.50739cm</Left>
+              <Height>0.52908cm</Height>
+              <Width>10.00252cm</Width>
+              <ZIndex>27</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Top</VerticalAlign>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
           </ReportItems>
           <Style />
         </PageHeader>
@@ -3292,7 +3360,7 @@ Fields!DateWording_remarkText.Value</Value>
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.54077cm</Top>
+              <Top>0.5196cm</Top>
               <Left>0.09275cm</Left>
               <Height>0.6cm</Height>
               <Width>2.41161cm</Width>
@@ -3324,7 +3392,7 @@ Fields!DateWording_remarkText.Value</Value>
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.43466cm</Top>
+              <Top>0.5196cm</Top>
               <Left>16.66676cm</Left>
               <Height>0.6cm</Height>
               <Width>1.90465cm</Width>
@@ -3662,15 +3730,6 @@ HjXjf4OeKPid4H8VaF4i8UQx3kutjVPDWoWVoqtpaROklsrrx5jKytuJPIbrWbo3wn+JnjLxVp2ofE7x
         <Field Name="QA_Header_No">
           <DataField>QA_Header_No</DataField>
         </Field>
-        <Field Name="DisplayQuantityPerLot">
-          <DataField>DisplayQuantityPerLot</DataField>
-        </Field>
-        <Field Name="DateWordingText">
-          <DataField>DateWordingText</DataField>
-        </Field>
-        <Field Name="DateWording_remarkText">
-          <DataField>DateWording_remarkText</DataField>
-        </Field>
         <Field Name="METHOD_Caption">
           <DataField>METHOD_Caption</DataField>
         </Field>
@@ -3700,6 +3759,21 @@ HjXjf4OeKPid4H8VaF4i8UQx3kutjVPDWoWVoqtpaROklsrrx5jKytuJPIbrWbo3wn+JnjLxVp2ofE7x
         </Field>
         <Field Name="CompanyInfo_Picture">
           <DataField>CompanyInfo_Picture</DataField>
+        </Field>
+        <Field Name="CompanyInfo_Name">
+          <DataField>CompanyInfo_Name</DataField>
+        </Field>
+        <Field Name="CompanyInfo_Registration">
+          <DataField>CompanyInfo_Registration</DataField>
+        </Field>
+        <Field Name="DisplayQuantityPerLot">
+          <DataField>DisplayQuantityPerLot</DataField>
+        </Field>
+        <Field Name="DateWordingText">
+          <DataField>DateWordingText</DataField>
+        </Field>
+        <Field Name="DateWording_remarkText">
+          <DataField>DateWording_remarkText</DataField>
         </Field>
         <Field Name="OutputNo">
           <DataField>OutputNo</DataField>

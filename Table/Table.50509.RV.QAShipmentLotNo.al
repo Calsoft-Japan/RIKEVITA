@@ -85,8 +85,8 @@ table 50509 "RV QA Shipment Lot No."
 
     procedure SetQAEnable(var UpdateQALineEnable: Boolean; var QACheckEnable: Boolean;
                         var QAApproveEnable: Boolean; var QARejectEnable: Boolean;
-                        var ShipmentLotNoEditable: Boolean; var SubCOACardEditable: Boolean;
-                        var SubInterQCResultEditable: Boolean; var SubExterQCResultEditable: Boolean;
+                        var SubCOACardEditable: Boolean;
+                        var SubExterQCResultEditable: Boolean;
                          var SubInyResultEditable: Boolean)
     var
         QAHeader: Record "RV QA Header";
@@ -101,9 +101,9 @@ table 50509 "RV QA Shipment Lot No."
                     QAApproveEnable := false;
                     QARejectEnable := false;
 
-                    ShipmentLotNoEditable := true;
+
                     SubCOACardEditable := true;
-                    SubInterQCResultEditable := true;
+
                     SubExterQCResultEditable := true;
                     SubInyResultEditable := true;
                 end;
@@ -114,9 +114,9 @@ table 50509 "RV QA Shipment Lot No."
                     QAApproveEnable := true;
                     QARejectEnable := true;
 
-                    ShipmentLotNoEditable := false;
+
                     SubCOACardEditable := false;
-                    SubInterQCResultEditable := false;
+
                     SubExterQCResultEditable := false;
                     SubInyResultEditable := false;
                 end;
@@ -127,9 +127,9 @@ table 50509 "RV QA Shipment Lot No."
                     QAApproveEnable := false;
                     QARejectEnable := false;
 
-                    ShipmentLotNoEditable := false;
+
                     SubCOACardEditable := false;
-                    SubInterQCResultEditable := false;
+
                     SubExterQCResultEditable := false;
                     SubInyResultEditable := false;
                 end;
@@ -140,9 +140,9 @@ table 50509 "RV QA Shipment Lot No."
                     QAApproveEnable := false;
                     QARejectEnable := false;
 
-                    ShipmentLotNoEditable := false;
+
                     SubCOACardEditable := false;
-                    SubInterQCResultEditable := false;
+
                     SubExterQCResultEditable := false;
                     SubInyResultEditable := false;
                 end;
@@ -249,7 +249,7 @@ table 50509 "RV QA Shipment Lot No."
                     //QCParameter
                     if QCParameter.Get(QCSpecificationLine."QC Parameter Name") then begin
                         QAExternalResults."QC Parameter Name" := QCParameter."Parameter Name";
-                        QAExternalResults."QC Value" := QCParameter."Value Table Name";
+                        //QAExternalResults."QC Value" := QCParameter."Value Table Name";
                         //QAExternalResults."COA Value" := 
                         //QAExternalResults."Differ From QC Vaule":=
                         //QAExternalResults."Alpha. Min"

@@ -10,7 +10,6 @@ page 50506 "RV QC Resource Group List"
     Caption = 'QC Resource Group List';
     SourceTable = "RV QC Resource Group";
     SourceTableView = sorting("QC Resource Group No.");
-    DelayedInsert = true;
 
     layout
     {

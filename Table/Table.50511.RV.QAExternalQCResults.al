@@ -26,6 +26,28 @@ table 50511 "RV QA External QC Results"
         {
             Caption = 'QC Parameter Name';
             TableRelation = "RV QC Parameter";
+            trigger OnValidate()
+            var
+                QAInternalQCResults: Record "RV QA Internal QC Results";
+                QCParameter: Record "RV QC Parameter";
+                QCValueTable: Record "RV QC Value Table";
+            begin
+                QAInternalQCResults.Reset();
+                QAInternalQCResults.SetRange("COA No.", "COA No.");
+                QAInternalQCResults.SetRange("COA Lot Line No.", "COA Lot Line No.");
+                QAInternalQCResults.SetRange("QC Parameter Name", "QC Parameter Name");
+                if QAInternalQCResults.FindLast() then
+                    "QC Value" := QAInternalQCResults."QC Result";
+
+                if QCParameter.Get("QC Parameter Name") then begin
+                    QCValueTable.Reset();
+                    QCValueTable.SetRange("Value Table Name");
+                    if QCValueTable.FindFirst() then begin
+                        "Alpha. Min" := QCValueTable."Minimum Value";
+                        "Alpha. Max" := QCValueTable."Maximum Value";
+                    end;
+                end;
+            end;
         }
         field(5; "QC Value"; Text[50])
         {
@@ -34,6 +56,28 @@ table 50511 "RV QA External QC Results"
         field(6; "COA Value"; Text[50])
         {
             Caption = 'COA Value';
+            trigger OnValidate()
+            var
+                QCParameter: Record "RV QC Parameter";
+                QCValueTable: Record "RV QC Value Table";
+            begin
+                "Differ From QC Vaule" := "COA Value" <> "QC Value";
+
+                if QCParameter.Get("QC Parameter Name") then begin
+                    QCValueTable.Reset();
+                    QCValueTable.SetRange("Value Table Name");
+                    if QCValueTable.FindFirst() then begin
+
+                    end;
+                end;
+
+
+
+
+
+
+
+            end;
         }
         field(7; "Differ From QC Vaule"; Boolean)
         {
@@ -47,6 +91,10 @@ table 50511 "RV QA External QC Results"
         {
             Caption = 'Alpha. Max';
         }
+        field(11; "Check Status"; Enum "RV Check Status")
+        {
+            Caption = 'Check Status';
+        }
     }
     keys
     {
@@ -55,6 +103,4 @@ table 50511 "RV QA External QC Results"
             Clustered = true;
         }
     }
-
-    var
 }
