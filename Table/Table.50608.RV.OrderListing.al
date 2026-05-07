@@ -206,6 +206,7 @@ table 50608 "RV Order Listing"
             Caption = 'Comment';
             DataClassification = ToBeClassified;
         }
+
     }
 
     keys
