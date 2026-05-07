@@ -13,6 +13,12 @@ tableextension 50206 "RV Sales Shipment Line" extends "Sales Shipment Line"
             FieldClass = FlowField;
             CalcFormula = Lookup(Item."RV_Print RSPO No." WHERE("No." = FIELD("No.")));
         }
-
+        field(50201; "RV_Symbol Display Packing List"; Boolean)
+        {
+            Caption = 'Print RSPO No.';
+            Description = 'FDD019';
+            FieldClass = FlowField;
+            CalcFormula = Lookup("RV Item Symbol Setting"."Symbol Display Packing List" WHERE("Item Code" = FIELD("No.")));
+        }
     }
 }

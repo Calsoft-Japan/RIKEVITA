@@ -56,5 +56,29 @@ pageextension 50209 "RV PostedWhseShipmentExt" extends "Posted Whse. Shipment"
             }
         }
     }
-
+    actions
+    {
+        addbefore("&Print")
+        {
+            action("PackingInfo")
+            {
+                Caption = 'Packing Info';
+                Image = ViewPage;
+                ApplicationArea = all;
+                trigger OnAction()
+                var
+                    PackingInfo: Record "RV Warehouse Packing Info.";
+                begin
+                    PackingInfo.SetRange("Posted Whse. Shipment No.", Rec."No.");
+                    PAGE.Run(PAGE::"Warehouse Packing Info", PackingInfo);
+                end;
+            }
+        }
+        addafter("&Print_Promoted")
+        {
+            actionref("CreatePackingInfo_Promoted"; "PackingInfo")
+            {
+            }
+        }
+    }
 }
