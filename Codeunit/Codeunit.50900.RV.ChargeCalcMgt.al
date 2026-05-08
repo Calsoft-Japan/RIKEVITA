@@ -90,6 +90,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
 
                 CCLine.CalcFields("HTP Adjustment Price");
                 CCLine."Unit Charge (KG)" := Round(CCLine."Total Charge (KG)" / CCLine."Quantity (KG)" + CCLine."HTP Adjustment Price", 0.00001);
+                CCline."HTP Adj. Price (Order Curr.)" := Round(CCLine."HTP Adjustment Price" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCline."Unit Charge (KG) (Ord Curr.)" := Round(CCLine."Unit Charge (KG)" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
                 CCLine."Invoice Unit Price (KG)" := CCLine."Order Unit Price (KG)" + CCLine."Unit Charge (KG) (Ord Curr.)";
                 CCLine."Invoice Amount (KG)" := CCLine."Invoice Unit Price (KG)" * CCLine."Quantity (KG)";
 
@@ -123,9 +125,6 @@ codeunit 50900 "RV Charge Calc. Mgt"
                                                                 + CCLine."FREIGHT (Order Curr.)",
                                                                 0.00001);
 
-                CCline."HTP Adj. Price (Order Curr.)" := Round(CCLine."HTP Adjustment Price" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
-                CCline."Unit Charge (KG) (Ord Curr.)" := Round(CCLine."Unit Charge (KG)" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
-
                 CCLine.Modify();
             until CCLine.Next() = 0;
 
@@ -134,7 +133,32 @@ codeunit 50900 "RV Charge Calc. Mgt"
 
     local procedure CalcCNF()
     var
+        UnitCharge_KG: Decimal;
     begin
+
+        //Calculate ChargeUOM related fields.
+        CCLine.Reset();
+        CCLine.SetRange("Document No.", ChargeDocNo);
+        if CCLine.FindSet() then
+            repeat
+                CCLine.CalcBaseFields();
+                CCLine.Modify();
+            until CCLine.Next() = 0;
+
+        CCHeader.CalcFields("Total Quantity (KG)");
+
+        //all lines are same Unit Charge (KG).
+        UnitCharge_KG := round((CCHeader."Total Cost" + CCHeader.FREIGHT) / CCHeader."Total Quantity (KG)", 0.00001);
+
+        if CCLine.FindSet() then
+            repeat
+                CCLine."Unit Charge (KG)" := UnitCharge_KG;
+                CCline."Unit Charge (KG) (Ord Curr.)" := Round(CCLine."Unit Charge (KG)" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
+                CCLine."Invoice Unit Price (KG)" := CCLine."Order Unit Price (KG)" + CCLine."Unit Charge (KG) (Ord Curr.)";
+                CCLine."Invoice Amount (KG)" := CCLine."Invoice Unit Price (KG)" * CCLine."Quantity (KG)";
+                CCLine.Modify();
+
+            until CCLine.Next() = 0;
 
     end;
 
@@ -346,6 +370,26 @@ codeunit 50900 "RV Charge Calc. Mgt"
 
     local procedure CarryOutCNF()
     var
+        SalesLine: Record "Sales Line";
     begin
+
+        CCLine.Reset();
+        CCLine.SetRange("Document No.", ChargeDocNo);
+        CCLine.SetFilter("Invoice Unit Price (KG)", '>%1', 0);
+        if CCLine.FindSet() then
+            repeat
+
+                //Update the Existing Sales Order Line
+                if SalesLine.Get(Enum::"Sales Document Type"::Order, CCLine."Sales Order No.", CCLine."Sales Order Line No.") then begin
+
+                    SalesLine.Validate("Unit Price", CCLine."Invoice Unit Price (KG)");
+                    SalesLine.Modify();
+                end;
+
+            until CCLine.Next() = 0;
+
+        CCHeader.Status := Enum::"RV Charge Calc. Status"::Completed;
+        CCHeader.Modify();
+
     end;
 }
