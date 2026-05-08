@@ -75,8 +75,12 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
                 Image = Report;
                 ApplicationArea = all;
                 trigger OnAction()
+                var
+                    ReportRec: Record "Warehouse Shipment Header";
                 begin
-                    Report.Run(Report::"RV Pre Packing List Report");
+                    ReportRec.Reset();
+                    ReportRec.SetRange("No.", Rec."No.");
+                    Report.Run(50201, TRUE, FALSE, ReportRec);
                 end;
             }
         }

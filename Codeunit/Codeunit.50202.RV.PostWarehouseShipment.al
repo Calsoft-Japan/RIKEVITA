@@ -15,5 +15,21 @@ codeunit 50202 "RV Post Warehouse Shipment"
         PostedWhseShipmentHeader."RV_Consignee Country/Region" := WarehouseShipmentHeader."RV_Consignee Country/Region";
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Shipment", OnAfterPostedWhseShptHeaderInsert, '', false, false)]
+    local procedure "Whse.-Post Shipment_OnAfterPostedWhseShptHeaderInsert"(PostedWhseShipmentHeader: Record "Posted Whse. Shipment Header"; LastShptNo: Code[20])
+    var
+        PackingInfo: Record "RV Warehouse Packing Info.";
+        TmpPackingInfo: Record "RV Warehouse Packing Info." temporary;
+    begin
+        PackingInfo.Reset();
+        PackingInfo.SetRange("Warehouse Shipment No.", PostedWhseShipmentHeader."Whse. Shipment No.");
+        if PackingInfo.FindSet() then begin
+            repeat
+                PackingInfo.Rename(PackingInfo."Warehouse Shipment No.", PostedWhseShipmentHeader."No.", PackingInfo."Sales Order No.", PackingInfo."SO Line No.");
+            until PackingInfo.Next() = 0;
+        end;
+
+    end;
+
 
 }

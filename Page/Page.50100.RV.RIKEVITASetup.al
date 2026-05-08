@@ -243,6 +243,18 @@ page 50100 "RIKEVITA Setup"///
                     Description = 'FDD009';
                     ApplicationArea = All;
                 }
+                field("10-Label"; Rec."10-Label")
+                {
+                    Caption = '10-Label';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
+                field("11-OF"; Rec."11-OF")
+                {
+                    Caption = '11-OF';
+                    Description = 'FDD009';
+                    ApplicationArea = All;
+                }
                 field("99-OTHERS"; Rec."99-OTHERS")
                 {
                     Caption = '99-OTHERS';

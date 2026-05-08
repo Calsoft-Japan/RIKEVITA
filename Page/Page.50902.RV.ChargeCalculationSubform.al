@@ -53,7 +53,7 @@ page 50902 "RV Charge Calculation Subform"
                         if Page.RunModal(Page::"Sales Lines", SalesLineView) = Action::LookupOK then begin
 
                             Rec."Sales Order No." := SalesLineView."Document No.";
-                            Rec."Sales Order Line No." := SalesLineView."Line No.";
+                            Rec.Validate("Sales Order Line No.", SalesLineView."Line No.");
                         end;
 
                         CurrPage.Update();
@@ -105,6 +105,12 @@ page 50902 "RV Charge Calculation Subform"
                 field("09-REACH"; Rec."09-REACH")
                 {
                 }
+                field("10-Label"; Rec."10-Label")
+                {
+                }
+                field("11-OF"; Rec."11-OF")
+                {
+                }
                 field("99-OTHERS"; Rec."99-OTHERS")
                 {
                 }
@@ -123,6 +129,57 @@ page 50902 "RV Charge Calculation Subform"
                 field("Currency Code"; Rec."Currency Code")
                 {
                 }
+                field("Exch. Rate from Inv. Currency"; Rec."Exch. Rate from Inv. Currency")
+                {
+                }
+                field("01-COO (Order Curr.)"; Rec."01-COO (Order Curr.)")
+                {
+                }
+                field("02-FORWARDING (Order Curr.)"; Rec."02-FORWARDING (Order Curr.)")
+                {
+                }
+                field("03-FUMIGATION (Order Curr.)"; Rec."03-FUMIGATION (Order Curr.)")
+                {
+                }
+                field("04-HEALTH (Order Curr.)"; Rec."04-HEALTH (Order Curr.)")
+                {
+                }
+                field("05-PALLETIZING (Order Curr.)"; Rec."05-PALLETIZING (Order Curr.)")
+                {
+                }
+                field("06-PHYTO (Order Curr.)"; Rec."06-PHYTO (Order Curr.)")
+                {
+                }
+                field("07-STUFFING (Order Curr.)"; Rec."07-STUFFING (Order Curr.)")
+                {
+                }
+                field("08-TRANSPORT (Order Curr.)"; Rec."08-TRANSPORT (Order Curr.)")
+                {
+                }
+                field("09-REACH (Order Curr.)"; Rec."09-REACH (Order Curr.)")
+                {
+                }
+                field("10-Label (Order Curr.)"; Rec."10-Label (Order Curr.)")
+                {
+                }
+                field("11-OF (Order Curr.)"; Rec."11-OF (Order Curr.)")
+                {
+                }
+                field("99-OTHERS (Order Curr.)"; Rec."99-OTHERS (Order Curr.)")
+                {
+                }
+                field("FREIGHT (Order Curr.)"; Rec."FREIGHT (Order Curr.)")
+                {
+                }
+                field("Total Charge (KG)  (Ord Curr.)"; Rec."Total Charge (KG) (Ord Curr.)")
+                {
+                }
+                field("HTP Adj. Price (Order Curr.)"; Rec."HTP Adj. Price (Order Curr.)")
+                {
+                }
+                field("Unit Charge (KG) (Ord Curr.)"; Rec."Unit Charge (KG) (Ord Curr.)")
+                {
+                }
                 field("Order Unit Price"; Rec."Order Unit Price")
                 {
                 }
@@ -132,7 +189,7 @@ page 50902 "RV Charge Calculation Subform"
                 field("Invoice Unit Price (KG)"; Rec."Invoice Unit Price (KG)")
                 {
                 }
-                field("Final Charge (KG)"; Rec."Final Charge (KG)")
+                field("Invoice Amount (KG)"; Rec."Invoice Amount (KG)")
                 {
                 }
             }

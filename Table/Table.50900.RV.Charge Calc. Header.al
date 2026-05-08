@@ -36,7 +36,32 @@ table 50900 "RV Charge Calc. Header"
 
         }
 
-        field(6; "Status"; Enum "RV Charge Calc. Status")
+        field(6; "Invoice Currency Code"; Code[10])
+        {
+            Caption = 'Invoice Currency Code';
+            TableRelation = Currency.Code;
+
+            trigger OnValidate()
+            var
+                recCCLine: Record "RV Charge Calc. Line";
+                recSalesLine: Record "Sales Line";
+            begin
+                recCCLine.SetRange("Document No.", "No.");
+                if recCCLine.FindSet() then
+                    repeat
+                        if recSalesLine.Get(Enum::"Sales Document Type"::Order, recCCLine."Sales Order No.", recCCLine."Sales Order Line No.") then begin
+                            recCCLine.CalcFields("Currency Code");
+                            if Rec."Invoice Currency Code" = recCCLine."Currency Code" then begin
+                                recCCLine."Exch. Rate from Inv. Currency" := 1;
+                                recCCLine.Modify();
+                            end;
+                        end;
+
+                    until recCCLine.Next() = 0;
+            end;
+        }
+
+        field(7; "Status"; Enum "RV Charge Calc. Status")
         {
             Caption = 'Status';
 
@@ -127,7 +152,25 @@ table 50900 "RV Charge Calc. Header"
                 CalcTotalCost();
             end;
         }
-        field(21; "99-OTHERS"; Decimal)
+        field(21; "10-Label"; Decimal)
+        {
+            Caption = '10-Label';
+
+            trigger OnValidate()
+            begin
+                CalcTotalCost();
+            end;
+        }
+        field(22; "11-OF"; Decimal)
+        {
+            Caption = '11-OF';
+
+            trigger OnValidate()
+            begin
+                CalcTotalCost();
+            end;
+        }
+        field(23; "99-OTHERS"; Decimal)
         {
             Caption = '99-OTHERS';
 
@@ -136,7 +179,7 @@ table 50900 "RV Charge Calc. Header"
                 CalcTotalCost();
             end;
         }
-        field(22; "FREIGHT"; Decimal)
+        field(24; "FREIGHT"; Decimal)
         {
             Caption = 'FREIGHT';
         }
@@ -212,6 +255,8 @@ table 50900 "RV Charge Calc. Header"
                         + "07-STUFFING"
                         + "08-TRANSPORT"
                         + "09-REACH"
+                        + "10-Label"
+                        + "11-OF"
                         + "99-OTHERS"; //Total amount of all charges except FREIGHT
     end;
 

@@ -179,41 +179,53 @@ table 50100 "RV RIKEVITA Setup"
             Caption = '09-REACH';
             TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
-        field(32; "99-OTHERS"; Code[20])
+        field(32; "10-Label"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = '10-Label';
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
+        }
+        field(33; "11-OF"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = '11-OF';
+            TableRelation = Item."No." where(Type = const("Non-Inventory"));
+        }
+        field(34; "99-OTHERS"; Code[20])
         {
             Description = 'FDD009';
             Caption = '99-OTHERS';
             TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
-        field(33; "Freight Charge Item No"; Code[20])
+        field(35; "Freight Charge Item No"; Code[20])
         {
             Description = 'FDD009';
             Caption = 'Freight Charge Item No';
             TableRelation = "Item"."No." where(Type = const("Non-Inventory"));
         }
-        field(34; "HTP Adjustment"; Code[20])
+        field(36; "HTP Adjustment"; Code[20])
         {
             Description = 'FDD009';
             Caption = 'HTP Adjustment';
             TableRelation = Item."No." where(Type = const("Non-Inventory"));
         }
-        field(35; "Chg. Calc. UOM (KG)"; Code[10])
+        field(37; "Chg. Calc. UOM (KG)"; Code[10])
         {
             Description = 'FDD009';
             Caption = 'Chg. Calc. UOM (KG)';
             TableRelation = "Unit of Measure".Code;
         }
-        field(36; "ILE Last Entry No."; Integer)
+        field(38; "ILE Last Entry No."; Integer)
         {
             Description = 'FDD100';
             Caption = 'Last Item Ledger Entry#';
         }
-        field(37; "VE Last Entry No."; Integer)
+        field(39; "VE Last Entry No."; Integer)
         {
             Description = 'FDD100';
             Caption = 'Last Value Entry#';
         }
-        field(38; "Calc. Item No."; Text[100])
+        field(40; "Calc. Item No."; Text[100])
         {
             Description = 'FDD100';
             Caption = 'Calc. Item Filter';

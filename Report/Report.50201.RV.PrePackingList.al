@@ -9,13 +9,15 @@ report 50201 "RV Pre Packing List Report"
     ApplicationArea = All;
     ProcessingOnly = false;
     DefaultLayout = RDLC;
-    RDLCLayout = './ReportLayout/RV_PackingList.rdlc';
+    RDLCLayout = './ReportLayout/RV_PerPackingList.rdlc';
 
     dataset
     {
         dataitem(WarehouseShipmentHeader; "Warehouse Shipment Header")
         {
-            column(CompanyLogo; CompanyInfo.Picture)
+            RequestFilterFields = "No.";
+            column(CompanyLogo;
+            CompanyInfo.Picture)
             {
             }
             column(CompanyName; CompanyInfo.Name)
@@ -78,11 +80,96 @@ report 50201 "RV Pre Packing List Report"
             column(SailingOnOrAbout; SailingOnOrAbout)
             {
             }
+            column(Shipment_Method_Code; "Shipment Method Code")
+            {
+            }
+            dataitem(WarehousePackingInfo; "RV Warehouse Packing Info.")
+            {
+                DataItemLink = "Warehouse Shipment No." = field("No.");
+                column(Case_No; "Case No.")
+                {
+                }
+                column(Item_No; "Item No.")
+                {
+                }
+                column(Sales_Order_No; "Sales Order No.")
+                {
+                }
+                column(Description; Description)
+                {
+                }
+                column(Description2; Description2)
+                {
+                }
+                column(Package_Info; PackageInfo)
+                {
+                }
+                column(No_of_Packages; "No. of Packages")
+                {
+                }
+                column(No_of_Packages2; BaseUnitofMeasure)
+                {
+                }
+                column(Contents_Per_Package; "Contents Per Package")
+                {
+                }
+                column(Contents_UOM; "Contents UOM")
+                {
+                }
+                column(Net_Weight; "Net Weight")
+                {
+                }
+                column(Gross_Weight; "Gross Weight")
+                {
+                }
+                column(Measurement; Measurement)
+                {
+                }
+                column(Symbol_Display_Packing_List; ItemSymbolSetting."Symbol Display Packing List")
+                {
+                }
+                column(Symbol_Picture; ItemSymbolSetting."Item Symbol Image")
+                {
+                }
+
+                column(External_Document_No; ExternalDocumentNo) { }
+                trigger OnAfterGetRecord()
+                var
+                    RecItem: Record Item;
+                    RecSalesHeader: Record "Sales Header";
+                    tmpBlob: Codeunit "Temp Blob";
+                    InStr: InStream;
+                    OutStr: OutStream;
+                begin
+                    if RecItem.Get("Item No.") then begin
+                        Description := RecItem.Description;
+                        Description2 := RecItem."Description 2";
+                        BaseUnitofMeasure := RecItem."Base Unit of Measure";
+                        PackageInfo := StrSubstNo('(%1 %2 X %3 %4)',
+                        "Net Weight", "Contents UOM", "No. of Packages", BaseUnitofMeasure);
+                    end;
+
+                    ItemSymbolSetting.Reset();
+                    ItemSymbolSetting.SetRange("Item Code", "Item No.");
+                    if ItemSymbolSetting.FindFirst() then begin
+                    end;
+
+                    RecSalesHeader.Reset();
+                    RecSalesHeader.SetRange("Document Type", RecSalesHeader."Document Type"::Order);
+                    RecSalesHeader.SetRange("No.", "Sales Order No.");
+                    if RecSalesHeader.FindFirst() then begin
+                        if RecSalesHeader."External Document No." <> '' then begin
+                            ExternalDocumentNo := 'CUSTOMER PO NO: ' + RecSalesHeader."External Document No.";
+                        end;
+                    end;
+                end;
+            }
+
             trigger OnAfterGetRecord()
             var
                 ISODoc: Record "RV ISO Document";
                 WarehouseShipmentLine: Record "Warehouse Shipment Line";
-                SalesHeader: Record "Sales Header";
+                SalesInvoiceHeader: Record "Sales Invoice Header";
             begin
                 //CompanyInfo.Get();
                 //CompanyInfo.CalcFields(Picture);
@@ -96,12 +183,13 @@ report 50201 "RV Pre Packing List Report"
                 WarehouseShipmentLine.Reset();
                 WarehouseShipmentLine.SetRange("No.", WarehouseShipmentHeader."No.");
                 if WarehouseShipmentLine.FindFirst() then begin
-                    SalesHeader.Reset();
-                    SalesHeader.SetRange("No.", WarehouseShipmentLine."Source No.");
-                    if SalesHeader.FindFirst() then begin
-                        //FromValue := SalesHeader."RV_Country of Origin";
-                        ToValue := SalesHeader."Ship-to Name";
-                        //SailingOnOrAbout := SalesHeader."RV_SAILING ON OR ABOUT";
+                    SalesInvoiceHeader.Reset();
+                    SalesInvoiceHeader.SetRange("No.", WarehouseShipmentLine."Source No.");
+                    if SalesInvoiceHeader.FindFirst() then begin
+
+                        FromValue := SalesInvoiceHeader."RV_Country of Origin";
+                        ToValue := SalesInvoiceHeader."Ship-to Name";
+                        SailingOnOrAbout := Format(SalesInvoiceHeader."RV_SAILING ON OR ABOUT");
                     end;
                 end;
 
@@ -124,6 +212,7 @@ report 50201 "RV Pre Packing List Report"
         }
     }
     var
+        ItemSymbolSetting: Record "RV Item Symbol Setting";
         CompanyInfo: Record "Company Information";
         IsPrePacking: Boolean;
         ReportTitle: Label 'PRE PACKING LIST';
@@ -134,6 +223,13 @@ report 50201 "RV Pre Packing List Report"
         FromValue: Text;
         ToValue: Text;
         SailingOnOrAbout: Text;
+        Description: Text;
+        Description2: Text;
+        PackageInfo: Text;
+        BaseUnitofMeasure: Text;
+        ShipmentMethodCode: Text;
+        ExternalDocumentNo: Text;
+        ItemSymbolImageBlob: Codeunit "Temp Blob";
 
     trigger OnPreReport()
     begin

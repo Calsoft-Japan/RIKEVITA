@@ -100,5 +100,89 @@ page 50205 "Warehouse Packing Info"
 
     }
 
+    actions
+    {
+        area(Processing)
+        {
+            action(ResetPackingInfo)
+            {
+                Caption = 'Reset';
+                Image = Refresh;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+
+                trigger OnAction()
+                var
+                    WhseShpgHeader: Record "Warehouse Shipment Header";
+                    WshpLine: Record "Warehouse Shipment Line";
+                    PackingInfo: Record "RV Warehouse Packing Info.";
+                    QtytoShip: Decimal;
+
+                begin
+                    TempSourceNo := '';
+                    TempSourceLineNo := 0;
+                    TempItemNo := '';
+                    TempUOM := '';
+                    TempQtyPerUOM := 0;
+                    TempQtyToShip := 0;
+                    if not WhseShpgHeader.Get(Rec."Warehouse Shipment No.") then
+                        exit;
+                    PackingInfo.Reset();
+                    PackingInfo.SetRange("Warehouse Shipment No.", Rec."Warehouse Shipment No.");
+                    PackingInfo.DeleteAll();
+
+                    WshpLine.Reset();
+                    WshpLine.SetRange("No.", WhseShpgHeader."No.");
+                    WshpLine.SetCurrentKey("Source No.", "Source Line No.");
+                    if WshpLine.FindSet() then begin
+                        repeat
+                            if (WshpLine."Source No." <> TempSourceNo) or (WshpLine."Source Line No." <> TempSourceLineNo) then begin
+
+                                if TempSourceNo <> '' then begin
+                                    InsertPackingInfo();
+                                end;
+                                TempSourceNo := WshpLine."Source No.";
+                                TempSourceLineNo := WshpLine."Source Line No.";
+                                TempItemNo := WshpLine."Item No.";
+                                TempUOM := WshpLine."Unit of Measure Code";
+                                TempQtyPerUOM := WshpLine."Qty. per Unit of Measure";
+                                TempQtyToShip := 0;
+                            end;
+
+                            TempQtyToShip += WshpLine."Qty. to Ship";
+
+                        until WshpLine.Next() = 0;
+                        if TempSourceNo <> '' then
+                            InsertPackingInfo();
+                    end;
+                end;
+            }
+        }
+    }
+    var
+        TempSourceNo: Code[20];
+        TempSourceLineNo: Integer;
+        TempItemNo: Code[20];
+        TempQtyToShip: Decimal;
+        TempQtyPerUOM: Decimal;
+        TempUOM: Code[10];
+
+    local procedure InsertPackingInfo()
+    var
+        PackingInfo: Record "RV Warehouse Packing Info.";
+    begin
+        PackingInfo.Init();
+        PackingInfo."Warehouse Shipment No." := Rec."Warehouse Shipment No.";
+        PackingInfo."Sales Order No." := TempSourceNo;
+        PackingInfo."SO Line No." := TempSourceLineNo;
+        PackingInfo."Item No." := TempItemNo;
+        PackingInfo."No. of Packages" := TempQtyToShip * TempQtyPerUOM;
+        PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
+        PackingInfo."Contents UOM" := TempUOM;
+        PackingInfo."Net Weight" := TempQtyToShip;
+        PackingInfo."Gross Weight UOM" := TempUOM;
+        PackingInfo.Insert();
+    end;
 }
 
