@@ -73,9 +73,11 @@ pageextension 50618 "RV_Sales Order Subform" extends "Sales Order Subform"
                     SLfilter.SetRange("Document No.", Rec."Document No.");
                     SLfilter.SetRange("Line No.", Rec."Line No.");
                     ECRCalculationMgt.SetTableView(SLfilter);
+                    ECRCalculationMgt.UseRequestPage(false);//Zhao
                     ECRCalculationMgt.RunModal();
                     if ECRCalculationMgt.getIsRunedOnce() then
-                        SalesECRStatusInfo.Run();
+                        SalesECRStatusInfo.Run()
+                    ;
                 end;
             }
         }

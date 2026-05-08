@@ -28,7 +28,7 @@ table 50607 "RV Sales ECR Status Info."
             Caption = 'SO Line No.';
             DataClassification = ToBeClassified;
         }
-        field(5; "Prod. Order No."; Code[20])
+        field(5; "Prod. Order No."; Text[250])
         {
             Caption = 'Prod. Order No.';
             DataClassification = ToBeClassified;
@@ -76,11 +76,13 @@ table 50607 "RV Sales ECR Status Info."
         }
         field(14; "Reservation Quantity"; Decimal)
         {
+            DecimalPlaces = 0 : 5;
             Caption = 'Reservation Quantity';
             DataClassification = ToBeClassified;
         }
         field(15; "Order Quantity"; Decimal)
         {
+            DecimalPlaces = 0 : 5;
             Caption = 'Order Quantity';
             DataClassification = ToBeClassified;
         }

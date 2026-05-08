@@ -11,12 +11,16 @@ report 50602 "RV ECR Calculation Info"
         {
             RequestFilterFields = "Document No.", "Line No.";
             DataItemTableView = sorting("Document Type", "Document No.", "Line No.") where("Document Type" = const(order));
+
             trigger OnPreDataItem()
             begin
+                Salesline.SetFilter("Outstanding Quantity", '>0');
                 Salesline.SetAutoCalcFields("Reserved Quantity");
             end;
 
             trigger OnAfterGetRecord()
+            var
+                SalesReservationInfo: Codeunit ReservationEntryMgt;
             begin
                 Salesheader.get(Salesline."Document Type", Salesline."Document No.");
 
@@ -42,9 +46,12 @@ report 50602 "RV ECR Calculation Info"
                 SalesECRStatusInfo."ECR Required" := Salesline."RV_ECR Required";
                 SalesECRStatusInfo."Bypass ECR" := not Salesline."RV_ECR Required";
 
-                ReservEntry.InitSortingAndFilters(true);
-                ECRSetReservationFilters(ReservEntry, Salesline);
-                FindReqLine(ReservEntry);
+                //ReservEntry.InitSortingAndFilters(true);
+                //ECRSetReservationFilters(ReservEntry, Salesline);
+                //FindReqLine(ReservEntry);
+                Clear(SalesReservationInfo);
+                SalesReservationInfo.FindReservationEntry(Salesline);
+                SalesReservationInfo.GetProdNoInfo(SalesECRStatusInfo."Prod. Order No.");
 
                 SalesECRStatusInfo."Reservation Quantity" := Salesline."Reserved Quantity";
                 SalesECRStatusInfo."Order Quantity" := Salesline."Quantity";

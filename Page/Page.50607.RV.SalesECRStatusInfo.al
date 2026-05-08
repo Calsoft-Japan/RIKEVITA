@@ -43,6 +43,11 @@ page 50607 "RV Sales ECR Status Info."
                     Editable = false;
                     ToolTip = 'Specifies the value of the Item Description field.', Comment = '%';
                 }
+                field("Prod. Order No."; Rec."Prod. Order No.")
+                {
+                    Editable = false;
+                    ToolTip = 'Specifies the value of the Prod. Order No.', Comment = '%';
+                }
                 field("Shipment Method"; Rec."Shipment Method")
                 {
                     Editable = false;
@@ -73,6 +78,7 @@ page 50607 "RV Sales ECR Status Info."
                     Editable = false;
                     ToolTip = 'Specifies the value of the ECR Status field.', Comment = '%';
                 }
+
                 field("Prod. Due Date"; Rec."Prod. Due Date")
                 {
                     Editable = false;

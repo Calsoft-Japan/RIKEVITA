@@ -1,6 +1,7 @@
 /// <summary>
 /// Codeunit Sales Price Based on Shipment (ID 50102)
 /// FDD007 2026/03/17: New. (Liuyang)
+/// FDD007 2026/05/8: Modify the stuffing date updating logic(ZHAO)
 /// </summary>
 tableextension 50106 "RV Sales Line Ext." extends "Sales Line"
 {
@@ -59,15 +60,14 @@ tableextension 50106 "RV Sales Line Ext." extends "Sales Line"
                 Clear(DateFormulaVar);
 
                 if Rec."RV_Cosing Date" = 0D then begin
-                    "RV_Stuffing Date" := 0D;
+                    validate("RV_Stuffing Date", 0D);
                 end else begin
-                    RVSteup.Reset();
-                    if RVSteup.FindFirst() then begin
-                        DateFormulaVar := RVSteup."Stuffing Date Calculation";
-                    end;
-
+                    RVSteup.get();
+                    DateFormulaVar := RVSteup."Stuffing Date Calculation";
                     if (Format(DateFormulaVar) <> '') then
-                        "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
+                        Validate("RV_Stuffing Date", CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date"))//Stuffing Date = Closing Date - Stuffing Date Calculation
+                    else
+                        Validate("RV_Stuffing Date", "RV_Cosing Date")
                 end;
             end;
         }
