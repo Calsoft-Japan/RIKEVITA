@@ -5,6 +5,7 @@
 table 50605 "RV Sailing Category"
 {
     DataClassification = ToBeClassified;
+    LookupPageId = "RV Sailing Category";
 
     fields
     {

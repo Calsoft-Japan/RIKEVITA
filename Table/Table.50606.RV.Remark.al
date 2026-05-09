@@ -5,6 +5,7 @@
 table 50606 "RV Standard Remark"
 {
     DataClassification = ToBeClassified;
+    LookupPageId = "RV Standard Remark";
 
     fields
     {

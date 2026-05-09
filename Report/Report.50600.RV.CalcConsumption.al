@@ -4,7 +4,7 @@
 /// </summary>
 report 50600 "RV Calc. Consumption"
 {
-    Caption = 'Calc. Consumption';
+    Caption = 'Cal. Prod. Journal';
     ProcessingOnly = true;
 
     dataset
@@ -133,7 +133,7 @@ report 50600 "RV Calc. Consumption"
         ProdOrderRtngLine.SetRange("Routing No.", ProdOrderLine."Routing No.");
         ProdOrderRtngLine.SetRange(Status, ProdOrderLine.Status);
         ProdOrderRtngLine.SetRange("Routing Reference No.", ProdOrderLine."Routing Reference No.");
-        if ProdOrderRtngLine.FindSet() then begin
+        if ProdOrderRtngLine.FindLast() then begin
             repeat
                 LastLineNo += 10000;
                 RVProdResultJnlLine.Init();

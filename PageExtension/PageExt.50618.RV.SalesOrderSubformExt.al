@@ -68,6 +68,7 @@ pageextension 50618 "RV_Sales Order Subform" extends "Sales Order Subform"
                     ECRCalculationMgt: Report "RV ECR Calculation Info";
                     SLfilter: Record "Sales Line";
                     SalesECRStatusInfo: page "RV Sales ECR Status Info.";
+                    ECRStatusInfoRec: Record "RV Sales ECR Status Info.";
                 begin
                     SLfilter.setrange("Document Type", Rec."Document Type");
                     SLfilter.SetRange("Document No.", Rec."Document No.");
@@ -75,9 +76,13 @@ pageextension 50618 "RV_Sales Order Subform" extends "Sales Order Subform"
                     ECRCalculationMgt.SetTableView(SLfilter);
                     ECRCalculationMgt.UseRequestPage(false);//Zhao
                     ECRCalculationMgt.RunModal();
-                    if ECRCalculationMgt.getIsRunedOnce() then
+                    if ECRCalculationMgt.getIsRunedOnce() then begin
+                        ECRStatusInfoRec.Reset();
+                        ECRStatusInfoRec.SetRange("Sales Order No.", Rec."Document No.");
+                        ECRStatusInfoRec.SetRange("SO Line No.", Rec."Line No.");
+                        SalesECRStatusInfo.SetTableView(ECRStatusInfoRec);
                         SalesECRStatusInfo.Run()
-                    ;
+                    end;
                 end;
             }
         }

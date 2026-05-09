@@ -21,6 +21,7 @@ report 50602 "RV ECR Calculation Info"
             trigger OnAfterGetRecord()
             var
                 SalesReservationInfo: Codeunit ReservationEntryMgt;
+                ProdLine: Record "Prod. Order Line";
             begin
                 Salesheader.get(Salesline."Document Type", Salesline."Document No.");
 
@@ -31,6 +32,8 @@ report 50602 "RV ECR Calculation Info"
                     SalesECRStatusInfo."SO Line No." := Salesline."Line No.";
                     SalesECRStatusInfo."Item No." := Salesline."No.";
                     SalesECRStatusInfo."Original ECR Date" := Salesline."RV_ECR Date";
+                    SalesECRStatusInfo."ECR Required" := Salesline."RV_ECR Required";
+                    SalesECRStatusInfo."Bypass ECR" := not Salesline."RV_ECR Required";
                     SalesECRStatusInfo.Insert();
                 end;
 
@@ -43,8 +46,7 @@ report 50602 "RV ECR Calculation Info"
                     SalesECRStatusInfo."Sailing Category" := ShiptoAddress."RV_Sailing Category";
                 end else
                     SalesECRStatusInfo."Sailing Category" := '';
-                SalesECRStatusInfo."ECR Required" := Salesline."RV_ECR Required";
-                SalesECRStatusInfo."Bypass ECR" := not Salesline."RV_ECR Required";
+
 
                 //ReservEntry.InitSortingAndFilters(true);
                 //ECRSetReservationFilters(ReservEntry, Salesline);
@@ -52,6 +54,14 @@ report 50602 "RV ECR Calculation Info"
                 Clear(SalesReservationInfo);
                 SalesReservationInfo.FindReservationEntry(Salesline);
                 SalesReservationInfo.GetProdNoInfo(SalesECRStatusInfo."Prod. Order No.");
+
+                if SalesECRStatusInfo."Prod. Order No." <> '' then begin
+                    ProdLine.Reset();
+                    ProdLine.SetFilter("Prod. Order No.", SalesECRStatusInfo."Prod. Order No.");
+                    ProdLine.setrange("Item No.", SalesECRStatusInfo."Item No.");
+                    if ProdLine.FindFirst() then
+                        SalesECRStatusInfo."Prod. Due Date" := ProdLine."Due Date";
+                end;
 
                 SalesECRStatusInfo."Reservation Quantity" := Salesline."Reserved Quantity";
                 SalesECRStatusInfo."Order Quantity" := Salesline."Quantity";

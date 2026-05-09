@@ -141,7 +141,7 @@ page 50601 "RV Prod. Result Journal Line"
         {
             action(CalProdJouornal)
             {
-                Caption = 'Cal. Prod. Jouornal';
+                Caption = 'Cal. Prod. Journal';
                 Image = Calculate;
 
                 trigger OnAction()

@@ -226,4 +226,25 @@ codeunit 50606 "RV ECR Calculation Mgt"
                 end;
             until SalesLine.next() = 0;
     end;
+
+    [EventSubscriber(ObjectType::table, Database::"Sales Line", OnAfterUpdateDates, '', false, false)]
+    local procedure OnAfterUpdateDates(var SalesLine: Record "Sales Line")
+    var
+        SalesHeader: Record "Sales Header";
+        ShiptoAddress: Record "Ship-to Address";
+        tmpDataCal: DateFormula;
+    begin
+        SalesHeader.get(SalesLine."Document Type", SalesLine."Document No.");
+        if ShiptoAddress.get(SalesHeader."Sell-to Customer No.", SalesHeader."Ship-to Code") then begin
+            ShiptoAddress.CalcFields("RV_Sailing Period");
+
+            if format(ShiptoAddress."RV_Sailing Period") <> '' then
+                Evaluate(tmpDataCal, '-' + format(ShiptoAddress."RV_Sailing Period"));
+            SalesLine."RV_ECR Date" := SalesLine."RV_Stuffing Date";
+            if SalesLine."RV_Stuffing Date" <> 0D then
+                SalesLine.Validate("Shipment Date", CalcDate(tmpDataCal, SalesLine."RV_Stuffing Date"))
+            else
+                SalesLine.Validate("Shipment Date", SalesLine."RV_Stuffing Date");
+        end;
+    end;
 }
