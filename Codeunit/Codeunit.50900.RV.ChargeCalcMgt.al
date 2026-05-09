@@ -187,6 +187,7 @@ codeunit 50900 "RV Charge Calc. Mgt"
     var
         SalesLine: Record "Sales Line";
         SalesHeader: Record "Sales Header";
+        ReleaseSalesDoc: Codeunit "Release Sales Document";
         SOPost: Codeunit "Sales-Post";
         SOLastLineNo: Integer;
     begin
@@ -196,6 +197,11 @@ codeunit 50900 "RV Charge Calc. Mgt"
         CCLine.SetFilter("Total Charge (KG)", '>%1', 0);
         if CCLine.FindSet() then
             repeat
+                //Reopen Sales Order if released.
+                SalesHeader.Get(Enum::"Sales Document Type"::Order, CCLine."Sales Order No.");
+                if SalesHeader.Status = Enum::"Sales Document Status"::Released then begin
+                    ReleaseSalesDoc.PerformManualReopen(SalesHeader);
+                end;
 
                 //Update the Existing Sales Order Line
                 if SalesLine.Get(Enum::"Sales Document Type"::Order, CCLine."Sales Order No.", CCLine."Sales Order Line No.") then begin
@@ -344,7 +350,6 @@ codeunit 50900 "RV Charge Calc. Mgt"
                 end;
 
                 //Post Ship for Created Sales Order Lines
-                SalesHeader.Get(Enum::"Sales Document Type"::Order, CCLine."Sales Order No.");
                 SalesHeader.Ship := TRUE;
                 SalesHeader.Invoice := FALSE;
                 Clear(SOPost);
@@ -371,6 +376,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
     local procedure CarryOutCNF()
     var
         SalesLine: Record "Sales Line";
+        SalesHeader: Record "Sales Header";
+        ReleaseSalesDoc: Codeunit "Release Sales Document";
     begin
 
         CCLine.Reset();
@@ -378,6 +385,12 @@ codeunit 50900 "RV Charge Calc. Mgt"
         CCLine.SetFilter("Invoice Unit Price (KG)", '>%1', 0);
         if CCLine.FindSet() then
             repeat
+
+                //Reopen Sales Order if released.
+                SalesHeader.Get(Enum::"Sales Document Type"::Order, CCLine."Sales Order No.");
+                if SalesHeader.Status = Enum::"Sales Document Status"::Released then begin
+                    ReleaseSalesDoc.PerformManualReopen(SalesHeader);
+                end;
 
                 //Update the Existing Sales Order Line
                 if SalesLine.Get(Enum::"Sales Document Type"::Order, CCLine."Sales Order No.", CCLine."Sales Order Line No.") then begin

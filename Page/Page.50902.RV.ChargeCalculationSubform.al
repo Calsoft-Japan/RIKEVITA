@@ -49,6 +49,8 @@ page 50902 "RV Charge Calculation Subform"
                         SalesLineView.SetRange("Document Type", Enum::"Sales Document Type"::Order);
                         SalesLineView.SetRange(Type, Enum::"Sales Line Type"::Item);
                         SalesLineView.SetRange("RV_Charge Type", ChargeCalcHeader."Charge Type");
+                        SalesLineView.SetRange("RV_Item Type", Enum::"Item Type"::Inventory);
+                        SalesLineView.SetRange("RV_Charge Allocated", false);
 
                         if Page.RunModal(Page::"Sales Lines", SalesLineView) = Action::LookupOK then begin
 

@@ -23,5 +23,20 @@ tableextension 50901 "RV SalesLine Ext" extends "Sales Line"
             FieldClass = FlowField;
             CalcFormula = lookup(Customer."RV_Charge Type" where("No." = field("Sell-to Customer No.")));
         }
+        field(50903; "RV_Item Type"; Enum "Item Type")
+        {
+            Description = 'FDD009';
+            Caption = 'Item Type';
+            FieldClass = FlowField;
+            CalcFormula = lookup(Item.Type where("No." = field("No.")));
+        }
+        field(50904; "RV_Charge Allocated"; Boolean)
+        {
+            Description = 'FDD009';
+            Caption = 'Charge Allocated';
+            FieldClass = FlowField;
+            CalcFormula = exist("RV Charge Calc. Line" where("Sales Order No." = field("Document No."),
+                                                            "Sales Order Line No." = field("Line No.")));
+        }
     }
 }
