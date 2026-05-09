@@ -65,6 +65,17 @@ table 50900 "RV Charge Calc. Header"
         {
             Caption = 'Status';
 
+            trigger OnValidate()
+            begin
+                if (xRec.Status = Enum::"RV Charge Calc. Status"::Completed) and (Rec.Status <> Enum::"RV Charge Calc. Status"::Completed) then begin
+                    Error(ModifyOnCompletedErr);
+                end;
+                if (xRec.Status <> Enum::"RV Charge Calc. Status"::Completed) and (Rec.Status = Enum::"RV Charge Calc. Status"::Completed) then begin
+                    Error(ChangeToCompletedErr);
+                end;
+
+            end;
+
         }
 
         field(11; "HTP Adjustment Price"; Decimal)
@@ -205,7 +216,8 @@ table 50900 "RV Charge Calc. Header"
 
     var
 
-        DeleteOnCompletedErr: Label 'Cannot delete the compeleted data.';
+        ModifyOnCompletedErr: Label 'Cannot modify or delete the compeleted data.';
+        ChangeToCompletedErr: Label 'Status will be Completed after Carry Out.';
 
 
     trigger OnInsert()
@@ -222,11 +234,21 @@ table 50900 "RV Charge Calc. Header"
 
     end;
 
+    trigger OnModify()
+    begin
+        CheckStatusCompleted();
+    end;
+
     trigger OnDelete()
     begin
+        CheckStatusCompleted();
+    end;
 
-        if Status = Enum::"RV Charge Calc. Status"::Completed then
-            Error(DeleteOnCompletedErr);
+    procedure CheckStatusCompleted()
+    begin
+
+        if xRec.Status = Enum::"RV Charge Calc. Status"::Completed then
+            Error(ModifyOnCompletedErr);
 
     end;
 

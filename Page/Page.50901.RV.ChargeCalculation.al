@@ -164,11 +164,17 @@ page 50901 "RV Charge Calculation"
 
                     ChargeCalcMgt: Codeunit "RV Charge Calc. Mgt";
 
+                    CarryOutNodataErr: Label 'Calculate charge first before Carry out.';
                     CarryOutQst: Label 'This calculation will be carried out to Sales Orders.';
                     CarryOutOkMsg: Label 'Carry out completed.';
                 begin
 
                     Rec.TestField(Status, Enum::"RV Charge Calc. Status"::WIP);
+
+                    Rec.CalcFields("Total Quantity (KG)");
+                    if Rec."Total Quantity (KG)" = 0 then begin
+                        Error(CarryOutNodataErr);
+                    end;
 
                     if not Confirm(CarryOutQst) then
                         exit;
