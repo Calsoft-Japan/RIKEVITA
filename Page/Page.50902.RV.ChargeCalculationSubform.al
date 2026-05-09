@@ -214,6 +214,8 @@ page 50902 "RV Charge Calculation Subform"
                     ChargeCalcOkMsg: Label 'Charge Calculation completed.';
                 begin
 
+                    Rec.CheckHeaderStatusCompleted();
+
                     //Message('Under Construction.');
                     ChargeCalcMgt.SetDocNo(Rec."Document No.");
                     ChargeCalcMgt.CalcCharge();
