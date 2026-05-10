@@ -37,5 +37,21 @@ tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Ship
             Description = 'FDD019';
             TableRelation = "Country/Region";
         }
+        field(50206; "RV_VIA"; Text[50])
+        {
+            Caption = 'VIA';
+            Description = 'FDD019';
+            DataClassification = ToBeClassified;
+        }
+        field(50207; "RV_Feeder Vessel"; Text[50])
+        {
+            Caption = 'Feeder Vessel';
+            Description = 'FDD019';
+        }
+        field(50208; "RV_Mother Vessel"; Text[50])
+        {
+            Caption = 'Mother Vessel';
+            Description = 'FDD019';
+        }
     }
 }

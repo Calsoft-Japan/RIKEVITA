@@ -13,7 +13,7 @@ tableextension 50209 "RV Sales Invoice Header" extends "Sales Invoice Header"
         }
         field(50201; "RV_ETA"; Date)
         {
-            Caption = 'RV ETD';
+            Caption = 'RV ETA';
             Description = 'FDD021';
         }
         field(50202; "RV_Country of Origin"; Text[50])

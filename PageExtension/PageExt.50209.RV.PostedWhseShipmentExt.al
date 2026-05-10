@@ -73,10 +73,27 @@ pageextension 50209 "RV PostedWhseShipmentExt" extends "Posted Whse. Shipment"
                     PAGE.Run(PAGE::"Warehouse Packing Info", PackingInfo);
                 end;
             }
+            action("PackingList")
+            {
+                Caption = 'Packing List';
+                Image = Report;
+                ApplicationArea = all;
+                trigger OnAction()
+                var
+                    ReportRec: Record "Posted Whse. Shipment Header";
+                begin
+                    ReportRec.Reset();
+                    ReportRec.SetRange("No.", Rec."No.");
+                    Report.Run(50202, TRUE, FALSE, ReportRec);
+                end;
+            }
         }
         addafter("&Print_Promoted")
         {
             actionref("CreatePackingInfo_Promoted"; "PackingInfo")
+            {
+            }
+            actionref("PackingList_Promoted"; "PackingList")
             {
             }
         }
