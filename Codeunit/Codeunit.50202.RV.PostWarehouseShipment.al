@@ -13,6 +13,9 @@ codeunit 50202 "RV Post Warehouse Shipment"
         PostedWhseShipmentHeader."RV_Consignee City" := WarehouseShipmentHeader."RV_Consignee City";
         PostedWhseShipmentHeader."RV_Consignee Post Code" := WarehouseShipmentHeader."RV_Consignee Post Code";
         PostedWhseShipmentHeader."RV_Consignee Country/Region" := WarehouseShipmentHeader."RV_Consignee Country/Region";
+        PostedWhseShipmentHeader.RV_VIA := WarehouseShipmentHeader.RV_VIA;
+        PostedWhseShipmentHeader."RV_Feeder Vessel" := WarehouseShipmentHeader."RV_Feeder Vessel";
+        PostedWhseShipmentHeader."RV_Mother Vessel" := WarehouseShipmentHeader."RV_Mother Vessel";
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Shipment", OnAfterPostedWhseShptHeaderInsert, '', false, false)]

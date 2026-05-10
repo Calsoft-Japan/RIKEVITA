@@ -1,10 +1,10 @@
 /// <summary>
-/// Report RV Packing List (ID 50201)
+/// Report RV Packing List (ID 50202)
 /// FDD020 2026/04/29: New. (Bobby.ji)
 /// </summary>
-report 50201 "RV Pre Packing List Report"
+report 50202 "RV Packing List Report"
 {
-    Caption = 'Pre Packing List';
+    Caption = 'Packing List';
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = All;
     ProcessingOnly = false;
@@ -20,7 +20,7 @@ report 50201 "RV Pre Packing List Report"
             {
             }
 
-            dataitem(WarehouseShipmentHeader; "Warehouse Shipment Header")
+            dataitem(PostedWhseShipmentHeader; "Posted Whse. Shipment Header")
             {
                 RequestFilterFields = "No.";
                 column(CompanyLogo;
@@ -92,7 +92,7 @@ report 50201 "RV Pre Packing List Report"
                 }
                 dataitem(WarehousePackingInfo; "RV Warehouse Packing Info.")
                 {
-                    DataItemLink = "Warehouse Shipment No." = field("No.");
+                    DataItemLink = "Posted Whse. Shipment No." = field("No.");
                     column(MARKS; MARKS)
                     {
                     }
@@ -158,7 +158,8 @@ report 50201 "RV Pre Packing List Report"
                         RecItem: Record Item;
                         RecSalesHeader: Record "Sales Header";
                         RecSalesShipmentHeader: Record "Sales Shipment Header";
-                        RecReservationEntry: Record "Reservation Entry";
+                        RecPostedWhseShipmentLine: Record "Posted Whse. Shipment Line";
+                        RecItemLedgerEntry: Record "Item Ledger Entry";
                         chr10: Char;
                         TempNo: Integer;
                         oldContainerNo: Text;
@@ -205,24 +206,28 @@ report 50201 "RV Pre Packing List Report"
                             end;
                         end;
 
-                        RecReservationEntry.Reset();
-                        //RecReservationEntry.SetRange("Reservation Status", RecReservationEntry."Reservation Status"::Tracking);
-                        RecReservationEntry.SetFilter("Lot No.", '<>%1', '');
-                        RecReservationEntry.SetRange("Source ID", "Sales Order No.");
-                        RecReservationEntry.SetRange("Source Type", 37);
-                        if RecReservationEntry.FindSet() then begin
+                        RecPostedWhseShipmentLine.Reset();
+                        RecPostedWhseShipmentLine.SetRange("Source No.", "Sales Order No.");
+                        RecPostedWhseShipmentLine.SetRange("No.", PostedWhseShipmentHeader."No.");
+                        if RecPostedWhseShipmentLine.FindSet() then begin
                             repeat
-                                LotNoNumber := LotNoNumber + 1;
-                                Templine.Init();
-                                Templine."Entry No." := TempNo;
-                                Templine."RV_Container No." := RecReservationEntry."RV_Container No.";
-                                Templine.Description := Description2;
-                                Templine."Lot No." := RecReservationEntry."Lot No.";
-                                Templine."Quantity (Base)" := RecReservationEntry."Qty. to Invoice (Base)";
-                                Templine."Location Code" := RecItem."Base Unit of Measure";
-                                Templine.Insert();
-                                TempNo := TempNo + 1;
-                            until RecReservationEntry.Next() = 0;
+                                RecItemLedgerEntry.Reset();
+                                RecItemLedgerEntry.SetRange("Document No.", RecPostedWhseShipmentLine."Posted Source No.");
+                                if RecItemLedgerEntry.FindSet() then begin
+                                    repeat
+                                        LotNoNumber := LotNoNumber + 1;
+                                        Templine.Init();
+                                        Templine."Entry No." := TempNo;
+                                        Templine."RV_Container No." := RecItemLedgerEntry."RV_Container No.";
+                                        Templine.Description := Description2;
+                                        Templine."Lot No." := RecItemLedgerEntry."Lot No.";
+                                        Templine."Quantity (Base)" := RecItemLedgerEntry.Quantity;
+                                        Templine."Location Code" := RecItem."Base Unit of Measure";
+                                        Templine.Insert();
+                                        TempNo := TempNo + 1;
+                                    until RecItemLedgerEntry.Next() = 0;
+                                end;
+                            until RecPostedWhseShipmentLine.Next() = 0;
                             Templine.Reset();
                             Templine.SetCurrentKey("RV_Container No.");
                             if Templine.FindSet() then begin
@@ -240,7 +245,6 @@ report 50201 "RV Pre Packing List Report"
                                     end;
                                 until Templine.Next() = 0;
                             end;
-
                         end;
                     end;
                 }
@@ -258,7 +262,7 @@ report 50201 "RV Pre Packing List Report"
                         ISODocVersion := ISODoc."ISO Doc. Version No.";
                     end;
                     WarehouseShipmentLine.Reset();
-                    WarehouseShipmentLine.SetRange("No.", WarehouseShipmentHeader."No.");
+                    WarehouseShipmentLine.SetRange("No.", PostedWhseShipmentHeader."No.");
                     if WarehouseShipmentLine.FindFirst() then begin
                         SalesInvoiceHeader.Reset();
                         SalesInvoiceHeader.SetRange("Order No.", WarehouseShipmentLine."Source No.");
@@ -297,7 +301,7 @@ report 50201 "RV Pre Packing List Report"
         ItemSymbolSetting: Record "RV Item Symbol Setting";
         CompanyInfo: Record "Company Information";
         IsPrePacking: Boolean;
-        ReportTitle: Label 'PRE PACKING LIST';
+        ReportTitle: Label 'PACKING LIST';
         ISODocumentNo: Text;
         ISODocVersion: Text;
         InvoiceNo: Text;
