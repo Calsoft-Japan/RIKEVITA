@@ -18,6 +18,11 @@ pageextension 50905 "RV_PostedSalesInvSubform Ext" extends "Posted Sales Invoice
                 Caption = 'Other Charge';
                 ApplicationArea = All;
             }
+            field("RV_Charge Type"; Rec."RV_Charge Type")
+            {
+                Caption = 'Charge Type';
+                ApplicationArea = All;
+            }
         }
     }
 }

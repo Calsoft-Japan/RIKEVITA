@@ -19,6 +19,7 @@ tableextension 50901 "RV SalesLine Ext" extends "Sales Line"
         field(50902; "RV_Charge Type"; Enum "RV Charge Type")
         {
             Description = 'FDD009';
+            Editable = false;
             Caption = 'Charge Type';
             FieldClass = FlowField;
             CalcFormula = lookup(Customer."RV_Charge Type" where("No." = field("Sell-to Customer No.")));
@@ -26,6 +27,7 @@ tableextension 50901 "RV SalesLine Ext" extends "Sales Line"
         field(50903; "RV_Item Type"; Enum "Item Type")
         {
             Description = 'FDD009';
+            Editable = false;
             Caption = 'Item Type';
             FieldClass = FlowField;
             CalcFormula = lookup(Item.Type where("No." = field("No.")));
@@ -33,6 +35,7 @@ tableextension 50901 "RV SalesLine Ext" extends "Sales Line"
         field(50904; "RV_Charge Allocated"; Boolean)
         {
             Description = 'FDD009';
+            Editable = false;
             Caption = 'Charge Allocated';
             FieldClass = FlowField;
             CalcFormula = exist("RV Charge Calc. Line" where("Sales Order No." = field("Document No."),

@@ -18,6 +18,11 @@ pageextension 50904 "RV_PostedSalesShptSubform Ext" extends "Posted Sales Shpt. 
                 Caption = 'Other Charge';
                 ApplicationArea = All;
             }
+            field("RV_Charge Type"; Rec."RV_Charge Type")
+            {
+                Caption = 'Charge Type';
+                ApplicationArea = All;
+            }
         }
     }
 }

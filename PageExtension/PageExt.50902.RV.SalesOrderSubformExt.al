@@ -18,6 +18,21 @@ pageextension 50902 "RV_Sales Order Subform Ext" extends "Sales Order Subform"
                 Caption = 'Other Charge';
                 ApplicationArea = All;
             }
+            field("RV_Charge Type"; Rec."RV_Charge Type")
+            {
+                Caption = 'Charge Type';
+                ApplicationArea = All;
+            }
+            field("RV_Item Type"; Rec."RV_Item Type")
+            {
+                Caption = 'Item Type';
+                ApplicationArea = All;
+            }
+            field("RV_Charge Allocated"; Rec."RV_Charge Allocated")
+            {
+                Caption = 'Charge Allocated';
+                ApplicationArea = All;
+            }
         }
     }
 }
