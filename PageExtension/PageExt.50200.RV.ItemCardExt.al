@@ -19,6 +19,11 @@ pageextension 50200 "RV Item Card Ext" extends "Item Card"
         }
         addafter("Item Category Code")
         {
+            field(RV_RSPO; Rec.RV_RSPO)
+            {
+                Caption = 'RSPO';
+                ApplicationArea = all;
+            }
             field("RSPO Type"; Rec."RV_RSPO Type")
             {
                 Caption = 'RSPO Type';
