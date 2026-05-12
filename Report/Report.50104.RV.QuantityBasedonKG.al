@@ -30,18 +30,17 @@ report 50104 "RV Quantity on KG JobQueue"
                     end;
                 end;
 
-                trigger OnPostDataItem()
-                begin
-                    if RVSetup."ILE Last Entry No." <> "Item Ledger Entry"."Entry No." then begin
-                        RVSetup."ILE Last Entry No." := "Item Ledger Entry"."Entry No.";
-                        RVSetup.Modify();
-                    end;
-                end;
-
                 trigger OnPreDataItem()
                 begin
                     if RVSetup."ILE Last Entry No." > 0 then
                         SetFilter("Entry No.", StrSubstNo('>%1', RVSetup."ILE Last Entry No."));
+                end;
+
+                trigger OnPostDataItem()
+                begin
+                    if LastILENo < "Item Ledger Entry"."Entry No." then begin
+                        LastILENo := "Item Ledger Entry"."Entry No.";
+                    end;
                 end;
             }
 
@@ -60,18 +59,17 @@ report 50104 "RV Quantity on KG JobQueue"
                     end;
                 end;
 
-                trigger OnPostDataItem()
-                begin
-                    if RVSetup."ILE Last Entry No." <> "Value Entry"."Entry No." then begin
-                        RVSetup."VE Last Entry No." := "Value Entry"."Entry No.";
-                        RVSetup.Modify();
-                    end;
-                end;
-
                 trigger OnPreDataItem()
                 begin
                     if RVSetup."VE Last Entry No." > 0 then
                         SetFilter("Entry No.", StrSubstNo('>%1', RVSetup."VE Last Entry No."));
+                end;
+
+                trigger OnPostDataItem()
+                begin
+                    if LastVENo < "Value Entry"."Entry No." then begin
+                        LastVENo := "Value Entry"."Entry No.";
+                    end;
                 end;
             }
 
@@ -81,11 +79,28 @@ report 50104 "RV Quantity on KG JobQueue"
                 if RVSetup."Calc. Item No." <> '' then
                     SetFilter("No.", RVSetup."Calc. Item No.");
             end;
+
         }
     }
     trigger OnInitReport()
     begin
         if not RVSetup.Get() then CurrReport.Break();
+
+        LastILENo := RVSetup."ILE Last Entry No.";
+        LastVENo := RVSetup."VE Last Entry No.";
+    end;
+
+    trigger OnPostReport()
+    begin
+        if RVSetup."ILE Last Entry No." <> LastILENo then begin
+            RVSetup."ILE Last Entry No." := LastILENo;
+            RVSetup.Modify();
+        end;
+
+        if RVSetup."VE Last Entry No." <> LastVENo then begin
+            RVSetup."VE Last Entry No." := LastVENo;
+            RVSetup.Modify();
+        end;
     end;
 
     var
