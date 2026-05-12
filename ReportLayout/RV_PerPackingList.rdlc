@@ -2489,10 +2489,17 @@ Cstr(Fields!SailingOnOrAbout.Value)</Value>
                                     <TablixMembers>
                                       <TablixMember />
                                       <TablixMember>
-                                        <Group Name="Details2" />
+                                        <Group Name="Details2">
+                                          <GroupExpressions>
+                                            <GroupExpression>=Fields!MARKS.Value</GroupExpression>
+                                          </GroupExpressions>
+                                        </Group>
                                         <TablixMembers>
                                           <TablixMember />
                                         </TablixMembers>
+                                        <Visibility>
+                                          <Hidden>=iif(Fields!Number.Value=2,false,true)</Hidden>
+                                        </Visibility>
                                       </TablixMember>
                                     </TablixMembers>
                                   </TablixMember>

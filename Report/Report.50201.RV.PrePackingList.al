@@ -212,7 +212,6 @@ report 50201 "RV Pre Packing List Report"
                         RecReservationEntry.SetRange("Source Type", 37);
                         if RecReservationEntry.FindSet() then begin
                             repeat
-                                LotNoNumber := LotNoNumber + 1;
                                 Templine.Init();
                                 Templine."Entry No." := TempNo;
                                 Templine."RV_Container No." := RecReservationEntry."RV_Container No.";
@@ -228,12 +227,17 @@ report 50201 "RV Pre Packing List Report"
                             if Templine.FindSet() then begin
                                 repeat
                                     EntryNo := Templine."Entry No.";
+                                    if (Templine."RV_Container No." = '') and (LotNoNumber = 1) then begin
+                                        LotNo1 += '<b>' + Templine."RV_Container No." + '</b><br>LOT NO. :<br>';
+                                    end;
                                     if oldContainerNo <> Templine."RV_Container No." then begin
+                                        LotNoNumber := 1;
                                         LotNo1 += '<b>' + Templine."RV_Container No." + '</b><br>LOT NO. :<br>' + Templine.Description + '<br>' + Templine."Lot No." + ' - ' + Format(abs(Templine."Qty. to Invoice (Base)")) + ' ' + Templine."Location Code" + '<br>';
                                         LotNo2 += '<br><br>';
                                         oldContainerNo := Templine."RV_Container No.";
                                     end else begin
-                                        if Templine."Entry No." mod 2 = 0 then begin
+                                        LotNoNumber := LotNoNumber + 1;
+                                        if LotNoNumber mod 2 = 0 then begin
                                             LotNo1 += Templine.Description + '<br>' + Templine."Lot No." + ' - ' + Format(abs(Templine."Qty. to Invoice (Base)")) + ' ' + Templine."Location Code" + '<br>';
                                         end else
                                             LotNo2 += Templine.Description + '<br>' + Templine."Lot No." + ' - ' + Format(abs(Templine."Qty. to Invoice (Base)")) + ' ' + Templine."Location Code" + '<br>';
