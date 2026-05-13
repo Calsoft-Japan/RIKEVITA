@@ -67,10 +67,10 @@ tableextension 50103 "RV Warehouse Shipment Ln Ext" extends "Warehouse Shipment 
         }
         field(50201; "RV_Symbol Display Packing List"; Boolean)
         {
-            Caption = 'Print RSPO No.';
+            Caption = 'Symbol Display Packing List';
             Description = 'FDD019';
             FieldClass = FlowField;
-            CalcFormula = Lookup("RV Item Symbol Setting"."Symbol Display Packing List" WHERE("Item Code" = FIELD("No.")));
+            CalcFormula = Lookup("RV Item Symbol Setting"."Symbol Display Packing List" WHERE("Item Code" = FIELD("Item No.")));
         }
         field(50202; "RV_SI Received Date"; Date)
         {

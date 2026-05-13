@@ -3,6 +3,7 @@
 /// COMMON 2026/02/23: New. (Stephen)
 /// FDD008 2026/03/15: New field "Stuffing Date Calculation". (Liuyang)
 /// FDD009 2026/04/29: Charge Allocation fields Added. (Shawn)
+/// FDD021 2026/05/11: Bank Information fields Added. (Bobby)
 /// </summary>
 page 50100 "RIKEVITA Setup"/// 
 {
@@ -94,7 +95,56 @@ page 50100 "RIKEVITA Setup"///
                 }
 
             }
+            group(BankInformation)
+            {
+                Caption = 'Bank Information';
+                field("USD Bank Name"; Rec."USD Bank Name")
+                {
+                    Caption = 'USD Bank Name';
+                    Description = 'FDD021';
+                    ApplicationArea = All;
+                    ShowMandatory = true;
+                }
+                field("USD Bank Branch No."; Rec."USD Bank Branch No.")
+                {
+                    Caption = 'USD Bank Branch No.';
+                    Description = 'FDD021';
+                    ApplicationArea = All;
+                    ShowMandatory = true;
+                }
+                field("USD Bank Account No."; Rec."USD Bank Account No.")
+                {
+                    Caption = 'USD Bank Account No.';
+                    Description = 'FDD021';
+                    ApplicationArea = All;
+                    ShowMandatory = true;
+                }
+                field("ID No."; Rec."ID No.")
+                {
+                    Caption = 'ID No.';
+                    Description = 'FDD021';
+                    ApplicationArea = All;
+                }
+                field("MYR Bank Name"; Rec."MYR Bank Name")
+                {
+                    Caption = 'MYR Bank Name';
+                    Description = 'FDD021';
+                    ApplicationArea = All;
+                }
+                field("MYR Bank Branch No."; Rec."MYR Bank Branch No.")
+                {
+                    Caption = 'MYR Bank Branch No.';
+                    Description = 'FDD021';
+                    ApplicationArea = All;
+                }
+                field("MYR Bank Account No."; Rec."MYR Bank Account No.")
+                {
+                    Caption = 'MYR Bank Account No.';
+                    Description = 'FDD021';
+                    ApplicationArea = All;
+                }
 
+            }
             group(EPayment)
             {
                 Caption = 'Electronic Payment PIC Setup';
@@ -275,6 +325,7 @@ page 50100 "RIKEVITA Setup"///
                 }
 
             }
+
         }
     }
 

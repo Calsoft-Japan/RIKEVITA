@@ -160,6 +160,18 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
                     end;
             end;
         }
+        field(50110; "RV_Ship-to Name"; Text[100])
+        {
+            Caption = 'Ship-to Name';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
+        field(50111; "RV_SAILING ON OR ABOUT"; Date)
+        {
+            Caption = 'SAILING ON OR ABOUT';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
         field(50200; "RV_Consignee Name"; Text[100])
         {
             Caption = 'Consignee Name';

@@ -44,11 +44,13 @@ table 50203 "RV Warehouse Packing Info."
         {
             Caption = 'No. of Packages';
             Description = 'FDD019';
+            DecimalPlaces = 0 : 5;
         }
         field(8; "Contents Per Package"; Decimal)
         {
             Caption = 'Contents Per Package';
             Description = 'FDD019';
+            DecimalPlaces = 0 : 5;
         }
         field(9; "Contents UOM"; Code[10])
         {
@@ -60,11 +62,13 @@ table 50203 "RV Warehouse Packing Info."
         {
             Caption = 'Net Weight';
             Description = 'FDD019';
+            DecimalPlaces = 0 : 5;
         }
         field(11; "Gross Weight"; Decimal)
         {
             Caption = 'Gross Weight';
             Description = 'FDD019';
+            DecimalPlaces = 0 : 5;
         }
         field(12; "Gross Weight UOM"; Code[10])
         {
@@ -76,6 +80,7 @@ table 50203 "RV Warehouse Packing Info."
         {
             Caption = 'Measurement';
             Description = 'FDD019';
+            DecimalPlaces = 0 : 5;
         }
         field(14; "Measurement UOM"; Code[10])
         {

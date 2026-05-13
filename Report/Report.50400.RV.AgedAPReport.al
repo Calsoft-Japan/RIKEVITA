@@ -1,6 +1,7 @@
 /// <summary>
 /// Report RV Aged Accounts Payable (ID 50400).
 /// FDD030 2026/04/15: New. (Vani)
+/// Custom version of standard BC Aged Accounts Payable report.
 /// </summary>
 report 50400 "RV Aged Accounts Payable"
 {
@@ -42,12 +43,17 @@ report 50400 "RV Aged Accounts Payable"
             column(VendorFilter; VendorFilter)
             {
             }
+
+            // FDD030: Show currency filter value in report header.
             column(RV_CurrencyFilter; CurrencyFilterTxt)
             {
             }
+
+            // FDD030: Expose selected heading type for RDLC layout.
             column(RV_ReportHeadingType; Format(HeadingType))
             {
             }
+
             column(RV_CompanyDisplayName; CompanyDisplayName)
             {
             }
@@ -57,40 +63,66 @@ report 50400 "RV Aged Accounts Payable"
             column(PrintDetails; PrintDetails)
             {
             }
+
+            // FDD030: Request page option used to show/hide vendor bank details in RDLC.
             column(RV_PrintBankDetails; PrintBankDetails)
             {
             }
+
+            // FDD030: Second title line showing report aging date.
+            column(RV_AsAtDateText; 'AS AT ' + Format(EndingDate, 0, 4))
+            {
+            }
+
             column(AgingBy; AgingBy)
             {
             }
             column(SelctAgeByDuePostngDocDt1; StrSubstNo(Text004, SelectStr(AgingBy + 1, Text009)))
             {
             }
-            column(HeaderText5; HeaderText[5])
-            {
-            }
-            column(HeaderText4; HeaderText[4])
-            {
-            }
-            column(HeaderText3; HeaderText[3])
+
+            column(HeaderText1; HeaderText[1])
             {
             }
             column(HeaderText2; HeaderText[2])
             {
             }
-            column(HeaderText1; HeaderText[1])
+            column(HeaderText3; HeaderText[3])
             {
             }
+            column(HeaderText4; HeaderText[4])
+            {
+            }
+            column(HeaderText5; HeaderText[5])
+            {
+            }
+
+            // FDD030: Added sixth aging bucket header for 4MTH+ / After 120 days.
             column(HeaderText6; HeaderText[6])
             {
             }
-            column(TopHeaderText1; TopHeaderText[1]) { }
-            column(TopHeaderText2; TopHeaderText[2]) { }
-            column(TopHeaderText3; TopHeaderText[3]) { }
-            column(TopHeaderText4; TopHeaderText[4]) { }
-            column(TopHeaderText5; TopHeaderText[5]) { }
-            column(TopHeaderText6; TopHeaderText[6]) { }
 
+            // FDD030: Top aging header row: Current, 1MTH, 2MTH, 3MTH, 4MTH, 4MTH+.
+            column(TopHeaderText1; TopHeaderText[1])
+            {
+            }
+            column(TopHeaderText2; TopHeaderText[2])
+            {
+            }
+            column(TopHeaderText3; TopHeaderText[3])
+            {
+            }
+            column(TopHeaderText4; TopHeaderText[4])
+            {
+            }
+            column(TopHeaderText5; TopHeaderText[5])
+            {
+            }
+            column(TopHeaderText6; TopHeaderText[6])
+            {
+            }
+
+            // FDD030: Added sixth grand total aging bucket.
             column(GrandTotalVLE6RemAmtLCY; GrandTotalVLERemaingAmtLCY[6])
             {
                 AutoFormatType = 1;
@@ -119,13 +151,15 @@ report 50400 "RV Aged Accounts Payable"
             {
                 AutoFormatType = 1;
             }
+
             column(PageGroupNo; PageGroupNo)
             {
             }
             column(No_Vendor; "No.")
             {
             }
-            column(AgedAcctPayableCaption; AgedAcctPayableCaptionLbl)
+            // FDD030: Dynamic report title for Summary / Detail layout.
+            column(AgedAcctPayableCaption; ReportTitleTxt)
             {
             }
             column(CurrReportPageNoCaption; CurrReportPageNoCaptionLbl)
@@ -188,6 +222,7 @@ report 50400 "RV Aged Accounts Payable"
                     VendorLedgEntry.SetRange("Closed by Entry No.", "Entry No.");
                     VendorLedgEntry.SetRange("Posting Date", 0D, EndingDate);
                     CopyDimFiltersFromVendor(VendorLedgEntry);
+
                     if VendorLedgEntry.FindSet(false) then
                         repeat
                             InsertTemp(VendorLedgEntry);
@@ -205,10 +240,12 @@ report 50400 "RV Aged Accounts Payable"
                     VendorLedgEntry.SetRange("Entry No.", "Closed by Entry No.");
                     VendorLedgEntry.SetRange("Posting Date", 0D, EndingDate);
                     CopyDimFiltersFromVendor(VendorLedgEntry);
+
                     if VendorLedgEntry.FindSet(false) then
                         repeat
                             InsertTemp(VendorLedgEntry);
                         until VendorLedgEntry.Next() = 0;
+
                     CurrReport.Skip();
                 end;
 
@@ -233,6 +270,7 @@ report 50400 "RV Aged Accounts Payable"
                         if "Remaining Amt. (LCY)" = 0 then
                             CurrReport.Skip();
                     end;
+
                     InsertTemp(OpenVendorLedgEntry);
                     CurrReport.Skip();
                 end;
@@ -270,9 +308,13 @@ report 50400 "RV Aged Accounts Payable"
                     column(VendorContactName; Vendor.Contact)
                     {
                     }
+
+                    // FDD030: Vendor payment terms displayed in detail section.
                     column(RV_PaymentTermsCode; PaymentTermsCode)
                     {
                     }
+
+                    // FDD030: Vendor bank details from Vendor Bank Account.
                     column(RV_VendorBankName; VendorBankName)
                     {
                     }
@@ -282,10 +324,13 @@ report 50400 "RV Aged Accounts Payable"
                     column(RV_VendorBankAccountNo; VendorBankAccountNo)
                     {
                     }
+
+                    // FDD030: RM Equivalent Amount. For foreign currency entries, use Amount (LCY).
                     column(RV_RMEquivAmount; RMEquivAmount)
                     {
                         AutoFormatType = 1;
                     }
+
                     column(VLEEndingDateRemAmtLCY; VendorLedgEntryEndingDate."Remaining Amt. (LCY)")
                     {
                         AutoFormatType = 1;
@@ -310,16 +355,46 @@ report 50400 "RV Aged Accounts Payable"
                     {
                         AutoFormatType = 1;
                     }
+
+                    // FDD030: Added sixth aging bucket amount in LCY.
                     column(AgedVendLedgEnt6RemAmtLCY; AgedVendorLedgEntry[6]."Remaining Amt. (LCY)")
                     {
                         AutoFormatType = 1;
                     }
 
+                    column(AgedVendLedgEnt1RemAmt; AgedVendorLedgEntry[1]."Remaining Amount")
+                    {
+                        AutoFormatExpression = CurrencyCode;
+                        AutoFormatType = 1;
+                    }
+                    column(AgedVendLedgEnt2RemAmt; AgedVendorLedgEntry[2]."Remaining Amount")
+                    {
+                        AutoFormatExpression = CurrencyCode;
+                        AutoFormatType = 1;
+                    }
+                    column(AgedVendLedgEnt3RemAmt; AgedVendorLedgEntry[3]."Remaining Amount")
+                    {
+                        AutoFormatExpression = CurrencyCode;
+                        AutoFormatType = 1;
+                    }
+                    column(AgedVendLedgEnt4RemAmt; AgedVendorLedgEntry[4]."Remaining Amount")
+                    {
+                        AutoFormatExpression = CurrencyCode;
+                        AutoFormatType = 1;
+                    }
+                    column(AgedVendLedgEnt5RemAmt; AgedVendorLedgEntry[5]."Remaining Amount")
+                    {
+                        AutoFormatExpression = CurrencyCode;
+                        AutoFormatType = 1;
+                    }
+
+                    // FDD030: Added sixth aging bucket amount in document currency.
                     column(AgedVendLedgEnt6RemAmt; AgedVendorLedgEntry[6]."Remaining Amount")
                     {
                         AutoFormatExpression = CurrencyCode;
                         AutoFormatType = 1;
                     }
+
                     column(VendLedgEntryEndDtAmtLCY; VendorLedgEntryEndingDate."Amount (LCY)")
                     {
                         AutoFormatType = 1;
@@ -335,31 +410,6 @@ report 50400 "RV Aged Accounts Payable"
                     }
                     column(VendLedgEntryEndDtPostgDt; Format(VendorLedgEntryEndingDate."Posting Date"))
                     {
-                    }
-                    column(AgedVendLedgEnt5RemAmt; AgedVendorLedgEntry[5]."Remaining Amount")
-                    {
-                        AutoFormatExpression = CurrencyCode;
-                        AutoFormatType = 1;
-                    }
-                    column(AgedVendLedgEnt4RemAmt; AgedVendorLedgEntry[4]."Remaining Amount")
-                    {
-                        AutoFormatExpression = CurrencyCode;
-                        AutoFormatType = 1;
-                    }
-                    column(AgedVendLedgEnt3RemAmt; AgedVendorLedgEntry[3]."Remaining Amount")
-                    {
-                        AutoFormatExpression = CurrencyCode;
-                        AutoFormatType = 1;
-                    }
-                    column(AgedVendLedgEnt2RemAmt; AgedVendorLedgEntry[2]."Remaining Amount")
-                    {
-                        AutoFormatExpression = CurrencyCode;
-                        AutoFormatType = 1;
-                    }
-                    column(AgedVendLedgEnt1RemAmt; AgedVendorLedgEntry[1]."Remaining Amount")
-                    {
-                        AutoFormatExpression = CurrencyCode;
-                        AutoFormatType = 1;
                     }
                     column(VLEEndingDateRemAmt; VendorLedgEntryEndingDate."Remaining Amount")
                     {
@@ -393,25 +443,42 @@ report 50400 "RV Aged Accounts Payable"
 
                         VendorLedgEntryEndingDate := TempVendorLedgEntry;
 
+                        // FDD030: Payment Terms is required in the detail section.
+                        // Source: Vendor Payment Terms Code.
                         PaymentTermsCode := Vendor."Payment Terms Code";
 
+                        // FDD030: Vendor bank details are displayed when Print Bank Details is enabled.
+                        // Primary source is Preferred Bank Account Code.
+                        // If no preferred bank exists, use the first available Vendor Bank Account.
                         Clear(VendorBankName);
                         Clear(VendorSwiftCode);
                         Clear(VendorBankAccountNo);
 
-                        if Vendor."Preferred Bank Account Code" <> '' then
+                        if Vendor."Preferred Bank Account Code" <> '' then begin
                             if VendorBankAccount.Get(Vendor."No.", Vendor."Preferred Bank Account Code") then begin
                                 VendorBankName := VendorBankAccount.Name;
                                 VendorSwiftCode := VendorBankAccount."SWIFT Code";
                                 VendorBankAccountNo := VendorBankAccount."Bank Account No.";
                             end;
+                        end else begin
+                            VendorBankAccount.Reset();
+                            VendorBankAccount.SetRange("Vendor No.", Vendor."No.");
+                            if VendorBankAccount.FindFirst() then begin
+                                VendorBankName := VendorBankAccount.Name;
+                                VendorSwiftCode := VendorBankAccount."SWIFT Code";
+                                VendorBankAccountNo := VendorBankAccount."Bank Account No.";
+                            end;
+                        end;
 
+                        // FDD030: RM Equivalent Amount is required only for foreign currency entries.
+                        // Source: Vendor Ledger Entry Amount (LCY).
                         if VendorLedgEntryEndingDate."Currency Code" <> '' then
                             RMEquivAmount := VendorLedgEntryEndingDate."Amount (LCY)"
                         else
                             RMEquivAmount := 0;
 
                         DetailedVendorLedgerEntry.SetRange("Vendor Ledger Entry No.", VendorLedgEntryEndingDate."Entry No.");
+
                         if DetailedVendorLedgerEntry.FindSet(false) then
                             repeat
                                 if (DetailedVendorLedgerEntry."Entry Type" =
@@ -453,15 +520,17 @@ report 50400 "RV Aged Accounts Payable"
                                         DetailedVendorLedgerEntry."Entry Type"::"Payment Discount Tolerance (VAT Excl.)",
                                         DetailedVendorLedgerEntry."Entry Type"::"Payment Discount Tolerance (VAT Adjustment)"]
                                     then begin
-                                        VendorLedgEntryEndingDate.Amount := VendorLedgEntryEndingDate.Amount + DetailedVendorLedgerEntry.Amount;
+                                        VendorLedgEntryEndingDate.Amount :=
+                                            VendorLedgEntryEndingDate.Amount + DetailedVendorLedgerEntry.Amount;
                                         VendorLedgEntryEndingDate."Amount (LCY)" :=
-                                          VendorLedgEntryEndingDate."Amount (LCY)" + DetailedVendorLedgerEntry."Amount (LCY)";
+                                            VendorLedgEntryEndingDate."Amount (LCY)" + DetailedVendorLedgerEntry."Amount (LCY)";
                                     end;
+
                                     if DetailedVendorLedgerEntry."Posting Date" <= EndingDate then begin
                                         VendorLedgEntryEndingDate."Remaining Amount" :=
-                                          VendorLedgEntryEndingDate."Remaining Amount" + DetailedVendorLedgerEntry.Amount;
+                                            VendorLedgEntryEndingDate."Remaining Amount" + DetailedVendorLedgerEntry.Amount;
                                         VendorLedgEntryEndingDate."Remaining Amt. (LCY)" :=
-                                          VendorLedgEntryEndingDate."Remaining Amt. (LCY)" + DetailedVendorLedgerEntry."Amount (LCY)";
+                                            VendorLedgEntryEndingDate."Remaining Amt. (LCY)" + DetailedVendorLedgerEntry."Amount (LCY)";
                                     end;
                                 end;
                             until DetailedVendorLedgerEntry.Next() = 0;
@@ -486,19 +555,36 @@ report 50400 "RV Aged Accounts Payable"
                                         VendorLedgEntryEndingDate."Remaining Amt. (LCY)" := 0;
                                         VendorLedgEntryEndingDate."Document Date" := VendorLedgEntryEndingDate."Posting Date";
                                     end;
+
                                     PeriodIndex := GetPeriodIndex(VendorLedgEntryEndingDate."Document Date");
                                 end;
                         end;
 
                         Clear(AgedVendorLedgEntry);
-                        AgedVendorLedgEntry[PeriodIndex]."Remaining Amount" := VendorLedgEntryEndingDate."Remaining Amount";
-                        AgedVendorLedgEntry[PeriodIndex]."Remaining Amt. (LCY)" := VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
-                        TotalVendorLedgEntry[PeriodIndex]."Remaining Amount" += VendorLedgEntryEndingDate."Remaining Amount";
-                        TotalVendorLedgEntry[PeriodIndex]."Remaining Amt. (LCY)" += VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
-                        GrandTotalVLERemaingAmtLCY[PeriodIndex] += VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
-                        TotalVendorLedgEntry[1].Amount += VendorLedgEntryEndingDate."Remaining Amount";
-                        TotalVendorLedgEntry[1]."Amount (LCY)" += VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
-                        GrandTotalVLEAmtLCY += VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
+
+                        // FDD030: PeriodIndex now supports six aging buckets.
+                        // The added bucket is index 5 = 91-120 days / 4MTH.
+                        // The last bucket is index 6 = After 120 days / 4MTH+.
+                        AgedVendorLedgEntry[PeriodIndex]."Remaining Amount" :=
+                            VendorLedgEntryEndingDate."Remaining Amount";
+                        AgedVendorLedgEntry[PeriodIndex]."Remaining Amt. (LCY)" :=
+                            VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
+
+                        TotalVendorLedgEntry[PeriodIndex]."Remaining Amount" +=
+                            VendorLedgEntryEndingDate."Remaining Amount";
+                        TotalVendorLedgEntry[PeriodIndex]."Remaining Amt. (LCY)" +=
+                            VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
+
+                        GrandTotalVLERemaingAmtLCY[PeriodIndex] +=
+                            VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
+
+                        TotalVendorLedgEntry[1].Amount +=
+                            VendorLedgEntryEndingDate."Remaining Amount";
+                        TotalVendorLedgEntry[1]."Amount (LCY)" +=
+                            VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
+
+                        GrandTotalVLEAmtLCY +=
+                            VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
                     end;
 
                     trigger OnPostDataItem()
@@ -546,8 +632,10 @@ report 50400 "RV Aged Accounts Payable"
 
                 TempCurrency.Reset();
                 TempCurrency.DeleteAll();
+
                 TempVendorLedgEntry.Reset();
                 TempVendorLedgEntry.DeleteAll();
+
                 Clear(GrandTotalVLERemaingAmtLCY);
                 GrandTotalVLEAmtLCY := 0;
             end;
@@ -569,11 +657,6 @@ report 50400 "RV Aged Accounts Payable"
             {
             }
             column(TempCurrency2Code; TempCurrency2.Code)
-            {
-                AutoFormatExpression = TempCurrency2.Code;
-                AutoFormatType = 1;
-            }
-            column(AgedVendLedgEnt6RemAmtLCY6; AgedVendorLedgEntry[6]."Remaining Amount")
             {
                 AutoFormatExpression = TempCurrency2.Code;
                 AutoFormatType = 1;
@@ -603,6 +686,14 @@ report 50400 "RV Aged Accounts Payable"
                 AutoFormatExpression = TempCurrency2.Code;
                 AutoFormatType = 1;
             }
+
+            // FDD030: Added sixth currency total bucket.
+            column(AgedVendLedgEnt6RemAmtLCY6; AgedVendorLedgEntry[6]."Remaining Amount")
+            {
+                AutoFormatExpression = TempCurrency2.Code;
+                AutoFormatType = 1;
+            }
+
             column(CurrencySpecificationCaption; CurrencySpecificationCaptionLbl)
             {
             }
@@ -617,12 +708,14 @@ report 50400 "RV Aged Accounts Payable"
                         CurrReport.Break();
 
                 Clear(AgedVendorLedgEntry);
+
                 TempCurrencyAmount.SetRange("Currency Code", TempCurrency2.Code);
+
                 if TempCurrencyAmount.FindSet(false) then
                     repeat
                         if TempCurrencyAmount.Date <> DMY2Date(31, 12, 9999) then
                             AgedVendorLedgEntry[GetPeriodIndex(TempCurrencyAmount.Date)]."Remaining Amount" :=
-                              TempCurrencyAmount.Amount
+                                TempCurrencyAmount.Amount
                         else
                             AgedVendorLedgEntry[6]."Remaining Amount" := TempCurrencyAmount.Amount;
                     until TempCurrencyAmount.Next() = 0;
@@ -639,7 +732,7 @@ report 50400 "RV Aged Accounts Payable"
     {
         SaveValues = true;
         AboutTitle = 'About Aged Accounts Payable';
-        AboutText = 'Analyze vendor balances at the end of each period by calculating outstanding invoice, credit memo, and payment totals in three periods of equal length. Monitor unpaid invoices, and prioritize payments for overdue accounts. ';
+        AboutText = 'Analyze vendor balances at the end of each period by calculating outstanding invoice, credit memo, and payment totals in periods of equal length. Monitor unpaid invoices and prioritize payments for overdue accounts.';
 
         layout
         {
@@ -660,45 +753,49 @@ report 50400 "RV Aged Accounts Payable"
                         ApplicationArea = Basic, Suite;
                         Caption = 'Aging by';
                         OptionCaption = 'Due Date,Posting Date,Document Date';
-                        ToolTip = 'Specifies if the aging will be calculated from the due date, the posting date, or the document date.';
+                        ToolTip = 'Specifies whether the aging is calculated from the due date, posting date, or document date.';
                     }
                     field(PeriodLength; PeriodLength)
                     {
                         ApplicationArea = Basic, Suite;
                         Caption = 'Period Length';
-                        ToolTip = 'Specifies the period for which data is shown in the report. For example, enter "1M" for one month, "30D" for thirty days, "3Q" for three quarters, or "5Y" for five years.';
+                        ToolTip = 'Specifies the period length used to calculate aging buckets.';
                     }
                     field(PrintAmountInLCY; PrintAmountInLCY)
                     {
                         ApplicationArea = Basic, Suite;
                         Caption = 'Print Amounts in LCY';
-                        ToolTip = 'Specifies if you want the report to specify the aging per vendor ledger entry.';
+                        ToolTip = 'Specifies whether amounts are printed in local currency.';
                     }
                     field(PrintDetails; PrintDetails)
                     {
                         ApplicationArea = Basic, Suite;
                         Caption = 'Print Details';
-                        ToolTip = 'Specifies if you want the report to show the detailed entries that add up the total balance for each vendor.';
+                        ToolTip = 'Specifies whether detailed vendor ledger entries are printed.';
                     }
+
+                    // FDD030: Added Number of Months option.
                     field(HeadingType; HeadingType)
                     {
                         ApplicationArea = Basic, Suite;
                         Caption = 'Heading Type';
                         OptionCaption = 'Date Interval,Number of Days,Number of Months';
-                        ToolTip = 'Specifies if the column heading for the periods will indicate a date interval, the number of days overdue, or the number of months.';
+                        ToolTip = 'Specifies whether the aging column heading shows date interval, number of days, or number of months.';
                     }
                     field(NewPagePerVendor; NewPagePerVendor)
                     {
                         ApplicationArea = Basic, Suite;
                         Caption = 'New Page per Vendor';
-                        ToolTip = 'Specifies if each vendor''s information is printed on a new page if you have chosen two or more vendors to be included in the report.';
+                        ToolTip = 'Specifies whether each vendor starts on a new page.';
                     }
                     field(UseExternalDocNo; UseExternalDocNo)
                     {
                         ApplicationArea = Basic, Suite;
                         Caption = 'Use External Document No.';
-                        ToolTip = 'Specifies if you want to print the vendor''s document numbers, such as the invoice number, on all transactions. Clear this check box to print only internal document numbers.';
+                        ToolTip = 'Specifies whether external document numbers are printed instead of internal document numbers.';
                     }
+
+                    // FDD030: New option to control vendor bank details display in RDLC.
                     field(PrintBankDetails; PrintBankDetails)
                     {
                         ApplicationArea = Basic, Suite;
@@ -709,21 +806,14 @@ report 50400 "RV Aged Accounts Payable"
             }
         }
 
-        actions
-        {
-        }
-
         trigger OnOpenPage()
         begin
             if EndingDate = 0D then
                 EndingDate := WorkDate();
+
             if Format(PeriodLength) = '' then
                 Evaluate(PeriodLength, '<1M>');
         end;
-    }
-
-    labels
-    {
     }
 
     trigger OnPreReport()
@@ -736,6 +826,12 @@ report 50400 "RV Aged Accounts Payable"
 
         CalcDates();
         CreateHeadings();
+
+        // FDD030: Set report title dynamically based on Print Details option.
+        if PrintDetails then
+            ReportTitleTxt := 'ACCOUNT PAYABLE AGING REPORT'
+        else
+            ReportTitleTxt := 'ACCOUNT PAYABLE AGING SUMMARY REPORT';
 
         TodayFormatted := Format(CurrentDateTime());
         CompanyDisplayName := COMPANYPROPERTY.DisplayName();
@@ -750,31 +846,37 @@ report 50400 "RV Aged Accounts Payable"
     var
         GLSetup: Record "General Ledger Setup";
         VendorLedgEntryEndingDate: Record "Vendor Ledger Entry";
-        // TotalVendorLedgEntry: array[5] of Record "Vendor Ledger Entry";
-        // AgedVendorLedgEntry: array[6] of Record "Vendor Ledger Entry";
         TempCurrency: Record Currency temporary;
         TempCurrency2: Record Currency temporary;
         TempCurrencyAmount: Record "Currency Amount" temporary;
         DetailedVendorLedgerEntry: Record "Detailed Vendor Ledg. Entry";
+
+        // FDD030: Required to retrieve vendor bank details.
         VendorBankAccount: Record "Vendor Bank Account";
+
         PeriodLength: DateFormula;
+
         GrandTotalVLEAmtLCY: Decimal;
         PrintAmountInLCY: Boolean;
         EndingDate: Date;
         AgingBy: Option "Due Date","Posting Date","Document Date";
         UseExternalDocNo: Boolean;
+
+        // FDD030: Added Number of Months option.
         HeadingType: Option "Date Interval","Number of Days","Number of Months";
+
         NewPagePerVendor: Boolean;
+
+        // FDD030: Custom fields for payment terms, bank details, and RM equivalent amount.
         PaymentTermsCode: Code[20];
         VendorBankName: Text[100];
         VendorSwiftCode: Code[20];
         VendorBankAccountNo: Text[50];
         RMEquivAmount: Decimal;
         CurrencyFilterTxt: Text[50];
+        ReportTitleTxt: Text[100];
 
-#pragma warning disable AA0074
         Text000: Label 'Not Due';
-#pragma warning restore AA0074
         AfterTok: Label 'After';
         BeforeTok: Label 'Before';
         CurrencyCode: Code[10];
@@ -785,20 +887,15 @@ report 50400 "RV Aged Accounts Payable"
         DocNoCaption: Text;
         DocumentNo: Code[35];
 
-#pragma warning disable AA0074
         Text002: Label 'days';
-#pragma warning disable AA0470
         Text004: Label 'Aged by %1';
         Text005: Label 'Total for %1';
         Text006: Label 'Aged as of %1';
         Text007: Label 'Aged by %1';
-#pragma warning restore AA0470
         Text009: Label 'Due Date,Posting Date,Document Date';
-#pragma warning disable AA0470
         Text010: Label 'The Date Formula %1 cannot be used. Try to restate it, for example, by using 1M+CM instead of CM+1M.';
-#pragma warning restore AA0470
         Text027: Label '-%1', Comment = 'Negating the period length: %1 is the period length';
-#pragma warning restore AA0074
+
         EnterDateFormulaErr: Label 'Enter a date formula in the Period Length field.';
         AgedAcctPayableCaptionLbl: Label 'Aged Accounts Payable';
         CurrReportPageNoCaptionLbl: Label 'Page';
@@ -814,6 +911,8 @@ report 50400 "RV Aged Accounts Payable"
         CurrencyCaptionLbl: Label 'Currency Code';
         TotalLCYCaptionLbl: Label 'Total (LCY)';
         CurrencySpecificationCaptionLbl: Label 'Currency Specification';
+
+        // FDD030: Arrays extended from 5 to 6 to support the additional 91-120 days / 4MTH bucket.
         TotalVendorLedgEntry: array[6] of Record "Vendor Ledger Entry";
         AgedVendorLedgEntry: array[6] of Record "Vendor Ledger Entry";
         GrandTotalVLERemaingAmtLCY: array[6] of Decimal;
@@ -823,6 +922,7 @@ report 50400 "RV Aged Accounts Payable"
         HeaderText: array[6] of Text[30];
         TopHeaderText: array[6] of Text[30];
 
+        // FDD030: Request page flag to show/hide vendor bank details.
         PrintBankDetails: Boolean;
 
     protected var
@@ -835,6 +935,31 @@ report 50400 "RV Aged Accounts Payable"
         PeriodLength2: DateFormula;
         i: Integer;
     begin
+        // FDD030: For Number of Days / Number of Months, use fixed aging buckets:
+
+        if HeadingType in [HeadingType::"Number of Days", HeadingType::"Number of Months"] then begin
+            PeriodStartDate[1] := EndingDate + 1;
+            PeriodEndDate[1] := DMY2Date(31, 12, 9999);
+
+            PeriodStartDate[2] := EndingDate - 30;
+            PeriodEndDate[2] := EndingDate;
+
+            PeriodStartDate[3] := EndingDate - 58;
+            PeriodEndDate[3] := EndingDate - 31;
+
+            PeriodStartDate[4] := EndingDate - 89;
+            PeriodEndDate[4] := EndingDate - 59;
+
+            PeriodStartDate[5] := EndingDate - 119;
+            PeriodEndDate[5] := EndingDate - 90;
+
+            PeriodStartDate[6] := 0D;
+            PeriodEndDate[6] := EndingDate - 120;
+
+            exit;
+        end;
+
+        // Standard BC date interval logic kept for Date Interval heading type.
         if not Evaluate(PeriodLength2, StrSubstNo(Text027, PeriodLength)) then
             Error(EnterDateFormulaErr);
 
@@ -859,40 +984,9 @@ report 50400 "RV Aged Accounts Payable"
                 Error(Text010, PeriodLength);
     end;
 
-    // local procedure CreateHeadings()
-    // var
-    //     i: Integer;
-    // begin
-    //     if AgingBy = AgingBy::"Due Date" then begin
-    //         HeaderText[1] := Text000;
-    //         i := 2;
-    //     end else
-    //         i := 1;
-
-    //     while i < ArrayLen(PeriodEndDate) do begin
-    //         case HeadingType of
-    //             HeadingType::"Date Interval":
-    //                 HeaderText[i] := StrSubstNo('%1\..%2', PeriodStartDate[i], PeriodEndDate[i]);
-    //             HeadingType::"Number of Days":
-    //                 HeaderText[i] :=
-    //                   StrSubstNo('%1 - %2 %3', EndingDate - PeriodEndDate[i] + 1, EndingDate - PeriodStartDate[i] + 1, Text002);
-    //             HeadingType::"Number of Months":
-    //                 HeaderText[i] := StrSubstNo('%1MTH', i);
-    //         end;
-    //         i := i + 1;
-    //     end;
-
-    //     case HeadingType of
-    //         HeadingType::"Date Interval":
-    //             HeaderText[i] := StrSubstNo('%1\%2', BeforeTok, PeriodStartDate[i - 1]);
-    //         HeadingType::"Number of Days":
-    //             HeaderText[i] := StrSubstNo('%1 %2 %3', AfterTok, EndingDate - PeriodStartDate[i - 1] + 1, Text002);
-    //         HeadingType::"Number of Months":
-    //             HeaderText[i] := StrSubstNo('%1MTH+', i - 1);
-    //     end;
-    // end;
     local procedure CreateHeadings()
     begin
+        // FDD030: Top header row for six aging buckets.
         TopHeaderText[1] := 'Current';
         TopHeaderText[2] := '1MTH';
         TopHeaderText[3] := '2MTH';
@@ -908,12 +1002,15 @@ report 50400 "RV Aged Accounts Payable"
                     HeaderText[3] := Format(PeriodStartDate[3]) + '..' + Format(PeriodEndDate[3]);
                     HeaderText[4] := Format(PeriodStartDate[4]) + '..' + Format(PeriodEndDate[4]);
                     HeaderText[5] := Format(PeriodStartDate[5]) + '..' + Format(PeriodEndDate[5]);
-                    HeaderText[6] := 'Before ' + Format(PeriodStartDate[6]);
+
+                    // Final bucket covers all dates before the previous bucket start date.
+                    HeaderText[6] := 'Before ' + Format(PeriodStartDate[5]);
                 end;
 
             HeadingType::"Number of Days",
             HeadingType::"Number of Months":
                 begin
+                    // FDD030: Fixed bucket captions required by FDD.
                     HeaderText[1] := 'Not Due';
                     HeaderText[2] := '1 - 31 days';
                     HeaderText[3] := '32 - 59 days';
@@ -974,8 +1071,10 @@ report 50400 "RV Aged Accounts Payable"
         for i := 1 to ArrayLen(TotalVendorLedgEntry) do begin
             TempCurrencyAmount."Currency Code" := CurrencyCode;
             TempCurrencyAmount.Date := PeriodStartDate[i];
+
             if TempCurrencyAmount.Find() then begin
-                TempCurrencyAmount.Amount := TempCurrencyAmount.Amount + TotalVendorLedgEntry[i]."Remaining Amount";
+                TempCurrencyAmount.Amount :=
+                    TempCurrencyAmount.Amount + TotalVendorLedgEntry[i]."Remaining Amount";
                 TempCurrencyAmount.Modify();
             end else begin
                 TempCurrencyAmount."Currency Code" := CurrencyCode;
@@ -987,6 +1086,7 @@ report 50400 "RV Aged Accounts Payable"
 
         TempCurrencyAmount."Currency Code" := CurrencyCode;
         TempCurrencyAmount.Date := DMY2Date(31, 12, 9999);
+
         if TempCurrencyAmount.Find() then begin
             TempCurrencyAmount.Amount := TempCurrencyAmount.Amount + TotalVendorLedgEntry[1].Amount;
             TempCurrencyAmount.Modify();
@@ -998,7 +1098,7 @@ report 50400 "RV Aged Accounts Payable"
         end;
     end;
 
-    procedure InitializeRequest(NewEndingDate: Date; NewAgingBy: Option; NewPeriodLength: DateFormula; NewPrintAmountInLCY: Boolean; NewPrintDetails: Boolean; NewHeadingType: Option; NewNewPagePerVendor: Boolean)
+    procedure InitializeRequest(NewEndingDate: Date; NewAgingBy: Option; NewPeriodLength: DateFormula; NewPrintAmountInLCY: Boolean; NewPrintDetails: Boolean; NewHeadingType: Option; NewNewPagePerVendor: Boolean; NewPrintBankDetails: Boolean)
     begin
         EndingDate := NewEndingDate;
         AgingBy := NewAgingBy;
@@ -1007,12 +1107,16 @@ report 50400 "RV Aged Accounts Payable"
         PrintDetails := NewPrintDetails;
         HeadingType := NewHeadingType;
         NewPagePerVendor := NewNewPagePerVendor;
+
+        // FDD030: Initialize Print Bank Details when report is called from AL.
+        PrintBankDetails := NewPrintBankDetails;
     end;
 
     local procedure CopyDimFiltersFromVendor(var VendorLedgerEntry: Record "Vendor Ledger Entry")
     begin
         if Vendor.GetFilter("Global Dimension 1 Filter") <> '' then
             VendorLedgerEntry.SetFilter("Global Dimension 1 Code", Vendor.GetFilter("Global Dimension 1 Filter"));
+
         if Vendor.GetFilter("Global Dimension 2 Filter") <> '' then
             VendorLedgerEntry.SetFilter("Global Dimension 2 Code", Vendor.GetFilter("Global Dimension 2 Filter"));
     end;

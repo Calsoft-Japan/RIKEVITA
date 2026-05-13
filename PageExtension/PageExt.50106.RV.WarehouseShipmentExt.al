@@ -35,6 +35,16 @@ pageextension 50106 "RV Warehouse Shipment Ext" extends "Warehouse Shipment"
                     ApplicationArea = All;
                     Description = 'FDD008';
                 }
+                field("RV_Ship-to Name"; Rec."RV_Ship-to Name")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD008';
+                }
+                field("RV_SAILING ON OR ABOUT"; Rec."RV_SAILING ON OR ABOUT")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD008';
+                }
                 field(RV_VIA; Rec."RV_VIA")
                 {
                     ApplicationArea = All;
