@@ -73,6 +73,7 @@ table 50901 "RV Charge Calc. Line"
             Caption = 'Sales Quantity';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
             FieldClass = FlowField;
             CalcFormula = lookup("Sales Line"."Quantity"
                                 where("Document Type" = const(Order),
@@ -95,88 +96,103 @@ table 50901 "RV Charge Calc. Line"
             Caption = 'Quantity (KG)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(10; "01-COO"; Decimal)
         {
             Caption = '01-COO';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(11; "02-FORWARDING"; Decimal)
         {
             Caption = '02-FORWARDING';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(12; "03-FUMIGATION"; Decimal)
         {
             Caption = '03-FUMIGATION';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(13; "04-HEALTH"; Decimal)
         {
             Caption = '04-HEALTH';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(14; "05-PALLETIZING"; Decimal)
         {
             Caption = '05-PALLETIZING';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(15; "06-PHYTO"; Decimal)
         {
             Caption = '06-PHYTO';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(16; "07-STUFFING"; Decimal)
         {
             Caption = '07-STUFFING';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(17; "08-TRANSPORT"; Decimal)
         {
             Caption = '08-TRANSPORT';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(18; "09-REACH"; Decimal)
         {
             Caption = '09-REACH';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(19; "10-Label"; Decimal)
         {
             Caption = '10-Label';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(20; "11-OF"; Decimal)
         {
             Caption = '11-OF';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(21; "99-OTHERS"; Decimal)
         {
             Caption = '99-OTHERS';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(22; "FREIGHT"; Decimal)
         {
             Caption = 'FREIGHT';
+            DecimalPlaces = 0 : 5;
         }
         field(23; "HTP Adjustment Price"; Decimal)
         {
             Caption = 'HTP Adjustment Price';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
             FieldClass = FlowField;
             CalcFormula = lookup("RV Charge Calc. Header"."HTP Adjustment Price" where("No." = field("Document No.")));
         }
@@ -185,12 +201,14 @@ table 50901 "RV Charge Calc. Line"
             Caption = 'Total Charge (KG)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(25; "Unit Charge (KG)"; Decimal)
         {
             Caption = 'Unit Charge (KG)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(26; "Currency Code"; Code[10])
         {
@@ -206,108 +224,126 @@ table 50901 "RV Charge Calc. Line"
         field(27; "Exch. Rate from Inv. Currency"; Decimal)
         {
             Caption = 'Exch. Rate from Inv. Currency';
+            DecimalPlaces = 0 : 5;
         }
         field(28; "01-COO (Order Curr.)"; Decimal)
         {
             Caption = '01-COO (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(29; "02-FORWARDING (Order Curr.)"; Decimal)
         {
             Caption = '02-FORWARDING (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(30; "03-FUMIGATION (Order Curr.)"; Decimal)
         {
             Caption = '03-FUMIGATION (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(31; "04-HEALTH (Order Curr.)"; Decimal)
         {
             Caption = '04-HEALTH (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(32; "05-PALLETIZING (Order Curr.)"; Decimal)
         {
             Caption = '05-PALLETIZING (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(33; "06-PHYTO (Order Curr.)"; Decimal)
         {
             Caption = '06-PHYTO (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(34; "07-STUFFING (Order Curr.)"; Decimal)
         {
             Caption = '07-STUFFING (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(35; "08-TRANSPORT (Order Curr.)"; Decimal)
         {
             Caption = '08-TRANSPORT (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(36; "09-REACH (Order Curr.)"; Decimal)
         {
             Caption = '09-REACH (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(37; "10-Label (Order Curr.)"; Decimal)
         {
             Caption = '10-Label (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(38; "11-OF (Order Curr.)"; Decimal)
         {
             Caption = '11-OF (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(39; "99-OTHERS (Order Curr.)"; Decimal)
         {
             Caption = '99-OTHERS (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(40; "FREIGHT (Order Curr.)"; Decimal)
         {
             Caption = 'FREIGHT (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(41; "Total Charge (KG) (Ord Curr.)"; Decimal)
         {
             Caption = 'Total Charge (KG) (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(42; "HTP Adj. Price (Order Curr.)"; Decimal)
         {
             Caption = 'HTP Adj. Price (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(43; "Unit Charge (KG) (Ord Curr.)"; Decimal)
         {
             Caption = 'Unit Charge (KG) (Order Curr.)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(44; "Order Unit Price"; Decimal)
         {
             Caption = 'Order Unit Price';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
             FieldClass = FlowField;
             CalcFormula = lookup("Sales Line"."Unit Price"
                                 where("Document Type" = const(Order),
@@ -319,18 +355,21 @@ table 50901 "RV Charge Calc. Line"
             Caption = 'Order Unit Price (KG)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(46; "Invoice Unit Price (KG)"; Decimal)
         {
             Caption = 'Invoice Unit Price (KG)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
         field(47; "Invoice Amount (KG)"; Decimal)
         {
             Caption = 'Invoice Amount (KG)';
             Editable = false;
             Enabled = true;
+            DecimalPlaces = 0 : 5;
         }
 
     }
