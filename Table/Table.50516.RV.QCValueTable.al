@@ -55,6 +55,9 @@ table 50516 "RV QC Value Table"
         else
             LineEnable := true;
 
+        TypeEnable := true;
+        ValueTableTypeEnable := true;
+
         QCParameter.Reset();
         QCParameter.SetRange("Value Table Name", "Value Table Name");
         if QCParameter.FindFirst() then begin
