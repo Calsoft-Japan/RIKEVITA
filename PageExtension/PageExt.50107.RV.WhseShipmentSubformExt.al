@@ -2,6 +2,7 @@
 /// pageextension Warehouse Shipment Subform Ext (ID 50107) extends "Warehouse Shipment Subform" page
 /// FDD008 2026/03/14: New. (Liuyang)
 /// FDD020 2026/04/08: New. (Bobby.ji)
+/// FDD019 2026/05/13: New. (Bobby.ji)
 /// </summary>
 pageextension 50107 "RV Whse. Shipment Subform Ext" extends "Whse. Shipment Subform"
 {
@@ -17,7 +18,13 @@ pageextension 50107 "RV Whse. Shipment Subform Ext" extends "Whse. Shipment Subf
                 Editable = false;
 
             }
-
+            field("Symbol Display Packing List"; SymbolDisplayPackingList)
+            {
+                ApplicationArea = All;
+                Caption = 'Symbol Display Packing List';
+                Description = 'FDD019';
+                Editable = false;
+            }
         }
         addafter("Qty. per Unit of Measure")
         {
@@ -66,6 +73,7 @@ pageextension 50107 "RV Whse. Shipment Subform Ext" extends "Whse. Shipment Subf
     var
         PrintRSPONo: Boolean;
         AllowContainer, AllowBLDate, AllowClosingDate, AllowStaffingDate : Boolean;
+        SymbolDisplayPackingList: Boolean;
 
     trigger OnAfterGetRecord()
     var
@@ -73,6 +81,9 @@ pageextension 50107 "RV Whse. Shipment Subform Ext" extends "Whse. Shipment Subf
     begin
         if Rec.CalcFields("RV_Print RSPO No.") then begin//FDD020
             PrintRSPONo := Rec."RV_Print RSPO No.";
+        end;
+        if Rec.CalcFields("RV_Symbol Display Packing List") then begin//FDD019
+            SymbolDisplayPackingList := Rec."RV_Symbol Display Packing List";
         end;
     end;
 

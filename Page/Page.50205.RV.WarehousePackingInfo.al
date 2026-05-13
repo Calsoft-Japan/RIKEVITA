@@ -118,7 +118,6 @@ page 50205 "Warehouse Packing Info"
                     WshpLine: Record "Warehouse Shipment Line";
                     PackingInfo: Record "RV Warehouse Packing Info.";
                     QtytoShip: Decimal;
-
                 begin
                     TempSourceNo := '';
                     TempSourceLineNo := 0;

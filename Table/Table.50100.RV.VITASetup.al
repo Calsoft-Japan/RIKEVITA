@@ -3,6 +3,7 @@
 /// FDD030 2026/02/23: New. (Stephen)
 /// FDD008 2026/03/15: New field "Stuffing Date Calculation". (Liuyang)/// 
 /// FDD009 2026/04/29: Charge Allocation fields Added. (Shawn)
+/// FDD021 2026/05/11: Bank Information fields Added. (Bobby)
 /// </summary>
 table 50100 "RV RIKEVITA Setup"
 {
@@ -230,7 +231,41 @@ table 50100 "RV RIKEVITA Setup"
             Description = 'FDD100';
             Caption = 'Calc. Item Filter';
         }
-
+        field(41; "USD Bank Name"; Text[100])
+        {
+            Description = 'FDD021';
+            Caption = 'USD Bank Name';
+        }
+        field(42; "USD Bank Branch No."; Text[20])
+        {
+            Description = 'FDD021';
+            Caption = 'USD Bank Branch No.';
+        }
+        field(43; "USD Bank Account No."; Text[20])
+        {
+            Description = 'FDD021';
+            Caption = 'USD Bank Account No.';
+        }
+        field(44; "MYR Bank Name"; Text[100])
+        {
+            Description = 'FDD021';
+            Caption = 'MYR Bank Name';
+        }
+        field(45; "MYR Bank Branch No."; Text[20])
+        {
+            Description = 'FDD021';
+            Caption = 'MYR Bank Branch No.';
+        }
+        field(46; "MYR Bank Account No."; Text[30])
+        {
+            Description = 'FDD021';
+            Caption = 'MYR Bank Account No.';
+        }
+        field(47; "ID No."; Code[30])
+        {
+            Description = 'FDD021';
+            Caption = 'ID No.';
+        }
     }
     keys
     {

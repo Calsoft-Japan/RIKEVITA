@@ -36,6 +36,9 @@ report 50201 "RV Pre Packing List Report"
                 column(SSTRegNo; 'SST Reg No. ' + CompanyInfo."RV_SST Reg No.")
                 {
                 }
+                column(CerfiticateNo; CerfiticateNo)
+                {
+                }
                 column(ReportTitle; ReportTitle)
                 {
                 }
@@ -78,13 +81,13 @@ report 50201 "RV Pre Packing List Report"
                 column(VIA; "RV_VIA")
                 {
                 }
-                column(FromValue; FromValue)
+                column(FromValue; "RV_Country of Origin")
                 {
                 }
-                column(ToValue; ToValue)
+                column(ToValue; "RV_Ship-to Name")
                 {
                 }
-                column(SailingOnOrAbout; SailingOnOrAbout)
+                column(SailingOnOrAbout; "RV_SAILING ON OR ABOUT")
                 {
                 }
                 column(Shipment_Method_Code; "Shipment Method Code")
@@ -159,6 +162,7 @@ report 50201 "RV Pre Packing List Report"
                         RecSalesHeader: Record "Sales Header";
                         RecSalesShipmentHeader: Record "Sales Shipment Header";
                         RecReservationEntry: Record "Reservation Entry";
+                        RecWarehouseShipmentLine: Record "Warehouse Shipment Line";
                         chr10: Char;
                         TempNo: Integer;
                         oldContainerNo: Text;
@@ -170,12 +174,14 @@ report 50201 "RV Pre Packing List Report"
                         TempNo := 1;
                         LotNo1 := '';
                         LotNo2 := '';
+                        CerfiticateNo := '';
+                        ExternalDocumentNo := 'CUSTOMER PO NO: ';
                         if RecItem.Get("Item No.") then begin
                             Description := RecItem.Description;
                             Description2 := RecItem."Description 2";
                             BaseUnitofMeasure := RecItem."Base Unit of Measure";
                             PackageInfo := StrSubstNo('(%1 %2 X %3 %4)',
-                            "Net Weight", "Contents UOM", "No. of Packages", BaseUnitofMeasure);
+                            "Contents Per Package", "Contents UOM", "No. of Packages", BaseUnitofMeasure);
                         end;
 
                         ItemSymbolSetting.Reset();
@@ -183,19 +189,26 @@ report 50201 "RV Pre Packing List Report"
                         if ItemSymbolSetting.FindFirst() then begin
                         end;
 
-                        RecSalesHeader.Reset();
-                        RecSalesHeader.SetRange("Document Type", RecSalesHeader."Document Type"::Order);
-                        RecSalesHeader.SetRange("No.", "Sales Order No.");
-                        if RecSalesHeader.FindFirst() then begin
-                            if RecSalesHeader."External Document No." <> '' then begin
-                                ExternalDocumentNo := 'CUSTOMER PO NO: ' + RecSalesHeader."External Document No.";
-                            end;
+                        RecWarehouseShipmentLine.Reset();
+                        RecWarehouseShipmentLine.SetRange("No.", WarehouseShipmentHeader."No.");
+                        if RecWarehouseShipmentLine.FindSet() then begin
+                            repeat
+                                if RecItem.Get(RecWarehouseShipmentLine."Item No.") then begin
+                                    if RecItem."RV_Print RSPO No." then begin
+                                        CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
+                                    end;
+                                end;
+                            until RecWarehouseShipmentLine.Next() = 0;
                         end;
 
                         RecSalesHeader.Reset();
                         RecSalesHeader.SetRange("Document Type", RecSalesHeader."Document Type"::Order);
                         RecSalesHeader.SetRange("No.", "Sales Order No.");
                         if RecSalesHeader.FindFirst() then begin
+                            if RecSalesHeader."External Document No." <> '' then begin
+                                ExternalDocumentNo := ExternalDocumentNo + RecSalesHeader."External Document No.";
+                            end;
+
                             MARKS := RecSalesHeader."Sell-to Customer Name" + Format(chr10) + RecSalesHeader."Sell-to City" + Format(chr10) + "Sales Order No.";
                         end else begin
                             RecSalesShipmentHeader.Reset();
@@ -217,7 +230,7 @@ report 50201 "RV Pre Packing List Report"
                                 Templine."RV_Container No." := RecReservationEntry."RV_Container No.";
                                 Templine.Description := Description2;
                                 Templine."Lot No." := RecReservationEntry."Lot No.";
-                                Templine."Quantity (Base)" := RecReservationEntry."Qty. to Invoice (Base)";
+                                Templine."Quantity (Base)" := RecReservationEntry."Qty. to Handle (Base)";
                                 Templine."Location Code" := RecItem."Base Unit of Measure";
                                 Templine.Insert();
                                 TempNo := TempNo + 1;
@@ -229,19 +242,24 @@ report 50201 "RV Pre Packing List Report"
                                     EntryNo := Templine."Entry No.";
                                     if (Templine."RV_Container No." = '') and (LotNoNumber = 1) then begin
                                         LotNo1 += '<b>' + Templine."RV_Container No." + '</b><br>LOT NO. :<br>';
+                                        LotNo2 += '<br><br>';
                                     end;
                                     if oldContainerNo <> Templine."RV_Container No." then begin
+                                        if LotNoNumber mod 2 = 1 then begin
+                                            LotNo2 += '<br><br>';
+                                        end;
                                         LotNoNumber := 1;
-                                        LotNo1 += '<b>' + Templine."RV_Container No." + '</b><br>LOT NO. :<br>' + Templine.Description + '<br>' + Templine."Lot No." + ' - ' + Format(abs(Templine."Qty. to Invoice (Base)")) + ' ' + Templine."Location Code" + '<br>';
+                                        LotNo1 += '<b>' + Templine."RV_Container No." + '</b><br>LOT NO. :<br>' + Templine.Description + '<br>' + Templine."Lot No." + ' - ' + Format(Round(abs(Templine."Quantity (Base)"), 0.1, '=')) + ' ' + Templine."Location Code" + '<br>';
                                         LotNo2 += '<br><br>';
                                         oldContainerNo := Templine."RV_Container No.";
                                     end else begin
                                         LotNoNumber := LotNoNumber + 1;
                                         if LotNoNumber mod 2 = 0 then begin
-                                            LotNo1 += Templine.Description + '<br>' + Templine."Lot No." + ' - ' + Format(abs(Templine."Qty. to Invoice (Base)")) + ' ' + Templine."Location Code" + '<br>';
+                                            LotNo2 += Templine.Description + '<br>' + Templine."Lot No." + ' - ' + Format(Round(abs(Templine."Quantity (Base)"), 0.1, '=')) + ' ' + Templine."Location Code" + '<br>';
                                         end else
-                                            LotNo2 += Templine.Description + '<br>' + Templine."Lot No." + ' - ' + Format(abs(Templine."Qty. to Invoice (Base)")) + ' ' + Templine."Location Code" + '<br>';
+                                            LotNo1 += Templine.Description + '<br>' + Templine."Lot No." + ' - ' + Format(Round(abs(Templine."Quantity (Base)"), 0.1, '=')) + ' ' + Templine."Location Code" + '<br>';
                                     end;
+
                                 until Templine.Next() = 0;
                             end;
 
@@ -261,6 +279,7 @@ report 50201 "RV Pre Packing List Report"
                         ISODocumentNo := ISODoc."ISO Document No.";
                         ISODocVersion := ISODoc."ISO Doc. Version No.";
                     end;
+                    /*
                     WarehouseShipmentLine.Reset();
                     WarehouseShipmentLine.SetRange("No.", WarehouseShipmentHeader."No.");
                     if WarehouseShipmentLine.FindFirst() then begin
@@ -273,7 +292,7 @@ report 50201 "RV Pre Packing List Report"
                             SailingOnOrAbout := Format(SalesInvoiceHeader."RV_SAILING ON OR ABOUT");
                         end;
                     end;
-
+*/
                 end;
             }
             trigger OnPreDataItem()
@@ -321,6 +340,7 @@ report 50201 "RV Pre Packing List Report"
         LotNoNumber: Integer;
         Templine: Record "Tracking Specification" temporary;
         EntryNo: Integer;
+        CerfiticateNo: Text;
 
     trigger OnPreReport()
     begin

@@ -47,7 +47,8 @@ Cstr(Fields!MotherVessel.Value) + Chr(177) +
 Cstr(Fields!VIA.Value)+ Chr(177) + 
 Cstr(Fields!FromValue.Value)+ Chr(177) + 
 Cstr(Fields!ToValue.Value)+ Chr(177) + 
-Cstr(Fields!SailingOnOrAbout.Value)</Value>
+Cstr(Fields!SailingOnOrAbout.Value) + Chr(177) + 
+Cstr(Fields!CerfiticateNo.Value)</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -2640,7 +2641,7 @@ Cstr(Fields!SailingOnOrAbout.Value)</Value>
               <Top>0.11333in</Top>
               <Left>1.57167in</Left>
               <Height>0.3125in</Height>
-              <Width>4.78819in</Width>
+              <Width>4.37152in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
@@ -2706,7 +2707,7 @@ Cstr(Fields!SailingOnOrAbout.Value)</Value>
               <Top>0.5925in</Top>
               <Left>3.73486in</Left>
               <Height>0.25in</Height>
-              <Width>2.625in</Width>
+              <Width>2.20833in</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <Border>
@@ -3016,10 +3017,10 @@ Cstr(Fields!SailingOnOrAbout.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox45</rd:DefaultName>
-              <Top>1.04458in</Top>
-              <Left>2.09262in</Left>
+              <Top>1.24875in</Top>
+              <Left>1.57167in</Left>
               <Height>0.36042in</Height>
-              <Width>2.9589in</Width>
+              <Width>4.37152in</Width>
               <ZIndex>10</ZIndex>
               <Style>
                 <Border>
@@ -3137,7 +3138,7 @@ Cstr(Fields!SailingOnOrAbout.Value)</Value>
               <Top>1.88479in</Top>
               <Left>0.73958in</Left>
               <Height>11pt</Height>
-              <Width>1.64583in</Width>
+              <Width>2.70833in</Width>
               <ZIndex>14</ZIndex>
               <Style>
                 <Border>
@@ -3166,7 +3167,7 @@ Cstr(Fields!SailingOnOrAbout.Value)</Value>
               <Top>2.03757in</Top>
               <Left>0.73958in</Left>
               <Height>11pt</Height>
-              <Width>1.64583in</Width>
+              <Width>2.70833in</Width>
               <ZIndex>15</ZIndex>
               <Style>
                 <Border>
@@ -3195,7 +3196,7 @@ Cstr(Fields!SailingOnOrAbout.Value)</Value>
               <Top>2.19035in</Top>
               <Left>0.73958in</Left>
               <Height>11pt</Height>
-              <Width>1.64583in</Width>
+              <Width>2.70833in</Width>
               <ZIndex>16</ZIndex>
               <Style>
                 <Border>
@@ -3224,7 +3225,7 @@ Cstr(Fields!SailingOnOrAbout.Value)</Value>
               <Top>2.34313in</Top>
               <Left>0.73958in</Left>
               <Height>11pt</Height>
-              <Width>1.64583in</Width>
+              <Width>2.70833in</Width>
               <ZIndex>17</ZIndex>
               <Style>
                 <Border>
@@ -3253,7 +3254,7 @@ Cstr(Fields!SailingOnOrAbout.Value)</Value>
               <Top>2.4959in</Top>
               <Left>0.73958in</Left>
               <Height>11pt</Height>
-              <Width>1.64583in</Width>
+              <Width>2.70833in</Width>
               <ZIndex>18</ZIndex>
               <Style>
                 <Border>
@@ -3666,6 +3667,37 @@ Cstr(Fields!SailingOnOrAbout.Value)</Value>
                 <VerticalAlign>Middle</VerticalAlign>
               </Style>
             </Textbox>
+            <Textbox Name="Textbox26">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Cstr(Choose(14, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox26</rd:DefaultName>
+              <Top>0.91194in</Top>
+              <Left>1.57167in</Left>
+              <Height>11pt</Height>
+              <Width>4.37152in</Width>
+              <ZIndex>33</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
           </ReportItems>
           <Style>
             <Border>
@@ -3818,6 +3850,9 @@ End Function
         </Field>
         <Field Name="SSTRegNo">
           <DataField>SSTRegNo</DataField>
+        </Field>
+        <Field Name="CerfiticateNo">
+          <DataField>CerfiticateNo</DataField>
         </Field>
         <Field Name="ReportTitle">
           <DataField>ReportTitle</DataField>
