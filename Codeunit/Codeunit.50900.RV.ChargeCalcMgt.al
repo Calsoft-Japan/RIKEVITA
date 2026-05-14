@@ -92,8 +92,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                 CCLine."Unit Charge (KG)" := Round(CCLine."Total Charge (KG)" / CCLine."Quantity (KG)" + CCLine."HTP Adjustment Price", 0.00001);
                 CCline."HTP Adj. Price (Order Curr.)" := Round(CCLine."HTP Adjustment Price" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
                 CCline."Unit Charge (KG) (Ord Curr.)" := Round(CCLine."Unit Charge (KG)" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
-                CCLine."Invoice Unit Price (KG)" := CCLine."Order Unit Price (KG)" + CCLine."Unit Charge (KG) (Ord Curr.)";
-                CCLine."Invoice Amount (KG)" := CCLine."Invoice Unit Price (KG)" * CCLine."Quantity (KG)";
+                CCLine."Invoice Unit Price (KG)" := Round(CCLine."Order Unit Price (KG)" + CCLine."Unit Charge (KG) (Ord Curr.)", 0.00001);
+                CCLine."Invoice Amount (KG)" := Round(CCLine."Invoice Unit Price (KG)" * CCLine."Quantity (KG)", 0.00001);
 
                 //Calculate Order Currency related fields.
                 CCline."01-COO (Order Curr.)" := Round(CCLine."01-COO" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
@@ -148,14 +148,14 @@ codeunit 50900 "RV Charge Calc. Mgt"
         CCHeader.CalcFields("Total Quantity (KG)");
 
         //all lines are same Unit Charge (KG).
-        UnitCharge_KG := round((CCHeader."Total Cost" + CCHeader.FREIGHT) / CCHeader."Total Quantity (KG)", 0.00001);
+        UnitCharge_KG := Round((CCHeader."Total Cost" + CCHeader.FREIGHT) / CCHeader."Total Quantity (KG)", 0.00001);
 
         if CCLine.FindSet() then
             repeat
                 CCLine."Unit Charge (KG)" := UnitCharge_KG;
                 CCline."Unit Charge (KG) (Ord Curr.)" := Round(CCLine."Unit Charge (KG)" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
-                CCLine."Invoice Unit Price (KG)" := CCLine."Order Unit Price (KG)" + CCLine."Unit Charge (KG) (Ord Curr.)";
-                CCLine."Invoice Amount (KG)" := CCLine."Invoice Unit Price (KG)" * CCLine."Quantity (KG)";
+                CCLine."Invoice Unit Price (KG)" := Round(CCLine."Order Unit Price (KG)" + CCLine."Unit Charge (KG) (Ord Curr.)", 0.00001);
+                CCLine."Invoice Amount (KG)" := Round(CCLine."Invoice Unit Price (KG)" * CCLine."Quantity (KG)", 0.00001);
                 CCLine.Modify();
 
             until CCLine.Next() = 0;
