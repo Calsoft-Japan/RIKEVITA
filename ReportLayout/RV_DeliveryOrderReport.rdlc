@@ -1130,6 +1130,9 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                           <TablixMembers>
                             <TablixMember />
                           </TablixMembers>
+                          <Visibility>
+                            <Hidden>=iif(Fields!PackageInfo.Value="",true,false)</Hidden>
+                          </Visibility>
                         </TablixMember>
                       </TablixMembers>
                     </TablixMember>
