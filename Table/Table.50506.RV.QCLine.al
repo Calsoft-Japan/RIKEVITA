@@ -44,20 +44,15 @@ table 50506 "RV QC Line"
                 if "QC Result" = '' then
                     "Check Status" := "Check Status"::Init
                 else
-                    CheckQCResultRange("QC Result", "Check Status", "QC Parameter Name");
+                    CheckQCResultRange();
             end;
 
             trigger OnLookup()
             var
                 ValueTableType: Enum "RV Value Table Type";
-                //ValueTable: Record "RV QC Value Table";
-
-
                 QCListValue: Record "RV QC List Value";
-            //QCListValuePage: Page "RV QC List Value";
             begin
                 if Rec."Value Table Type" in [ValueTableType::List, ValueTableType::Single, ValueTableType::Table] then begin
-                    //Clear(QCListValuePage);
                     QCListValue.Reset();
                     QCListValue.SetRange("Value Table Name", "Value Table Name");
 
@@ -66,18 +61,6 @@ table 50506 "RV QC Line"
                         "Check Status" := QCListValue."Check Status";
                         Modify();
                     end;
-
-                    //QCListValuePage.SetTableView(QCListValue);
-                    //QCListValuePage.LookupMode(true);
-                    //if (QCListValuePage.RunModal() = Action::LookupOK) then begin
-                    /*
-                    if (Page.RunModal(Page::"RV QC List Value", QCListValue) = Action::LookupOK) then begin
-                        //QCListValuePage.GetRecord(QCListValue);
-                        "QC Result" := QCListValue."List Value";
-                        "Check Status" := QCListValue."Check Status";
-                        Modify();
-                    end;
-                    */
                 end;
             end;
         }
@@ -118,36 +101,8 @@ table 50506 "RV QC Line"
             ValueTableTypeEnable := false;
         end;
     end;
-    /*
+
     procedure CheckQCResultRange()
-    var
-        TempInteger: Record "Integer" temporary;// Temp
-        QCSpecificationLine: Record "RV QC Specification Line";
-    begin
-
-        TempInteger.Reset();
-
-        TempInteger.Init();
-        if Evaluate(TempInteger.Number, "QC Result") then
-            TempInteger.Insert()
-        else
-            Error('Please enter a Numeric');
-
-        QCSpecificationLine.Reset();
-        QCSpecificationLine.SetRange("QC Parameter Name", "QC Parameter Name");
-        if QCSpecificationLine.FindFirst() then begin
-            TempInteger.SetFilter(Number, QCSpecificationLine."Target Value ib Base UM");
-        end else begin
-            Error('QC Result cannot be checked because QC Specification Line do not exist.');
-        end;
-
-        if not TempInteger.IsEmpty() then
-            "Check Status" := "Check Status"::PASSED
-        else
-            "Check Status" := "Check Status"::FAILED;
-    end;
-    */
-    procedure CheckQCResultRange(QCResult: Text[50]; var CheckStatus: Enum "RV Check Status"; QCParameterName: Code[20])
     var
         TempInteger: Record "Integer" temporary;// Temp
         Temptext: Record "RV QC Value Table" temporary;// Temp
@@ -159,11 +114,20 @@ table 50506 "RV QC Line"
         TempMaxValue: Decimal;
         TempMinValue: Decimal;
     begin
+        //clear Temptext
+        Temptext.Reset();
+        Temptext.DeleteAll();
 
+        //clear TempInteger
+        TempInteger.Reset();
+        TempInteger.DeleteAll();
 
-        if QCParameter.Get(QCParameterName) then begin
+        Clear(TempMaxValue);
+        Clear(TempMinValue);
+
+        if QCParameter.Get("QC Parameter Name") then begin
             QCValueTable.Reset();
-            QCValueTable.SetRange("Value Table Name");
+            QCValueTable.SetRange("Value Table Name", QCParameter."Value Table Name");
             if QCValueTable.FindFirst() then begin
 
                 CASE QCValueTable.Type OF
@@ -177,36 +141,43 @@ table 50506 "RV QC Line"
                                         Temptext.Reset();
 
                                         Temptext.Init();
-                                        Temptext."Value Table Name" := QCResult;
+                                        Temptext."Value Table Name" := "QC Result";
                                         Temptext.Insert();
 
-                                        Temptext.SetRange("Value Table Name", QCValueTable."Minimum Value", QCValueTable."Maximum Value");
+                                        if (QCValueTable."Minimum Value" <> '') and (QCValueTable."Maximum Value" <> '') then begin
+                                            Temptext.SetRange("Value Table Name", QCValueTable."Minimum Value", QCValueTable."Maximum Value");
+                                        end
+                                        else if (QCValueTable."Minimum Value" <> '') then begin
+                                            Temptext.SetFilter("Value Table Name", '%1..', QCValueTable."Minimum Value");
+                                        end
+                                        else if (QCValueTable."Maximum Value" <> '') then begin
+                                            Temptext.SetFilter("Value Table Name", '..%1', QCValueTable."Maximum Value");
+                                        end;
 
                                         //Error('QC Result cannot be checked because QC Specification Line do not exist.');
 
                                         if not Temptext.IsEmpty() then
-                                            CheckStatus := CheckStatus::PASSED
+                                            "Check Status" := "Check Status"::PASSED
                                         else
-                                            CheckStatus := CheckStatus::FAILED;
-
+                                            "Check Status" := "Check Status"::FAILED;
                                     end;
                                 (QCValueTable."Value Table Type"::Single):
                                     begin
-
+                                        //None
                                     end;
                                 (QCValueTable."Value Table Type"::Table):
                                     begin
-                                        if QCListValue.Get(QCValueTable."Value Table Name", QCResult) then
-                                            CheckStatus := QCListValue."Check Status"
+                                        if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
+                                            "Check Status" := QCListValue."Check Status"
                                         else
-                                            CheckStatus := CheckStatus::Init;
+                                            "Check Status" := "Check Status"::Init;
                                     end;
                                 (QCValueTable."Value Table Type"::List):
                                     begin
-                                        if QCListValue.Get(QCValueTable."Value Table Name", QCResult) then
-                                            CheckStatus := QCListValue."Check Status"
+                                        if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
+                                            "Check Status" := QCListValue."Check Status"
                                         else
-                                            CheckStatus := CheckStatus::Init;
+                                            "Check Status" := "Check Status"::Init;
                                     end;
                             END;
 
@@ -217,7 +188,7 @@ table 50506 "RV QC Line"
                             TempInteger.Reset();
 
                             TempInteger.Init();
-                            if Evaluate(TempInteger.Number, QCResult) then
+                            if Evaluate(TempInteger.Number, "QC Result") then
                                 TempInteger.Insert()
                             else
                                 Error('Please enter a Numeric.');
@@ -229,7 +200,15 @@ table 50506 "RV QC Line"
                                         if Evaluate(TempMinValue, QCValueTable."Minimum Value") then;
                                         if Evaluate(TempMaxValue, QCValueTable."Maximum Value") then;
 
-                                        TempInteger.SetRange(Number, TempMinValue, TempMaxValue);
+                                        if (QCValueTable."Minimum Value" <> '') and (QCValueTable."Maximum Value" <> '') then begin
+                                            TempInteger.SetRange(Number, TempMinValue, TempMaxValue);
+                                        end
+                                        else if (QCValueTable."Minimum Value" <> '') then begin
+                                            TempInteger.SetFilter(Number, '%1..', TempMinValue);
+                                        end
+                                        else if (QCValueTable."Maximum Value" <> '') then begin
+                                            TempInteger.SetFilter(Number, '..%1', TempMaxValue);
+                                        end;
 
                                         //Error('QC Result cannot be checked because QC Specification Line do not exist.');
 
@@ -241,35 +220,59 @@ table 50506 "RV QC Line"
                                     end;
                                 (QCValueTable."Value Table Type"::Single):
                                     begin
-
+                                        //None
                                     end;
                                 (QCValueTable."Value Table Type"::Table):
                                     begin
-                                        if QCListValue.Get(QCValueTable."Value Table Name", QCResult) then
-                                            CheckStatus := QCListValue."Check Status"
+                                        if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
+                                            "Check Status" := QCListValue."Check Status"
                                         else
-                                            CheckStatus := CheckStatus::Init;
+                                            "Check Status" := "Check Status"::Init;
                                     end;
                                 (QCValueTable."Value Table Type"::List):
                                     begin
-                                        if QCListValue.Get(QCValueTable."Value Table Name", QCResult) then
-                                            CheckStatus := QCListValue."Check Status"
+                                        if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
+                                            "Check Status" := QCListValue."Check Status"
                                         else
-                                            CheckStatus := CheckStatus::Init;
+                                            "Check Status" := "Check Status"::Init;
                                     end;
                             END;
 
                         end;
                     (QCValueTable.Type::Blooean):
                         begin
-                            if QCListValue.Get(QCValueTable."Value Table Name", QCResult) then
-                                CheckStatus := QCListValue."Check Status"
+                            if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
+                                "Check Status" := QCListValue."Check Status"
                             else
-                                CheckStatus := CheckStatus::Init;
+                                "Check Status" := "Check Status"::Init;
                         end;
                     (QCValueTable.Type::" "):
                         begin
 
+                            CASE QCValueTable."Value Table Type" OF
+                                (QCValueTable."Value Table Type"::Range):
+                                    begin
+                                        //None
+                                    end;
+                                (QCValueTable."Value Table Type"::Single):
+                                    begin
+                                        //None
+                                    end;
+                                (QCValueTable."Value Table Type"::Table):
+                                    begin
+                                        if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
+                                            "Check Status" := QCListValue."Check Status"
+                                        else
+                                            "Check Status" := "Check Status"::Init;
+                                    end;
+                                (QCValueTable."Value Table Type"::List):
+                                    begin
+                                        if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
+                                            "Check Status" := QCListValue."Check Status"
+                                        else
+                                            "Check Status" := "Check Status"::Init;
+                                    end;
+                            END;
                         end;
                 END;
             end;

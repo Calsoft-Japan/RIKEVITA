@@ -16,6 +16,24 @@ table 50502 "RV QC Specification Line"
         {
             Caption = 'QC Parameter Name';
             TableRelation = "RV QC Parameter";
+            trigger OnValidate()
+            var
+                QCParameterRec: Record "RV QC Parameter";
+                QCValueTable: Record "RV QC Value Table";
+            begin
+                if "QC Parameter Name" <> xRec."QC Parameter Name" then begin
+                    if "QC Parameter Name" <> '' then begin
+                        if QCParameterRec.Get("QC Parameter Name") then begin
+                            if QCValueTable.Get(QCParameterRec."Value Table Name") then;
+                            "Value Table Type" := QCValueTable."Value Table Type";
+                            "Target Value ib Base UM" := QCValueTable."Minimum Value" + '..' + QCValueTable."Maximum Value";
+                        end;
+                    end else begin
+                        "Value Table Type" := "Value Table Type"::" ";
+                        "Target Value ib Base UM" := '';
+                    end;
+                end;
+            end;
         }
         field(3; "Value Table Type"; Enum "RV Value Table Type")
         {
