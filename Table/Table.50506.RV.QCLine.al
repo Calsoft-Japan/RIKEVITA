@@ -29,39 +29,51 @@ table 50506 "RV QC Line"
             trigger OnValidate()
             var
                 QCParameter: Record "RV QC Parameter";
+                QCListValue: Record "RV QC List Value";
+
             begin
+                Clear(Type);
+                Clear("Value Table Type");
+                Clear("Value Table Name");
+                Clear("QC Result");
+                Clear("Check Status");
+
                 if QCParameter.Get("QC Parameter Name") then begin
+                    QCParameter.CalcFields(Type, "Value Table Type");
                     Type := QCParameter.Type;
                     "Value Table Type" := QCParameter."Value Table Type";
+                    "Value Table Name" := QCParameter."Value Table Name";
+
+                    if "Value Table Type" = "Value Table Type"::Single then begin
+                        QCListValue.Reset();
+                        QCListValue.SetRange("Value Table Name", QCParameter."Value Table Name");
+                        if QCListValue.FindFirst() then begin
+                            "QC Result" := QCListValue."List Value";
+                            "Check Status" := QCListValue."Check Status";
+                        end;
+                    end;
+                end else begin
+                    Type := Type::" ";
+                    "Value Table Type" := "Value Table Type"::" ";
                 end;
             end;
         }
         field(5; "QC Result"; Text[50])
         {
             Caption = 'QC Result';
+            TableRelation =
+            if ("Value Table Type" = const("List")) "RV QC List Value"."List Value" where("Value Table Name" = field("Value Table Name"))
+            else
+            if ("Value Table Type" = const("Single")) "RV QC List Value"."List Value" where("Value Table Name" = field("Value Table Name"))
+            else
+            if ("Value Table Type" = const("Table")) "RV QC List Value"."List Value" where("Value Table Name" = field("Value Table Name"));
+            //ValidateTableRelation = false;
             trigger OnValidate()
             begin
                 if "QC Result" = '' then
                     "Check Status" := "Check Status"::Init
                 else
                     CheckQCResultRange();
-            end;
-
-            trigger OnLookup()
-            var
-                ValueTableType: Enum "RV Value Table Type";
-                QCListValue: Record "RV QC List Value";
-            begin
-                if Rec."Value Table Type" in [ValueTableType::List, ValueTableType::Single, ValueTableType::Table] then begin
-                    QCListValue.Reset();
-                    QCListValue.SetRange("Value Table Name", "Value Table Name");
-
-                    if (Page.RunModal(Page::"RV QC List Value List", QCListValue) = Action::LookupOK) then begin
-                        "QC Result" := QCListValue."List Value";
-                        "Check Status" := QCListValue."Check Status";
-                        Modify();
-                    end;
-                end;
             end;
         }
         field(6; "Check Status"; Enum "RV Check Status")

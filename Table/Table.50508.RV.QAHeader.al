@@ -15,118 +15,14 @@ table 50508 "RV QA Header"
         field(2; "Ref. Order Type QA"; Enum "RV Ref. Order Type QA")
         {
             Caption = 'Ref. Order Type';
-            trigger OnValidate()
-            var
-                QAShipmentLotNo: Record "RV QA Shipment Lot No.";
-            begin
-                //clear data
-                /*
-                if (xRec."Ref. Order Type QA" <> "Ref. Order Type QA") then begin
-                    QAShipmentLotNo.SetRange("COA No.", "COA No.");
-                    if QAShipmentLotNo.Count = 0 then begin
-                        "Order No." := '';
-                        "Item No." := '';
-                    end else begin
-                        if not Confirm(StrSubstNo(ConfirmChangeQst, 'Ref. Order Type'), false) then
-                            exit;
-                        //clear data
-                        QAShipmentLotNo.DeleteAll();
-                        "Order No." := '';
-                        "Item No." := '';
-                    end;
-
-                    
-                    
-
-                end;
-                
-
-                "Order No." := '';
-                "Item No." := '';
-
-                //ClearHeaderData
-                ClearHeaderData();
-
-                //clear ShipmentLotNo
-                QAShipmentLotNo.SetRange("COA No.", "COA No.");
-                QAShipmentLotNo.DeleteAll();
-                */
-
-            end;
         }
         field(3; "Order No."; Code[20])
         {
             Caption = 'Order No.';
-            //ValidateTableRelation = false;
-            /*
-            TableRelation =
-            if ("Ref. Order Type QA" = const("Posted Whse. Shipment")) "Posted Whse. Shipment Line"
-            else
-            if ("Ref. Order Type QA" = const("Warehouse Shipment")) "Warehouse Shipment Line";
-            */
-            trigger OnValidate()
-            var
-                PostedWhShipHeader: Record "Posted Whse. Shipment Header";
-                PostedWhShipLine: Record "Posted Whse. Shipment Line";
-                WhShipHeader: Record "Warehouse Shipment Header";
-                WhShipline: Record "Warehouse Shipment line";
-                RefOrderTypeQA: Enum "RV Ref. Order Type QA";
-                QAShipmentLotNo: Record "RV QA Shipment Lot No.";
-            begin
-
-                //if (xRec."Order No." <> '') and (xRec."Order No." <> "Order No.") then begin
-                //   if not Confirm(StrSubstNo(ConfirmChangeQst, 'Order No.'), false) then
-                //       exit;
-                //clear data
-                //QAShipmentLotNo.SetRange("COA No.", "COA No.");
-                //QAShipmentLotNo.DeleteAll();
-                //"Item No." := '';
-                //end;
-
-                //"Item No." := '';
-                //ClearHeaderData
-                //ClearHeaderData();
-
-                //clear ShipmentLotNo
-                //ClearShipmentLotNo();
-
-            end;
         }
         field(4; "Item No."; Code[20])
         {
             Caption = 'Item No.';
-            //TableRelation =
-            //if ("Ref. Order Type" = const(" ")) "Standard Text"
-            //else
-            //if ("Ref. Order Type QA" = const("Posted Whse. Shipment")) "Posted Whse. Shipment line"."Item No." where("No." = field("Order No."))
-            //else
-            //if ("Ref. Order Type QA" = const("Warehouse Shipment")) "Warehouse Shipment Line"."Item No." where("No." = field("Order No."));
-            //ValidateTableRelation = false;
-
-
-
-
-            trigger OnValidate()
-            var
-            //QAShipmentLotNo: Record "RV QA Shipment Lot No.";
-            begin
-                //if (xRec."Item No." <> '') and (xRec."Item No." <> "Item No.") then begin
-                //if not Confirm(StrSubstNo(ConfirmChangeQst, 'Item No.'), false) then
-                //    exit;
-
-                //end;
-
-                //ClearHeaderData
-                //ClearHeaderData();
-
-                //clear ShipmentLotNo
-                //ClearShipmentLotNo();
-
-                //ValidateItemNo
-                //ValidateItemNo();
-
-
-            end;
         }
         field(5; "Item Description"; Text[100])
         {
@@ -187,22 +83,6 @@ table 50508 "RV QA Header"
         }
     }
 
-    /*
-    trigger OnInsert()
-    var
-        NoSeriesMgt: Codeunit "No. Series";
-        RIKEVITASetup: Record "RIKEVITA Setup";
-    begin
-
-        if "COA No." = '' then begin
-            RIKEVITASetup.Get();
-            RIKEVITASetup.TestField("COA No. Nos.");
-            "COA No." := NoSeriesMgt.GetNextNo(RIKEVITASetup."COA No. Nos.");
-        end;
-    end;
-    */
-
-
     trigger OnDelete()
     var
         QAShipmentLotNo: Record "RV QA Shipment Lot No.";
@@ -234,7 +114,6 @@ table 50508 "RV QA Header"
     end;
 
     var
-
         ConfirmChangeQst: Label 'Do you want to change %1?';
         RefOrderTypeQA: Enum "RV Ref. Order Type QA";
 
@@ -379,9 +258,6 @@ table 50508 "RV QA Header"
                     QACheckEnable := true;
                     QAApproveEnable := false;
                     QARejectEnable := false;
-
-                    //SubQCLineEnable := true;
-                    //SubInventoryResultEnable := true;
                 end;
             (Rec."QA Status"::Checked):
                 begin
@@ -389,9 +265,6 @@ table 50508 "RV QA Header"
                     QACheckEnable := false;
                     QAApproveEnable := true;
                     QARejectEnable := false;
-
-                    //SubQCLineEnable := false;
-                    //SubInventoryResultEnable := false;
                 end;
             (Rec."QA Status"::Approved):
                 begin
@@ -399,9 +272,6 @@ table 50508 "RV QA Header"
                     QACheckEnable := false;
                     QAApproveEnable := false;
                     QARejectEnable := true;
-
-                    //SubQCLineEnable := false;
-                    //SubInventoryResultEnable := false;
                 end;
             (Rec."QA Status"::Rejected):
                 begin
@@ -409,9 +279,6 @@ table 50508 "RV QA Header"
                     QACheckEnable := false;
                     QAApproveEnable := false;
                     QARejectEnable := false;
-
-                    //SubQCLineEnable := false;
-                    //SubInventoryResultEnable := false;
                 end;
         END;
 
@@ -458,7 +325,6 @@ table 50508 "RV QA Header"
                 SalesShipmentLine.SetRange("Line No.", PostedWhShipLine."Source Line No.");
                 SalesShipmentLine.FindFirst();
 
-
                 // Filter Item Ledger Entry by Document No. and Line No.
                 ItemLedgEntry.SetRange("Document No.", SalesShipmentLine."Document No.");
                 ItemLedgEntry.SetRange("Document Line No.", SalesShipmentLine."Line No.");
@@ -488,7 +354,6 @@ table 50508 "RV QA Header"
                         QAShipmentLotNo."Manufacturing Date" := ItemLedgEntry."Expiration Date";
                         QAShipmentLotNo.Insert();
                     until ItemLedgEntry.Next() = 0;
-
             end;
 
         end else if Rec."Ref. Order Type QA" = RefOrderTypeQA::"Warehouse Shipment" then begin
@@ -507,15 +372,12 @@ table 50508 "RV QA Header"
                     Rec."Ship-to Code" := SalesHeader."Ship-to Code";
                 end;
 
-
                 Clear(COALotLineNo);
-
                 SalesLine.Reset();
                 SalesLine.SetRange("Document No.", WhShipline."Source No.");
                 SalesLine.SetRange("Line No.", WhShipline."Source Line No.");
                 SalesLine.SetRange("No.", WhShipline."Item No.");
                 if SalesLine.FindFirst() then;
-
 
                 //  filtering Reservation Entries for a Whse. Shipment Line
                 /*
@@ -537,7 +399,7 @@ table 50508 "RV QA Header"
                 ReservEntry.SetRange("Source ID", WhShipline."Source No.");//Sales Header No.
                 ReservEntry.SetRange("Source Ref. No.", WhShipline."Source Line No."); //Sales Line No
                 ReservEntry.SetRange("Reservation Status", ReservEntry."Reservation Status"::Tracking);
-
+                ReservEntry.SetFilter("Qty. to Handle (Base)", '<>0');//for shipping
                 if ReservEntry.FindSet() then
                     repeat
 
@@ -568,7 +430,6 @@ table 50508 "RV QA Header"
                         end;
 
                     until ReservEntry.Next() = 0;
-
 
                 TempQAShipmentLotNo.Reset();
                 if TempQAShipmentLotNo.FindSet() then

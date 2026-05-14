@@ -57,26 +57,8 @@ table 50511 "RV QA External QC Results"
         {
             Caption = 'COA Value';
             trigger OnValidate()
-            var
-                QCParameter: Record "RV QC Parameter";
-                QCValueTable: Record "RV QC Value Table";
             begin
                 "Differ From QC Vaule" := "COA Value" <> "QC Value";
-
-                if QCParameter.Get("QC Parameter Name") then begin
-                    QCValueTable.Reset();
-                    QCValueTable.SetRange("Value Table Name");
-                    if QCValueTable.FindFirst() then begin
-
-                    end;
-                end;
-
-
-
-
-
-
-
             end;
         }
         field(7; "Differ From QC Vaule"; Boolean)
