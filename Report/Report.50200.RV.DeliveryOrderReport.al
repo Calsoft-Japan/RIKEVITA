@@ -69,57 +69,10 @@ report 50200 "RV Delivery Order Report"
             column(Terms; Terms)
             {
             }
-
-            dataitem(Lines; Integer)
+            column(CustomerOrderNo; Header."External Document No.")
             {
-                DataItemTableView = sorting(Number);
-                column(CustomerOrderNo; Header."External Document No.")
-                {
 
-                }
-                column(LotNo; Templine."Lot No.")
-                {
-                }
-
-                column(Description; Description)
-                {
-                }
-                column(Description2; Description2)
-                {
-                }
-                column(PackageInfo; PackageInfo)
-                {
-                }
-                column(Quantity; Format(Templine."Quantity (Base)") + ItemBUOM)
-                {
-                }
-                trigger OnPreDataItem()
-                begin
-                    SetRange(Number, 1, Templine.Count);
-                end;
-
-                trigger OnAfterGetRecord()
-                var
-                    RecItem: Record Item;
-                begin
-
-                    if Number = 1 then begin
-                        Templine.FindFirst();
-                    end else begin
-                        Templine.Next();
-                    end;
-
-                    if RecItem.Get(Templine."Item No.") then begin
-                        Description := RecItem.Description;
-                        Description2 := RecItem."Description 2";
-                    end;
-                    ItemBUOM := RecItem."Base Unit of Measure";
-                    PackageInfo := StrSubstNo('(%1 %2 X %3 %4 = %5 %6)',
-                        Templine."Quantity (Base)" / Templine."Qty. per Unit of Measure", Templine."Location Code", Templine."Qty. per Unit of Measure", ItemBUOM, Templine."Quantity (Base)", ItemBUOM);
-
-                end;
             }
-
             column(ShipToName; Header."Ship-to Name")
             {
             }
@@ -135,7 +88,68 @@ report 50200 "RV Delivery Order Report"
             column(ShipToCountry; Header."Ship-to Country/Region Code")
             {
             }
+            dataitem(SalesShipmentLine; "Sales Shipment Line")
+            {
+                DataItemLink = "Document No." = field("No.");
+                column(Item_No; SalesShipmentLine."No.") { }
+                column(LotNo; LotNo)
+                {
+                }
+                column(Description; Description)
+                {
+                }
+                column(Description2; Description2)
+                {
+                }
+                column(PackageInfo; PackageInfo)
+                {
+                }
+                column(Quantity; QuantityKGValue)
+                {
+                }
+                trigger OnAfterGetRecord()
+                var
+                    RecItemLedgerEntry: Record "Item Ledger Entry";
+                    RecItem: Record Item;
+                    ItemUOM: Record "Item Unit of Measure";
+                begin
+                    LotNo := '';
+                    QuantityKGValue := '';
+                    TotalQuantityKG := 0;
+                    PackageInfo := '';
 
+                    if RecItem.Get(SalesShipmentLine."No.") then begin
+                        if RecItem."RV_Print RSPO No." then begin
+                            CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
+                        end;
+                        Description := RecItem.Description;
+                        Description2 := RecItem."Description 2";
+                    end;
+
+                    ItemBUOM := RecItem."Base Unit of Measure";
+
+                    RecItemLedgerEntry.Reset();
+                    RecItemLedgerEntry.SetRange("Document No.", "Document No.");
+                    RecItemLedgerEntry.SetRange("Entry Type", RecItemLedgerEntry."Entry Type"::Sale);
+                    RecItemLedgerEntry.SetRange("Item No.", SalesShipmentLine."No.");
+                    RecItemLedgerEntry.SetRange("Document Line No.", SalesShipmentLine."Line No.");
+                    if RecItemLedgerEntry.FindSet() then begin
+                        repeat
+                            LotNo += RecItemLedgerEntry."Lot No." + ' - ' + Format(Abs(RecItemLedgerEntry.Quantity)) + ' ' + ItemBUOM + '<br>';
+                            if ItemUOM.Get(SalesShipmentLine."No.", 'KG') then begin
+                                QuantityKGValue += Format(Abs(RecItemLedgerEntry.Quantity / ItemUOM."Qty. per Unit of Measure")) + ' KG <br>';
+                            end;
+                            TotalQuantityKG += Abs(RecItemLedgerEntry.Quantity / ItemUOM."Qty. per Unit of Measure");
+                        until RecItemLedgerEntry.Next() = 0;
+                    end;
+
+                    if TotalQuantityKG <> 0 then begin
+                        PackageInfo := StrSubstNo('(%1 %2 X %3 %4 = %5 %6)',
+                                        TotalQuantityKG / Round(1 / RecItemLedgerEntry."Qty. per Unit of Measure", 1, '='), ItemBUOM, Round(1 / RecItemLedgerEntry."Qty. per Unit of Measure", 1, '='), RecItemLedgerEntry."Unit of Measure Code", TotalQuantityKG, RecItemLedgerEntry."Unit of Measure Code");
+                    end;
+
+                end;
+            }
             trigger OnAfterGetRecord()
             var
                 ISODoc: Record "RV ISO Document";
@@ -148,6 +162,8 @@ report 50200 "RV Delivery Order Report"
                 CompanyInfo.Get();
                 CompanyInfo.CalcFields(Picture);
                 CerfiticateNo := '';
+                LotNo := '';
+                ItemBUOM := '';
 
                 ISODoc.Reset();
                 ISODoc.SetRange("Report Code", 'DELIVERY ORDER');
@@ -159,53 +175,6 @@ report 50200 "RV Delivery Order Report"
                 if PaymentTerms.Get(Header."Payment Terms Code") then begin
                     Terms := PaymentTerms.Description;
                 end;
-
-                Templine.Reset();
-                Templine.DeleteAll();
-                TempNo := 1;
-                SalesShipmentLine.Reset();
-                SalesShipmentLine.SetRange("Document No.", "No.");
-                SalesShipmentLine.SetRange(Type, SalesShipmentLine.Type::Item);
-                if SalesShipmentLine.FindSet() then begin
-                    repeat
-                        if RecItem.Get(SalesShipmentLine."No.") then begin
-                            if RecItem."RV_Print RSPO No." then begin
-                                CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
-                            end;
-                        end;
-
-                        RecItemLedgerEntry.Reset();
-                        RecItemLedgerEntry.SetRange("Document No.", "No.");
-                        RecItemLedgerEntry.SetRange("Entry Type", RecItemLedgerEntry."Entry Type"::Sale);
-                        RecItemLedgerEntry.SetRange("Item No.", SalesShipmentLine."No.");
-                        RecItemLedgerEntry.SetRange("Document Line No.", SalesShipmentLine."Line No.");
-                        if RecItemLedgerEntry.FindSet() then begin
-                            repeat
-                                Templine.Reset();
-                                Templine.SetRange("Item No.", RecItemLedgerEntry."Item No.");
-                                Templine.SetRange("Lot No.", RecItemLedgerEntry."Lot No.");
-                                Templine.SetRange("Location Code", RecItemLedgerEntry."Unit of Measure Code");
-                                if Templine.FindFirst() then begin
-                                    Templine."Quantity (Base)" += RecItemLedgerEntry.Quantity;
-                                    Templine.Modify();
-                                end else begin
-                                    RecItem.Get(RecItemLedgerEntry."Item No.");
-                                    Templine.Init();
-                                    Templine."Entry No." := TempNo;
-                                    Templine."Item No." := RecItemLedgerEntry."Item No.";
-                                    Templine."Quantity (Base)" := RecItemLedgerEntry.Quantity;
-                                    Templine."Lot No." := RecItemLedgerEntry."Lot No.";
-                                    Templine."Location Code" := RecItemLedgerEntry."Unit of Measure Code";
-                                    Templine."Qty. per Unit of Measure" := RecItemLedgerEntry."Qty. per Unit of Measure";
-                                    Templine.Insert();
-                                    TempNo := TempNo + 1;
-                                end;
-                            until RecItemLedgerEntry.Next() = 0;
-                        end;
-                    until SalesShipmentLine.Next() = 0;
-                    Templine.Reset();
-                end;
-
             end;
         }
     }
@@ -227,13 +196,14 @@ report 50200 "RV Delivery Order Report"
 
     var
         CompanyInfo: Record "Company Information";
-        Item: Record Item;
         ISODocumentNo: Text;
         ISODocVersion: Text;
         Terms: Text;
         Description: Text;
         Description2: Text;
-        Templine: Record "Tracking Specification" temporary;
+        LotNo: Text;
+        TotalQuantityKG: Decimal;
+        QuantityKGValue: Text;
         PackageInfo: Text;
         ItemBUOM: Text;
         CerfiticateNo: Text;
