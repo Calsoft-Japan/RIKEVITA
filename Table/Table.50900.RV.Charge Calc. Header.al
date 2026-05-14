@@ -49,13 +49,14 @@ table 50900 "RV Charge Calc. Header"
                 recCCLine.SetRange("Document No.", "No.");
                 if recCCLine.FindSet() then
                     repeat
-                        if recSalesLine.Get(Enum::"Sales Document Type"::Order, recCCLine."Sales Order No.", recCCLine."Sales Order Line No.") then begin
-                            recCCLine.CalcFields("Currency Code");
-                            if Rec."Invoice Currency Code" = recCCLine."Currency Code" then begin
-                                recCCLine."Exch. Rate from Inv. Currency" := 1;
-                                recCCLine.Modify();
-                            end;
+                        recSalesLine.Get(Enum::"Sales Document Type"::Order, recCCLine."Sales Order No.", recCCLine."Sales Order Line No.");
+                        recCCLine.CalcFields("Currency Code");
+                        if Rec."Invoice Currency Code" = recCCLine."Currency Code" then begin
+                            recCCLine."Exch. Rate from Inv. Currency" := 1;
+                        end else begin
+                            recCCLine."Exch. Rate from Inv. Currency" := 0;
                         end;
+                        recCCLine.Modify();
 
                     until recCCLine.Next() = 0;
             end;
@@ -76,6 +77,11 @@ table 50900 "RV Charge Calc. Header"
 
             end;
 
+        }
+
+        field(8; "Need Re-Calc."; Boolean)
+        {
+            Caption = 'Status';
         }
 
         field(11; "HTP Adjustment Price"; Decimal)
@@ -231,12 +237,34 @@ table 50900 "RV Charge Calc. Header"
 
         "Calculation Date" := WorkDate();
         "Calculated By" := UserId;
+        "Need Re-Calc." := true;
 
     end;
 
     trigger OnModify()
     begin
         CheckStatusCompleted();
+
+        if (xRec."Charge Type" <> Rec."Charge Type")
+            or (xRec."Invoice Currency Code" <> Rec."Invoice Currency Code")
+            or (xRec."HTP Adjustment Price" <> Rec."HTP Adjustment Price")
+            or (xRec."01-COO" <> Rec."01-COO")
+            or (xRec."02-FORWARDING" <> Rec."02-FORWARDING")
+            or (xRec."03-FUMIGATION" <> Rec."03-FUMIGATION")
+            or (xRec."04-HEALTH" <> Rec."04-HEALTH")
+            or (xRec."05-PALLETIZING" <> Rec."05-PALLETIZING")
+            or (xRec."06-PHYTO" <> Rec."06-PHYTO")
+            or (xRec."07-STUFFING" <> Rec."07-STUFFING")
+            or (xRec."08-TRANSPORT" <> Rec."08-TRANSPORT")
+            or (xRec."09-REACH" <> Rec."09-REACH")
+            or (xRec."10-Label" <> Rec."10-Label")
+            or (xRec."11-OF" <> Rec."11-OF")
+            or (xRec."99-OTHERS" <> Rec."99-OTHERS")
+            or (xRec."FREIGHT" <> Rec."FREIGHT") then begin
+
+            "Need Re-Calc." := true;
+
+        end;
     end;
 
     trigger OnDelete()

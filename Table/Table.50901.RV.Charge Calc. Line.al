@@ -386,20 +386,35 @@ table 50901 "RV Charge Calc. Line"
 
     trigger OnInsert()
     var
+        recCCHeader: Record "RV Charge Calc. Header";
     begin
+
         CheckHeaderStatusCompleted();
+        SetHeaderNeedReCalc();
     end;
 
     trigger OnModify()
     var
+        recCCHeader: Record "RV Charge Calc. Header";
     begin
         CheckHeaderStatusCompleted();
+
+        if (xRec."Sales Order No." <> Rec."Sales Order No.")
+            or (xRec."Sales Order Line No." <> Rec."Sales Order Line No.")
+            or (xRec."Exch. Rate from Inv. Currency" <> Rec."Exch. Rate from Inv. Currency")
+            or (xRec.FREIGHT <> Rec.FREIGHT) then begin
+
+            SetHeaderNeedReCalc();
+        end;
     end;
 
     trigger OnDelete()
     var
+        recCCHeader: Record "RV Charge Calc. Header";
     begin
         CheckHeaderStatusCompleted();
+
+        SetHeaderNeedReCalc();
     end;
 
     procedure CheckHeaderStatusCompleted()
@@ -413,14 +428,29 @@ table 50901 "RV Charge Calc. Line"
 
     end;
 
+    procedure SetHeaderNeedReCalc()
+    var
+        recCCHeader: Record "RV Charge Calc. Header";
+    begin
+
+        recCCHeader.Get("Document No.");
+        recCCHeader."Need Re-Calc." := true;
+        recCCHeader.Modify();
+
+    end;
+
     procedure CalcBaseFields()
     var
         recCCHeader: Record "RV Charge Calc. Header";
+        recSalesLine: Record "Sales Line";
         Item: Record Item;
         RVSetup: Record "RV RIKEVITA Setup";
         ItemOUM: Record "Item Unit of Measure";
 
     begin
+        //check if Sales Line staill alive.
+        recSalesLine.Get(Enum::"Sales Document Type"::Order, "Sales Order No.", "Sales Order Line No.");
+
         //set or check Line Exchange rate.
         recCCHeader.Get("Document No.");
         CalcFields("Currency Code");

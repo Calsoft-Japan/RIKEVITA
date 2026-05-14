@@ -161,19 +161,29 @@ page 50901 "RV Charge Calculation"
 
                 trigger OnAction()
                 var
-
+                    recCCLine: Record "RV Charge Calc. Line";
                     ChargeCalcMgt: Codeunit "RV Charge Calc. Mgt";
 
-                    CarryOutNodataErr: Label 'Calculate charge first before Carry out.';
+                    NeedReCalcErr: Label 'Please calculate charge first.\If you changed some fields, please calculate again.';
+                    FreightNotEqualErr: Label 'Total Freight of all lines is not equal to Freight amount.';
                     CarryOutQst: Label 'This calculation will be carried out to Sales Orders.';
                     CarryOutOkMsg: Label 'Carry out completed.';
                 begin
 
                     Rec.TestField(Status, Enum::"RV Charge Calc. Status"::WIP);
 
-                    Rec.CalcFields("Total Quantity (KG)");
-                    if Rec."Total Quantity (KG)" = 0 then begin
-                        Error(CarryOutNodataErr);
+                    if Rec."Need Re-Calc." then begin
+                        Error(NeedReCalcErr);
+                    end;
+
+                    if Rec."Charge Type" = Enum::"RV Charge Type"::FOB then begin
+
+                        recCCLine.SetRange("Document No.", Rec."No.");
+                        recCCLine.CalcSums(FREIGHT);
+                        if recCCLine.FREIGHT <> Rec.FREIGHT then begin
+                            Error(FreightNotEqualErr);
+                        end;
+
                     end;
 
                     if not Confirm(CarryOutQst) then
