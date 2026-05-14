@@ -81,15 +81,16 @@ report 50202 "RV Packing List Report"
                 column(VIA; "RV_VIA")
                 {
                 }
-                column(FromValue; FromValue)
+                column(FromValue; "RV_Country of Origin")
                 {
                 }
-                column(ToValue; ToValue)
+                column(ToValue; "RV_Ship-to Name")
                 {
                 }
-                column(SailingOnOrAbout; SailingOnOrAbout)
+                column(SailingOnOrAbout; "RV_SAILING ON OR ABOUT")
                 {
                 }
+
                 column(Shipment_Method_Code; "Shipment Method Code")
                 {
                 }
@@ -181,7 +182,7 @@ report 50202 "RV Packing List Report"
                             Description2 := RecItem."Description 2";
                             BaseUnitofMeasure := RecItem."Base Unit of Measure";
                             PackageInfo := StrSubstNo('(%1 %2 X %3 %4)',
-                            "Net Weight", "Contents UOM", "No. of Packages", BaseUnitofMeasure);
+                            "Contents Per Package", "Contents UOM", "No. of Packages", BaseUnitofMeasure);
                         end;
 
                         ItemSymbolSetting.Reset();
@@ -283,19 +284,6 @@ report 50202 "RV Packing List Report"
                         ISODocumentNo := ISODoc."ISO Document No.";
                         ISODocVersion := ISODoc."ISO Doc. Version No.";
                     end;
-                    WarehouseShipmentLine.Reset();
-                    WarehouseShipmentLine.SetRange("No.", PostedWhseShipmentHeader."No.");
-                    if WarehouseShipmentLine.FindFirst() then begin
-                        SalesInvoiceHeader.Reset();
-                        SalesInvoiceHeader.SetRange("Order No.", WarehouseShipmentLine."Source No.");
-                        if SalesInvoiceHeader.FindFirst() then begin
-
-                            FromValue := SalesInvoiceHeader."RV_Country of Origin";
-                            ToValue := SalesInvoiceHeader."Ship-to Name";
-                            SailingOnOrAbout := Format(SalesInvoiceHeader."RV_SAILING ON OR ABOUT");
-                        end;
-                    end;
-
                 end;
             }
             trigger OnPreDataItem()

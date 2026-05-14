@@ -65,7 +65,7 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
                     PackingInfo.SetRange("Warehouse Shipment No.", Rec."No.");
                     if not PackingInfo.FindFirst() then begin
                         if Confirm('Do you want to create or updating the packing information for the warehouse order?', false) then begin
-                            InsertPackingInfo();
+                            CreatePackingInfo();
                             PAGE.Run(PAGE::"Warehouse Packing Info", PackingInfo);
                         end;
                     end else begin
@@ -108,7 +108,7 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
         TempUOM: Code[10];
         PackingInfo: Record "RV Warehouse Packing Info.";
 
-    local procedure InsertPackingInfo()
+    local procedure CreatePackingInfo()
     var
         //PackingInfo: Record "RV Warehouse Packing Info.";
         WhseShpgHeader: Record "Warehouse Shipment Header";
@@ -146,20 +146,27 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
 
             until WshpLine.Next() = 0;
             if TempSourceNo <> '' then begin
-                PackingInfo.Init();
-                PackingInfo."Warehouse Shipment No." := Rec."No.";
-                PackingInfo."Sales Order No." := TempSourceNo;
-                PackingInfo."SO Line No." := TempSourceLineNo;
-                PackingInfo."Item No." := TempItemNo;
-                PackingInfo."No. of Packages" := TempQtyToShip * TempQtyPerUOM;
-                PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
-                PackingInfo."Contents UOM" := TempUOM;
-                PackingInfo."Net Weight" := TempQtyToShip;
-                PackingInfo."Gross Weight UOM" := TempUOM;
-                PackingInfo.Insert();
+                InsertPackingInfo()
             end;
 
         end;
+    end;
+
+    local procedure InsertPackingInfo()
+    var
+        PackingInfo: Record "RV Warehouse Packing Info.";
+    begin
+        PackingInfo.Init();
+        PackingInfo."Warehouse Shipment No." := Rec."No.";
+        PackingInfo."Sales Order No." := TempSourceNo;
+        PackingInfo."SO Line No." := TempSourceLineNo;
+        PackingInfo."Item No." := TempItemNo;
+        PackingInfo."No. of Packages" := TempQtyToShip * TempQtyPerUOM;
+        PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
+        PackingInfo."Contents UOM" := TempUOM;
+        PackingInfo."Net Weight" := TempQtyToShip;
+        PackingInfo."Gross Weight UOM" := TempUOM;
+        PackingInfo.Insert();
     end;
 }
 
