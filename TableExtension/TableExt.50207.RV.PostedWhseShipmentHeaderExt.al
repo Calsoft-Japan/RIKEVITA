@@ -53,5 +53,21 @@ tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Ship
             Caption = 'Mother Vessel';
             Description = 'FDD019';
         }
+        field(50209; "RV_Country of Origin"; Code[10])
+        {
+            Caption = 'Country of Origin';
+            Description = 'FDD008';
+            TableRelation = "Country/Region";
+        }
+        field(50210; "RV_Ship-to Name"; Text[100])
+        {
+            Caption = 'Ship-to Name';
+            Description = 'FDD008';
+        }
+        field(50211; "RV_SAILING ON OR ABOUT"; Date)
+        {
+            Caption = 'SAILING ON OR ABOUT';
+            Description = 'FDD008';
+        }
     }
 }
