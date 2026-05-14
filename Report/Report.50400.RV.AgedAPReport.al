@@ -44,6 +44,14 @@ report 50400 "RV Aged Accounts Payable"
             {
             }
 
+            // FDD030: Vendor filter range displayed as Trading Partner From / To.
+            column(RV_TradingPartnerFrom; TradingPartnerFrom)
+            {
+            }
+            column(RV_TradingPartnerTo; TradingPartnerTo)
+            {
+            }
+
             // FDD030: Show currency filter value in report header.
             column(RV_CurrencyFilter; CurrencyFilterTxt)
             {
@@ -470,13 +478,9 @@ report 50400 "RV Aged Accounts Payable"
                             end;
                         end;
 
-                        // FDD030: RM Equivalent Amount is required only for foreign currency entries.
-                        // Source: Vendor Ledger Entry Amount (LCY).
-                        if VendorLedgEntryEndingDate."Currency Code" <> '' then
-                            RMEquivAmount := VendorLedgEntryEndingDate."Amount (LCY)"
-                        else
-                            RMEquivAmount := 0;
-
+                        // Standard aging calculation: detailed vendor ledger entries must be filtered
+                        // by the current Vendor Ledger Entry No. before FindSet().
+                        DetailedVendorLedgerEntry.Reset();
                         DetailedVendorLedgerEntry.SetRange("Vendor Ledger Entry No.", VendorLedgEntryEndingDate."Entry No.");
 
                         if DetailedVendorLedgerEntry.FindSet(false) then
@@ -585,6 +589,8 @@ report 50400 "RV Aged Accounts Payable"
 
                         GrandTotalVLEAmtLCY +=
                             VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
+
+                        RMEquivAmount := VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
                     end;
 
                     trigger OnPostDataItem()
@@ -822,6 +828,8 @@ report 50400 "RV Aged Accounts Payable"
     begin
         VendorFilter := FormatDocument.GetRecordFiltersWithCaptions(Vendor);
 
+        SetTradingPartnerFilterText();
+
         GLSetup.Get();
 
         CalcDates();
@@ -853,6 +861,8 @@ report 50400 "RV Aged Accounts Payable"
 
         // FDD030: Required to retrieve vendor bank details.
         VendorBankAccount: Record "Vendor Bank Account";
+        TradingPartnerFrom: Code[20];
+        TradingPartnerTo: Code[20];
 
         PeriodLength: DateFormula;
 
@@ -1108,7 +1118,7 @@ report 50400 "RV Aged Accounts Payable"
         HeadingType := NewHeadingType;
         NewPagePerVendor := NewNewPagePerVendor;
 
-        // FDD030: Initialize Print Bank Details when report is called from AL.
+        // FDD030: Initialize Print Bank Details when report is called.
         PrintBankDetails := NewPrintBankDetails;
     end;
 
@@ -1119,5 +1129,30 @@ report 50400 "RV Aged Accounts Payable"
 
         if Vendor.GetFilter("Global Dimension 2 Filter") <> '' then
             VendorLedgerEntry.SetFilter("Global Dimension 2 Code", Vendor.GetFilter("Global Dimension 2 Filter"));
+    end;
+
+    // FDD030: Vendor Filter displayed as Trading Partner From / To.
+    local procedure SetTradingPartnerFilterText()
+    var
+        VendorNoFilter: Text;
+        SeparatorPos: Integer;
+    begin
+        Clear(TradingPartnerFrom);
+        Clear(TradingPartnerTo);
+
+        VendorNoFilter := Vendor.GetFilter("No.");
+
+        if VendorNoFilter = '' then
+            exit;
+
+        SeparatorPos := StrPos(VendorNoFilter, '..');
+
+        if SeparatorPos > 0 then begin
+            TradingPartnerFrom := CopyStr(CopyStr(VendorNoFilter, 1, SeparatorPos - 1), 1, MaxStrLen(TradingPartnerFrom));
+            TradingPartnerTo := CopyStr(CopyStr(VendorNoFilter, SeparatorPos + 2), 1, MaxStrLen(TradingPartnerTo));
+        end else begin
+            TradingPartnerFrom := CopyStr(VendorNoFilter, 1, MaxStrLen(TradingPartnerFrom));
+            TradingPartnerTo := CopyStr(VendorNoFilter, 1, MaxStrLen(TradingPartnerTo));
+        end;
     end;
 }
