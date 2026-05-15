@@ -153,6 +153,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
 
         if CCLine.FindSet() then
             repeat
+                CCLine."Total Charge (KG)" := Round(UnitCharge_KG * CCLine."Quantity (KG)", 0.00001);
+                CCLine."Total Charge (KG) (Ord Curr.)" := Round(CCLine."Total Charge (KG)" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
                 CCLine."Unit Charge (KG)" := UnitCharge_KG;
                 CCline."Unit Charge (KG) (Ord Curr.)" := Round(CCLine."Unit Charge (KG)" * CCLine."Exch. Rate from Inv. Currency", 0.00001);
                 CCLine."Invoice Unit Price (KG)" := Round(CCLine."Order Unit Price (KG)" + CCLine."Unit Charge (KG) (Ord Curr.)", 0.00001);
@@ -403,8 +405,10 @@ codeunit 50900 "RV Charge Calc. Mgt"
                 end;
 
                 //Update the Existing Sales Order Line
+                CCLine.CalcFields("Sales Quantity");
+
                 SalesLine.Get(Enum::"Sales Document Type"::Order, CCLine."Sales Order No.", CCLine."Sales Order Line No.");
-                SalesLine.Validate("Unit Price", CCLine."Invoice Unit Price (KG)");
+                SalesLine.Validate("Unit Price", CCLine."Invoice Unit Price (KG)" * CCLine."Quantity (KG)" / CCLine."Sales Quantity");
                 SalesLine.Modify();
 
             until CCLine.Next() = 0;
