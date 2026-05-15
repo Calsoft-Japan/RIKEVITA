@@ -204,4 +204,15 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
             TableRelation = "Country/Region";
         }
     }
+    /*
+    trigger OnDelete()
+    var
+        WarehousePackingInfo: Record "RV Warehouse Packing Info.";
+    begin
+        WarehousePackingInfo.Reset();
+        WarehousePackingInfo.SetRange("Warehouse Shipment No.", Rec."No.");
+        if WarehousePackingInfo.FindSet() then begin
+            WarehousePackingInfo.DeleteAll();
+        end;
+    end;*/
 }
