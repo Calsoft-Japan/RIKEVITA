@@ -211,14 +211,20 @@ page 50902 "RV Charge Calculation Subform"
 
                 trigger OnAction()
                 var
+                    recCCLine: Record "RV Charge Calc. Line";
                     ChargeCalcMgt: Codeunit "RV Charge Calc. Mgt";
 
+                    NoLinesError: Label 'No lines to Calculate.';
                     ChargeCalcOkMsg: Label 'Charge Calculation completed.';
                 begin
 
                     Rec.CheckHeaderStatusCompleted();
 
-                    //Message('Under Construction.');
+                    recCCLine.SetRange("Document No.", Rec."Document No.");
+                    if recCCLine.IsEmpty then begin
+                        Error(NoLinesError);
+                    end;
+
                     ChargeCalcMgt.SetDocNo(Rec."Document No.");
                     ChargeCalcMgt.CalcCharge();
 

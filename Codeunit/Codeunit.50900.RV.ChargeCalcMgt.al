@@ -9,13 +9,11 @@ codeunit 50900 "RV Charge Calc. Mgt"
     end;
 
     var
-        Err: Label '';
         ChargeDocNo: Code[20];
         RVSetup: Record "RV RIKEVITA Setup";
 
         CCHeader: Record "RV Charge Calc. Header";
         CCLine: Record "RV Charge Calc. Line";
-
 
     procedure SetDocNo(pDocNo: Code[20])
     begin
@@ -41,6 +39,9 @@ codeunit 50900 "RV Charge Calc. Mgt"
                 //do nothing.
             end;
         end;
+
+        CCHeader."Need Re-Calc." := false;
+        CCHeader.Modify();
     end;
 
     local procedure CalcFOB()
@@ -165,6 +166,7 @@ codeunit 50900 "RV Charge Calc. Mgt"
     procedure CarryOutCharge()
     var
     begin
+
         RVSetup.Get();
 
         case CCHeader."Charge Type" of
@@ -204,12 +206,10 @@ codeunit 50900 "RV Charge Calc. Mgt"
                 end;
 
                 //Update the Existing Sales Order Line
-                if SalesLine.Get(Enum::"Sales Document Type"::Order, CCLine."Sales Order No.", CCLine."Sales Order Line No.") then begin
-
-                    SalesLine."RV_Freight Charge" := CCLine."FREIGHT (Order Curr.)";
-                    SalesLine."RV_Other Charge" := CCLine."Total Charge (KG) (Ord Curr.)" - CCLine."FREIGHT (Order Curr.)";
-                    SalesLine.Modify();
-                end;
+                SalesLine.Get(Enum::"Sales Document Type"::Order, CCLine."Sales Order No.", CCLine."Sales Order Line No.");
+                SalesLine."RV_Freight Charge" := CCLine."FREIGHT (Order Curr.)";
+                SalesLine."RV_Other Charge" := CCLine."Total Charge (KG) (Ord Curr.)" - CCLine."FREIGHT (Order Curr.)";
+                SalesLine.Modify();
 
                 //Insert New Sales Order Lines for 01-COO - FREIGHT
                 SalesLine.Reset();
@@ -328,6 +328,16 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Insert(true);
                 end;
 
+                if CCLine."99-OTHERS (Order Curr.)" > 0 then begin
+                    SOLastLineNo += 10000;
+                    InitFOBSOLine(SalesLine, SOLastLineNo);
+                    SalesLine.Validate("No.", RVSetup."99-OTHERS");
+                    SalesLine.Validate(Quantity, 1);
+                    SalesLine.Validate("Unit Price", CCLine."99-OTHERS (Order Curr.)");
+                    SalesLine.Validate("Qty. to Ship", 1);
+                    SalesLine.Insert(true);
+                end;
+
                 if CCLine."FREIGHT (Order Curr.)" > 0 then begin
                     SOLastLineNo += 10000;
                     InitFOBSOLine(SalesLine, SOLastLineNo);
@@ -393,11 +403,9 @@ codeunit 50900 "RV Charge Calc. Mgt"
                 end;
 
                 //Update the Existing Sales Order Line
-                if SalesLine.Get(Enum::"Sales Document Type"::Order, CCLine."Sales Order No.", CCLine."Sales Order Line No.") then begin
-
-                    SalesLine.Validate("Unit Price", CCLine."Invoice Unit Price (KG)");
-                    SalesLine.Modify();
-                end;
+                SalesLine.Get(Enum::"Sales Document Type"::Order, CCLine."Sales Order No.", CCLine."Sales Order Line No.");
+                SalesLine.Validate("Unit Price", CCLine."Invoice Unit Price (KG)");
+                SalesLine.Modify();
 
             until CCLine.Next() = 0;
 
