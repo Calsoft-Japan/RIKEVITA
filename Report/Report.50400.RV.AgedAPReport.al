@@ -1023,10 +1023,10 @@ report 50400 "RV Aged Accounts Payable"
                     // FDD030: Fixed bucket captions required by FDD.
                     HeaderText[1] := 'Not Due';
                     HeaderText[2] := '1 - 31 days';
-                    HeaderText[3] := '32 - 59 days';
-                    HeaderText[4] := '60 - 90 days';
-                    HeaderText[5] := '91 - 120 days';
-                    HeaderText[6] := 'After 120 days';
+                    HeaderText[3] := '32 - 61 days';
+                    HeaderText[4] := '62 - 92 days';
+                    HeaderText[5] := '93 - 123 days';
+                    HeaderText[6] := 'After 123 days';
                 end;
         end;
     end;
