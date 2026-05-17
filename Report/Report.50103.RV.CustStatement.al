@@ -16,10 +16,22 @@ report 50103 "RV Cust Statement"
         {
             DataItemTableView = sorting("No.");
             PrintOnlyIfDetail = true;
-            RequestFilterFields = "No.", "Search Name", "Print Statements", "Currency Filter";
+            RequestFilterFields = "No.", "Search Name", "Print Statements", "Currency Filter", "RV_Customer Type";
             column(No_Cust; "No.")
             {
             }
+
+            column(GreetingText; GreetingLbl)
+            {
+            }
+            column(BodyText; BodyLbl)
+            {
+            }
+            column(ClosingText; ClosingLbl)
+            {
+            }
+            column(Footer_lbl; Footer_lbl)
+            { }
             dataitem("Integer"; "Integer")
             {
                 DataItemTableView = sorting(Number) where(Number = const(1));
@@ -189,6 +201,8 @@ report 50103 "RV Cust Statement"
                 column(CompanyLegalOffice_Lbl; LegalOfficeLbl)
                 {
                 }
+                column(CustCurrencyCode; CustCurrencyCode) { }
+                column(CurrencyGroup; CurrencyGroup) { }
                 dataitem(CurrencyLoop; "Integer")
                 {
                     DataItemTableView = sorting(Number) where(Number = filter(1 ..));
@@ -196,6 +210,7 @@ report 50103 "RV Cust Statement"
                     column(Total_Caption2; Total_CaptionLbl)
                     {
                     }
+                    column(TempCurrency2_Code; TempCurrency2.Code) { }
                     dataitem(CustLedgEntryHdr; "Integer")
                     {
                         DataItemTableView = sorting(Number) where(Number = const(1));
@@ -635,11 +650,24 @@ report 50103 "RV Cust Statement"
                         end;
                         CustBalance := StartBalance;
                         CustBalance2 := 0;
+
+                        if NewPGCurrency and (not CurrencyGrpList.ContainsKey(TempCurrency2.Code)) then begin//(CustCurrencyCode <> TempCurrency2.Code)
+                            CustCurrencyCode := TempCurrency2.Code;
+                            CurrencyGroup := CurrencyGroup + 1;
+
+                            CurrencyGrpList.Add(CustCurrencyCode, CurrencyGroup)
+                        end else
+                            if NewPGCurrency and (CurrencyGrpList.ContainsKey(TempCurrency2.Code)) then
+                                CurrencyGroup := CurrencyGrpList.Get(TempCurrency2.Code);
                     end;
 
                     trigger OnPreDataItem()
                     begin
                         Customer.CopyFilter("Currency Filter", TempCurrency2.Code);
+
+                        CurrencyGroup := 0;
+                        CustCurrencyCode := '';
+                        Clear(CurrencyGrpList);
                     end;
                 }
                 dataitem(AgingBandVisible; "Integer")
@@ -772,6 +800,23 @@ report 50103 "RV Cust Statement"
                             AgingBandCurrencyCode := TempAgingBandBuf."Currency Code";
                             if AgingBandCurrencyCode = '' then
                                 AgingBandCurrencyCode := GLSetup."LCY Code";
+
+                            CustCurrencyCode := AgingBandCurrencyCode;
+
+                            if NewPGCurrency and (not CurrencyGrpList.ContainsKey(AgingBandCurrencyCode)) then begin
+                                CustCurrencyCode := AgingBandCurrencyCode;
+                                CurrencyGroup := CurrencyGroup + 1;
+
+                                CurrencyGrpList.Add(CustCurrencyCode, CurrencyGroup)
+                            end else
+                                if NewPGCurrency and (CurrencyGrpList.ContainsKey(AgingBandCurrencyCode)) then
+                                    CurrencyGroup := CurrencyGrpList.Get(AgingBandCurrencyCode);
+                        end;
+
+                        trigger OnPreDataItem()
+                        begin
+                            CurrencyGroup := 0;
+                            CustCurrencyCode := '';
                         end;
                     }
 
@@ -782,7 +827,7 @@ report 50103 "RV Cust Statement"
                     end;
                 }
             }
-            dataitem(LetterText; "Integer")
+            /* dataitem(LetterText; "Integer")
             {
                 DataItemTableView = sorting(Number) where(Number = const(1));
                 column(GreetingText; GreetingLbl)
@@ -796,7 +841,7 @@ report 50103 "RV Cust Statement"
                 }
                 column(Footer_lbl; Footer_lbl)
                 { }
-            }
+            } */
 
             trigger OnAfterGetRecord()
             begin
@@ -900,6 +945,12 @@ report 50103 "RV Cust Statement"
                         begin
                             UpdateReqPageParameters();
                         end;
+                    }
+                    field(NewPGCurrency; NewPGCurrency)
+                    {
+                        ApplicationArea = Basic, Suite;
+                        Caption = 'New Page per Currency';
+                        ToolTip = 'Specifies if you want show new page for each currency.';
                     }
 
                     field(ShowOverdueEntries; PrintEntriesDue)
@@ -1246,6 +1297,10 @@ report 50103 "RV Cust Statement"
         OverDue_DocType: Text;
         OverDue_DueDate: Date;
         Footer_lbl: Text;
+        CurrencyGroup: Integer;
+        NewPGCurrency: Boolean;
+        CustCurrencyCode: Code[20];
+        CurrencyGrpList: Dictionary of [Text, Integer];
     //=IIF((Fields!DocNo_DtldCustLedgEntries.Value="") OR (Fields!PrintLine.Value=FALSE AND Fields!DtldCustLedgEntryType.Value="2") OR NOT Fields!IsNewCustCurrencyGroup.Value,TRUE,FALSE)
     protected var
         CompanyInfo: Record "Company Information";

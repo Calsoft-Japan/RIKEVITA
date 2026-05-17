@@ -40,8 +40,10 @@ pageextension 50901 "RV Customer List Ext" extends "Customer List"
                     else
                         DesignTimeRptSelect.SetSelectedLayout('StandardStatementLocal.rdlc');
 
-                    Cust.Reset();
-                    CurrPage.SetSelectionFilter(Cust);
+                    Cust.SetCurrentKey("No.", "RV_Customer Type");
+                    Cust.SetRange("No.", Rec."No.");
+                    Cust.SetRange("RV_Customer Type", Rec."RV_Customer Type");
+                    //CurrPage.SetSelectionFilter(Cust);
                     if Cust.FindSet() and (Cust.Count > 1) then Error('Need select only one customer.');
                     RVCustRpt.SetTableView(Cust);
                     RVCustRpt.RunModal();

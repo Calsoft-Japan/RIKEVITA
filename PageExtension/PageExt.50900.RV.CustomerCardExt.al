@@ -43,7 +43,9 @@ pageextension 50900 "RV Customer Card Ext" extends "Customer Card"
                 else
                     DesignTimeRptSelect.SetSelectedLayout('StandardStatementLocal.rdlc');
 
+                Cust.SetCurrentKey("No.", "RV_Customer Type");
                 Cust.SetRange("No.", Rec."No.");
+                Cust.SetRange("RV_Customer Type", Rec."RV_Customer Type");
                 RVCustRpt.SetTableView(Cust);
                 RVCustRpt.RunModal();
                 Error('');//Do not execute the BC Standard Aciton.

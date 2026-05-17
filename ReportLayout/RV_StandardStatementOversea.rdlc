@@ -1106,6 +1106,9 @@
                               <TablixRowHierarchy>
                                 <TablixMembers>
                                   <TablixMember>
+                                    <Visibility>
+                                      <Hidden>=IIF((Fields!AgingBandCurrencyCode.Value=""),TRUE,FALSE)</Hidden>
+                                    </Visibility>
                                     <KeepWithGroup>After</KeepWithGroup>
                                     <KeepTogether>true</KeepTogether>
                                   </TablixMember>
@@ -1118,14 +1121,14 @@
                                   </TablixMember>
                                   <TablixMember>
                                     <Visibility>
-                                      <Hidden>=Fields!PrintAgeTotal.Value=true</Hidden>
+                                      <Hidden>=IIF(Fields!PrintAgeTotal.Value=true OR (Fields!AgingBandCurrencyCode.Value=""),TRUE,FALSE)</Hidden>
                                     </Visibility>
                                     <KeepWithGroup>After</KeepWithGroup>
                                     <KeepTogether>true</KeepTogether>
                                   </TablixMember>
                                   <TablixMember>
                                     <Visibility>
-                                      <Hidden>=Fields!PrintAgeTotal.Value=true</Hidden>
+                                      <Hidden>=IIF(Fields!PrintAgeTotal.Value=true OR (Fields!AgingBandCurrencyCode.Value=""),TRUE,FALSE)</Hidden>
                                     </Visibility>
                                     <KeepWithGroup>After</KeepWithGroup>
                                     <KeepTogether>true</KeepTogether>
@@ -1137,6 +1140,9 @@
                                     <TablixMembers>
                                       <TablixMember />
                                     </TablixMembers>
+                                    <Visibility>
+                                      <Hidden>=IIF((Fields!AgingBandCurrencyCode.Value=""),TRUE,FALSE)</Hidden>
+                                    </Visibility>
                                     <DataElementName>Detail_Collection</DataElementName>
                                     <DataElementOutput>Output</DataElementOutput>
                                     <KeepTogether>true</KeepTogether>
@@ -5796,6 +5802,7 @@ Cstr(Fields!CompanyAddr6.Value)
                   <Group Name="list1_Details_Group">
                     <GroupExpressions>
                       <GroupExpression>=Fields!No_Cust.Value</GroupExpression>
+                      <GroupExpression>=Fields!CurrencyGroup.Value</GroupExpression>
                     </GroupExpressions>
                     <PageBreak>
                       <BreakLocation>Between</BreakLocation>
@@ -7243,6 +7250,18 @@ End Function
         <Field Name="No_Cust">
           <DataField>No_Cust</DataField>
         </Field>
+        <Field Name="GreetingText">
+          <DataField>GreetingText</DataField>
+        </Field>
+        <Field Name="BodyText">
+          <DataField>BodyText</DataField>
+        </Field>
+        <Field Name="ClosingText">
+          <DataField>ClosingText</DataField>
+        </Field>
+        <Field Name="Footer_lbl">
+          <DataField>Footer_lbl</DataField>
+        </Field>
         <Field Name="CompanyPicture">
           <DataField>CompanyPicture</DataField>
         </Field>
@@ -7408,8 +7427,17 @@ End Function
         <Field Name="CompanyLegalOffice_Lbl">
           <DataField>CompanyLegalOffice_Lbl</DataField>
         </Field>
+        <Field Name="CustCurrencyCode">
+          <DataField>CustCurrencyCode</DataField>
+        </Field>
+        <Field Name="CurrencyGroup">
+          <DataField>CurrencyGroup</DataField>
+        </Field>
         <Field Name="Total_Caption2">
           <DataField>Total_Caption2</DataField>
+        </Field>
+        <Field Name="TempCurrency2_Code">
+          <DataField>TempCurrency2_Code</DataField>
         </Field>
         <Field Name="Currency2Code_CustLedgEntryHdr">
           <DataField>Currency2Code_CustLedgEntryHdr</DataField>
@@ -7686,18 +7714,6 @@ End Function
         </Field>
         <Field Name="PrintAgeTotal">
           <DataField>PrintAgeTotal</DataField>
-        </Field>
-        <Field Name="GreetingText">
-          <DataField>GreetingText</DataField>
-        </Field>
-        <Field Name="BodyText">
-          <DataField>BodyText</DataField>
-        </Field>
-        <Field Name="ClosingText">
-          <DataField>ClosingText</DataField>
-        </Field>
-        <Field Name="Footer_lbl">
-          <DataField>Footer_lbl</DataField>
         </Field>
       </Fields>
       <Query>
