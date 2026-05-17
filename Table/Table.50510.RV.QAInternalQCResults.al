@@ -27,7 +27,7 @@ table 50510 "RV QA Internal QC Results"
             Caption = 'QC Parameter Name';
             TableRelation = "RV QC Parameter";
         }
-        field(5; "QC Result"; Code[20])
+        field(5; "QC Result"; Text[50])
         {
             Caption = 'QC Result';
         }

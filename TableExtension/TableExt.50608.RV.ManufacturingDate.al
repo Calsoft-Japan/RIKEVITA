@@ -6,16 +6,6 @@ tableextension 50608 "RV Lot No. Information" extends "Lot No. Information"
         {
             Caption = 'Manufacture Date';
             Description = 'FDD006';
-            Editable = false;
-
-            FieldClass = FlowField;
-            CalcFormula = min("Item Ledger Entry"."Posting Date"
-            where(
-                "Lot No." = FIELD("Lot No."),
-                "Item No." = FIELD("Item No."),
-                "Variant Code" = FIELD("Variant Code"),
-                "Order Type" = const("Production"),
-                "Entry Type" = const(Output)));
         }
     }
 }

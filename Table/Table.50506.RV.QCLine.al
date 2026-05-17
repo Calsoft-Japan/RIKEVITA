@@ -67,7 +67,7 @@ table 50506 "RV QC Line"
             if ("Value Table Type" = const("Single")) "RV QC List Value"."List Value" where("Value Table Name" = field("Value Table Name"))
             else
             if ("Value Table Type" = const("Table")) "RV QC List Value"."List Value" where("Value Table Name" = field("Value Table Name"));
-            //ValidateTableRelation = false;
+
             trigger OnValidate()
             begin
                 if "QC Result" = '' then

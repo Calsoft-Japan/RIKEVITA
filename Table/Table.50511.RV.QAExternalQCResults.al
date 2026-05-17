@@ -41,8 +41,11 @@ table 50511 "RV QA External QC Results"
 
                 if QCParameter.Get("QC Parameter Name") then begin
                     QCValueTable.Reset();
-                    QCValueTable.SetRange("Value Table Name");
+                    QCValueTable.SetRange("Value Table Name", QCParameter."Value Table Name");
                     if QCValueTable.FindFirst() then begin
+                        "Value Table Type" := QCValueTable."Value Table Type";
+                        Type := QCValueTable.Type;
+                        "Value Table Name" := QCValueTable."Value Table Name";
                         "Alpha. Min" := QCValueTable."Minimum Value";
                         "Alpha. Max" := QCValueTable."Maximum Value";
                     end;
@@ -56,6 +59,13 @@ table 50511 "RV QA External QC Results"
         field(6; "COA Value"; Text[50])
         {
             Caption = 'COA Value';
+            TableRelation =
+            if ("Value Table Type" = const("List")) "RV QC List Value"."List Value" where("Value Table Name" = field("Value Table Name"))
+            else
+            if ("Value Table Type" = const("Single")) "RV QC List Value"."List Value" where("Value Table Name" = field("Value Table Name"))
+            else
+            if ("Value Table Type" = const("Table")) "RV QC List Value"."List Value" where("Value Table Name" = field("Value Table Name"));
+
             trigger OnValidate()
             begin
                 "Differ From QC Vaule" := "COA Value" <> "QC Value";
@@ -73,9 +83,17 @@ table 50511 "RV QA External QC Results"
         {
             Caption = 'Alpha. Max';
         }
-        field(11; "Check Status"; Enum "RV Check Status")
+        field(100; "Value Table Type"; Enum "RV Value Table Type")
         {
-            Caption = 'Check Status';
+            Caption = 'Value Table Type';
+        }
+        field(101; "Type"; Enum "RV Type")
+        {
+            Caption = 'Type';
+        }
+        field(102; "Value Table Name"; Code[100])
+        {
+            Caption = 'Value Table Name';
         }
     }
     keys

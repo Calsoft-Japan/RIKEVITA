@@ -195,6 +195,7 @@ table 50508 "RV QA Header"
         RVQCRemarkInput: Page "RV QC Remark Input";
         RemarkText: array[2] of Text;
         QAShipmentLotNo: Record "RV QA Shipment Lot No.";
+        QAInternalQCResults: Record "RV QA Internal QC Results";
     begin
         //Page
         Clear(RVQCRemarkInput);
@@ -213,8 +214,12 @@ table 50508 "RV QA Header"
             Modify();
 
             QAShipmentLotNo.Reset();
-            QAShipmentLotNo.SetRange("COA No.");
+            QAShipmentLotNo.SetRange("COA No.", "COA No.");
             QAShipmentLotNo.ModifyAll("QA Status", "QA Status"::Checked);
+
+            QAInternalQCResults.Reset();
+            QAInternalQCResults.SetRange("COA No.", "COA No.");
+            QAInternalQCResults.ModifyAll("QC Checked Remark", "QA Checked Remark");
         end;
     end;
 
@@ -224,6 +229,7 @@ table 50508 "RV QA Header"
         RVQCRemarkInput: Page "RV QC Remark Input";
         RemarkText: array[2] of Text;
         QAShipmentLotNo: Record "RV QA Shipment Lot No.";
+        QAInternalQCResults: Record "RV QA Internal QC Results";
     begin
         //Page
         Clear(RVQCRemarkInput);
@@ -242,8 +248,12 @@ table 50508 "RV QA Header"
             Modify();
 
             QAShipmentLotNo.Reset();
-            QAShipmentLotNo.SetRange("COA No.");
+            QAShipmentLotNo.SetRange("COA No.", "COA No.");
             QAShipmentLotNo.ModifyAll("QA Status", "QA Status"::Approved);
+
+            QAInternalQCResults.Reset();
+            QAInternalQCResults.SetRange("COA No.", "COA No.");
+            QAInternalQCResults.ModifyAll("QC Approved Remark", "QA Approved Remark");
         end;
     end;
 
@@ -293,7 +303,7 @@ table 50508 "RV QA Header"
         SalesHeader: Record "Sales Header";
         WhShipline: Record "Warehouse Shipment line";
         ReservEntry: Record "Reservation Entry";
-        ReservEntry2: Record "Reservation Entry";
+        TrackingSpec: Record "Tracking Specification";
         QAShipmentLotNo: Record "RV QA Shipment Lot No.";
         TempQAShipmentLotNo: Record "RV QA Shipment Lot No." temporary;
         COALotLineNo: Integer;
@@ -393,43 +403,40 @@ table 50508 "RV QA Header"
                 TempQAShipmentLotNo.Reset();
                 TempQAShipmentLotNo.DeleteAll();
 
-                ReservEntry.SetCurrentKey("Source ID", "Source Type", "Source Subtype");
-                ReservEntry.SetRange("Source Type", WhShipline."Source Type");//37
-                ReservEntry.SetRange("Source Subtype", WhShipline."Source Subtype");
-                ReservEntry.SetRange("Source ID", WhShipline."Source No.");//Sales Header No.
-                ReservEntry.SetRange("Source Ref. No.", WhShipline."Source Line No."); //Sales Line No
-                ReservEntry.SetRange("Reservation Status", ReservEntry."Reservation Status"::Tracking);
-                ReservEntry.SetFilter("Qty. to Handle (Base)", '<>0');//for shipping
-                if ReservEntry.FindSet() then
+                TrackingSpec.Reset();
+                TrackingSpec.SetRange("Source Type", WhShipline."Source Type");//37
+                TrackingSpec.SetRange("Source Subtype", WhShipline."Source Subtype");
+                TrackingSpec.SetRange("Source ID", WhShipline."Source No.");//Sales Header No.
+                TrackingSpec.SetRange("Source Ref. No.", WhShipline."Source Line No."); //Sales Line No
+                if TrackingSpec.FindSet() then
                     repeat
 
-                        TempQAShipmentLotNo.SetRange("Lot No.", ReservEntry."Lot No.");
+                        TempQAShipmentLotNo.SetRange("Lot No.", TrackingSpec."Lot No.");
                         if not TempQAShipmentLotNo.FindFirst() then begin
 
                             COALotLineNo += 10000;
                             TempQAShipmentLotNo.Init();
                             TempQAShipmentLotNo."COA No." := Rec."COA No.";
                             TempQAShipmentLotNo."COA Lot Line No." := COALotLineNo;
-                            TempQAShipmentLotNo."Lot No." := ReservEntry."Lot No.";
-
-                            TempQAShipmentLotNo.Quantity := -ReservEntry.Quantity;
+                            TempQAShipmentLotNo."Lot No." := TrackingSpec."Lot No.";
                             TempQAShipmentLotNo."Sales Order No." := WhShipline."Source No.";
-                            TempQAShipmentLotNo."Qty. (Base)" := -ReservEntry."Quantity (Base)";
-                            TempQAShipmentLotNo."Qty. per UOM" := ReservEntry."Qty. per Unit of Measure";
+                            TempQAShipmentLotNo."Qty. (Base)" := -TrackingSpec."Quantity (Base)";
+                            TempQAShipmentLotNo."Qty. per UOM" := TrackingSpec."Qty. per Unit of Measure";
                             TempQAShipmentLotNo.UOM := SalesLine."Unit of Measure Code";
+                            TempQAShipmentLotNo.Quantity := -TrackingSpec."Quantity (Base)" / TrackingSpec."Qty. per Unit of Measure";
 
-                            TempQAShipmentLotNo."Expire Date" := ReservEntry."Expiration Date";
-                            TempQAShipmentLotNo."Manufacturing Date" := ReservEntry."RV_Manufacture Date";
-                            TempQAShipmentLotNo."Container No." := ReservEntry."RV_Container No.";
+                            TempQAShipmentLotNo."Expire Date" := TrackingSpec."Expiration Date";
+                            TempQAShipmentLotNo."Manufacturing Date" := TrackingSpec."RV_Manufacture Date";
+                            TempQAShipmentLotNo."Container No." := TrackingSpec."RV_Container No.";
 
                             TempQAShipmentLotNo.Insert();
                         end else begin
-                            TempQAShipmentLotNo.Quantity += Abs(ReservEntry.Quantity);
-                            TempQAShipmentLotNo."Qty. (Base)" += Abs(ReservEntry."Quantity (Base)");
+                            TempQAShipmentLotNo.Quantity += Abs(TrackingSpec."Quantity (Base)") / TrackingSpec."Qty. per Unit of Measure";
+                            TempQAShipmentLotNo."Qty. (Base)" += Abs(TrackingSpec."Quantity (Base)");
                             TempQAShipmentLotNo.Modify();
                         end;
 
-                    until ReservEntry.Next() = 0;
+                    until TrackingSpec.Next() = 0;
 
                 TempQAShipmentLotNo.Reset();
                 if TempQAShipmentLotNo.FindSet() then

@@ -220,6 +220,8 @@ page 50512 "RV COA List"
 
         QAShipmentLotNo.Init();
         QAShipmentLotNo."COA No." := QAHeader."COA No.";
+        QAShipmentLotNo."COA Lot Line No." := 10000;
+        QAShipmentLotNo.Insert();
 
         ShipmentLotNoPage.SetRecord(QAShipmentLotNo);
         ShipmentLotNoPage.SetTableView(QAShipmentLotNo);

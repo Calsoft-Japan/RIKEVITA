@@ -5,13 +5,14 @@
 page 50513 "RV COA ShipmentLotNo"
 {
     AutoSplitKey = true;
-    DelayedInsert = true;
+    //DelayedInsert = true;
     Caption = 'COA';
     PageType = List;
     SaveValues = true;
     SourceTable = "RV QA Shipment Lot No.";
     DataCaptionFields = "COA No.";
     DeleteAllowed = false;
+    InsertAllowed = false;
 
     layout
     {

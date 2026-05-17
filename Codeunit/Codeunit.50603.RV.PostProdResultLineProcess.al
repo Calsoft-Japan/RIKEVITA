@@ -232,7 +232,11 @@ codeunit 50603 "RV Post Prod Result Line Proc."
                 );
 
             Item.get(ItemJnlLine."Item No.");
-            ExpireDate := CalcDate(Item."Expiration Calculation", ProdResultJournalLine."Manufacturing Date");
+
+            ExpireDate := ProdResultJournalLine."Expire Date";
+            if ExpireDate = 0D then
+                if ProdResultJournalLine."Manufacturing Date" <> 0D then
+                    ExpireDate := CalcDate(Item."Expiration Calculation", ProdResultJournalLine."Manufacturing Date");
             CreateReservEntry.SetDates(0D, ExpireDate);
 
             CreateReservEntry.CreateEntry(
@@ -251,7 +255,10 @@ codeunit 50603 "RV Post Prod Result Line Proc."
                 LotNoInfo."Item No." := ItemJnlLine."Item No.";
                 LotNoInfo."Variant Code" := ItemJnlLine."Variant Code";
                 LotNoInfo."Lot No." := ProdResultJournalLine."Lot No.";
-                // LotNoInfo."RV_Manufacture Date" := ItemJnlLine."Posting Date";
+                if ProdResultJournalLine."Manufacturing Date" = 0D then
+                    LotNoInfo."RV_Manufacture Date" := ProdResultJournalLine."Posting Date"
+                else
+                    LotNoInfo."RV_Manufacture Date" := ProdResultJournalLine."Manufacturing Date";
                 LotNoInfo.Insert();
             end;
         end;
@@ -331,5 +338,24 @@ codeunit 50603 "RV Post Prod Result Line Proc."
     local procedure WMSMgtOnBeforeConfirmExceededCapacity(var IsHandled: Boolean)
     begin
         IsHandled := true;
+    end;
+
+    [EventSubscriber(ObjectType::Table, database::"Lot No. Information", OnBeforeInsertEvent, '', false, false)]
+    local procedure LotNoInfoOnBeforeInsert(var Rec: Record "Lot No. Information")
+    var
+        IsHandled: Boolean;
+    begin
+        IsHandled := true;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Tracking Management", OnAfterCreateLotInformation, '', false, false)]
+    local procedure OnAfterCreateLotInformation(var LotNoInfo: Record "Lot No. Information"; var TrackingSpecification: Record "Tracking Specification")
+    var
+        IsHandled: Boolean;
+    begin
+        if TrackingSpecification."RV_Manufacture Date" <> 0D then begin
+            LotNoInfo."RV_Manufacture Date" := TrackingSpecification."RV_Manufacture Date";
+            LotNoInfo.Modify();
+        end;
     end;
 }

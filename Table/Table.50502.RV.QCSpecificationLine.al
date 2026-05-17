@@ -21,12 +21,22 @@ table 50502 "RV QC Specification Line"
                 QCParameterRec: Record "RV QC Parameter";
                 QCValueTable: Record "RV QC Value Table";
             begin
+                Clear("Value Table Type");
+                Clear("Target Value ib Base UM");
                 if "QC Parameter Name" <> xRec."QC Parameter Name" then begin
                     if "QC Parameter Name" <> '' then begin
                         if QCParameterRec.Get("QC Parameter Name") then begin
                             if QCValueTable.Get(QCParameterRec."Value Table Name") then;
                             "Value Table Type" := QCValueTable."Value Table Type";
-                            "Target Value ib Base UM" := QCValueTable."Minimum Value" + '..' + QCValueTable."Maximum Value";
+
+                            if "Value Table Type" = "Value Table Type"::Range then begin
+                                if (QCValueTable."Minimum Value" <> '') and (QCValueTable."Maximum Value" <> '') then
+                                    "Target Value ib Base UM" := QCValueTable."Minimum Value" + '..' + QCValueTable."Maximum Value"
+                                else if (QCValueTable."Minimum Value" = '') and (QCValueTable."Maximum Value" <> '') then
+                                    "Target Value ib Base UM" := '..' + QCValueTable."Maximum Value"
+                                else if (QCValueTable."Minimum Value" <> '') and (QCValueTable."Maximum Value" = '') then
+                                    "Target Value ib Base UM" := '..' + QCValueTable."Maximum Value"
+                            end;
                         end;
                     end else begin
                         "Value Table Type" := "Value Table Type"::" ";

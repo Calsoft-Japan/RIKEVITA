@@ -54,11 +54,6 @@ page 50516 "RV COA ExterQCResult Subform"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("Check Status"; Rec."Check Status")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
                 field("Alpha. Min"; Rec."Alpha. Min")
                 {
                     ApplicationArea = All;
