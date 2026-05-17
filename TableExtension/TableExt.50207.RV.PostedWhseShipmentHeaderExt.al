@@ -69,5 +69,11 @@ tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Ship
             Caption = 'SAILING ON OR ABOUT';
             Description = 'FDD008';
         }
+        field(50212; "RV_Final Destination"; Text[50])
+        {
+            Caption = 'Final Destination';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
     }
 }

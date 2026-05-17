@@ -95,6 +95,7 @@ report 50201 "RV Pre Packing List Report"
                 }
                 dataitem(WarehousePackingInfo; "RV Warehouse Packing Info.")
                 {
+                    DataItemTableView = where("Posted Whse. Shipment No." = filter(''));
                     DataItemLink = "Warehouse Shipment No." = field("No.");
                     column(MARKS; MARKS)
                     {

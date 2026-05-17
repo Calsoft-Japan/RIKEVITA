@@ -57,5 +57,32 @@ pageextension 50211 "RV Sales Invoice Ext" extends "Sales Invoice"
             }
         }
     }
+    actions
+    {
+        addbefore("ProformaInvoice")
+        {
+            action("SalesInvoiceLocal")
+            {
+                Caption = 'Sales Invoice(Local)';
+                Image = ViewPage;
+                ApplicationArea = all;
+                trigger OnAction()
+                var
+                    ReportRec: Record "Sales Header";
+                begin
+                    ReportRec.Reset();
+                    ReportRec.SetRange("No.", Rec."No.");
+                    ReportRec.SetRange("Document Type", ReportRec."Document Type"::Invoice);
+                    Report.Run(50203, TRUE, FALSE, ReportRec);
+                end;
+            }
+        }
+        addafter("ProformaInvoice_Promoted")
+        {
+            actionref("SalesInvoiceLocal_Promoted"; "SalesInvoiceLocal")
+            {
+            }
 
+        }
+    }
 }
