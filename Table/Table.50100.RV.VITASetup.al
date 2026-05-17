@@ -4,6 +4,7 @@
 /// FDD008 2026/03/15: New field "Stuffing Date Calculation". (Liuyang)/// 
 /// FDD009 2026/04/29: Charge Allocation fields Added. (Shawn)
 /// FDD021 2026/05/11: Bank Information fields Added. (Bobby)
+/// FDD028 2026/05/17: Item Trace fields Added. (Shawn)
 /// </summary>
 table 50100 "RV RIKEVITA Setup"
 {
@@ -265,6 +266,21 @@ table 50100 "RV RIKEVITA Setup"
         {
             Description = 'FDD021';
             Caption = 'ID No.';
+        }
+        field(48; "Start Date (Item Trace)"; Date)
+        {
+            Description = 'FDD028';
+            Caption = 'Start Date (Item Trace)';
+        }
+        field(49; "End Date (Item Trace)"; Date)
+        {
+            Description = 'FDD028';
+            Caption = 'End Date (Item Trace)';
+        }
+        field(50; "Item No. (Item Trace)"; Text[250])
+        {
+            Description = 'FDD028';
+            Caption = 'Item No. (Item Trace)';
         }
     }
     keys
