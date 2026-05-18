@@ -147,6 +147,7 @@ report 50900 "RV Item Trace Collect"
                     or (QueItemDetail.Quantity__KG_ <> 0)
                     or (QueItemDetail.Cost_Amount__RM_ <> 0) then begin
                     //New transactions only between Start Date and End Date.
+                    //Opening Balance should be 0.
                     ItemBalance.Init();
                     ItemBalance."History Entry No." := HistoryEntryNo;
                     ItemBalance."Vendor No." := QueItemDetail.Vendor_No_;
@@ -199,7 +200,7 @@ report 50900 "RV Item Trace Collect"
 
                     ItemDetail."Lot No." := ILE."Lot No.";
 
-                    ILE.CalcFields("RV_Base Unit of Measure Code", "RV_Quantity (KG)", "Cost Amount (Actual)");
+                    ILE.CalcFields("RV_Base Unit of Measure Code", "Cost Amount (Actual)");
                     ItemDetail."Base Unit of Measure Code" := ILE."RV_Base Unit of Measure Code";
                     ItemDetail."Quantity (BUOM)" := ILE.Quantity;
                     ItemDetail."Quantity (KG)" := ILE."RV_Quantity (KG)";
@@ -229,7 +230,7 @@ report 50900 "RV Item Trace Collect"
 
                     ItemDetail."Lot No." := ILE."Lot No.";
 
-                    ILE.CalcFields("RV_Base Unit of Measure Code", "RV_Quantity (KG)", "Cost Amount (Actual)");
+                    ILE.CalcFields("RV_Base Unit of Measure Code", "Cost Amount (Actual)");
                     ItemDetail."Base Unit of Measure Code" := ILE."RV_Base Unit of Measure Code";
                     ItemDetail."Quantity (BUOM)" := ILE.Quantity;
                     ItemDetail."Quantity (KG)" := ILE."RV_Quantity (KG)";
@@ -269,7 +270,7 @@ report 50900 "RV Item Trace Collect"
 
                     ItemDetail."Lot No." := ILE."Lot No.";
 
-                    ILE.CalcFields("RV_Base Unit of Measure Code", "RV_Quantity (KG)", "Cost Amount (Actual)");
+                    ILE.CalcFields("RV_Base Unit of Measure Code", "Cost Amount (Actual)");
                     ItemDetail."Base Unit of Measure Code" := ILE."RV_Base Unit of Measure Code";
                     ItemDetail."Quantity (BUOM)" := ILE.Quantity;
                     ItemDetail."Quantity (KG)" := ILE."RV_Quantity (KG)";
@@ -300,7 +301,7 @@ report 50900 "RV Item Trace Collect"
 
                     ItemDetail."Lot No." := ILE."Lot No.";
 
-                    ILE.CalcFields("RV_Base Unit of Measure Code", "RV_Quantity (KG)", "Cost Amount (Actual)");
+                    ILE.CalcFields("RV_Base Unit of Measure Code", "Cost Amount (Actual)");
                     ItemDetail."Base Unit of Measure Code" := ILE."RV_Base Unit of Measure Code";
                     ItemDetail."Quantity (BUOM)" := ILE.Quantity;
                     ItemDetail."Quantity (KG)" := ILE."RV_Quantity (KG)";
@@ -336,12 +337,5 @@ report 50900 "RV Item Trace Collect"
         EndDate: Date;
         ItemNoFilter: Text[250];
         HistoryEntryNo: Integer;
-        NetChange_BUOM: Decimal;
-        CB_BUOM: Decimal;
-        NetChange_KG: Decimal;
-        CB_KG: Decimal;
-        NetChange_RM: Decimal;
-        CB_RM: Decimal;
-
 
 }

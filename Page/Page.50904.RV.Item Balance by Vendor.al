@@ -59,4 +59,36 @@ page 50904 "RV Item Balance by Vendor"
             }
         }
     }
+
+    actions
+    {
+        area(processing)
+        {
+            group(History)
+            {
+                Caption = 'History';
+                Image = Confirm;
+                action("Item Trace Details")
+                {
+                    ApplicationArea = ALL;
+                    Caption = 'Item Trace Details';
+                    Image = ChangeToLines;
+                    Promoted = true;
+                    PromotedIsBig = true;
+                    PromotedCategory = Process;
+
+                    trigger OnAction()
+                    var
+                        recItemDetail: Record "RV Item Trace Detail";
+                    begin
+                        recItemDetail.RESET;
+                        recItemDetail.SETRANGE("History Entry No.", Rec."History Entry No.");
+                        recItemDetail.FINDFIRST();
+                        PAGE.RUN(Page::"RV Item Trace Detail", recItemDetail);
+                    end;
+                }
+            }
+        }
+    }
+
 }
