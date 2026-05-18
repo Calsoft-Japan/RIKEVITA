@@ -98,6 +98,21 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                 Description = 'FDD017';
                 Caption = 'Export to Excel';
                 Image = Excel;
+
+                action(BookExp)
+                {
+                    ApplicationArea = All;
+                    Image = Excel;
+                    Caption = 'Book Transfer Own Account (MayBank)';
+                    trigger OnAction()
+                    var
+                        GenJnlLine: Record "Gen. Journal Line";
+                        CUExportExcel: Codeunit "RV Bank Payment to Excel";
+                    begin
+                        if Confirm(Text001) then
+                            CUExportExcel.ExportSelectedLines(Rec, ExpType::BookTrans);
+                    end;
+                }
                 action(DomesticExp)
                 {
                     ApplicationArea = All;
@@ -202,6 +217,6 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
     }
 
     var
-        ExpType: Option Domestic,Jompay,GIRO;
+        ExpType: Option BookTrans,Domestic,Jompay,GIRO;
         TEXT001: Label 'Electronic Payment Excel Template will be exported. Do you want to continue?';
 }

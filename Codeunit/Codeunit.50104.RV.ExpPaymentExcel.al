@@ -12,20 +12,56 @@ codeunit 50104 "RV Bank Payment to Excel"
         TempExcelBuffer: Record "Excel Buffer" temporary;
         StartRow, RowNo : Integer;
 
-    procedure ExportSelectedLines(var GenJournalLine: Record "Gen. Journal Line"; ExpTye: Option Domestic,Jompay,GIRO)
+    procedure ExportSelectedLines(var GenJournalLine: Record "Gen. Journal Line"; ExpTye: Option BookTrans,Domestic,Jompay,GIRO)
+    var
+        ExpFileName: Text;
+        PrefixName: Text;
+        GenBatch: Record "Gen. Journal Batch";
     begin
         TempExcelBuffer.Reset();
         TempExcelBuffer.DeleteAll();
         RowNo := 1;
 
+        GenBatch.Reset();
+        GenBatch.SetRange("Journal Template Name", GenJournalLine."Journal Template Name");
+        GenBatch.SetRange(Name, GenJournalLine."Journal Batch Name");
+        if not GenBatch.FindSet() then
+            Error(StrSubstNo('Journal Template and Batch does not exist. %1,%2', GenJournalLine."Journal Template Name", GenJournalLine."Journal Batch Name"));
+
         // Create Header Row
         case ExpTye of
             ExpTye::Domestic:
-                CreateDomesticExcelHeader();
+                begin
+                    PrefixName := 'Domestic Payments (MayBank)';
+                    if ExpTye <> GenBatch."RV_Export Type" then
+                        Error(StrSubstNo('%1 was not assigned with this General Journal Batch Name. Please make sure you are using the correct General Journal Batch.', PrefixName));
+
+                    CreateDomesticExcelHeader();
+                end;
             ExpTye::Jompay:
-                CreateJompayExcelHeader();
+                begin
+                    PrefixName := 'Utility Payment - Jompay (MayBank)';
+                    if ExpTye <> GenBatch."RV_Export Type" then
+                        Error(StrSubstNo('%1 was not assigned with this General Journal Batch Name. Please make sure you are using the correct General Journal Batch.', PrefixName));
+
+                    CreateJompayExcelHeader();
+                end;
             ExpTye::GIRO:
-                CreateGIROExcelHeader();
+                begin
+                    PrefixName := 'GIRO Payments (MUFG)';
+                    if ExpTye <> GenBatch."RV_Export Type" then
+                        Error(StrSubstNo('%1 was not assigned with this General Journal Batch Name. Please make sure you are using the correct General Journal Batch.', PrefixName));
+
+                    CreateGIROExcelHeader();
+                end;
+            ExpTye::BookTrans:
+                begin
+                    PrefixName := 'Book Transfer Own Account (MayBank)';
+                    if ExpTye <> GenBatch."RV_Export Type" then
+                        Error(StrSubstNo('%1 was not assigned with this General Journal Batch Name. Please make sure you are using the correct General Journal Batch.', PrefixName));
+
+                    CreateBookTransExcelHeader();
+                end;
         end;
 
 
@@ -35,14 +71,15 @@ codeunit 50104 "RV Bank Payment to Excel"
             until GenJournalLine.Next() = 0;
 
         // Generate and Download Excel File
+        ExpFileName := StrSubstNo('%1_%2.xlsx', PrefixName, Format(CurrentDateTime(), 0, '<Month,2><Day,2><Year4><Hours24>.<Minutes,2><Seconds,2><Second dec.>'));
         TempExcelBuffer.CreateNewBook('BankExport');
         TempExcelBuffer.WriteSheet('Payments', CompanyName, UserId);
         TempExcelBuffer.CloseBook();
-        TempExcelBuffer.SetFriendlyFilename('Bank_Payment_Export.xlsx');
+        TempExcelBuffer.SetFriendlyFilename(ExpFileName);
         TempExcelBuffer.OpenExcel();
     end;
 
-    local procedure ProcessJournalLine(GenJnlLine: Record "Gen. Journal Line"; ExpTye: Option Domestic,Jompay,GIRO)
+    local procedure ProcessJournalLine(GenJnlLine: Record "Gen. Journal Line"; ExpTye: Option BookTrans,Domestic,Jompay,GIRO)
     var
         VendorLedgerEntry: Record "Vendor Ledger Entry";
         IsApplied: Boolean;
@@ -65,6 +102,8 @@ codeunit 50104 "RV Bank Payment to Excel"
                                     WriteJompayExcelRow(GenJnlLine, VendorLedgerEntry);
                                 ExpTye::GIRO:
                                     WriteGIROExcelRow(GenJnlLine, VendorLedgerEntry);
+                                ExpTye::BookTrans:
+                                    WriteBookTransExcelRow(GenJnlLine, VendorLedgerEntry);
                             end;
                         until VendorLedgerEntry.Next() = 0;
                     end;
@@ -84,6 +123,8 @@ codeunit 50104 "RV Bank Payment to Excel"
                                     WriteJompayExcelRow(GenJnlLine, VendorLedgerEntry);
                                 ExpTye::GIRO:
                                     WriteGIROExcelRow(GenJnlLine, VendorLedgerEntry);
+                                ExpTye::BookTrans:
+                                    WriteBookTransExcelRow(GenJnlLine, VendorLedgerEntry);
                             end;
                         end;
                     end;
@@ -98,6 +139,8 @@ codeunit 50104 "RV Bank Payment to Excel"
                                 WriteJompayExcelRow(GenJnlLine, VendorLedgerEntry);
                             ExpTye::GIRO:
                                 WriteGIROExcelRow(GenJnlLine, VendorLedgerEntry);
+                            ExpTye::BookTrans:
+                                WriteBookTransExcelRow(GenJnlLine, VendorLedgerEntry);
                         end;
                     end;
                 end;
@@ -111,8 +154,10 @@ codeunit 50104 "RV Bank Payment to Excel"
                             WriteDomesticExcelRow(GenJnlLine, VendorLedgerEntry);
                         ExpTye::Jompay:
                             WriteJompayExcelRow(GenJnlLine, VendorLedgerEntry);
-                    //ExpTye::GIRO:
-                    //    WriteGIROExcelRow(GenJnlLine, VendorLedgerEntry); //GIRO is just for international Vendor
+                        //ExpTye::GIRO:
+                        //    WriteGIROExcelRow(GenJnlLine, VendorLedgerEntry); //GIRO is just for international Vendor
+                        ExpTye::BookTrans:
+                            WriteBookTransExcelRow(GenJnlLine, VendorLedgerEntry);
                     end;
                 end;
         end;
@@ -190,6 +235,57 @@ codeunit 50104 "RV Bank Payment to Excel"
         TempExcelBuffer.AddColumn('Invoice Date', false, '', true, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn('Payment Amount', false, '', true, false, false, '', TempExcelBuffer."Cell Type"::Text);
         // Add more header columns as needed
+    end;
+
+    local procedure CreateBookTransExcelHeader()
+    begin
+        TempExcelBuffer.NewRow();
+        TempExcelBuffer.AddColumn('Value Date', false, '', true, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn('Customer Reference Number', false, '', true, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn('Transaction Amount *', false, '', true, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn('Credit Account Number', false, '', true, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn('Beneficiary Name 1', false, '', true, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn('Beneficiary Name 2', false, '', true, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn('Beneficiary Name 3', false, '', true, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn('ID No(Business Registration No)', false, '', true, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        // Add more header columns as needed
+    end;
+
+    local procedure WriteBookTransExcelRow(GenJnlLine: Record "Gen. Journal Line"; VLE: Record "Vendor Ledger Entry")
+    var
+        AppliedAmt: Decimal;
+        Vend: Record Vendor;
+        Empl: Record Employee;
+        EmplLedgEntry: Record "Employee Ledger Entry";
+        CompanyInfo: Record "Company Information";
+        CompanyName: Text;
+        CompanyBankAccountNo, RegNo, Name1, Name2, Name3 : Text;
+    begin
+        if CompanyInfo.Get() then begin
+            CompanyName := CompanyInfo.Name + CompanyInfo."Name 2";
+            CompanyBankAccountNo := CompanyInfo."Bank Account No.";
+
+            Name1 := CopyStr(CompanyName, 1, 40);
+            Name2 := CopyStr(CompanyName, 41, 80);
+            Name3 := CopyStr(CompanyName, 81, 100);
+            RegNo := CompanyInfo."Registration No.";
+        end;
+
+        TempExcelBuffer.NewRow();
+
+        // 1. Payment Journal Info
+        TempExcelBuffer.AddColumn(Format(GenJnlLine."Posting Date", 0, '<Closing><Day,2><Month,2><Year4>'), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+
+        // 2. Applied Invoice Info
+        AppliedAmt := GenJnlLine."Amount (LCY)";
+        TempExcelBuffer.AddColumn(Abs(AppliedAmt), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Number);
+
+        TempExcelBuffer.AddColumn(CompanyBankAccountNo, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn(Name1, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn(Name2, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn(Name3, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn(RegNo, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
     end;
 
     local procedure WriteDomesticExcelRow(GenJnlLine: Record "Gen. Journal Line"; VLE: Record "Vendor Ledger Entry")
@@ -455,7 +551,7 @@ codeunit 50104 "RV Bank Payment to Excel"
             Error('Template upload was cancelled.');
     end;
 
-    procedure LoadBankTemplateFromSetup(var BankTemplateBlobRef: Codeunit "Temp Blob"; ExpType: Option Domestic,Jompay,GIRO)//Load from Blob
+    procedure LoadBankTemplateFromSetup(var BankTemplateBlobRef: Codeunit "Temp Blob"; ExpType: Option BookTrans,Domestic,Jompay,GIRO)//Load from Blob
     var
         BankExportSetup: Record "RV RIKEVITA Setup"; // setup table
         SetupInStream: InStream;
@@ -503,7 +599,7 @@ codeunit 50104 "RV Bank Payment to Excel"
         CopyStream(BlobOutStream, SetupInStream);
     end;
 
-    procedure ExportToTemplate(var GenJournalLine: Record "Gen. Journal Line"; ExpTye: Option Domestic,Jompay,GIRO)
+    procedure ExportToTemplate(var GenJournalLine: Record "Gen. Journal Line"; ExpTye: Option BookTrans,Domestic,Jompay,GIRO)
     var
 
         TempExcelBuffer: Record "Excel Buffer" temporary;
@@ -549,7 +645,7 @@ codeunit 50104 "RV Bank Payment to Excel"
             ExcelBuffer.Modify();
     end;
 
-    local procedure WriteInvoiceLines(var ExcelBuffer: Record "Excel Buffer"; var GenJournalLine: Record "Gen. Journal Line"; StartRow: Integer; ExpTye: Option Domestic,Jompay,GIRO)
+    local procedure WriteInvoiceLines(var ExcelBuffer: Record "Excel Buffer"; var GenJournalLine: Record "Gen. Journal Line"; StartRow: Integer; ExpTye: Option BookTrans,Domestic,Jompay,GIRO)
     var
         VendorLedgerEntry: Record "Vendor Ledger Entry";
         CurrentRow: Integer;
