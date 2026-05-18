@@ -182,5 +182,11 @@ permissionset 50100 GeneratedPermission
         page "RV QC List Value List" = X,
         page "RV QC List Value Subform" = X,
         page "RV QC Value Table Card" = X,
-        page "RV QC Value Table List" = X;
+        page "RV QC Value Table List" = X,
+        report "RV Aged Accounts Payable" = X,
+        report "RV Packing List Report" = X,
+        report "RV Sales Invoice(Local)" = X,
+        codeunit ReservationEntryMgt = X,
+        codeunit "RV Charge Calc. Subscriber" = X,
+        codeunit "RV Get Shipment Lines" = X;
 }

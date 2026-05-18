@@ -31,10 +31,12 @@ page 50505 "RV QC Specification Subform"
                 field("Value Table Type"; Rec."Value Table Type")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
                 field("Target Value ib Base UM"; Rec."Target Value ib Base UM")
                 {
                     ApplicationArea = All;
+                    Editable = false;
                 }
             }
         }
