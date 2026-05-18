@@ -71,7 +71,7 @@ codeunit 50104 "RV Bank Payment to Excel"
             until GenJournalLine.Next() = 0;
 
         // Generate and Download Excel File
-        ExpFileName := StrSubstNo('%1_%2.xlsx', PrefixName, Format(CurrentDateTime(), 0, '<Month,2><Day,2><Year4><Hours24>.<Minutes,2><Seconds,2><Second dec.>'));
+        ExpFileName := StrSubstNo('%1_%2.xlsx', PrefixName, Format(CurrentDateTime(), 0, '<Month,2><Day,2><Year4>.<Hours24><Minutes,2><Seconds,2>'));//<Second dec.>
         TempExcelBuffer.CreateNewBook('BankExport');
         TempExcelBuffer.WriteSheet('Payments', CompanyName, UserId);
         TempExcelBuffer.CloseBook();

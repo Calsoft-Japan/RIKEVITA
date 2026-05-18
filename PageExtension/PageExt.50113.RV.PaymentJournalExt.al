@@ -108,7 +108,19 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                     var
                         GenJnlLine: Record "Gen. Journal Line";
                         CUExportExcel: Codeunit "RV Bank Payment to Excel";
+                        PrefixName: Text;
+                        GenBatch: Record "Gen. Journal Batch";
                     begin
+                        GenBatch.Reset();
+                        GenBatch.SetRange("Journal Template Name", Rec."Journal Template Name");
+                        GenBatch.SetRange(Name, Rec."Journal Batch Name");
+                        if not GenBatch.FindSet() then
+                            Error(StrSubstNo('Journal Template and Batch does not exist. %1,%2', Rec."Journal Template Name", Rec."Journal Batch Name"));
+
+                        PrefixName := 'Book Transfer Own Account (MayBank)';
+                        if GenBatch."RV_Export Type" <> GenBatch."RV_Export Type"::BookTrans then
+                            Error(StrSubstNo('%1 was not assigned with this General Journal Batch Name. Please make sure you are using the correct General Journal Batch.', PrefixName));
+
                         if Confirm(Text001) then
                             CUExportExcel.ExportSelectedLines(Rec, ExpType::BookTrans);
                     end;
@@ -130,7 +142,18 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                         ApplyVendEntry: page "Apply Vendor Entries";
                         GenApply: Codeunit "Gen. Jnl.-Apply"; */
                         CUExportExcel: Codeunit "RV Bank Payment to Excel";
+                        PrefixName: Text;
+                        GenBatch: Record "Gen. Journal Batch";
                     begin
+                        GenBatch.Reset();
+                        GenBatch.SetRange("Journal Template Name", Rec."Journal Template Name");
+                        GenBatch.SetRange(Name, Rec."Journal Batch Name");
+                        if not GenBatch.FindSet() then
+                            Error(StrSubstNo('Journal Template and Batch does not exist. %1,%2', Rec."Journal Template Name", Rec."Journal Batch Name"));
+
+                        PrefixName := 'Domestic Payments (MayBank)';
+                        if GenBatch."RV_Export Type" <> GenBatch."RV_Export Type"::Domestic then
+                            Error(StrSubstNo('%1 was not assigned with this General Journal Batch Name. Please make sure you are using the correct General Journal Batch.', PrefixName));
                         if Confirm(Text001) then
                             CUExportExcel.ExportSelectedLines(Rec, ExpType::Domestic);
                         /* case Rec."Account Type" of
@@ -167,9 +190,20 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                     trigger OnAction()
                     var
                         CUExportExcel: Codeunit "RV Bank Payment to Excel";
-                    //RptExport: Report "RV Export Payment Inv Excel";
-                    //DesignTimeRptSelect: Codeunit "Design-time Report Selection";
+                        //RptExport: Report "RV Export Payment Inv Excel";
+                        //DesignTimeRptSelect: Codeunit "Design-time Report Selection";
+                        PrefixName: Text;
+                        GenBatch: Record "Gen. Journal Batch";
                     begin
+                        GenBatch.Reset();
+                        GenBatch.SetRange("Journal Template Name", Rec."Journal Template Name");
+                        GenBatch.SetRange(Name, Rec."Journal Batch Name");
+                        if not GenBatch.FindSet() then
+                            Error(StrSubstNo('Journal Template and Batch does not exist. %1,%2', Rec."Journal Template Name", Rec."Journal Batch Name"));
+
+                        PrefixName := 'Utility Payment - Jompay(MayBank)';
+                        if GenBatch."RV_Export Type" <> GenBatch."RV_Export Type"::Jompay then
+                            Error(StrSubstNo('%1 was not assigned with this General Journal Batch Name. Please make sure you are using the correct General Journal Batch.', PrefixName));
                         if Confirm(Text001) then
                             CUExportExcel.ExportSelectedLines(Rec, ExpType::Jompay);
 
@@ -188,7 +222,18 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                     var
                         GenJnlLine: Record "Gen. Journal Line";
                         CUExportExcel: Codeunit "RV Bank Payment to Excel";
+                        PrefixName: Text;
+                        GenBatch: Record "Gen. Journal Batch";
                     begin
+                        GenBatch.Reset();
+                        GenBatch.SetRange("Journal Template Name", Rec."Journal Template Name");
+                        GenBatch.SetRange(Name, Rec."Journal Batch Name");
+                        if not GenBatch.FindSet() then
+                            Error(StrSubstNo('Journal Template and Batch does not exist. %1,%2', Rec."Journal Template Name", Rec."Journal Batch Name"));
+
+                        PrefixName := 'GIRO Payments (MUFG)';
+                        if GenBatch."RV_Export Type" <> GenBatch."RV_Export Type"::GIRO then
+                            Error(StrSubstNo('%1 was not assigned with this General Journal Batch Name. Please make sure you are using the correct General Journal Batch.', PrefixName));
                         if Confirm(Text001) then
                             CUExportExcel.ExportSelectedLines(Rec, ExpType::GIRO);
                     end;
@@ -203,6 +248,9 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
             {
                 Caption = 'Export to Excel', Comment = 'Export payment invoice to excel.';
 
+                actionref(BookExp_Promoted; BookExp)
+                {
+                }
                 actionref(DomesticExp_Promoted; DomesticExp)
                 {
                 }
