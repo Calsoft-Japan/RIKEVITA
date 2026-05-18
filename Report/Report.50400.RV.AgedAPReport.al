@@ -14,10 +14,21 @@ report 50400 "RV Aged Accounts Payable"
 
     dataset
     {
+        // -----------------------------------------------------------------------------
+        // DATASET STRUCTURE
+        // Vendor                         : Main vendor loop and report header fields.
+        // Vendor Ledger Entry            : Finds entries closed after the ending date and
+        //                                  adds related entries into TempVendorLedgEntry.
+        // OpenVendorLedgEntry            : Adds open entries up to the ending date into
+        //                                  TempVendorLedgEntry.
+        // CurrencyLoop                   : Prints one set of vendor ledger entries per currency.
+        // TempVendortLedgEntryLoop       : Calculates aging bucket amounts row by row.
+        // CurrencyTotals                 : Builds Currency Specification rows by currency.
+        // -----------------------------------------------------------------------------
         dataitem(Vendor; Vendor)
         {
             PrintOnlyIfDetail = true;
-            RequestFilterFields = "No.";
+            RequestFilterFields = "No.", "Currency Filter";
 
             column(TodayFormatted; TodayFormatted)
             {
@@ -216,6 +227,9 @@ report 50400 "RV Aged Accounts Payable"
             {
             }
 
+            // Standard BC logic: process vendor ledger entries posted after the ending date,
+            // then find related closing entries posted on/before the ending date.
+            // These are not printed directly; they are inserted into TempVendorLedgEntry.
             dataitem("Vendor Ledger Entry"; "Vendor Ledger Entry")
             {
                 DataItemLink = "Vendor No." = field("No.");
@@ -226,10 +240,14 @@ report 50400 "RV Aged Accounts Payable"
                 var
                     VendorLedgEntry: Record "Vendor Ledger Entry";
                 begin
+                    // Collect entries that were closed by this entry or related to this closure.
+                    // The actual report lines are printed from TempVendorLedgEntryLoop, so this
+                    // dataitem only prepares the temporary dataset and then skips itself.
                     VendorLedgEntry.SetCurrentKey("Closed by Entry No.");
                     VendorLedgEntry.SetRange("Closed by Entry No.", "Entry No.");
                     VendorLedgEntry.SetRange("Posting Date", 0D, EndingDate);
                     CopyDimFiltersFromVendor(VendorLedgEntry);
+                    ApplyCurrencyFilterToVendLedgEntry(VendorLedgEntry);
 
                     if VendorLedgEntry.FindSet(false) then
                         repeat
@@ -248,6 +266,7 @@ report 50400 "RV Aged Accounts Payable"
                     VendorLedgEntry.SetRange("Entry No.", "Closed by Entry No.");
                     VendorLedgEntry.SetRange("Posting Date", 0D, EndingDate);
                     CopyDimFiltersFromVendor(VendorLedgEntry);
+                    ApplyCurrencyFilterToVendLedgEntry(VendorLedgEntry);
 
                     if VendorLedgEntry.FindSet(false) then
                         repeat
@@ -261,10 +280,13 @@ report 50400 "RV Aged Accounts Payable"
                 begin
                     SetRange("Posting Date", EndingDate + 1, DMY2Date(31, 12, 9999));
                     CopyDimFiltersFromVendor("Vendor Ledger Entry");
-                    Vendor.CopyFilter("Currency Filter", "Currency Code");
+                    //Vendor.CopyFilter("Currency Filter", "Currency Code");
+                    ApplyCurrencyFilterToVendLedgEntry("Vendor Ledger Entry");
                 end;
             }
 
+            // Standard BC logic: collect currently open vendor ledger entries that must be
+            // included in the aging calculation as of the selected EndingDate.
             dataitem(OpenVendorLedgEntry; "Vendor Ledger Entry")
             {
                 DataItemLink = "Vendor No." = field("No.");
@@ -273,6 +295,8 @@ report 50400 "RV Aged Accounts Payable"
 
                 trigger OnAfterGetRecord()
                 begin
+                    // Add open entries into the temporary ledger table.
+                    // For Posting Date aging, skip entries that have no Remaining Amt. (LCY).
                     if AgingBy = AgingBy::"Posting Date" then begin
                         CalcFields("Remaining Amt. (LCY)");
                         if "Remaining Amt. (LCY)" = 0 then
@@ -291,15 +315,21 @@ report 50400 "RV Aged Accounts Payable"
                     end;
 
                     CopyDimFiltersFromVendor(OpenVendorLedgEntry);
-                    Vendor.CopyFilter("Currency Filter", "Currency Code");
+                    //Vendor.CopyFilter("Currency Filter", "Currency Code");
+                    ApplyCurrencyFilterToVendLedgEntry(OpenVendorLedgEntry);
                 end;
             }
 
+            // CurrencyLoop prints the aging rows currency by currency.
+            // If Print Amounts in LCY is false, TempCurrency contains one row per currency.
+            // If Print Amounts in LCY is true, a single blank/LCY currency is used.
             dataitem(CurrencyLoop; "Integer")
             {
                 DataItemTableView = sorting(Number) where(Number = filter(1 ..));
                 PrintOnlyIfDetail = true;
 
+                // Iterates TempVendorLedgEntry and calculates the row values shown in Section B.
+                // Section B 6th bucket remains the real 4MTH+ aging bucket only.
                 dataitem(TempVendortLedgEntryLoop; "Integer")
                 {
                     DataItemTableView = sorting(Number) where(Number = filter(1 ..));
@@ -442,6 +472,9 @@ report 50400 "RV Aged Accounts Payable"
                     var
                         PeriodIndex: Integer;
                     begin
+                        // Print one temporary vendor ledger entry row.
+                        // This is the main calculation point for Section B: payment terms,
+                        // bank details, RM equiv., remaining amounts, and aging bucket values.
                         if Number = 1 then begin
                             if not TempVendorLedgEntry.FindSet(false) then
                                 CurrReport.Break();
@@ -590,6 +623,10 @@ report 50400 "RV Aged Accounts Payable"
                         GrandTotalVLEAmtLCY +=
                             VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
 
+                        // FDD030: RM Equiv. shown on the report row.
+                        // Current implementation uses Remaining Amt. (LCY), matching the verified
+                        // report output. If the FDD is later interpreted as original Amount (LCY),
+                        // change this to TempVendorLedgEntry."Amount (LCY)".
                         RMEquivAmount := VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
                     end;
 
@@ -652,6 +689,9 @@ report 50400 "RV Aged Accounts Payable"
             end;
         }
 
+        // Currency Specification section.
+        // This section uses TempCurrency2 and TempCurrencyAmount prepared by UpdateCurrencyTotals().
+        // Important: the final/total column is RV_CurrencySpecTotalAmount, not the 6th aging bucket.
         dataitem(CurrencyTotals; "Integer")
         {
             DataItemTableView = sorting(Number) where(Number = filter(1 ..));
@@ -663,6 +703,18 @@ report 50400 "RV Aged Accounts Payable"
             {
             }
             column(TempCurrency2Code; TempCurrency2.Code)
+            {
+                AutoFormatExpression = TempCurrency2.Code;
+                AutoFormatType = 1;
+            }
+            // FDD030: Currency Specification total/balance amount by currency.
+            // RDLC uses this field for the Total/Balance column in the Currency Specification section.
+            // FDD030: Currency Specification total/balance amount by currency.
+            // RDLC usage:
+            //   - Use this for the Total/Balance column in Currency Specification.
+            //   - Do NOT use AgedVendLedgEnt6RemAmtLCY6 for this total.
+            // AgedVendLedgEnt6RemAmtLCY6 is reserved for the real 4MTH+ bucket.
+            column(RV_CurrencySpecTotalAmount; CurrencySpecTotalAmount)
             {
                 AutoFormatExpression = TempCurrency2.Code;
                 AutoFormatType = 1;
@@ -706,6 +758,7 @@ report 50400 "RV Aged Accounts Payable"
 
             trigger OnAfterGetRecord()
             begin
+                // Standard BC pattern: move through the temporary currency list one currency at a time.
                 if Number = 1 then begin
                     if not TempCurrency2.FindSet(false) then
                         CurrReport.Break();
@@ -713,8 +766,13 @@ report 50400 "RV Aged Accounts Payable"
                     if TempCurrency2.Next() = 0 then
                         CurrReport.Break();
 
+                // FDD030: Build Currency Specification values for the current currency.
+                // AgedVendorLedgEntry[1..6] are true aging bucket amounts only.
+                // CurrencySpecTotalAmount is the separate total/balance amount for the currency.
                 Clear(AgedVendorLedgEntry);
+                Clear(CurrencySpecTotalAmount);
 
+                TempCurrencyAmount.Reset();
                 TempCurrencyAmount.SetRange("Currency Code", TempCurrency2.Code);
 
                 if TempCurrencyAmount.FindSet(false) then
@@ -723,7 +781,7 @@ report 50400 "RV Aged Accounts Payable"
                             AgedVendorLedgEntry[GetPeriodIndex(TempCurrencyAmount.Date)]."Remaining Amount" :=
                                 TempCurrencyAmount.Amount
                         else
-                            AgedVendorLedgEntry[6]."Remaining Amount" := TempCurrencyAmount.Amount;
+                            CurrencySpecTotalAmount := TempCurrencyAmount.Amount;
                     until TempCurrencyAmount.Next() = 0;
             end;
 
@@ -826,6 +884,8 @@ report 50400 "RV Aged Accounts Payable"
     var
         FormatDocument: Codeunit "Format Document";
     begin
+        // Prepare report-level values before any dataitems run: filters, date buckets,
+        // RDLC headings, dynamic title, company name, and document number caption.
         VendorFilter := FormatDocument.GetRecordFiltersWithCaptions(Vendor);
 
         SetTradingPartnerFilterText();
@@ -922,6 +982,10 @@ report 50400 "RV Aged Accounts Payable"
         TotalLCYCaptionLbl: Label 'Total (LCY)';
         CurrencySpecificationCaptionLbl: Label 'Currency Specification';
 
+        // FDD030: Currency Specification total/balance amount by currency.
+        // This is separated from aging bucket 6 so the 4MTH+ bucket remains a true aging bucket.
+        CurrencySpecTotalAmount: Decimal;
+
         // FDD030: Arrays extended from 5 to 6 to support the additional 91-120 days / 4MTH bucket.
         TotalVendorLedgEntry: array[6] of Record "Vendor Ledger Entry";
         AgedVendorLedgEntry: array[6] of Record "Vendor Ledger Entry";
@@ -940,6 +1004,10 @@ report 50400 "RV Aged Accounts Payable"
         VendorFilter: Text;
         PrintDetails: Boolean;
 
+    /// <summary>
+    /// Calculates PeriodStartDate and PeriodEndDate arrays used by GetPeriodIndex().
+    /// This controls which aging bucket each vendor ledger entry falls into.
+    /// </summary>
     local procedure CalcDates()
     var
         PeriodLength2: DateFormula;
@@ -994,6 +1062,10 @@ report 50400 "RV Aged Accounts Payable"
                 Error(Text010, PeriodLength);
     end;
 
+    /// <summary>
+    /// Builds the RDLC aging captions: top row Current/1MTH/2MTH/... and
+    /// second row Not Due/date range/day range depending on Heading Type.
+    /// </summary>
     local procedure CreateHeadings()
     begin
         // FDD030: Top header row for six aging buckets.
@@ -1031,6 +1103,10 @@ report 50400 "RV Aged Accounts Payable"
         end;
     end;
 
+    /// <summary>
+    /// Inserts eligible Vendor Ledger Entries into TempVendorLedgEntry and prepares
+    /// the TempCurrency list used by CurrencyLoop. Prevents duplicate entries by Entry No.
+    /// </summary>
     local procedure InsertTemp(var VendorLedgEntry: Record "Vendor Ledger Entry")
     var
         Currency: Record Currency;
@@ -1062,6 +1138,10 @@ report 50400 "RV Aged Accounts Payable"
         TempCurrency.Insert();
     end;
 
+    /// <summary>
+    /// Returns the aging bucket index 1..6 for the supplied date.
+    /// Index 1 = Current/Not Due, Index 6 = 4MTH+/oldest bucket.
+    /// </summary>
     local procedure GetPeriodIndex(Date: Date): Integer
     var
         i: Integer;
@@ -1071,6 +1151,11 @@ report 50400 "RV Aged Accounts Payable"
                 exit(i);
     end;
 
+    /// <summary>
+    /// Builds temporary currency totals for the Currency Specification section.
+    /// Bucket amounts are stored by PeriodStartDate; the overall currency total is
+    /// stored with Date = 31/12/9999 and later exposed as RV_CurrencySpecTotalAmount.
+    /// </summary>
     local procedure UpdateCurrencyTotals()
     var
         i: Integer;
@@ -1108,6 +1193,9 @@ report 50400 "RV Aged Accounts Payable"
         end;
     end;
 
+    /// <summary>
+    /// Allows another AL object to run this report with predefined request values.
+    /// </summary>
     procedure InitializeRequest(NewEndingDate: Date; NewAgingBy: Option; NewPeriodLength: DateFormula; NewPrintAmountInLCY: Boolean; NewPrintDetails: Boolean; NewHeadingType: Option; NewNewPagePerVendor: Boolean; NewPrintBankDetails: Boolean)
     begin
         EndingDate := NewEndingDate;
@@ -1122,6 +1210,10 @@ report 50400 "RV Aged Accounts Payable"
         PrintBankDetails := NewPrintBankDetails;
     end;
 
+    /// <summary>
+    /// Copies Vendor global dimension filters to Vendor Ledger Entry records so the
+    /// aging result respects dimension filters entered on the request page.
+    /// </summary>
     local procedure CopyDimFiltersFromVendor(var VendorLedgerEntry: Record "Vendor Ledger Entry")
     begin
         if Vendor.GetFilter("Global Dimension 1 Filter") <> '' then
@@ -1132,6 +1224,10 @@ report 50400 "RV Aged Accounts Payable"
     end;
 
     // FDD030: Vendor Filter displayed as Trading Partner From / To.
+    /// <summary>
+    /// Splits Vendor No. filter into Trading Partner From and To fields for RDLC.
+    /// Example: VN0001..VN0020 becomes From = VN0001, To = VN0020.
+    /// </summary>
     local procedure SetTradingPartnerFilterText()
     var
         VendorNoFilter: Text;
@@ -1155,4 +1251,27 @@ report 50400 "RV Aged Accounts Payable"
             TradingPartnerTo := CopyStr(VendorNoFilter, 1, MaxStrLen(TradingPartnerTo));
         end;
     end;
+
+    // FDD022: Currency Filter
+    /// <summary>
+    /// Applies Vendor.Currency Filter to Vendor Ledger Entry.Currency Code.
+    /// LCY entries are stored as blank Currency Code in Vendor Ledger Entry, so
+    /// filtering by GLSetup.LCY Code must be converted to Currency Code = ''.
+    /// </summary>
+    local procedure ApplyCurrencyFilterToVendLedgEntry(var VendorLedgerEntry: Record "Vendor Ledger Entry")
+    var
+        CurrencyFilter: Text;
+    begin
+        CurrencyFilter := Vendor.GetFilter("Currency Filter");
+
+        if CurrencyFilter = '' then
+            exit;
+
+        // LCY entries are stored with blank Currency Code in Vendor Ledger Entry.
+        if CurrencyFilter = GLSetup."LCY Code" then
+            VendorLedgerEntry.SetRange("Currency Code", '')
+        else
+            VendorLedgerEntry.SetFilter("Currency Code", CurrencyFilter);
+    end;
 }
+
