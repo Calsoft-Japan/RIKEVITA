@@ -412,6 +412,9 @@
         <Field Name="CurrencySpecificationCaption">
           <DataField>CurrencySpecificationCaption</DataField>
         </Field>
+        <Field Name="RV_CurrencySpecTotalAmount">
+          <Value>RV_CurrencySpecTotalAmount</Value>
+        </Field>
       </Fields>
     </DataSet>
   </DataSets>
@@ -1254,15 +1257,15 @@
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox436">
-                          <rd:DefaultName>Textbox436</rd:DefaultName>
+                        <Textbox Name="Textbox85">
+                          <rd:DefaultName>Textbox85</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>11</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -2712,15 +2715,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox216">
-                          <rd:DefaultName>Textbox216</rd:DefaultName>
+                        <Textbox Name="Textbox87">
+                          <rd:DefaultName>Textbox87</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>a</Value>
+                                  <Value />
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -2739,15 +2742,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox283">
-                          <rd:DefaultName>Textbox283</rd:DefaultName>
+                        <Textbox Name="Textbox118">
+                          <rd:DefaultName>Textbox118</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>d</Value>
+                                  <Value />
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -3145,15 +3148,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox217">
-                          <rd:DefaultName>Textbox217</rd:DefaultName>
+                        <Textbox Name="Textbox92">
+                          <rd:DefaultName>Textbox92</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>b</Value>
+                                  <Value />
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -3172,15 +3175,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox285">
-                          <rd:DefaultName>Textbox285</rd:DefaultName>
+                        <Textbox Name="Textbox117">
+                          <rd:DefaultName>Textbox117</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>e</Value>
+                                  <Value />
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -3572,15 +3575,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox218">
-                          <rd:DefaultName>Textbox218</rd:DefaultName>
+                        <Textbox Name="Textbox93">
+                          <rd:DefaultName>Textbox93</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>c</Value>
+                                  <Value />
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -3599,15 +3602,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox286">
-                          <rd:DefaultName>Textbox286</rd:DefaultName>
+                        <Textbox Name="Textbox116">
+                          <rd:DefaultName>Textbox116</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>g</Value>
+                                  <Value />
                                   <Style />
                                 </TextRun>
                               </TextRuns>
@@ -3972,15 +3975,15 @@
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="RV_PaymentTermsCode1">
-                          <rd:DefaultName>RV_PaymentTermsCode1</rd:DefaultName>
+                        <Textbox Name="Textbox94">
+                          <rd:DefaultName>Textbox94</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>44</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -4005,15 +4008,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox287">
-                          <rd:DefaultName>Textbox287</rd:DefaultName>
+                        <Textbox Name="Textbox115">
+                          <rd:DefaultName>Textbox115</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>i</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -4793,15 +4796,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="RV_RowPaymentTermsCode">
-                          <rd:DefaultName>RV_RowPaymentTermsCode</rd:DefaultName>
+                        <Textbox Name="Textbox95">
+                          <rd:DefaultName>Textbox95</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>55</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -4827,15 +4830,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox290">
-                          <rd:DefaultName>Textbox290</rd:DefaultName>
+                        <Textbox Name="Textbox114">
+                          <rd:DefaultName>Textbox114</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>99</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -5306,15 +5309,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox445">
-                          <rd:DefaultName>Textbox445</rd:DefaultName>
+                        <Textbox Name="Textbox96">
+                          <rd:DefaultName>Textbox96</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>66</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -5340,15 +5343,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox291">
-                          <rd:DefaultName>Textbox291</rd:DefaultName>
+                        <Textbox Name="Textbox113">
+                          <rd:DefaultName>Textbox113</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>o</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -5377,15 +5380,16 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox505">
-                          <rd:DefaultName>Textbox505</rd:DefaultName>
+                        <rd:Selected>true</rd:Selected>
+                        <Textbox Name="Textbox119">
+                          <rd:DefaultName>Textbox119</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>00</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -5714,15 +5718,15 @@
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox222">
-                          <rd:DefaultName>Textbox222</rd:DefaultName>
+                        <Textbox Name="Textbox102">
+                          <rd:DefaultName>Textbox102</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>p</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -5744,15 +5748,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox292">
-                          <rd:DefaultName>Textbox292</rd:DefaultName>
+                        <Textbox Name="Textbox112">
+                          <rd:DefaultName>Textbox112</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>q</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -6553,15 +6557,15 @@
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox223">
-                          <rd:DefaultName>Textbox223</rd:DefaultName>
+                        <Textbox Name="Textbox104">
+                          <rd:DefaultName>Textbox104</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>77</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -6584,15 +6588,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox293">
-                          <rd:DefaultName>Textbox293</rd:DefaultName>
+                        <Textbox Name="Textbox111">
+                          <rd:DefaultName>Textbox111</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>46</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -6969,15 +6973,15 @@
                     <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox425">
-                          <rd:DefaultName>Textbox425</rd:DefaultName>
+                        <Textbox Name="Textbox105">
+                          <rd:DefaultName>Textbox105</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>88</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -7004,15 +7008,15 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox426">
-                          <rd:DefaultName>Textbox426</rd:DefaultName>
+                        <Textbox Name="Textbox106">
+                          <rd:DefaultName>Textbox106</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>87</Value>
+                                  <Value />
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -11191,10 +11195,10 @@ and(not Fields!VendorNo.Value=""),False,True)</Hidden>
                   <Width>13.60344cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.26188cm</Width>
+                  <Width>2.11487cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.54804cm</Width>
+                  <Width>2.69504cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>2.69504cm</Width>
@@ -11294,19 +11298,20 @@ and(not Fields!VendorNo.Value=""),False,True)</Hidden>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox81">
-                          <rd:DefaultName>Textbox81</rd:DefaultName>
+                        <Textbox Name="Textbox82">
+                          <rd:DefaultName>Textbox82</rd:DefaultName>
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value />
+                                  <Value>=Fields!RV_CurrencySpecTotalAmount.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Normal</FontWeight>
+                                    <Format>N2</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
