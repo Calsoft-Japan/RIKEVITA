@@ -9,7 +9,7 @@ page 50535 "RV QC List Value List"
     UsageCategory = Lists;
     Caption = 'QC List Value';
     SourceTable = "RV QC List Value";
-    Editable = false;
+    //Editable = false;
     layout
     {
         area(Content)

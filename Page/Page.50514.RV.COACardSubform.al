@@ -44,6 +44,10 @@ page 50514 "RV COA Card Subform"
 
                         //clear ShipmentLotNo
                         Rec.ClearShipmentLotNo;
+
+                        //Init ShipmentLotNo
+                        Rec.InitShipmentLotNo;
+
                         CurrPage.Update();
 
                     end;
@@ -89,6 +93,9 @@ page 50514 "RV COA Card Subform"
                         Rec.ClearShipmentLotNo;
 
                         Rec.ValidateOrderNo();
+
+                        //Init ShipmentLotNo
+                        Rec.InitShipmentLotNo;
 
                         CurrPage.Update();
                     end;

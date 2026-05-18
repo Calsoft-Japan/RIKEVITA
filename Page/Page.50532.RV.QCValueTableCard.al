@@ -29,7 +29,7 @@ page 50532 "RV QC Value Table Card"
                     var
                         QCListValue: Record "RV QC List Value";
                     begin
-                        Rec.SetQCEnable(LineEnable, TypeEnable, ValueTableTypeEnable);
+                        Rec.SetQCEnable(LineEnable, ValueEnable, TypeEnable, ValueTableTypeEnable);
                         if (xRec."Value Table Type" <> Rec."Value Table Type") then begin
                             QCListValue.Reset();
                             QCListValue.SetRange("Value Table Name", Rec."Value Table Name");
@@ -45,10 +45,12 @@ page 50532 "RV QC Value Table Card"
                 field("Minimum Value"; Rec."Minimum Value")
                 {
                     ApplicationArea = All;
+                    Editable = ValueEnable;
                 }
                 field("Maximum Value"; Rec."Maximum Value")
                 {
                     ApplicationArea = All;
+                    Editable = ValueEnable;
                 }
             }
             part(SubLine; "RV QC List Value Subform")
@@ -63,16 +65,17 @@ page 50532 "RV QC Value Table Card"
     }
     trigger OnOpenPage()
     begin
-        Rec.SetQCEnable(LineEnable, TypeEnable, ValueTableTypeEnable);
+        Rec.SetQCEnable(LineEnable, ValueEnable, TypeEnable, ValueTableTypeEnable);
     end;
 
     trigger OnAfterGetCurrRecord()
     begin
-        Rec.SetQCEnable(LineEnable, TypeEnable, ValueTableTypeEnable);
+        Rec.SetQCEnable(LineEnable, ValueEnable, TypeEnable, ValueTableTypeEnable);
     end;
 
     var
         LineEnable: Boolean;
+        ValueEnable: Boolean;
         TypeEnable: Boolean;
         ValueTableTypeEnable: Boolean;
 }

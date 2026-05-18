@@ -53,8 +53,8 @@ table 50506 "RV QC Line"
                         end;
                     end;
                 end else begin
-                    Type := Type::" ";
-                    "Value Table Type" := "Value Table Type"::" ";
+                    Clear(Type);
+                    Clear("Value Table Type");
                 end;
             end;
         }
@@ -116,8 +116,8 @@ table 50506 "RV QC Line"
 
     procedure CheckQCResultRange()
     var
-        TempInteger: Record "Integer" temporary;// Temp
-        Temptext: Record "RV QC Value Table" temporary;// Temp
+        TempDecimal: Record "RV TempTextDecimal" temporary;// Temp
+        Temptext: Record "RV TempTextDecimal" temporary;// Temp
         //QCSpecificationLine: Record "RV QC Specification Line";
         QCValueTable: Record "RV QC Value Table";
         QCListValue: Record "RV QC List Value";
@@ -130,9 +130,9 @@ table 50506 "RV QC Line"
         Temptext.Reset();
         Temptext.DeleteAll();
 
-        //clear TempInteger
-        TempInteger.Reset();
-        TempInteger.DeleteAll();
+        //clear TempDecimal
+        TempDecimal.Reset();
+        TempDecimal.DeleteAll();
 
         Clear(TempMaxValue);
         Clear(TempMinValue);
@@ -145,6 +145,8 @@ table 50506 "RV QC Line"
                 CASE QCValueTable.Type OF
                     (QCValueTable.Type::Alphanumeric):
                         begin
+                            //ValidateAlphanumeric
+                            ValidateAlphanumeric("QC Result");
 
                             CASE QCValueTable."Value Table Type" OF
                                 (QCValueTable."Value Table Type"::Range):
@@ -153,17 +155,17 @@ table 50506 "RV QC Line"
                                         Temptext.Reset();
 
                                         Temptext.Init();
-                                        Temptext."Value Table Name" := "QC Result";
+                                        Temptext."Value Text" := "QC Result";
                                         Temptext.Insert();
 
                                         if (QCValueTable."Minimum Value" <> '') and (QCValueTable."Maximum Value" <> '') then begin
-                                            Temptext.SetRange("Value Table Name", QCValueTable."Minimum Value", QCValueTable."Maximum Value");
+                                            Temptext.SetRange("Value Text", QCValueTable."Minimum Value", QCValueTable."Maximum Value");
                                         end
                                         else if (QCValueTable."Minimum Value" <> '') then begin
-                                            Temptext.SetFilter("Value Table Name", '%1..', QCValueTable."Minimum Value");
+                                            Temptext.SetFilter("Value Text", '%1..', QCValueTable."Minimum Value");
                                         end
                                         else if (QCValueTable."Maximum Value" <> '') then begin
-                                            Temptext.SetFilter("Value Table Name", '..%1', QCValueTable."Maximum Value");
+                                            Temptext.SetFilter("Value Text", '..%1', QCValueTable."Maximum Value");
                                         end;
 
                                         //Error('QC Result cannot be checked because QC Specification Line do not exist.');
@@ -197,11 +199,15 @@ table 50506 "RV QC Line"
                     (QCValueTable.Type::Numeric):
                         begin
 
-                            TempInteger.Reset();
+                            //ValidateNumeric
+                            ValidateNumeric("QC Result");
 
-                            TempInteger.Init();
-                            if Evaluate(TempInteger.Number, "QC Result") then
-                                TempInteger.Insert()
+                            TempDecimal.Reset();
+
+                            TempDecimal.Init();
+                            TempDecimal."Value Text" := 'Temp';
+                            if Evaluate(TempDecimal."Value Decimal", "QC Result") then
+                                TempDecimal.Insert()
                             else
                                 Error('Please enter a Numeric.');
 
@@ -213,18 +219,18 @@ table 50506 "RV QC Line"
                                         if Evaluate(TempMaxValue, QCValueTable."Maximum Value") then;
 
                                         if (QCValueTable."Minimum Value" <> '') and (QCValueTable."Maximum Value" <> '') then begin
-                                            TempInteger.SetRange(Number, TempMinValue, TempMaxValue);
+                                            TempDecimal.SetRange("Value Decimal", TempMinValue, TempMaxValue);
                                         end
                                         else if (QCValueTable."Minimum Value" <> '') then begin
-                                            TempInteger.SetFilter(Number, '%1..', TempMinValue);
+                                            TempDecimal.SetFilter("Value Decimal", '%1..', TempMinValue);
                                         end
                                         else if (QCValueTable."Maximum Value" <> '') then begin
-                                            TempInteger.SetFilter(Number, '..%1', TempMaxValue);
+                                            TempDecimal.SetFilter("Value Decimal", '..%1', TempMaxValue);
                                         end;
 
                                         //Error('QC Result cannot be checked because QC Specification Line do not exist.');
 
-                                        if not TempInteger.IsEmpty() then
+                                        if not TempDecimal.IsEmpty() then
                                             "Check Status" := "Check Status"::PASSED
                                         else
                                             "Check Status" := "Check Status"::FAILED;
@@ -251,43 +257,31 @@ table 50506 "RV QC Line"
                             END;
 
                         end;
-                    (QCValueTable.Type::Blooean):
-                        begin
-                            if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
-                                "Check Status" := QCListValue."Check Status"
-                            else
-                                "Check Status" := "Check Status"::Init;
-                        end;
-                    (QCValueTable.Type::" "):
-                        begin
 
-                            CASE QCValueTable."Value Table Type" OF
-                                (QCValueTable."Value Table Type"::Range):
-                                    begin
-                                        //None
-                                    end;
-                                (QCValueTable."Value Table Type"::Single):
-                                    begin
-                                        //None
-                                    end;
-                                (QCValueTable."Value Table Type"::Table):
-                                    begin
-                                        if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
-                                            "Check Status" := QCListValue."Check Status"
-                                        else
-                                            "Check Status" := "Check Status"::Init;
-                                    end;
-                                (QCValueTable."Value Table Type"::List):
-                                    begin
-                                        if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
-                                            "Check Status" := QCListValue."Check Status"
-                                        else
-                                            "Check Status" := "Check Status"::Init;
-                                    end;
-                            END;
-                        end;
                 END;
             end;
+        end;
+    end;
+
+    procedure ValidateAlphanumeric(InputValue: Text)
+    var
+        RemainingText: Text;
+    begin
+        RemainingText := DelChr(InputValue, '=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+        if RemainingText <> '' then
+            Error('Please enter a Alphanumeric.');
+    end;
+
+
+    procedure ValidateNumeric(InputText: Text)
+    var
+        ResultDecimal: Decimal;
+    begin
+        if Evaluate(ResultDecimal, InputText) then begin
+            if ResultDecimal < 0 then
+                Error('The input value cannot be negative.');
+        end else begin
+            Error('Please enter a Numeric.');
         end;
     end;
 }

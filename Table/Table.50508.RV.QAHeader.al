@@ -142,6 +142,22 @@ table 50508 "RV QA Header"
         QAShipmentLotNo.DeleteAll();
     end;
 
+    procedure InitShipmentLotNo()
+    var
+        QAShipmentLotNo: Record "RV QA Shipment Lot No.";
+    begin
+
+        QAShipmentLotNo.SetRange("COA No.", "COA No.");
+        if QAShipmentLotNo.IsEmpty then begin
+            //Init ShipmentLotNo
+            QAShipmentLotNo.Init();
+            QAShipmentLotNo."COA No." := "COA No.";
+            QAShipmentLotNo."COA Lot Line No." := 0;
+            if QAShipmentLotNo.Insert() then;
+        end;
+
+    end;
+
     procedure IsQACheckAllowed(): Boolean
     var
         UserSetup: Record "User Setup";

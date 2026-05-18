@@ -39,8 +39,8 @@ table 50502 "RV QC Specification Line"
                             end;
                         end;
                     end else begin
-                        "Value Table Type" := "Value Table Type"::" ";
-                        "Target Value ib Base UM" := '';
+                        Clear("Value Table Type");
+                        Clear("Target Value ib Base UM");
                     end;
                 end;
             end;

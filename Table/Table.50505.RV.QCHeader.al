@@ -223,11 +223,27 @@ table 50505 "RV QC Header"
     trigger OnDelete()
     var
         DocumentAttachment: Record "Document Attachment";
+        QCline: Record "RV QC line";
+        QCInyResultLine: Record "RV QC Iny. Result Line";
+
+
     begin
         DocumentAttachment.SetRange("Table ID", Database::"RV QC Header");
         DocumentAttachment.SetRange("No.", Rec."QC No.");
         if not DocumentAttachment.IsEmpty then
             DocumentAttachment.DeleteAll();
+
+        QCline.Reset();
+        QCline.LockTable();
+        QCline.SetRange("QC No.", Rec."QC No.");
+        QCline.SetRange("QC Type", Rec."QC Type");
+        QCline.DeleteAll(true);
+
+        QCInyResultLine.Reset();
+        QCInyResultLine.LockTable();
+        QCInyResultLine.SetRange("QC No.", Rec."QC No.");
+        QCInyResultLine.SetRange("QC Type", Rec."QC Type");
+        QCInyResultLine.DeleteAll(true);
     end;
 
     procedure IsQCCheckAllowed(): Boolean
