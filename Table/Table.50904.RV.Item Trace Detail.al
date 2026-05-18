@@ -18,6 +18,11 @@ table 50904 "RV Item Trace Detail"
         {
             Caption = 'Entry No.';
             Editable = false;
+        }
+        field(3; "Item Ledger Entry No."; Integer)
+        {
+            Caption = 'Item Ledger Entry No.';
+            Editable = false;
             TableRelation = "Item Ledger Entry"."Entry No.";
         }
         field(11; "Vendor No."; Code[20])

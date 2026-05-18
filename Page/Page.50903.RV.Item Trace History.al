@@ -59,6 +59,7 @@ page 50903 "RV Item Trace History"
                     var
                         repCollect: Report "RV Item Trace Collect";
                     begin
+                        Clear(repCollect);
                         repCollect.RunModal();
                     end;
                 }

@@ -167,10 +167,11 @@ report 50900 "RV Item Trace Collect"
     local procedure CreateItemTraceDetail()
     var
     begin
-
+        DetailEntryNo += 1;
         ItemDetail.Init();
         ItemDetail."History Entry No." := HistoryEntryNo;
-        ItemDetail."Entry No." := ILE."Entry No.";
+        ItemDetail."Entry No." := DetailEntryNo;
+        ItemDetail."Item Ledger Entry No." := ILE."Entry No.";
         ItemDetail.Insert();
 
         case ILE."Entry Type" of
@@ -337,5 +338,6 @@ report 50900 "RV Item Trace Collect"
         EndDate: Date;
         ItemNoFilter: Text[250];
         HistoryEntryNo: Integer;
+        DetailEntryNo: Integer;
 
 }
