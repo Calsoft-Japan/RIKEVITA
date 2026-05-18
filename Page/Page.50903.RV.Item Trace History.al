@@ -5,7 +5,7 @@
 page 50903 "RV Item Trace History"
 {
     ApplicationArea = All;
-    Caption = 'Item Trace History';
+    Caption = 'Item Trace Histories';
     PageType = List;
     SourceTable = "RV Item Trace History";
     UsageCategory = Lists;

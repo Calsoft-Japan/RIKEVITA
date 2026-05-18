@@ -9,6 +9,8 @@ page 50904 "RV Item Balance by Vendor"
     PageType = List;
     SourceTable = "RV Item Balance by Vendor";
     UsageCategory = Lists;
+    InsertAllowed = false;
+    DeleteAllowed = false;
 
     layout
     {
