@@ -55,6 +55,7 @@ table 50200 "RV Vendor Selection"
             trigger OnValidate()
             var
                 ItemVendor: Record "Item Vendor";
+                RequisitionLine: Record "Requisition Line";
             begin
                 ItemVendor.Reset();
                 ItemVendor.SetRange("Item No.", Rec."Item No.");
@@ -62,6 +63,14 @@ table 50200 "RV Vendor Selection"
                 if ItemVendor.FindFirst() then begin
                     "Minimum Order Quantity" := ItemVendor."RV_Minimum Order Quantity";
                     "Maximum Order Quantity" := ItemVendor."RV_Maximum Order Quantity";
+                end;
+
+                RequisitionLine.Reset();
+                RequisitionLine.SetRange("Journal Batch Name", Rec."Journal Batch Name");
+                RequisitionLine.SetRange("No.", Rec."Item No.");
+                RequisitionLine.SetRange("Line No.", Rec."Line No.");
+                if RequisitionLine.FindFirst() then begin
+                    "Unit of Measure Code" := RequisitionLine."Unit of Measure Code";
                 end;
             end;
         }
@@ -85,6 +94,13 @@ table 50200 "RV Vendor Selection"
             trigger OnValidate()
             begin
                 Rec.CalcFields("Total Split Quantity");
+                if (Rec."Quantity to Order" < Rec."Minimum Order Quantity") and (Rec."Quantity to Order" <> 0) then begin
+                    Error('Quantity to Order must not be less than the Minimum Order Quantity.');
+                end;
+
+                if (Rec."Quantity to Order" > Rec."Maximum Order Quantity") and (Rec."Quantity to Order" <> 0) then begin
+                    Error('Quantity to Order must not be more than the Maximum Order Quantity.');
+                end;
             end;
         }
         field(12; "Unit of Measure Code"; Code[10])

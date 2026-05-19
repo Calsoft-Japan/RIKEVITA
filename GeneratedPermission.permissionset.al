@@ -135,7 +135,7 @@ permissionset 50100 GeneratedPermission
         page "RV Vendor ISO Certificate Card" = X,
         page "RV Vendor ISO Certificate List" = X,
         page "RV Vendor Selection" = X,
-        page "RV Vendor Selection Subform" = X,
+    //page "RV Vendor Selection Subform" = X,
         page "Standard Cost Element Details" = X,
         page "Standard Cost Element Period" = X,
         query "Inventory Master File" = X,

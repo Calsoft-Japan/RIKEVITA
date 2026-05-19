@@ -60,11 +60,53 @@ page 50200 "RV Vendor Selection"
                     Enabled = false;
                 }
             }
-            part(VendorSelectionLines; "RV Vendor Selection Subform")
+            repeater(VendorSelectionLines)
             {
-                ApplicationArea = Basic, Suite;
-                SubPageLink = "Journal Batch Name" = field("Journal Batch Name"), "Line No." = field("Line No."), "Item No." = field("Item No.");
-                UpdatePropagation = Both;
+                field("Vendor No."; Rec."Vendor No.")
+                {
+                    Caption = 'Vendor No.';
+                    Description = 'FDD002';
+                    ApplicationArea = All;
+                    NotBlank = true;
+                    TableRelation = "Item Vendor" where("Item No." = field("Item No."));
+                }
+                field("Minimum Order Quantity"; Rec."Minimum Order Quantity")
+                {
+                    Caption = 'Minimum Order Quantity';
+                    Description = 'FDD002';
+                    Enabled = false;
+                    ApplicationArea = All;
+                }
+                field("Maximum Order Quantity"; Rec."Maximum Order Quantity")
+                {
+                    Caption = 'Maximum Order Quantity';
+                    Description = 'FDD002';
+                    Enabled = false;
+                    ApplicationArea = All;
+                }
+                field("Quantity to Order"; Rec."Quantity to Order")
+                {
+                    Caption = 'Quantity to Order';
+                    Description = 'FDD002';
+                    ApplicationArea = All;
+
+                    trigger OnValidate()
+                    begin
+                        CurrPage.Update(true);
+                        Rec.CalcFields("Total Split Quantity");
+                        if (RecQuantity - Rec."Total Split Quantity" < 0) and (Rec."Total Split Quantity" <> 0) then begin
+                            Message('Balance Quantity must be 0 before you close this page.');
+                        end;
+                    end;
+
+                }
+                field("Unit of Measure Code"; Rec."Unit of Measure Code")
+                {
+                    Caption = 'Unit of Measure Code';
+                    Description = 'FDD002';
+                    ApplicationArea = All;
+                    Enabled = false;
+                }
             }
         }
     }
@@ -79,9 +121,11 @@ page 50200 "RV Vendor Selection"
 
     trigger OnQueryClosePage(CloseAction: Action): Boolean
     begin
-        if RecQuantity - Rec."Total Split Quantity" <> 0 then begin
+
+        if (RecQuantity - Rec."Total Split Quantity" > 0) and (Rec."Total Split Quantity" <> 0) then begin
             Error('Balance Quantity must be 0 before you close this page.');
         end;
+
     end;
 
 }
