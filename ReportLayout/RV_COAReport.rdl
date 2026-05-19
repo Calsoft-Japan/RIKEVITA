@@ -11,7 +11,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.1.30001.02</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-04-30T09:01:36.3872263Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-05-18T14:06:50.1525634Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -2942,7 +2942,7 @@ Fields!DateWording_remarkText.Value</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>NO</Value>
+                      <Value>NO :</Value>
                       <Style>
                         <FontFamily>Meiryo</FontFamily>
                         <FontWeight>Bold</FontWeight>
@@ -3329,20 +3329,6 @@ Fields!DateWording_remarkText.Value</Value>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
-            <Image Name="Image3">
-              <Source>Embedded</Source>
-              <Value>COAfooter</Value>
-              <Sizing>FitProportional</Sizing>
-              <Top>2.02243cm</Top>
-              <Left>4.10331cm</Left>
-              <Height>1.5cm</Height>
-              <Width>11.20843cm</Width>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Image>
             <Textbox Name="Textbox1">
               <rd:DefaultName>Textbox1</rd:DefaultName>
               <CanGrow>true</CanGrow>
@@ -3360,11 +3346,10 @@ Fields!DateWording_remarkText.Value</Value>
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.5196cm</Top>
+              <Top>2.04005cm</Top>
               <Left>0.09275cm</Left>
-              <Height>0.6cm</Height>
-              <Width>2.41161cm</Width>
-              <ZIndex>1</ZIndex>
+              <Height>0.2825cm</Height>
+              <Width>4.31661cm</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3392,11 +3377,11 @@ Fields!DateWording_remarkText.Value</Value>
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>0.5196cm</Top>
-              <Left>16.66676cm</Left>
-              <Height>0.6cm</Height>
-              <Width>1.90465cm</Width>
-              <ZIndex>2</ZIndex>
+              <Top>2.04005cm</Top>
+              <Left>14.76176cm</Left>
+              <Height>0.2825cm</Height>
+              <Width>3.80965cm</Width>
+              <ZIndex>1</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3417,22 +3402,19 @@ Fields!DateWording_remarkText.Value</Value>
                     <TextRun>
                       <Value>Remark: The validity of expiry date shall follow the end of the month as in '</Value>
                       <Style>
-                        <FontFamily>Meiryo</FontFamily>
-                        <FontSize>8pt</FontSize>
+                        <FontFamily>Calibri</FontFamily>
                       </Style>
                     </TextRun>
                     <TextRun>
                       <Value>=code.GetData(3,4)</Value>
                       <Style>
-                        <FontFamily>Meiryo</FontFamily>
-                        <FontSize>8pt</FontSize>
+                        <FontFamily>Calibri</FontFamily>
                       </Style>
                     </TextRun>
                     <TextRun>
                       <Value>'</Value>
                       <Style>
-                        <FontFamily>Meiryo</FontFamily>
-                        <FontSize>8pt</FontSize>
+                        <FontFamily>Calibri</FontFamily>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -3441,20 +3423,18 @@ Fields!DateWording_remarkText.Value</Value>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>0.5196cm</Top>
-              <Left>2.50436cm</Left>
-              <Height>0.6cm</Height>
-              <Width>14.05657cm</Width>
-              <ZIndex>3</ZIndex>
+              <Top>0.72647cm</Top>
+              <Left>0.09275cm</Left>
+              <Height>0.4cm</Height>
+              <Width>18.42537cm</Width>
+              <ZIndex>2</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
                 </Border>
-                <VerticalAlign>Bottom</VerticalAlign>
+                <VerticalAlign>Middle</VerticalAlign>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>1pt</PaddingBottom>
               </Style>
             </Textbox>
             <Textbox Name="Textbox40">
@@ -3467,22 +3447,22 @@ Fields!DateWording_remarkText.Value</Value>
                     <TextRun>
                       <Value>This document is computer generated, no signature required. (</Value>
                       <Style>
-                        <FontFamily>Meiryo</FontFamily>
-                        <FontSize>9pt</FontSize>
+                        <FontFamily>Calibri</FontFamily>
+                        <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
                     <TextRun>
                       <Value>=code.GetData(2,4)</Value>
                       <Style>
-                        <FontFamily>Meiryo</FontFamily>
-                        <FontSize>9pt</FontSize>
+                        <FontFamily>Calibri</FontFamily>
+                        <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
                     <TextRun>
                       <Value>)</Value>
                       <Style>
-                        <FontFamily>Meiryo</FontFamily>
-                        <FontSize>9pt</FontSize>
+                        <FontFamily>Calibri</FontFamily>
+                        <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -3491,20 +3471,18 @@ Fields!DateWording_remarkText.Value</Value>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>1.46122cm</Top>
-              <Left>0.09275cm</Left>
-              <Height>0.6cm</Height>
-              <Width>18.47866cm</Width>
-              <ZIndex>4</ZIndex>
+              <Top>1.12647cm</Top>
+              <Left>0.06416cm</Left>
+              <Height>0.44cm</Height>
+              <Width>18.45396cm</Width>
+              <ZIndex>3</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
                 </Border>
-                <VerticalAlign>Bottom</VerticalAlign>
+                <VerticalAlign>Top</VerticalAlign>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>1pt</PaddingBottom>
               </Style>
             </Textbox>
             <Textbox Name="PageNumberTextBox">
@@ -3525,13 +3503,150 @@ Fields!DateWording_remarkText.Value</Value>
                   </Style>
                 </Paragraph>
               </Paragraphs>
-              <Top>2.48455cm</Top>
+              <Top>2.60104cm</Top>
               <Left>16.71968cm</Left>
               <Height>0.63491cm</Height>
               <Width>1.85173cm</Width>
-              <ZIndex>5</ZIndex>
+              <ZIndex>4</ZIndex>
               <Style>
                 <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox24">
+              <rd:DefaultName>Textbox10</rd:DefaultName>
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>No 11, Jalan Bayu, 81200 Tampoi, Johor Bahru, Johor Darul Takzim, Malaysia</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Calibri</FontFamily>
+                        <FontSize>8pt</FontSize>
+                        <FontWeight>Normal</FontWeight>
+                        <TextDecoration>None</TextDecoration>
+                        <Color>#000000</Color>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.81567in</Top>
+              <Left>1.75208in</Left>
+              <Height>11pt</Height>
+              <Width>4.03242in</Width>
+              <ZIndex>5</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox27">
+              <rd:DefaultName>Textbox10</rd:DefaultName>
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>Tel: 07-238 1733, 07-213 2100 Fax: 07-238 1737</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Calibri</FontFamily>
+                        <FontSize>8pt</FontSize>
+                        <FontWeight>Normal</FontWeight>
+                        <TextDecoration>None</TextDecoration>
+                        <Color>#000000</Color>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.96844in</Top>
+              <Left>1.75208in</Left>
+              <Height>11pt</Height>
+              <Width>4.03242in</Width>
+              <ZIndex>6</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox28">
+              <rd:DefaultName>Textbox10</rd:DefaultName>
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>QA E-Mail: qadept@rikevita.com.my</Value>
+                      <Style>
+                        <FontStyle>Normal</FontStyle>
+                        <FontFamily>Calibri</FontFamily>
+                        <FontSize>8pt</FontSize>
+                        <FontWeight>Normal</FontWeight>
+                        <TextDecoration>None</TextDecoration>
+                        <Color>#000000</Color>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>1.12122in</Top>
+              <Left>1.75208in</Left>
+              <Height>11pt</Height>
+              <Width>4.03242in</Width>
+              <ZIndex>7</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox41">
+              <rd:DefaultName>Textbox39</rd:DefaultName>
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value EvaluationMode="Constant">Note: Results listed on COA with identification as asterisk (*) are not tested every lot or represent typical range of value.</Value>
+                      <Style>
+                        <FontFamily>Calibri</FontFamily>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <Top>0.28647cm</Top>
+              <Left>0.09275cm</Left>
+              <Height>0.44cm</Height>
+              <Width>18.42787cm</Width>
+              <ZIndex>8</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Bottom</VerticalAlign>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
               </Style>
             </Textbox>
           </ReportItems>

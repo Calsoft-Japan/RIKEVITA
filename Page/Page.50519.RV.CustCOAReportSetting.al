@@ -4,7 +4,7 @@
 /// </summary>
 page 50519 "RV CustCOAReportSetting"
 {
-    Caption = 'Cust. COA Report Setting';
+    Caption = 'Customer COA Report Setting';
     PageType = List;
     ApplicationArea = All;
     UsageCategory = Lists;

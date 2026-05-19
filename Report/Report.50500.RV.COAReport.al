@@ -118,7 +118,6 @@ report 50500 "RV_COA Report"
                         dataitem(ExternalQCLoop; "Integer")
                         {
                             DataItemTableView = sorting(Number);
-
                             column(ExternalQCLoop_Number; ExternalQCLoop.Number)//1
                             {
                             }
@@ -142,7 +141,6 @@ report 50500 "RV_COA Report"
                             begin
                                 ExternalQCResults.SetRange("COA No.", "RV QA Shipment Lot No."."COA No.");//COA Lot Line No.
                                 ExternalQCResults.SetRange("COA Lot Line No.", "RV QA Shipment Lot No."."COA Lot Line No.");//COA Lot Line No.
-
                                 SETRANGE(Number, 1, ExternalQCResults.COUNT);
                             end;
 
@@ -153,7 +151,6 @@ report 50500 "RV_COA Report"
                                     IF ExternalQCResults.FIND('-') THEN;
                                 END ELSE
                                     IF ExternalQCResults.NEXT = 0 THEN;
-
 
                                 CLEAR(METHODText);
                                 CLEAR(SPECIFICATIONText);
@@ -193,15 +190,13 @@ report 50500 "RV_COA Report"
 
                         trigger OnAfterGetRecord()
                         begin
-                            //UOM := JPCK_Functions.GetUnitOfMeasureText(UOM, CurrReport.Language);
                             UOM := UOM;
 
                             Clear(HeaderQuantity);
                             Clear(ContainerNo);
-
                             Clear(LineQuantity);
-
                             Clear(QtyCalculated);
+                            Clear(FormatExpireDateText);
 
                             if not Item.get("QA Header"."Item No.") then
                                 Item.Init();
@@ -270,6 +265,8 @@ report 50500 "RV_COA Report"
 
             trigger OnAfterGetRecord()
             begin
+                //ClearData
+                ClearData();
 
                 CompanyInfo.Get();
                 CompanyInfo.CalcFields(Picture);
@@ -280,6 +277,9 @@ report 50500 "RV_COA Report"
                 //SalesOrderNoText
                 Clear(SalesOrderNoText);
                 CollectUniqueSalesOrderNo("COA No.");
+
+                Clear(PRODUCTText);
+                Clear(MARKSText);
 
                 Clear(DisplayQuantityPerLot);
                 Clear(DateCalculation);
@@ -403,10 +403,6 @@ report 50500 "RV_COA Report"
         SalesOrderNoText: Text;
         MARKSText: array[4] of Text[100];
         CopyText: Text[50];
-        DimText: Text;
-        OldDimText: Text;
-        ShowInternalInfo: Boolean;
-        Continue: Boolean;
         OutputNo: Integer;
         UOM: Text[50];
         Item: Record Item;
@@ -440,6 +436,29 @@ report 50500 "RV_COA Report"
                 SalesOrderNoText += '/' + SONo;
 
         end;
+    end;
+
+    procedure ClearData()
+    begin
+        Clear(DateWordingText);
+        Clear(DateWording_remarkText);
+        Clear(DisplayQuantityPerLot);
+        Clear(METHOD_Caption);
+        Clear(SPECIFICATION_Caption);
+        Clear(METHODText);
+        Clear(ContainerNo);
+        Clear(HeaderQuantity);
+        Clear(LineQuantity);
+        Clear(QtyCalculated);
+        Clear(SPECIFICATIONText);
+        Clear(SalesOrderNoText);
+        Clear(MARKSText);
+        Clear(FormatExpireDateText);
+        Clear(resultText);
+        Clear(SpecLineNoText);
+        Clear(PRODUCTText);
+        Clear(Format_DateText);
+        Clear(UOM);
     end;
 
 }

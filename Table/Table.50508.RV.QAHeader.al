@@ -130,7 +130,6 @@ table 50508 "RV QA Header"
         "QA Approved By" := '';
         "QA Checked Remark" := '';
         "QA Approved Remark" := '';
-        "COA Date" := 0D;
     end;
 
     procedure ClearShipmentLotNo()

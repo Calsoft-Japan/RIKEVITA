@@ -69,8 +69,6 @@ page 50533 "RV QC List Value Subform"
         CurrPage.Update();
     end;
 
-
-
     procedure SetQCEnable(var ListValueEnable: Boolean; var CheckStatusEnable: Boolean)
     var
         ExistingRec: Record "RV QC List Value";

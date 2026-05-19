@@ -145,12 +145,12 @@ table 50506 "RV QC Line"
                 CASE QCValueTable.Type OF
                     (QCValueTable.Type::Alphanumeric):
                         begin
-                            //ValidateAlphanumeric
-                            ValidateAlphanumeric("QC Result");
-
                             CASE QCValueTable."Value Table Type" OF
                                 (QCValueTable."Value Table Type"::Range):
                                     begin
+
+                                        //ValidateAlphanumeric
+                                        ValidateAlphanumeric("QC Result");
 
                                         Temptext.Reset();
 
@@ -198,22 +198,21 @@ table 50506 "RV QC Line"
                         end;
                     (QCValueTable.Type::Numeric):
                         begin
-
-                            //ValidateNumeric
-                            ValidateNumeric("QC Result");
-
-                            TempDecimal.Reset();
-
-                            TempDecimal.Init();
-                            TempDecimal."Value Text" := 'Temp';
-                            if Evaluate(TempDecimal."Value Decimal", "QC Result") then
-                                TempDecimal.Insert()
-                            else
-                                Error('Please enter a Numeric.');
-
                             CASE QCValueTable."Value Table Type" OF
                                 (QCValueTable."Value Table Type"::Range):
                                     begin
+
+                                        //ValidateNumeric
+                                        ValidateNumeric("QC Result");
+
+                                        TempDecimal.Reset();
+
+                                        TempDecimal.Init();
+                                        TempDecimal."Value Text" := 'Temp';
+                                        if Evaluate(TempDecimal."Value Decimal", "QC Result") then
+                                            TempDecimal.Insert()
+                                        else
+                                            Error('Please enter a Numeric.');
 
                                         if Evaluate(TempMinValue, QCValueTable."Minimum Value") then;
                                         if Evaluate(TempMaxValue, QCValueTable."Maximum Value") then;
@@ -227,8 +226,6 @@ table 50506 "RV QC Line"
                                         else if (QCValueTable."Maximum Value" <> '') then begin
                                             TempDecimal.SetFilter("Value Decimal", '..%1', TempMaxValue);
                                         end;
-
-                                        //Error('QC Result cannot be checked because QC Specification Line do not exist.');
 
                                         if not TempDecimal.IsEmpty() then
                                             "Check Status" := "Check Status"::PASSED

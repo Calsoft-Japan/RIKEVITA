@@ -188,5 +188,19 @@ permissionset 50100 GeneratedPermission
         report "RV Sales Invoice(Local)" = X,
         codeunit ReservationEntryMgt = X,
         codeunit "RV Charge Calc. Subscriber" = X,
-        codeunit "RV Get Shipment Lines" = X;
+        codeunit "RV Get Shipment Lines" = X,
+        tabledata "RV Item Balance by Vendor" = RIMD,
+        tabledata "RV Item Trace Detail" = RIMD,
+        tabledata "RV Item Trace History" = RIMD,
+        tabledata "RV TempTextDecimal" = RIMD,
+        table "RV Item Balance by Vendor" = X,
+        table "RV Item Trace Detail" = X,
+        table "RV Item Trace History" = X,
+        table "RV TempTextDecimal" = X,
+        report "RV Item Trace Collect" = X,
+        page "RV Item Balance by Vendor" = X,
+        page "RV Item Trace Detail" = X,
+        page "RV Item Trace History" = X,
+        query "RV Item Balance by Vendor" = X,
+        query "RV Item Detail by Vendor" = X;
 }

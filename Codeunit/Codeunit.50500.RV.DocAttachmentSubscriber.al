@@ -5,7 +5,7 @@
 
 codeunit 50500 "RV DocAttachmentSubscriber"
 {
-    [EventSubscriber(ObjectType::Page, Page::"Document Attachment Factbox", OnBeforeDrillDown, '', false, false)]
+    [EventSubscriber(ObjectType::Page, Page::"Doc. Attachment List Factbox", OnBeforeDocumentAttachmentDetailsRunModal, '', false, false)]
     local procedure AttachQCHeader(DocumentAttachment: Record "Document Attachment"; var RecRef: RecordRef)
     var
         QCHeader: Record "RV QC Header";
