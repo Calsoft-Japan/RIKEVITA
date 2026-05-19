@@ -25,7 +25,7 @@ page 50103 "RV Item Tracking Details-Whs."
                     ApplicationArea = All;
                     ToolTip = 'Specifies the lot number of the item that is being handled with the associated document line.';
                 }
-                field("Qty."; Abs(Rec."Qty. to Handle (Base)"))
+                field("Qty."; QtyinKG)// Abs(Rec."Qty. to Handle (Base)"))
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the quantity of the item that has been reserved in the entry.';
@@ -55,6 +55,21 @@ page 50103 "RV Item Tracking Details-Whs."
         }
     }
 
+    trigger OnAfterGetRecord()
+    var
+        ItmUOM: Record "Item Unit of Measure";
+        WhsShtLine: Record "Warehouse Shipment Line";
+    begin
+        Clear(QtyinKG);
+        WhsShtLine.Reset();
+        WhsShtLine.SetRange("Source No.", Rec."Source ID");
+        WhsShtLine.SetRange("Source Line No.", Rec."Source Ref. No.");
+        if WhsShtLine.FindFirst() then begin
+            if ItmUOM.Get(Rec."Item No.", WhsShtLine."Unit of Measure Code") then
+                QtyinKG := Round(Abs(Rec."Qty. to Handle (Base)") / ItmUOM."Qty. per Unit of Measure", ItmUOM."Qty. Rounding Precision");
+        end;
+    end;
+
     trigger OnOpenPage()
     begin
         // These filters are permanent for the lifetime of the page instance.
@@ -65,5 +80,7 @@ page 50103 "RV Item Tracking Details-Whs."
         Rec.SetFilter("Lot No.", '<>%1', '');
     end;
 
+    var
+        QtyinKG: Decimal;
 
 }
