@@ -1,6 +1,7 @@
 /// <summary>
 /// Codeunit RV Post Warehouse Shipment (ID 50202)
 /// FDD019 2026/04/24: New. (Bobby.ji)
+/// FDD008 2026/05/19 (Liuyang)
 /// </summary>
 codeunit 50202 "RV Post Warehouse Shipment"
 {
@@ -20,6 +21,14 @@ codeunit 50202 "RV Post Warehouse Shipment"
         PostedWhseShipmentHeader."RV_Country of Origin" := WarehouseShipmentHeader."RV_Country of Origin";
         PostedWhseShipmentHeader."RV_Ship-to Name" := WarehouseShipmentHeader."RV_Ship-to Name";
         PostedWhseShipmentHeader."RV_SAILING ON OR ABOUT" := WarehouseShipmentHeader."RV_SAILING ON OR ABOUT";
+
+        //FDD008
+        PostedWhseShipmentHeader."RV_B/L Date" := WarehouseShipmentHeader."RV_B/L Date";
+        PostedWhseShipmentHeader."RV_Cosing Date" := WarehouseShipmentHeader."RV_Cosing Date";
+        PostedWhseShipmentHeader."RV_Stuffing Date" := WarehouseShipmentHeader."RV_Stuffing Date";
+        PostedWhseShipmentHeader.RV_ETD := WarehouseShipmentHeader."RV_ETD";
+        PostedWhseShipmentHeader.RV_ETA := WarehouseShipmentHeader."RV_ETA";
+        //FDD008
 
     end;
 
@@ -49,4 +58,18 @@ codeunit 50202 "RV Post Warehouse Shipment"
         end;
 
     end;
+
+    //FDD008
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Shipment", OnCreatePostedShptLineOnBeforePostedWhseShptLineInsert, '', false, false)]
+    local procedure "Whse.-Post Shipment_OnCreatePostedShptLineOnBeforePostedWhseShptLineInsert"(var PostedWhseShptLine: Record "Posted Whse. Shipment Line"; WhseShptLine: Record "Warehouse Shipment Line")
+    begin
+        //FDD008
+        PostedWhseShptLine."RV_B/L Date" := WhseShptLine."RV_B/L Date";
+        PostedWhseShptLine."RV_Cosing Date" := WhseShptLine."RV_Cosing Date";
+        PostedWhseShptLine."RV_Stuffing Date" := WhseShptLine."RV_Stuffing Date";
+        PostedWhseShptLine.RV_ETD := WhseShptLine."RV_ETD";
+        PostedWhseShptLine.RV_ETA := WhseShptLine."RV_ETA";
+        //FDD008
+    end;
+
 }

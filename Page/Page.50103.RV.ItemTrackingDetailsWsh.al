@@ -60,7 +60,8 @@ page 50103 "RV Item Tracking Details-Whs."
         // These filters are permanent for the lifetime of the page instance.
         // SubPageLink filters are layered on top when the parent line selection changes.
         Rec.SetRange(Positive, false);
-        Rec.SetRange("Reservation Status", Rec."Reservation Status"::Reservation);
+        //Rec.SetRange("Reservation Status", Rec."Reservation Status"::Reservation);
+        //Rec.SetRange("Item Tracking", "Item Tracking Entry Type"::"Lot No.");
         Rec.SetFilter("Lot No.", '<>%1', '');
     end;
 
