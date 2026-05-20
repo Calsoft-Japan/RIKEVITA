@@ -1,8 +1,8 @@
 /// <summary>
-/// Report RV Sales Invoice(Local) (ID 50203)
-/// FDD021 2026/05/15: New. (Bobby.ji)
+/// Report RV Posted Sales Invoice(Local) (ID 50204)
+/// FDD021 2026/05/20: New. (Bobby.ji)
 /// </summary>
-report 50203 "RV Sales Invoice(Local)"
+report 50204 "RV Posted Sales Invoice(Local)"
 {
     Caption = 'Sales Invoice(Local)';
     UsageCategory = ReportsAndAnalysis;
@@ -13,10 +13,10 @@ report 50203 "RV Sales Invoice(Local)"
 
     dataset
     {
-        dataitem(SalesHeader; "Sales Header")
+        dataitem(SalesInvoiceHeader; "Sales Invoice Header")
         {
             DataItemTableView = sorting("No.");
-            RequestFilterFields = "Document Type", "No.", "Bill-to Customer No.", "Sell-to Customer No.", "No. Printed";
+            RequestFilterFields = "No.", "Bill-to Customer No.", "Sell-to Customer No.", "No. Printed";
             column(CompanyLogo; CompanyInfo.Picture)
             {
             }
@@ -77,7 +77,10 @@ report 50203 "RV Sales Invoice(Local)"
             column(Terms; "Payment Method Code")
             {
             }
-            dataitem(SalesLine; "Sales Line")
+            column(QRCode; QRCode)
+            {
+            }
+            dataitem(SalesInvoiceLine; "Sales Invoice Line")
             {
                 DataItemTableView = where(Type = const(Item));
                 DataItemLink = "Document No." = field("No.");
@@ -143,6 +146,7 @@ report 50203 "RV Sales Invoice(Local)"
             column(RIKEVITASetup3; 'Bank: ' + RIKEVITASetup."USD Bank Name" + ' ' + RIKEVITASetup."USD Bank Branch No." + ' ' + RIKEVITASetup."USD Bank Account No." + '(USD)')
             {
             }
+            column(QRCodeText; QRCodeText) { }
             trigger OnAfterGetRecord()
             var
                 ISODoc: Record "RV ISO Document";
@@ -177,6 +181,9 @@ report 50203 "RV Sales Invoice(Local)"
                     end;
                 end;
 
+                if "uuid TTM" <> '' then begin
+                    QRCodeText := GenerateQRCode("uuid TTM");
+                end;
             end;
         }
     }
@@ -190,7 +197,11 @@ report 50203 "RV Sales Invoice(Local)"
                 group(Options)
                 {
                     Caption = 'Options';
-
+                    field(QRCode; QRCode)
+                    {
+                        Caption = 'Show UUID as QR Code';
+                        ApplicationArea = All;
+                    }
                 }
             }
         }
@@ -198,6 +209,7 @@ report 50203 "RV Sales Invoice(Local)"
     var
         CompanyInfo: Record "Company Information";
         RIKEVITASetup: Record "RV RIKEVITA Setup";
+        ReportTitle: Label 'PACKING LIST';
         ISODocumentNo: Text;
         ISODocVersion: Text;
         Description: Text;
@@ -206,11 +218,27 @@ report 50203 "RV Sales Invoice(Local)"
         CerfiticateNo: Text;
         Tranfportation: Text;
         OrderNo: Text;
+        QRCode: Boolean;
+        QRCodeText: Text;
 
     trigger OnPreReport()
     begin
         CompanyInfo.Get();
         CompanyInfo.CalcFields(Picture);
         RIKEVITASetup.Get();
+    end;
+
+    procedure GenerateQRCode(Value: Text): Text
+    var
+        barcodeSymbology: enum "Barcode Symbology 2D";
+        barcodeFontProvider: Interface "Barcode Font Provider 2D";
+        barcodeStr: Text;
+    begin
+        if (Value <> '') then begin
+            barcodeFontProvider := enum::"Barcode Font Provider 2D"::IDAutomation2D;
+            barcodeSymbology := Enum::"Barcode Symbology 2D"::"QR-Code";
+            barcodeStr := barcodeFontProvider.EncodeFont(Value, barcodeSymbology);
+            exit(barcodeStr);
+        end;
     end;
 }
