@@ -1,3 +1,7 @@
+/// <summary>
+/// report RV Aged Accounts Receivable (ID 50105) Copy from report 120 "Aged Accounts Receivable"
+/// FDD023 2026/05/19: New. (Liuyang)
+/// </summary>
 report 50105 "RV Aged Accounts Receivable"
 {
     ApplicationArea = All;
