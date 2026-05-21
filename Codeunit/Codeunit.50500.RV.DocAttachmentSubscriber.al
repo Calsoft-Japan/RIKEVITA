@@ -5,8 +5,8 @@
 
 codeunit 50500 "RV DocAttachmentSubscriber"
 {
-    [EventSubscriber(ObjectType::Page, Page::"Doc. Attachment List Factbox", OnBeforeDocumentAttachmentDetailsRunModal, '', false, false)]
-    local procedure AttachQCHeader(DocumentAttachment: Record "Document Attachment"; var RecRef: RecordRef)
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Document Attachment Mgmt", OnAfterGetRefTable, '', false, false)]
+    local procedure GetRefTableCollectiveInvoice(var RecRef: RecordRef; DocumentAttachment: Record "Document Attachment")
     var
         QCHeader: Record "RV QC Header";
     begin

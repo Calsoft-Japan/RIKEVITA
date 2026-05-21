@@ -39,4 +39,31 @@ page 50507 "RV QC Customer External Spec."
             }
         }
     }
+    actions
+    {
+        area(processing)
+        {
+            action(QCExternalSpecDescription)
+            {
+                Caption = 'QC External Spec. Description';
+                ApplicationArea = All;
+                Image = Create;
+                RunObject = Page "RV External Spec. Description";
+                RunPageLink = "QC Resource Group No." = field("QC Resource Group No."),
+                            "Customer No." = field("Customer No."),
+                            "Ship-to Code" = field("Ship-to Code"),
+                            "External Spec. Name" = field("External Specification");
+            }
+        }
+        area(Promoted)
+        {
+            group(Category_Process)
+            {
+                Caption = 'Process';
+                actionref("QCExternalSpecDescription_Promoted"; "QCExternalSpecDescription")
+                {
+                }
+            }
+        }
+    }
 }
