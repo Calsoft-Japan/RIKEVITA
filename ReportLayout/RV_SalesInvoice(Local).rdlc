@@ -477,7 +477,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               <Style>None</Style>
                             </Border>
                             <BottomBorder>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                             </BottomBorder>
                             <LeftBorder>
                               <Style>Solid</Style>
@@ -559,7 +559,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               <Style>None</Style>
                             </Border>
                             <BottomBorder>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                             </BottomBorder>
                             <LeftBorder>
                               <Style>Solid</Style>
@@ -594,12 +594,12 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             </Border>
                             <TopBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                               <Width>1pt</Width>
                             </TopBorder>
                             <BottomBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                               <Width>1pt</Width>
                             </BottomBorder>
                             <LeftBorder>
@@ -646,12 +646,12 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             </Border>
                             <TopBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                               <Width>1pt</Width>
                             </TopBorder>
                             <BottomBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                               <Width>1pt</Width>
                             </BottomBorder>
                             <LeftBorder>
@@ -698,12 +698,12 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             </Border>
                             <TopBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                               <Width>1pt</Width>
                             </TopBorder>
                             <BottomBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                               <Width>1pt</Width>
                             </BottomBorder>
                             <LeftBorder>
@@ -750,6 +750,9 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -779,6 +782,9 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -813,6 +819,9 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -848,6 +857,9 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <TopBorder>
+                              <Style>Solid</Style>
+                            </TopBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
