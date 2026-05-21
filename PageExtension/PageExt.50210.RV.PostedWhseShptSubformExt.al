@@ -16,6 +16,46 @@ pageextension 50210 "RV PostedWhseShipSubformExt" extends "Posted Whse. Shipment
                 Editable = false;
             }
         }
+
+        addafter(Quantity)
+        {
+            field("RV_B/L Date"; Rec."RV_B/L Date")
+            {
+                ApplicationArea = All;
+                Caption = 'B/L Date';
+                Description = 'FDD008';
+            }
+            field("RV_Cosing Date"; Rec."RV_Cosing Date")
+            {
+                ApplicationArea = All;
+                Caption = 'Cosing Date';
+                Description = 'FDD008';
+            }
+            field("RV_Stuffing Date"; Rec."RV_Stuffing Date")
+            {
+                ApplicationArea = All;
+                Caption = 'Stuffing Date';
+                Description = 'FDD008';
+            }
+            field("RV_ETA"; Rec."RV_ETA")
+            {
+                ApplicationArea = All;
+                Caption = 'ETA';
+                Description = 'FDD008';
+            }
+            field("RV_ETD"; Rec."RV_ETD")
+            {
+                ApplicationArea = All;
+                Caption = 'ETD';
+                Description = 'FDD008';
+            }
+            field("RV_SI Received Date"; Rec."RV_SI Received Date")
+            {
+                ApplicationArea = All;
+                Caption = 'SI Received Date';
+                Description = 'FDD008';
+            }
+        }
     }
     var
         SymbolDisplayPackingList: Boolean;

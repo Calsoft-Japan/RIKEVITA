@@ -26,7 +26,7 @@ page 50108 "RV Vendor ISO Certificate Card"
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the vendor number. The Vendor Name is auto-populated on validation.';
-                    Editable = false;
+                    //Editable = false;
 
                     trigger OnValidate()
                     begin

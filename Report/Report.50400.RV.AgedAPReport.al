@@ -79,6 +79,16 @@ report 50400 "RV Aged Accounts Payable"
             column(RV_PrintedDateTime; TodayFormatted)
             {
             }
+
+            // FDD030: User ID displayed in the report header.
+            column(RV_UserID; UserId)
+            {
+            }
+
+            // FDD030: Header filter text displayed near report title.
+            column(RV_FilterByText; FilterByText)
+            {
+            }
             column(PrintDetails; PrintDetails)
             {
             }
@@ -351,7 +361,45 @@ report 50400 "RV Aged Accounts Payable"
                     column(RV_PaymentTermsCode; PaymentTermsCode)
                     {
                     }
+                    column(RV_RowPrintDetails; PrintDetails)
+                    {
+                    }
 
+                    column(RV_RowPrintBankDetails; PrintBankDetails)
+                    {
+                    }
+
+                    // FDD030: Document Date displayed in detail section.
+                    column(RV_DocumentDate; Format(VendorLedgEntryEndingDate."Document Date"))
+                    {
+                    }
+
+                    // FDD030: Exchange rate displayed in detail section.
+                    column(RV_ExchangeRate; ExchangeRate)
+                    {
+                        DecimalPlaces = 0 : 6;
+                    }
+
+                    column(RV_ExchangeRateText; ExchangeRateText)
+                    {
+                    }
+
+                    // FDD030: Row-level vendor bank fields for RDLC detail scope.
+                    column(RV_RowVendorBankName; VendorBankName)
+                    {
+                    }
+
+                    column(RV_RowSwiftCode; VendorSwiftCode)
+                    {
+                    }
+
+                    column(RV_RowBankAccountNo; VendorBankAccountNo)
+                    {
+                    }
+
+                    column(RV_RowBankInfo; RowBankInfo)
+                    {
+                    }
                     // FDD030: Vendor bank details from Vendor Bank Account.
                     column(RV_VendorBankName; VendorBankName)
                     {
@@ -373,7 +421,7 @@ report 50400 "RV Aged Accounts Payable"
                     {
                         AutoFormatType = 1;
                     }
-                    column(AgedVLE1RemAmtLCY; AgedVendorLedgEntry[1]."Remaining Amt. (LCY)")
+                    column(AgedVendLedgEnt1RemAmtLCY; AgedVendorLedgEntry[1]."Remaining Amt. (LCY)")
                     {
                         AutoFormatType = 1;
                     }
@@ -511,6 +559,27 @@ report 50400 "RV Aged Accounts Payable"
                             end;
                         end;
 
+                        // FDD030: Build one combined bank information text for RDLC.
+                        // This is easier and safer than using multiple textboxes in different RDLC scopes.
+                        Clear(RowBankInfo);
+
+                        if PrintBankDetails then begin
+                            if VendorBankName <> '' then
+                                RowBankInfo := 'Bank Name: ' + VendorBankName;
+
+                            if VendorSwiftCode <> '' then begin
+                                if RowBankInfo <> '' then
+                                    RowBankInfo += ' | ';
+                                RowBankInfo += 'SWIFT: ' + VendorSwiftCode;
+                            end;
+
+                            if VendorBankAccountNo <> '' then begin
+                                if RowBankInfo <> '' then
+                                    RowBankInfo += ' | ';
+                                RowBankInfo += 'Account No.: ' + VendorBankAccountNo;
+                            end;
+                        end;
+
                         // Standard aging calculation: detailed vendor ledger entries must be filtered
                         // by the current Vendor Ledger Entry No. before FindSet().
                         DetailedVendorLedgerEntry.Reset();
@@ -624,10 +693,24 @@ report 50400 "RV Aged Accounts Payable"
                             VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
 
                         // FDD030: RM Equiv. shown on the report row.
-                        // Current implementation uses Remaining Amt. (LCY), matching the verified
-                        // report output. If the FDD is later interpreted as original Amount (LCY),
-                        // change this to TempVendorLedgEntry."Amount (LCY)".
+                        // Current implementation uses Remaining Amt. (LCY), matching the verified report output.
+                        // If the FDD is later interpreted as original Amount (LCY), change this to
+                        // VendorLedgEntryEndingDate."Amount (LCY)".
                         RMEquivAmount := VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
+
+                        // FDD030: Exchange Rate shown on the report row.
+                        // For foreign currency entries, calculate approximate exchange rate from
+                        // Remaining Amt. (LCY) / Remaining Amount.
+                        // For LCY entries, keep blank.
+                        Clear(ExchangeRate);
+                        Clear(ExchangeRateText);
+
+                        if (VendorLedgEntryEndingDate."Currency Code" <> '') and
+                           (VendorLedgEntryEndingDate."Remaining Amount" <> 0)
+                        then begin
+                            ExchangeRate := Abs(VendorLedgEntryEndingDate."Remaining Amt. (LCY)" / VendorLedgEntryEndingDate."Remaining Amount");
+                            ExchangeRateText := Format(ExchangeRate);
+                        end;
                     end;
 
                     trigger OnPostDataItem()
@@ -905,6 +988,8 @@ report 50400 "RV Aged Accounts Payable"
         CompanyDisplayName := COMPANYPROPERTY.DisplayName();
         CurrencyFilterTxt := Vendor.GetFilter("Currency Filter");
 
+        FilterByText := 'Action Date';
+
         if UseExternalDocNo then
             DocNoCaption := ExternalDocumentNoCaptionLbl
         else
@@ -938,6 +1023,7 @@ report 50400 "RV Aged Accounts Payable"
         NewPagePerVendor: Boolean;
 
         // FDD030: Custom fields for payment terms, bank details, and RM equivalent amount.
+
         PaymentTermsCode: Code[20];
         VendorBankName: Text[100];
         VendorSwiftCode: Code[20];
@@ -945,6 +1031,12 @@ report 50400 "RV Aged Accounts Payable"
         RMEquivAmount: Decimal;
         CurrencyFilterTxt: Text[50];
         ReportTitleTxt: Text[100];
+
+        // FDD030: Additional RDLC support fields.
+        FilterByText: Text[50];
+        ExchangeRate: Decimal;
+        ExchangeRateText: Text[30];
+        RowBankInfo: Text[250];
 
         Text000: Label 'Not Due';
         AfterTok: Label 'After';
@@ -1252,12 +1344,10 @@ report 50400 "RV Aged Accounts Payable"
         end;
     end;
 
-    // FDD022: Currency Filter
-    /// <summary>
     /// Applies Vendor.Currency Filter to Vendor Ledger Entry.Currency Code.
     /// LCY entries are stored as blank Currency Code in Vendor Ledger Entry, so
     /// filtering by GLSetup.LCY Code must be converted to Currency Code = ''.
-    /// </summary>
+
     local procedure ApplyCurrencyFilterToVendLedgEntry(var VendorLedgerEntry: Record "Vendor Ledger Entry")
     var
         CurrencyFilter: Text;

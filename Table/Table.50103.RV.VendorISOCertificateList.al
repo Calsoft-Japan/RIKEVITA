@@ -6,6 +6,7 @@ table 50103 "RV Vendor ISO Certificate Line"
 {
     Caption = 'RV Vendor ISO Certificate List';
     DataClassification = ToBeClassified;
+    DataCaptionFields = "Vendor No.", "Vendor Name";
 
     fields
     {

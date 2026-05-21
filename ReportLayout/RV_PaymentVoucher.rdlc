@@ -24,10 +24,13 @@
                   <Width>2.94792in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.35417in</Width>
+                  <Width>1.17708in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.40625in</Width>
+                  <Width>0.56252in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.02081in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -85,6 +88,38 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox34</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -176,14 +211,14 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                       <CellContents>
                         <Rectangle Name="Rectangle1">
                           <ReportItems>
-                            <Textbox Name="AccountDescription">
+                            <Textbox Name="PayToName">
                               <CanGrow>true</CanGrow>
                               <KeepTogether>true</KeepTogether>
                               <Paragraphs>
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!AccountDescription.Value</Value>
+                                      <Value>=Fields!PayToName.Value</Value>
                                       <Style>
                                         <FontSize>8pt</FontSize>
                                       </Style>
@@ -192,7 +227,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                                   <Style />
                                 </Paragraph>
                               </Paragraphs>
-                              <rd:DefaultName>AccountDescription</rd:DefaultName>
+                              <rd:DefaultName>PayToName</rd:DefaultName>
                               <Top>0.58854in</Top>
                               <Left>0.02646cm</Left>
                               <Height>0.25in</Height>
@@ -282,9 +317,10 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                             </Border>
                           </Style>
                         </Rectangle>
-                        <ColSpan>4</ColSpan>
+                        <ColSpan>5</ColSpan>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell />
                     <TablixCell />
                     <TablixCell />
                     <TablixCell />
@@ -305,6 +341,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                                   <Value>=Fields!Posting_Date_ByVID.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
+                                    <Format>dd/MM/yyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -359,7 +396,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox8">
+                        <Textbox Name="Textbox2">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -372,10 +409,46 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox8</rd:DefaultName>
+                          <rd:DefaultName>Textbox2</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="GenJnlLine_Currency_Code">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!GenJnlLine_Currency_Code.Value</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>GenJnlLine_Currency_Code</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -439,6 +512,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                                   <Value>=Fields!Posting_Date_ByVDoc.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
+                                    <Format>dd/MM/yyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -493,7 +567,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox31">
+                        <Textbox Name="Textbox3">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -506,10 +580,46 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox31</rd:DefaultName>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="GenJnlLine_Currency_Code1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!GenJnlLine_Currency_Code.Value</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>GenJnlLine_Currency_Code1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -573,6 +683,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                                   <Value>=Fields!Posting_Date_ByEID.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
+                                    <Format>dd/MM/yyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -627,7 +738,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox27">
+                        <Textbox Name="Textbox4">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -640,10 +751,46 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox27</rd:DefaultName>
+                          <rd:DefaultName>Textbox4</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="GenJnlLine_Currency_Code2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!GenJnlLine_Currency_Code.Value</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>GenJnlLine_Currency_Code2</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -707,6 +854,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                                   <Value>=Fields!Posting_Date_ByEDoc.Value</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
+                                    <Format>dd/MM/yyyy</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -761,7 +909,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox23">
+                        <Textbox Name="Textbox5">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -774,10 +922,46 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox23</rd:DefaultName>
+                          <rd:DefaultName>Textbox5</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="GenJnlLine_Currency_Code3">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!GenJnlLine_Currency_Code.Value</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>GenJnlLine_Currency_Code3</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -895,6 +1079,38 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Textbox6">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox6</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Textbox14">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -967,6 +1183,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -1029,7 +1246,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
             <Top>0.49875in</Top>
             <Left>0.13417in</Left>
             <Height>3.48959in</Height>
-            <Width>7.07292in</Width>
+            <Width>7.07291in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1041,7 +1258,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
         <Height>4.10292in</Height>
         <Style />
       </Body>
-      <Width>7.37375in</Width>
+      <Width>7.32167in</Width>
       <Page>
         <PageHeader>
           <Height>1in</Height>
@@ -1210,6 +1427,12 @@ End Function
         </Field>
         <Field Name="GenAmtLCY">
           <DataField>GenAmtLCY</DataField>
+        </Field>
+        <Field Name="GenJnlLine_Currency_Code">
+          <DataField>GenJnlLine_Currency_Code</DataField>
+        </Field>
+        <Field Name="PayToName">
+          <DataField>PayToName</DataField>
         </Field>
         <Field Name="Posting_Date_ByVID">
           <DataField>Posting_Date_ByVID</DataField>

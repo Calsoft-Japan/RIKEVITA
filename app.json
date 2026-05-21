@@ -10,7 +10,20 @@
   "help": "",
   "url": "",
   "logo": "",
-  "dependencies": [],
+  "dependencies": [
+    {
+      "name": "IRBM E-Invoice",
+      "version": "1.0.0.12",
+      "publisher": "Tectura Malaysia",
+      "id": "8763b756-a7e2-4bf7-8eae-8de887bf763a"
+    },
+    {
+      "name": "IRBM E-Invoice Digital Signature",
+      "version": "1.0.0.12",
+      "publisher": "Tectura Malaysia",
+      "id": "d895f7ab-1277-48f1-a9be-b94238c7bbd9"
+    }
+  ],
   "screenshots": [],
   "platform": "1.0.0.0",
   "application": "26.0.0.0",

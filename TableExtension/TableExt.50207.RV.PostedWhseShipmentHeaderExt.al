@@ -6,6 +6,40 @@ tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Ship
 {
     fields
     {
+        field(50100; "RV_B/L Date"; Date)
+        {
+            Caption = 'B/L Date';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+
+        }
+        field(50101; "RV_Cosing Date"; Date)
+        {
+            Caption = 'Cosing Date';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+
+        }
+        field(50102; "RV_Stuffing Date"; Date)
+        {
+            Caption = 'Stuffing Date';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+
+        }
+        field(50108; "RV_ETD"; Date)
+        {
+            Caption = 'ETD';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
+        field(50109; "RV_ETA"; Date)
+        {
+            Caption = 'ETA';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
+
         field(50200; "RV_Consignee Name"; Text[100])
         {
             Caption = 'Consignee Name';

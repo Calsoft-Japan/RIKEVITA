@@ -45,6 +45,10 @@ report 50102 "RV Payment Voucher"
             column(GenAmtLCY; GenAmtLCY)
             { }
 
+            column(GenJnlLine_Currency_Code; UpperCase("Currency Code"))
+            { }
+            column(PayToName; PayToName) { }
+
             dataitem(VendorLedgerEntryApplyID; "Vendor Ledger Entry")
             {
                 DataItemLink = "Vendor No." = field("Account No."), "Applies-to ID" = field("Applies-to ID");
@@ -55,7 +59,10 @@ report 50102 "RV Payment Voucher"
                 column(Document_No_ByVID; "Document No.")
                 { }
                 column(Amount_to_Apply_ByVID; "Amount to Apply")
-                { }
+                {
+                    AutoFormatExpression = VendorLedgerEntryApplyID."Currency Code";
+                    AutoFormatType = 1;
+                }
 
                 column(VendID; VendID)
                 { }
@@ -76,7 +83,10 @@ report 50102 "RV Payment Voucher"
                 column(Document_No_ByVDoc; "Document No.")
                 { }
                 column(Amount_to_Apply_ByVDoc; "Amount to Apply")
-                { }
+                {
+                    AutoFormatExpression = VendorLedgerEntryApplyDoc."Currency Code";
+                    AutoFormatType = 1;
+                }
                 column(VendDoc; VendDoc)
                 { }
 
@@ -96,7 +106,10 @@ report 50102 "RV Payment Voucher"
                 column(Document_No_ByEID; "Document No.")
                 { }
                 column(Amount_to_Apply_ByEID; "Amount to Apply")
-                { }
+                {
+                    AutoFormatExpression = EmployeeLedgerEntryApplyID."Currency Code";
+                    AutoFormatType = 1;
+                }
                 column(EmplID; EmplID)
                 { }
 
@@ -116,7 +129,10 @@ report 50102 "RV Payment Voucher"
                 column(Document_No_ByEDoc; "Document No.")
                 { }
                 column(Amount_to_Apply_ByEDoc; "Amount to Apply")
-                { }
+                {
+                    AutoFormatExpression = EmployeeLedgerEntryApplyDoc."Currency Code";
+                    AutoFormatType = 1;
+                }
                 column(EmplDoc; EmplDoc)
                 { }
 
@@ -127,9 +143,26 @@ report 50102 "RV Payment Voucher"
             }
 
             trigger OnAfterGetRecord()
+            var
+                Vend: Record Vendor;
+                Empl: Record Employee;
             begin
                 GenPostDate := Format("Posting Date", 0, '<Closing><Day,2>/<Month,2>/<Year>');
                 GenAmtLCY := Format("Amount (LCY)", 0, '<Precision,2><Sign><Integer Thousand><Decimals>');
+
+
+                case GenJnlLine."Account Type" of
+                    "Gen. Journal Account Type"::Vendor:
+                        begin
+                            Vend.Get(GenJnlLine."Account No.");
+                            PayToName := Vend.Name;
+                        end;
+                    "Gen. Journal Account Type"::Employee:
+                        begin
+                            Empl.Get(GenJnlLine."Account No.");
+                            PayToName := Empl.FullName();
+                        end;
+                end;
 
                 Clear(VendID);
                 Clear(VendDoc);
@@ -146,5 +179,6 @@ report 50102 "RV Payment Voucher"
         GenPostDate, GenAmtLCY : Text;
 
         VendID, VendDoc, EmplID, EmplDoc : Boolean;
+        PayToName: Text;
 
 }
