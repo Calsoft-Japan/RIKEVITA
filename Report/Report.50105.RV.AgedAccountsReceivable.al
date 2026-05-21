@@ -170,6 +170,8 @@ report 50105 "RV Aged Accounts Receivable"
             { }
             column(CustNoFilter; CustNoFilter) { }
             column(CurrencyFilter; CurrencyFilter) { }
+            column(CustPayTerm; CustPayTerm) { }
+            column(CustCurrency; CustCurrency) { }
             dataitem(Customer; Customer)
             {
                 RequestFilterFields = "No.";
@@ -410,9 +412,14 @@ report 50105 "RV Aged Accounts Receivable"
                         {
                         }
 
+                        column(CLEDocumentDate; CustLedgEntryEndingDate."Document Date") { }
+                        column(CLECurExchRateAmt; CurExchRateAmt) { }
+                        column(GLLCYCode; GLSetup."LCY Code") { }
+
                         trigger OnAfterGetRecord()
                         var
                             PeriodIndex: Integer;
+                            CurrExchRate: Record "Currency Exchange Rate";
                         begin
                             if Number = 1 then begin
                                 if not TempCustLedgEntry.FindSet(false) then
@@ -504,6 +511,15 @@ report 50105 "RV Aged Accounts Receivable"
                             TotalCustLedgEntry[1]."Amount (LCY)" += CustLedgEntryEndingDate."Remaining Amt. (LCY)";
                             GrandTotalCustLedgEntry[1]."Amount (LCY)" += CustLedgEntryEndingDate."Remaining Amt. (LCY)";
                             NumberOfLines += 1;
+
+                            Clear(CurExchRateAmt);
+                            CurrExchRate.Reset();
+                            CurrExchRate.SetCurrentKey("Currency Code", "Starting Date");
+                            CurrExchRate.SetRange("Currency Code", CustLedgEntryEndingDate."Currency Code");
+                            CurrExchRate.SetRange("Starting Date", 0D, CustLedgEntryEndingDate."Posting Date");
+                            CurrExchRate.SetAscending("Starting Date", true);
+                            if CurrExchRate.FindLast() then
+                                CurExchRateAmt := CurrExchRate."Relational Exch. Rate Amount";
                         end;
 
                         trigger OnPostDataItem()
@@ -572,6 +588,8 @@ report 50105 "RV Aged Accounts Receivable"
                     NumberOfLines += 1;
 
                     CustType := Customer."RV_Customer Type";
+                    CustCurrency := Customer."Currency Code";
+                    CustPayTerm := Customer."Payment Terms Code";
                 end;
             }
             dataitem(CurrencyTotals; "Integer")
@@ -691,7 +709,7 @@ report 50105 "RV Aged Accounts Receivable"
                     {
                         ApplicationArea = Basic, Suite;
                         Caption = 'Heading Type';
-                        OptionCaption = 'Date Interval,Number of Days';
+                        OptionCaption = 'Date Interval,Number of Days,Number of Months';
                         ToolTip = 'Specifies if the column heading for the three periods will indicate a date interval or the number of days overdue.';
 
                         trigger OnValidate()
@@ -833,7 +851,7 @@ report 50105 "RV Aged Accounts Receivable"
         CLEEndDatePstngDateCptnLbl: Label 'Posting Date';
         CLEEndDateDocTypeCptnLbl: Label 'Document Type';
         OriginalAmtCptnLbl: Label 'Currency Code';
-        TotalLCYCptnLbl: Label 'Total (LCY)';
+        TotalLCYCptnLbl: Label 'Total Amount (RM Equivalent)';//'Total (LCY)';
         CurrSpecificationCptnLbl: Label 'Currency Specification';
         EnterDateFormulaErr: Label 'Enter a date formula in the Period Length field.';
         CompanyDisplayName: Text;
@@ -842,6 +860,9 @@ report 50105 "RV Aged Accounts Receivable"
         CustType: Enum "RV Customer Type";
         CustNoFilter: Text;
         CurrencyFilter: Text;
+        CustPayTerm: Text;
+        CustCurrency: Text;
+        CurExchRateAmt: Decimal;
 
     protected var
         TempCustLedgEntry: Record "Cust. Ledger Entry" temporary;
