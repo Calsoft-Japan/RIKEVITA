@@ -12,11 +12,10 @@ query 50900 "RV Item Balance by Vendor"
     {
         dataitem(ItemLedgerEntry; "Item Ledger Entry")
         {
-            DataItemTableFilter = "Source Type" = const(Vendor);
             column(Item_No_; "Item No.")
             {
             }
-            column(Source_No_; "Source No.")
+            column(RV_Vendor_No__No_; "RV_Vendor No.")
             {
             }
             column(Quantity; Quantity)

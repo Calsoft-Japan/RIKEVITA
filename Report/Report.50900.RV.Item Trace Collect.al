@@ -94,7 +94,7 @@ report 50900 "RV Item Trace Collect"
 
                     ItemBalance.Init();
                     ItemBalance."History Entry No." := HistoryEntryNo;
-                    ItemBalance."Vendor No." := QueItemBal.Source_No_;
+                    ItemBalance."Vendor No." := QueItemBal.RV_Vendor_No__No_;
                     ItemBalance."Item No." := QueItemBal.Item_No_;
                     ItemBalance."Opening Balance (BUOM)" := QueItemBal.Quantity;
                     ItemBalance."Opening Balance (KG)" := QueItemBal.RV_Quantity__KG_;
@@ -177,7 +177,7 @@ report 50900 "RV Item Trace Collect"
         case ILE."Entry Type" of
             Enum::"Item Ledger Entry Type"::Purchase:
                 begin
-                    ItemDetail."Vendor No." := ILE."Source No.";
+                    ItemDetail."Vendor No." := ILE."RV_Vendor No.";
                     if Vendor.Get(ItemDetail."Vendor No.") then begin
                         ItemDetail."Gen. Bus. Posting Group " := Vendor."Gen. Bus. Posting Group";
                     end;
