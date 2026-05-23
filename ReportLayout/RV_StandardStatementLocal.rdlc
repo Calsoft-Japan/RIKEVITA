@@ -2310,6 +2310,7 @@ Cstr(Fields!CompanyAddr6.Value)
                                                                       <Style>
                                                                         <FontFamily>Segoe UI</FontFamily>
                                                                         <FontSize>8pt</FontSize>
+                                                                        <Format>#,0.00</Format>
                                                                       </Style>
                                                                     </TextRun>
                                                                   </TextRuns>
@@ -2586,6 +2587,7 @@ Cstr(Fields!CompanyAddr6.Value)
                                                                       <Style>
                                                                         <FontFamily>Segoe UI</FontFamily>
                                                                         <FontSize>8pt</FontSize>
+                                                                        <Format>#,0.00</Format>
                                                                       </Style>
                                                                     </TextRun>
                                                                   </TextRuns>
