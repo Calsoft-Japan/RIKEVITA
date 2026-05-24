@@ -65,6 +65,14 @@ codeunit 50902 "RV ILE Item Trace Mgt"
                 end;
             until ILE.Next() = 0;
 
+        //Finally, update "ILE Last Entry No (Item Trace)".
+        ILE.Reset();
+        ILE.SetFilter("Entry No.", '>%1', RVSetup."ILE Last Entry No (Item Trace)");
+        if ILE.FindLast() then begin
+            RVSetup."ILE Last Entry No (Item Trace)" := ILE."Entry No.";
+            RVSetup.Modify();
+        end;
+
     end;
 
 }

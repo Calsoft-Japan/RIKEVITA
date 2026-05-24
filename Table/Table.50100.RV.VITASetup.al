@@ -285,7 +285,7 @@ table 50100 "RV RIKEVITA Setup"
         field(51; "ILE Last Entry No (Item Trace)"; Integer)
         {
             Description = 'FDD028';
-            Caption = 'Item Last Entry No. (Item Trace)';
+            Caption = 'ILE Last Entry No. (Item Trace)';
         }
     }
     keys

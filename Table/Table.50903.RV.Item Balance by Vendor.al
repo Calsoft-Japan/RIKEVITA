@@ -51,31 +51,37 @@ table 50903 "RV Item Balance by Vendor"
         {
             Caption = 'Opening Balance (BUOM)';
             Editable = false;
+            DecimalPlaces = 0 : 5;
         }
         field(22; "Closing Balance (BUOM)"; Decimal)
         {
             Caption = 'Closing Balance (BUOM)';
             Editable = false;
+            DecimalPlaces = 0 : 5;
         }
         field(23; "Opening Balance (KG)"; Decimal)
         {
             Caption = 'Opening Balance (KG)';
             Editable = false;
+            DecimalPlaces = 0 : 5;
         }
         field(24; "Closing Balance (KG)"; Decimal)
         {
             Caption = 'Closing Balance (KG)';
             Editable = false;
+            DecimalPlaces = 0 : 5;
         }
         field(25; "Opening Balance (RM)"; Decimal)
         {
             Caption = 'Opening Balance (RM)';
             Editable = false;
+            DecimalPlaces = 0 : 5;
         }
         field(26; "Closing Balance (RM)"; Decimal)
         {
             Caption = 'Closing Balance (RM)';
             Editable = false;
+            DecimalPlaces = 0 : 5;
         }
         field(31; "Note"; Text[250])
         {

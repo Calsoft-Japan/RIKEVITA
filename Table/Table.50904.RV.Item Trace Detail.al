@@ -100,16 +100,19 @@ table 50904 "RV Item Trace Detail"
         {
             Caption = 'Quantity (BUOM)';
             Editable = false;
+            DecimalPlaces = 0 : 5;
         }
         field(25; "Quantity (KG)"; Decimal)
         {
             Caption = 'Quantity (KG)';
             Editable = false;
+            DecimalPlaces = 0 : 5;
         }
         field(26; "Cost Amount (RM)"; Decimal)
         {
             Caption = 'Cost Amount (RM)';
             Editable = false;
+            DecimalPlaces = 0 : 5;
         }
         field(27; "Item No. (FP)"; Code[20])
         {
