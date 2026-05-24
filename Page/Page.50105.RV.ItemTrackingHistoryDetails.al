@@ -7,7 +7,7 @@ page 50105 "RV Item Tracking Hst. - Sales"
     ApplicationArea = All;
     Caption = 'Item Tracking History Details';
     PageType = ListPart;
-    SourceTable = "Item Entry Relation";//"RV Item Tracking History Dtl."";
+    SourceTable = "RV Item Tracking History Dtl.";//"Item Entry Relation";
     Editable = false;
     InsertAllowed = false;
     DeleteAllowed = false;
@@ -27,7 +27,7 @@ page 50105 "RV Item Tracking Hst. - Sales"
                     ToolTip = 'Specifies the lot number of the shipped inventory.';
                 }
 
-                field(Qty; Abs(CurQty))
+                field(Qty; Abs(Rec.Qty))// Abs(CurQty))
                 {
                     ApplicationArea = All;
                     Caption = 'Qty.';
@@ -37,22 +37,40 @@ page 50105 "RV Item Tracking Hst. - Sales"
 
                     trigger OnDrillDown()
                     var
+                        ItemRelation: Record "Item Entry Relation";
                         ItemLedgerEntry: Record "Item Ledger Entry";
                         ItemLedgerEntriesPage: Page "Item Ledger Entries"; // Page 38
+                        ItemEntryNoList: Text;
                     begin
-                        /* ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Sales Shipment");
+                        ItemRelation.Reset();
+                        ItemRelation.SetRange("Source Type", Database::"Sales Shipment Line");
+                        ItemRelation.SetRange("Order No.", Rec."Sales Order No.");
+                        ItemRelation.SetRange("Order Line No.", Rec."Sales Order Line No.");
+                        if ItemRelation.FindSet() then begin
+                            repeat
+                                ItemEntryNoList += Format(ItemRelation."Item Entry No.") + '|';
+                            until ItemRelation.Next() = 0;
+
+                            ItemEntryNoList := DelStr(ItemEntryNoList, StrLen(ItemEntryNoList), 1);
+                        end;
+
+
+                        /* ItemLedgerEntry.Reset();
+                        ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Sales Shipment");
                         ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::Sale);
                         ItemLedgerEntry.SetRange("Source Type", ItemLedgerEntry."Source Type"::Customer);
                         ItemLedgerEntry.SetRange("Document No.", CurShipNo);
                         ItemLedgerEntry.SetRange("Document Line No.", CurShipLineNo);
                         ItemLedgerEntry.SetRange("Lot No.", CurLotNo);
                         ItemLedgerEntry.SetRange("RV_Container No.", RV_Container_No); */
-                        ItemLedgerEntry.SetRange("Entry No.", CurEntryNo);
+                        //ItemLedgerEntry.SetRange("Entry No.", CurEntryNo);
+
+                        ItemLedgerEntry.SetFilter("Entry No.", ItemEntryNoList);
                         ItemLedgerEntriesPage.SetTableView(ItemLedgerEntry);
                         ItemLedgerEntriesPage.RunModal();
                     end;
                 }
-                field("RV_Container No."; RV_Container_No)
+                field("RV_Container No."; Rec."Container No.")//RV_Container_No)
                 {
                     ApplicationArea = All;
                     Caption = 'Container No.';
@@ -78,7 +96,7 @@ page 50105 "RV Item Tracking Hst. - Sales"
         ItmLedgerEntry: Record "Item Ledger Entry";
     //ItmLedgerEntry: Query "RV ItemLedgerHist";
     begin
-        Clear(CurEntryNo);
+        /* Clear(CurEntryNo);
         Clear(RV_Container_No);
         Clear(CurLotNo);
         Clear(CurQty);
@@ -93,23 +111,7 @@ page 50105 "RV Item Tracking Hst. - Sales"
 
         if ItmLedgerEntry.Get(CurEntryNo) then begin
             RV_Container_No := ItmLedgerEntry."RV_Container No.";
-        end;
-
-        /* ItmLedgerEntry.SetRange("DocumentType", ItmLedgerEntry."DocumentType"::"Sales Shipment");
-        ItmLedgerEntry.SetRange("EntryType", ItmLedgerEntry."EntryType"::Sale);
-        ItmLedgerEntry.SetRange("SourceType", ItmLedgerEntry."SourceType"::Customer);
-        ItmLedgerEntry.SetRange("DocumentNo", CurShipNo); //Item Ledger Entry links to Posted sales shipment lines
-        ItmLedgerEntry.SetRange("DocumentLineNo", CurShipLineNo);//Item Ledger Entry links to Posted salse shipment lines
-        ItmLedgerEntry.SetFilter("LotNo", '<>%1', '');
-        ItmLedgerEntry.Open();
-        //if ItmLedgerEntry.FindFirst() then begin
-        while ItmLedgerEntry.Read() do begin
-            //CurEntryNo := ItmLedgerEntry."EntryNo";
-            CurLotNo := ItmLedgerEntry."LotNo";
-            RV_Container_No := ItmLedgerEntry."RV_Container_No_";
-            CurQty := ItmLedgerEntry.Quantity;
         end; */
     end;
-
 
 }

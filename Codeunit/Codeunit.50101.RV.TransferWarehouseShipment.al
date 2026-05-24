@@ -159,7 +159,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
         ItemTrackHist.SetRange("Lot No.", ItemEntryRelation."Lot No.");
         ItemTrackHist.SetRange("Container No.", ILE."RV_Container No.");
         if ItemTrackHist.FindFirst() then begin
-            ItemTrackHist.Qty := ItemTrackHist.Qty + ILE.Quantity;
+            ItemTrackHist.Qty := ItemTrackHist.Qty + ILE.Quantity / ILE."Qty. per Unit of Measure";
             ItemTrackHist.Modify();
         end else begin
             Clear(ItemTrackHist);
@@ -168,7 +168,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
             ItemTrackHist."Sales Order Line No." := xSalesLine."Line No.";
             ItemTrackHist."Lot No." := ItemEntryRelation."Lot No.";
             ItemTrackHist."Container No." := ILE."RV_Container No.";
-            ItemTrackHist.Qty := ILE.Quantity;
+            ItemTrackHist.Qty := ILE.Quantity / ILE."Qty. per Unit of Measure";
             ItemTrackHist.Insert();
         end;
     end;
