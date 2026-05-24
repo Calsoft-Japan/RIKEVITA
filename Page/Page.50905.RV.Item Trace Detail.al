@@ -23,6 +23,9 @@ page 50905 "RV Item Trace Detail"
                 field("Entry No."; Rec."Entry No.")
                 {
                 }
+                field("Item Ledger Entry No."; Rec."Item Ledger Entry No.")
+                {
+                }
                 field("Vendor No."; Rec."Vendor No.")
                 {
                 }
