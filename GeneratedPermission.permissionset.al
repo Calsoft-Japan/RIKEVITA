@@ -202,5 +202,9 @@ permissionset 50100 GeneratedPermission
         page "RV Item Trace Detail" = X,
         page "RV Item Trace History" = X,
         query "RV Item Balance by Vendor" = X,
-        query "RV Item Detail by Vendor" = X;
+        query "RV Item Detail by Vendor" = X,
+        report "RV Aged Accounts Receivable" = X,
+        report "RV Posted Sales Invoice(Local)" = X,
+        codeunit "RV ILE Item Trace Mgt" = X,
+        query "RV Query Item Tracking Hist" = X;
 }
