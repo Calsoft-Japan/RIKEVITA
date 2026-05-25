@@ -51,7 +51,7 @@ pageextension 50108 "RV Sales Order Ext" extends "Sales Order"
                     Description = 'FDD012';
                     Editable = AllowBLDate;
                 }
-                field("RV_Cosing Date"; Rec."RV_Cosing Date")
+                field("RV_Cosing Date"; Rec."RV_Closing Date")
                 {
                     ApplicationArea = All;
                     Description = 'FDD012';

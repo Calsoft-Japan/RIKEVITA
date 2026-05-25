@@ -14,9 +14,9 @@ tableextension 50103 "RV Warehouse Shipment Ln Ext" extends "Warehouse Shipment 
             Description = 'FDD008';
             DataClassification = ToBeClassified;
         }
-        field(50101; "RV_Cosing Date"; Date)
+        field(50101; "RV_Closing Date"; Date)
         {
-            Caption = 'Cosing Date';
+            Caption = 'Closing Date';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
 
@@ -27,7 +27,7 @@ tableextension 50103 "RV Warehouse Shipment Ln Ext" extends "Warehouse Shipment 
             begin
                 Clear(DateFormulaVar);
 
-                if Rec."RV_Cosing Date" = 0D then begin
+                if Rec."RV_Closing Date" = 0D then begin
                     "RV_Stuffing Date" := 0D;
                 end else begin
                     RVSteup.Reset();
@@ -36,7 +36,7 @@ tableextension 50103 "RV Warehouse Shipment Ln Ext" extends "Warehouse Shipment 
                     end;
 
                     if (Format(DateFormulaVar) <> '') then
-                        "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
+                        "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Closing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
                 end;
             end;
         }

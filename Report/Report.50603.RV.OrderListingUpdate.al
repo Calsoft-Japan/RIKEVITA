@@ -102,7 +102,7 @@ report 50603 "RV Order Listing Update"
                 WhseshipmentLine.setrange("Source No.", SalesLine."Document No.");
                 WhseshipmentLine.SetRange("Source Line No.", SalesLine."Line No.");
                 if WhseshipmentLine.findlast then begin
-                    OrderListing."Closing Date & Time 2" := WhseshipmentLine."RV_Cosing Date";
+                    OrderListing."Closing Date & Time 2" := WhseshipmentLine."RV_Closing Date";
                     OrderListing."SI Received Date" := WhseshipmentLine."RV_SI Received Date";
                     OrderListing.ETA := WhseshipmentLine.RV_ETA;
                     OrderListing.ETD := WhseshipmentLine.RV_ETD;

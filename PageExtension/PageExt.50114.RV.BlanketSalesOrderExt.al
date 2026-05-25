@@ -18,7 +18,7 @@ pageextension 50114 "RV Blanket Sales Order Ext" extends "Blanket Sales Order"
                     Description = 'FDD012';
                     Editable = AllowBLDate;
                 }
-                field("RV_Cosing Date"; Rec."RV_Cosing Date")
+                field("RV_Cosing Date"; Rec."RV_Closing Date")
                 {
                     ApplicationArea = All;
                     Description = 'FDD012';

@@ -35,7 +35,7 @@ pageextension 50107 "RV Whse. Shipment Subform Ext" extends "Whse. Shipment Subf
                 Description = 'FDD008';
                 Editable = AllowBLDate;
             }
-            field("RV_Cosing Date"; Rec."RV_Cosing Date")
+            field("RV_Cosing Date"; Rec."RV_Closing Date")
             {
                 ApplicationArea = All;
                 Caption = 'Cosing Date';

@@ -13,9 +13,9 @@ tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Ship
             DataClassification = ToBeClassified;
 
         }
-        field(50101; "RV_Cosing Date"; Date)
+        field(50101; "RV_Closing Date"; Date)
         {
-            Caption = 'Cosing Date';
+            Caption = 'Closing Date';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
 

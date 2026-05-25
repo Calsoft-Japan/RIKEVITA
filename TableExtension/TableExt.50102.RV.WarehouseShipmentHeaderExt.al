@@ -28,9 +28,9 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
                     end;
             end;
         }
-        field(50101; "RV_Cosing Date"; Date)
+        field(50101; "RV_Closing Date"; Date)
         {
-            Caption = 'Cosing Date';
+            Caption = 'Closing Date';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
 
@@ -42,7 +42,7 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
             begin
                 Clear(DateFormulaVar);
 
-                if Rec."RV_Cosing Date" = 0D then begin
+                if Rec."RV_Closing Date" = 0D then begin
                     "RV_Stuffing Date" := 0D;
                 end else begin
                     RVSteup.Reset();
@@ -50,7 +50,7 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
                         DateFormulaVar := RVSteup."Stuffing Date Calculation";
                     end;
                     if (Format(DateFormulaVar) <> '') then
-                        "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
+                        "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Closing Date");//Stuffing Date = Closing Date - Stuffing Date Calculation
                 end;
 
                 WhsShtLine.Reset();
@@ -59,7 +59,7 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
                     if Confirm('Do you want to update the related shipment lines with the same Cosing Date and Stuffing Date?') then begin
                         repeat
                             //WhsShtLine."RV_B/L Date" := "RV_B/L Date";
-                            WhsShtLine."RV_Cosing Date" := "RV_Cosing Date";
+                            WhsShtLine."RV_Closing Date" := "RV_Closing Date";
                             WhsShtLine."RV_Stuffing Date" := "RV_Stuffing Date";
                             WhsShtLine.Modify();
                         until WhsShtLine.Next() = 0;
