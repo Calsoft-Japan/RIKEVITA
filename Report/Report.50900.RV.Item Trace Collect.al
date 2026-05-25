@@ -85,6 +85,7 @@ report 50900 "RV Item Trace Collect"
         //Create Item Balance by Vendor data, with Openning Balance.
         Clear(QueItemBal);
         QueItemBal.SetDate(0D, StartDate - 1);
+        QueItemBal.SetItemNoFilter(ItemNoFilter);
         if QueItemBal.Open() then begin
             while QueItemBal.Read() do begin
 
