@@ -8,7 +8,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
     local procedure "Get Source Documents_OnSalesLineOnAfterCreateShptHeader"(var WhseShptHeader: Record "Warehouse Shipment Header"; WhseHeaderCreated: Boolean; SalesHeader: Record "Sales Header"; SalesLine: Record "Sales Line"; WarehouseRequest: Record "Warehouse Request")
     begin
         WhseShptHeader."RV_B/L Date" := SalesHeader."RV_B/L Date";
-        WhseShptHeader."RV_Cosing Date" := SalesHeader."RV_Cosing Date";
+        WhseShptHeader."RV_Closing Date" := SalesHeader."RV_Closing Date";
         WhseShptHeader."RV_Stuffing Date" := SalesHeader."RV_Stuffing Date";
         WhseShptHeader.RV_ETD := SalesHeader."RV_ETD";
         WhseShptHeader.RV_ETA := SalesHeader."RV_ETA";
@@ -32,7 +32,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
                 WarehouseShipmentHeader."Shipment Date" := SalesHeader."Shipment Date";
 
                 WarehouseShipmentHeader."RV_B/L Date" := SalesHeader."RV_B/L Date";
-                WarehouseShipmentHeader."RV_Cosing Date" := SalesHeader."RV_Cosing Date";
+                WarehouseShipmentHeader."RV_Closing Date" := SalesHeader."RV_Closing Date";
                 WarehouseShipmentHeader."RV_Stuffing Date" := SalesHeader."RV_Stuffing Date";
                 WarehouseShipmentHeader.RV_ETD := SalesHeader."RV_ETD";
                 WarehouseShipmentHeader.RV_ETA := SalesHeader."RV_ETA";
@@ -48,7 +48,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
     local procedure "Sales Warehouse Mgt._OnAfterCreateShptLineFromSalesLine"(var WarehouseShipmentLine: Record "Warehouse Shipment Line"; WarehouseShipmentHeader: Record "Warehouse Shipment Header"; SalesLine: Record "Sales Line"; SalesHeader: Record "Sales Header")
     begin
         WarehouseShipmentLine."RV_B/L Date" := SalesLine."RV_B/L Date";
-        WarehouseShipmentLine."RV_Cosing Date" := SalesLine."RV_Cosing Date";
+        WarehouseShipmentLine."RV_Closing Date" := SalesLine."RV_Closing Date";
         WarehouseShipmentLine."RV_Stuffing Date" := SalesLine."RV_Stuffing Date";
         WarehouseShipmentLine.RV_ETD := SalesLine."RV_ETD";
         WarehouseShipmentLine.RV_ETA := SalesLine."RV_ETA";
@@ -65,7 +65,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
         if WarehouseRequest."Source Document" = "Warehouse Request Source Document"::"Sales Order" then begin
             SOHeader.Get(SalesLine."Document Type", SalesLine."Document No.");
             WarehouseShipmentHeader."RV_B/L Date" := SOHeader."RV_B/L Date";
-            WarehouseShipmentHeader."RV_Cosing Date" := SOHeader."RV_Cosing Date";
+            WarehouseShipmentHeader."RV_Closing Date" := SOHeader."RV_Closing Date";
             WarehouseShipmentHeader."RV_Stuffing Date" := SOHeader."RV_Stuffing Date";
             WarehouseShipmentHeader.RV_ETD := SOHeader."RV_ETD";
             WarehouseShipmentHeader.RV_ETA := SOHeader."RV_ETA";
@@ -159,7 +159,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
         ItemTrackHist.SetRange("Lot No.", ItemEntryRelation."Lot No.");
         ItemTrackHist.SetRange("Container No.", ILE."RV_Container No.");
         if ItemTrackHist.FindFirst() then begin
-            ItemTrackHist.Qty := ItemTrackHist.Qty + ILE.Quantity;
+            ItemTrackHist.Qty := ItemTrackHist.Qty + ILE.Quantity / ILE."Qty. per Unit of Measure";
             ItemTrackHist.Modify();
         end else begin
             Clear(ItemTrackHist);
@@ -168,7 +168,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
             ItemTrackHist."Sales Order Line No." := xSalesLine."Line No.";
             ItemTrackHist."Lot No." := ItemEntryRelation."Lot No.";
             ItemTrackHist."Container No." := ILE."RV_Container No.";
-            ItemTrackHist.Qty := ILE.Quantity;
+            ItemTrackHist.Qty := ILE.Quantity / ILE."Qty. per Unit of Measure";
             ItemTrackHist.Insert();
         end;
     end;

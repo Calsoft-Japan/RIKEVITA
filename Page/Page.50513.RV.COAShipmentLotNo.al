@@ -137,15 +137,15 @@ page 50513 "RV COA ShipmentLotNo"
                     CurrPage.Update();
                 end;
             }
-            action(ExternalSpecCheck)
+            action(QACheck)
             {
-                Caption = 'External Spec. Check';
+                Caption = 'QA Check';
                 ApplicationArea = All;
                 Image = Check;
                 Enabled = QACheckEnable;
                 trigger OnAction()
                 begin
-                    CurrPage.SubCOACard.Page.ExternalSpecCheck_Action();
+                    CurrPage.SubCOACard.Page.QACheck_Action();
                 end;
             }
             action(COAApprove)
@@ -189,7 +189,7 @@ page 50513 "RV COA ShipmentLotNo"
                 actionref("UpdateQALine_Promoted"; "UpdateQALine")
                 {
                 }
-                actionref("ExternalSpecCheck_Promoted"; "ExternalSpecCheck")
+                actionref("ExternalSpecCheck_Promoted"; "QACheck")
                 {
                 }
                 actionref("COAApprove_Promoted"; "COAApprove")

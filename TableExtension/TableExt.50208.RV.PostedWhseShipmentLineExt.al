@@ -12,9 +12,9 @@ tableextension 50208 "RV Posted Whse Shipment Line" extends "Posted Whse. Shipme
             Description = 'FDD008';
             DataClassification = ToBeClassified;
         }
-        field(50101; "RV_Cosing Date"; Date)
+        field(50101; "RV_Closing Date"; Date)
         {
-            Caption = 'Cosing Date';
+            Caption = 'Closing Date';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
 

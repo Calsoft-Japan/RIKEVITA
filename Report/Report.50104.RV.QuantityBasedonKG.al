@@ -14,73 +14,81 @@ report 50104 "RV Quantity on KG JobQueue"
 
     dataset
     {
-        dataitem(Item; Item)
+        //dataitem(Item; Item)
+        //{
+
+        dataitem("Item Ledger Entry"; "Item Ledger Entry")
         {
+            //DataItemLink = "Item No." = field("No.");
+            DataItemTableView = sorting("Entry No.");
 
-            dataitem("Item Ledger Entry"; "Item Ledger Entry")
-            {
-                DataItemLink = "Item No." = field("No.");
-
-                trigger OnAfterGetRecord()
-                begin
-                    ItemUOM.Reset();
-                    if ItemUOM.Get(Item."No.", 'KG') then begin
-                        "RV_Quantity (KG)" := "Item Ledger Entry".Quantity / ItemUOM."Qty. per Unit of Measure";
-                        Modify();
-                    end;
+            trigger OnAfterGetRecord()
+            begin
+                ItemUOM.Reset();
+                if ItemUOM.Get("Item No.", 'KG') then begin
+                    "RV_Quantity (KG)" := "Item Ledger Entry".Quantity / ItemUOM."Qty. per Unit of Measure";
+                    Modify();
                 end;
-
-                trigger OnPreDataItem()
-                begin
-                    if RVSetup."ILE Last Entry No." > 0 then
-                        SetFilter("Entry No.", StrSubstNo('>%1', RVSetup."ILE Last Entry No."));
-                end;
-
-                trigger OnPostDataItem()
-                begin
-                    if LastILENo < "Item Ledger Entry"."Entry No." then begin
-                        LastILENo := "Item Ledger Entry"."Entry No.";
-                    end;
-                end;
-            }
-
-            dataitem("Value Entry"; "Value Entry")
-            {
-                DataItemLink = "Item No." = field("No.");
-
-                trigger OnAfterGetRecord()
-                begin
-                    ItemUOM.Reset();
-                    if ItemUOM.Get(Item."No.", 'KG') then begin
-                        "RV_Item Ledger Entry Qty (KG)" := "Value Entry"."Item Ledger Entry Quantity" / ItemUOM."Qty. per Unit of Measure";
-                        "RV_Value Quantity (KG)" := "Value Entry"."Valued Quantity" / ItemUOM."Qty. per Unit of Measure";
-                        "RV_Invoiced Quantity (KG)" := "Value Entry"."Invoiced Quantity" / ItemUOM."Qty. per Unit of Measure";
-                        Modify();
-                    end;
-                end;
-
-                trigger OnPreDataItem()
-                begin
-                    if RVSetup."VE Last Entry No." > 0 then
-                        SetFilter("Entry No.", StrSubstNo('>%1', RVSetup."VE Last Entry No."));
-                end;
-
-                trigger OnPostDataItem()
-                begin
-                    if LastVENo < "Value Entry"."Entry No." then begin
-                        LastVENo := "Value Entry"."Entry No.";
-                    end;
-                end;
-            }
-
+            end;
 
             trigger OnPreDataItem()
             begin
                 if RVSetup."Calc. Item No." <> '' then
-                    SetFilter("No.", RVSetup."Calc. Item No.");
+                    SetFilter("Item No.", RVSetup."Calc. Item No.");
+
+                if RVSetup."ILE Last Entry No." > 0 then
+                    SetFilter("Entry No.", StrSubstNo('>%1', RVSetup."ILE Last Entry No."));
             end;
 
+            trigger OnPostDataItem()
+            begin
+                if LastILENo < "Item Ledger Entry"."Entry No." then begin
+                    LastILENo := "Item Ledger Entry"."Entry No.";
+                end;
+            end;
         }
+
+        dataitem("Value Entry"; "Value Entry")
+        {
+            //DataItemLink = "Item No." = field("No.");
+            DataItemTableView = sorting("Entry No.");
+
+            trigger OnAfterGetRecord()
+            begin
+                ItemUOM.Reset();
+                if ItemUOM.Get("Item No.", 'KG') then begin
+                    "RV_Item Ledger Entry Qty (KG)" := "Value Entry"."Item Ledger Entry Quantity" / ItemUOM."Qty. per Unit of Measure";
+                    "RV_Value Quantity (KG)" := "Value Entry"."Valued Quantity" / ItemUOM."Qty. per Unit of Measure";
+                    "RV_Invoiced Quantity (KG)" := "Value Entry"."Invoiced Quantity" / ItemUOM."Qty. per Unit of Measure";
+                    Modify();
+                end;
+            end;
+
+            trigger OnPreDataItem()
+            begin
+                if RVSetup."Calc. Item No." <> '' then
+                    SetFilter("Item No.", RVSetup."Calc. Item No.");
+
+                if RVSetup."VE Last Entry No." > 0 then
+                    SetFilter("Entry No.", StrSubstNo('>%1', RVSetup."VE Last Entry No."));
+            end;
+
+            trigger OnPostDataItem()
+            begin
+                if LastVENo < "Value Entry"."Entry No." then begin
+                    LastVENo := "Value Entry"."Entry No.";
+                end;
+            end;
+        }
+
+
+        /* trigger OnPreDataItem()
+        begin
+            if RVSetup."Calc. Item No." <> '' then
+                SetFilter("No.", RVSetup."Calc. Item No.");
+        end; */
+
+        //}
     }
     trigger OnInitReport()
     begin

@@ -2396,6 +2396,7 @@ Cstr(Fields!CompanyAddr6.Value)
                                                                       <Style>
                                                                         <FontFamily>Segoe UI</FontFamily>
                                                                         <FontSize>8pt</FontSize>
+                                                                        <Format>#,0.00</Format>
                                                                       </Style>
                                                                     </TextRun>
                                                                   </TextRuns>
@@ -2426,6 +2427,7 @@ Cstr(Fields!CompanyAddr6.Value)
                                                                       <Style>
                                                                         <FontFamily>Segoe UI</FontFamily>
                                                                         <FontSize>8pt</FontSize>
+                                                                        <Format>#,0.00</Format>
                                                                       </Style>
                                                                     </TextRun>
                                                                   </TextRuns>
@@ -2702,6 +2704,7 @@ Cstr(Fields!CompanyAddr6.Value)
                                                                       <Style>
                                                                         <FontFamily>Segoe UI</FontFamily>
                                                                         <FontSize>8pt</FontSize>
+                                                                        <Format>#,0.00</Format>
                                                                       </Style>
                                                                     </TextRun>
                                                                   </TextRuns>
@@ -2732,6 +2735,7 @@ Cstr(Fields!CompanyAddr6.Value)
                                                                       <Style>
                                                                         <FontFamily>Segoe UI</FontFamily>
                                                                         <FontSize>8pt</FontSize>
+                                                                        <Format>#,0.00</Format>
                                                                       </Style>
                                                                     </TextRun>
                                                                   </TextRuns>
@@ -3784,7 +3788,7 @@ Cstr(Fields!CompanyAddr6.Value)
                                                       <TablixMembers>
                                                         <TablixMember>
                                                           <Visibility>
-                                                            <Hidden>=IIF((Fields!DocNo_DtldCustLedgEntries.Value="") OR (Fields!PrintLine.Value=FALSE AND Fields!DtldCustLedgEntryType.Value="2") OR NOT Fields!IsNewCustCurrencyGroup.Value,TRUE,FALSE)</Hidden>
+                                                            <Hidden>=IIF((Fields!EntriesExists.Value OR Fields!StartBalance.Value&gt;0),FALSE,TRUE)</Hidden>
                                                           </Visibility>
                                                           <KeepWithGroup>After</KeepWithGroup>
                                                         </TablixMember>
@@ -3826,19 +3830,19 @@ Cstr(Fields!CompanyAddr6.Value)
                                                         </TablixMember>
                                                         <TablixMember>
                                                           <Visibility>
-                                                            <Hidden>=IIF((Fields!EntriesExists.Value OR Fields!StartBalance.Value&gt;0),FALSE,TRUE)</Hidden>
+                                                            <Hidden>=IIF(Fields!DocNo_DtldCustLedgEntries.Value="",TRUE,FALSE) OR IIF((Fields!EntriesExists.Value OR Fields!StartBalance.Value&gt;0),FALSE,TRUE)</Hidden>
                                                           </Visibility>
                                                           <KeepWithGroup>Before</KeepWithGroup>
                                                         </TablixMember>
                                                         <TablixMember>
                                                           <Visibility>
-                                                            <Hidden>=IIF((Fields!EntriesExists.Value OR Fields!StartBalance.Value&gt;0),FALSE,TRUE)</Hidden>
+                                                            <Hidden>=IIF(Fields!DocNo_DtldCustLedgEntries.Value="",TRUE,FALSE) OR IIF((Fields!EntriesExists.Value OR Fields!StartBalance.Value&gt;0),FALSE,TRUE)</Hidden>
                                                           </Visibility>
                                                           <KeepWithGroup>Before</KeepWithGroup>
                                                         </TablixMember>
                                                         <TablixMember>
                                                           <Visibility>
-                                                            <Hidden>=IIF((Fields!EntriesExists.Value OR Fields!StartBalance.Value&gt;0),FALSE,TRUE)</Hidden>
+                                                            <Hidden>=IIF(Fields!DocNo_DtldCustLedgEntries.Value="",TRUE,FALSE) OR IIF((Fields!EntriesExists.Value OR Fields!StartBalance.Value&gt;0),FALSE,TRUE)</Hidden>
                                                           </Visibility>
                                                           <KeepWithGroup>Before</KeepWithGroup>
                                                           <KeepTogether>true</KeepTogether>
@@ -4689,6 +4693,7 @@ Cstr(Fields!CompanyAddr6.Value)
                                                                       <Style>
                                                                         <FontFamily>Segoe UI</FontFamily>
                                                                         <FontSize>8pt</FontSize>
+                                                                        <Format>#,0.00</Format>
                                                                       </Style>
                                                                     </TextRun>
                                                                   </TextRuns>

@@ -28,11 +28,13 @@ pageextension 50108 "RV Sales Order Ext" extends "Sales Order"
                 Visible = true;
                 Caption = 'Item Tracking History Details';
                 Provider = SalesLines;
-                // "Order No." on Sales Shipment Line(Posted) = originating Sales Order No.
-                // "Order Line No."  on Sales Shipment Line(Posted) = line no. from the selected Sales Line.
-                SubPageLink = "Source Type" = const(Database::"Sales Shipment Line"),
+
+                /* SubPageLink = "Source Type" = const(Database::"Sales Shipment Line"),
                               "Order No." = FIELD("Document No."),
-                              "Order Line No." = FIELD("Line No.");
+                              "Order Line No." = FIELD("Line No."); */
+                SubPageLink = "Sales Order No." = FIELD("Document No."),
+                              "Sales Order Line No." = FIELD("Line No.");
+
 
             }
         }
@@ -49,7 +51,7 @@ pageextension 50108 "RV Sales Order Ext" extends "Sales Order"
                     Description = 'FDD012';
                     Editable = AllowBLDate;
                 }
-                field("RV_Cosing Date"; Rec."RV_Cosing Date")
+                field("RV_Cosing Date"; Rec."RV_Closing Date")
                 {
                     ApplicationArea = All;
                     Description = 'FDD012';
@@ -78,8 +80,27 @@ pageextension 50108 "RV Sales Order Ext" extends "Sales Order"
     trigger OnOpenPage()
     var
         PermissionCheck: Codeunit "RV User Permission Check";
+        QryItemTrack: Query "RV Query Item Tracking Hist";
+        RVItemTrackHist: Record "RV Item Tracking History Dtl.";
     begin
         PermissionCheck.GetCurUserPermission(AllowContainer, AllowBLDate, AllowClosingDate, AllowStaffingDate);
+
+        //FDD005
+        RVItemTrackHist.LockTable();
+        QryItemTrack.SetRange(SalesOrderNo, Rec."No.");
+        //QryItemTrack.SetRange(SalesOrderLineNo, SOLine."Line No.");
+        QryItemTrack.Open();
+        while QryItemTrack.Read() do begin
+            RVItemTrackHist.Init();
+            RVItemTrackHist."Sales Order No." := QryItemTrack.SalesOrderNo;
+            RVItemTrackHist."Sales Order Line No." := QryItemTrack.SalesOrderLineNo;
+            RVItemTrackHist."Lot No." := QryItemTrack.LotNo;
+            RVItemTrackHist."Container No." := QryItemTrack.RV_Container_No_;
+            RVItemTrackHist.Qty := QryItemTrack.Quantity / QryItemTrack.QtyperUOM;
+            if not RVItemTrackHist.Insert() then
+                RVItemTrackHist.Modify();
+        end;
+        QryItemTrack.Close();
     end;
 
     var

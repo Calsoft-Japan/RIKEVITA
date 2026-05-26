@@ -17,7 +17,7 @@ pageextension 50209 "RV PostedWhseShipmentExt" extends "Posted Whse. Shipment"
                     ApplicationArea = All;
                     Description = 'FDD008';
                 }
-                field("RV_Cosing Date"; Rec."RV_Cosing Date")
+                field("RV_Cosing Date"; Rec."RV_Closing Date")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';

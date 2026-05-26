@@ -111,7 +111,7 @@ codeunit 50606 "RV ECR Calculation Mgt"
     begin
         //SalesHeader.get(Rec."Document Type", Rec."Document No.");
         SalesLine."RV_B/L Date" := SalesHeader."RV_B/L Date";
-        SalesLine."RV_Cosing Date" := SalesHeader."RV_Cosing Date";
+        SalesLine."RV_Closing Date" := SalesHeader."RV_Closing Date";
         SalesLine."RV_ECR Date" := SalesHeader."RV_ECR Date";
         SalesLine.RV_ETA := SalesHeader.RV_ETA;
         SalesLine.RV_ETD := SalesHeader.RV_ETD;

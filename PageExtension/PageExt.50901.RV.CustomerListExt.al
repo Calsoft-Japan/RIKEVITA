@@ -19,6 +19,25 @@ pageextension 50901 "RV Customer List Ext" extends "Customer List"
 
     actions
     {
+        modify(ReportAgedAccountsReceivable)
+        {
+            Description = 'FDD023';
+            Visible = false;
+        }
+
+        addafter(ReportAgedAccountsReceivable)
+        {
+            action(RVReportAgedAccountsReceivable)
+            {
+                Description = 'FDD023';
+                ApplicationArea = All;
+                Caption = 'Aged Accounts Receivable';
+                Image = "Report";
+                RunObject = Report "RV Aged Accounts Receivable";
+                ToolTip = 'View an overview of when customer payments are due or overdue, divided into four periods. You must specify the date you want aging calculated from and the length of the period that each column will contain data for.';
+            }
+        }
+
         addafter("Statement")
         {
             action(RVStatement)
@@ -61,6 +80,9 @@ pageextension 50901 "RV Customer List Ext" extends "Customer List"
             actionref(RVStatement_Promoted; RVStatement)
             {
             }
+
+            actionref(RVReportAgedAccountsReceivable_Promoted; RVReportAgedAccountsReceivable)
+            { }
         }
     }
 }

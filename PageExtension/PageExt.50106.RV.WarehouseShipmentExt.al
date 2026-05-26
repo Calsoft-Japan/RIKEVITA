@@ -18,7 +18,7 @@ pageextension 50106 "RV Warehouse Shipment Ext" extends "Warehouse Shipment"
                     Description = 'FDD008';
                     Editable = AllowBLDate;
                 }
-                field("RV_Cosing Date"; Rec."RV_Cosing Date")
+                field("RV_Cosing Date"; Rec."RV_Closing Date")
                 {
                     ApplicationArea = All;
                     Description = 'FDD008';

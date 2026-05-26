@@ -25,7 +25,7 @@ pageextension 50210 "RV PostedWhseShipSubformExt" extends "Posted Whse. Shipment
                 Caption = 'B/L Date';
                 Description = 'FDD008';
             }
-            field("RV_Cosing Date"; Rec."RV_Cosing Date")
+            field("RV_Cosing Date"; Rec."RV_Closing Date")
             {
                 ApplicationArea = All;
                 Caption = 'Cosing Date';

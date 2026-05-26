@@ -422,21 +422,21 @@ table 50505 "RV QC Header"
                 QCLine."QC No." := "QC No.";
                 QCLine."Line No." := LineNo;
                 //QCParameter
-                QCParameter.Reset();
-                if QCParameter.Get(QCSpecificationLine."QC Parameter Name") then begin
-                    QCParameter.CalcFields(Type, "Value Table Type");
-                    QCLine."QC Parameter Name" := QCParameter."Parameter Name";
-                    QCLine.Type := QCParameter.Type;
-                    QCLine."Value Table Type" := QCParameter."Value Table Type";
-                    QCLine."Value Table Name" := QCParameter."Value Table Name";
-                    if QCLine."Value Table Type" = QCLine."Value Table Type"::Single then begin
-                        QCListValue.Reset();
-                        QCListValue.SetRange("Value Table Name", QCParameter."Value Table Name");
-                        if QCListValue.FindFirst() then begin
-                            QCLine."QC Result" := QCListValue."List Value";
-                            QCLine."Check Status" := QCListValue."Check Status";
-                        end;
+                //QCParameter.Reset();
+                QCParameter.Get(QCSpecificationLine."QC Parameter Name");
+                QCParameter.CalcFields(Type, "Value Table Type");
+                QCLine."QC Parameter Name" := QCParameter."Parameter Name";
+                QCLine.Type := QCParameter.Type;
+                QCLine."Value Table Type" := QCParameter."Value Table Type";
+                QCLine."Value Table Name" := QCParameter."Value Table Name";
+                if QCLine."Value Table Type" = QCLine."Value Table Type"::Single then begin
+                    QCListValue.Reset();
+                    QCListValue.SetRange("Value Table Name", QCParameter."Value Table Name");
+                    if QCListValue.FindFirst() then begin
+                        QCLine."QC Result" := QCListValue."List Value";
+                        QCLine."Check Status" := QCListValue."Check Status";
                     end;
+                    //end;
                 end;
                 QCLine.Insert();
             until QCSpecificationLine.Next() = 0;

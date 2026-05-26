@@ -13,7 +13,8 @@ codeunit 50901 "RV Charge Calc. Subscriber"
 
         recSalesInvLine.SetRange("Document No.", CustLedgerEntry."Document No.");
         recSalesInvLine.SetRange(Type, Enum::"Sales Line Type"::Item);
-        if recSalesInvLine.FindFirst() then begin
+        if not recSalesInvLine.IsEmpty then begin
+            recSalesInvLine.CalcSums("RV_Freight Charge");
             CustLedgerEntry."RV_Freight Charge" := recSalesInvLine."RV_Freight Charge";
         end;
     end;

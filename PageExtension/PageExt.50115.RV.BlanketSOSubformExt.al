@@ -14,7 +14,7 @@ pageextension 50115 "RV Blanket SO Subform Ext" extends "Blanket Sales Order Sub
                 Description = 'FDD012';
                 Editable = AllowBLDate;
             }
-            field("RV_Cosing Date"; Rec."RV_Cosing Date")
+            field("RV_Cosing Date"; Rec."RV_Closing Date")
             {
                 ApplicationArea = All;
                 Description = 'FDD012';

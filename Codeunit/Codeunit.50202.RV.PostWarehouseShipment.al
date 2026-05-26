@@ -24,7 +24,7 @@ codeunit 50202 "RV Post Warehouse Shipment"
 
         //FDD008
         PostedWhseShipmentHeader."RV_B/L Date" := WarehouseShipmentHeader."RV_B/L Date";
-        PostedWhseShipmentHeader."RV_Cosing Date" := WarehouseShipmentHeader."RV_Cosing Date";
+        PostedWhseShipmentHeader."RV_Closing Date" := WarehouseShipmentHeader."RV_Closing Date";
         PostedWhseShipmentHeader."RV_Stuffing Date" := WarehouseShipmentHeader."RV_Stuffing Date";
         PostedWhseShipmentHeader.RV_ETD := WarehouseShipmentHeader."RV_ETD";
         PostedWhseShipmentHeader.RV_ETA := WarehouseShipmentHeader."RV_ETA";
@@ -65,7 +65,7 @@ codeunit 50202 "RV Post Warehouse Shipment"
     begin
         //FDD008
         PostedWhseShptLine."RV_B/L Date" := WhseShptLine."RV_B/L Date";
-        PostedWhseShptLine."RV_Cosing Date" := WhseShptLine."RV_Cosing Date";
+        PostedWhseShptLine."RV_Closing Date" := WhseShptLine."RV_Closing Date";
         PostedWhseShptLine."RV_Stuffing Date" := WhseShptLine."RV_Stuffing Date";
         PostedWhseShptLine.RV_ETD := WhseShptLine."RV_ETD";
         PostedWhseShptLine.RV_ETA := WhseShptLine."RV_ETA";

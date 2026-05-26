@@ -58,7 +58,14 @@ page 50903 "RV Item Trace History"
                     trigger OnAction()
                     var
                         repCollect: Report "RV Item Trace Collect";
+                        cuItemTraceMgt: Codeunit "RV ILE Item Trace Mgt";
                     begin
+                        Clear(cuItemTraceMgt);
+                        cuItemTraceMgt.Run();
+
+                        //Need commit before run report
+                        Commit();
+
                         Clear(repCollect);
                         repCollect.RunModal();
                     end;

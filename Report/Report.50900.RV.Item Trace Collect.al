@@ -85,6 +85,7 @@ report 50900 "RV Item Trace Collect"
         //Create Item Balance by Vendor data, with Openning Balance.
         Clear(QueItemBal);
         QueItemBal.SetDate(0D, StartDate - 1);
+        QueItemBal.SetItemNoFilter(ItemNoFilter);
         if QueItemBal.Open() then begin
             while QueItemBal.Read() do begin
 
@@ -94,7 +95,7 @@ report 50900 "RV Item Trace Collect"
 
                     ItemBalance.Init();
                     ItemBalance."History Entry No." := HistoryEntryNo;
-                    ItemBalance."Vendor No." := QueItemBal.Source_No_;
+                    ItemBalance."Vendor No." := QueItemBal.RV_Vendor_No__No_;
                     ItemBalance."Item No." := QueItemBal.Item_No_;
                     ItemBalance."Opening Balance (BUOM)" := QueItemBal.Quantity;
                     ItemBalance."Opening Balance (KG)" := QueItemBal.RV_Quantity__KG_;
@@ -109,7 +110,6 @@ report 50900 "RV Item Trace Collect"
         //Create Item Trace Detail: Purchase Entry Type.
         //The other types refer to Lot No. of Purchase Type data, that's why Create Purchase data first.
         ILE.Reset();
-        ILE.SetRange("Source Type", Enum::"Analysis Source Type"::Vendor);
         ILE.SetRange("Entry Type", Enum::"Item Ledger Entry Type"::Purchase);
         ILE.SetRange("Posting Date", StartDate, EndDate);
         ILE.SetFilter("Item No.", ItemNoFilter);
@@ -120,7 +120,6 @@ report 50900 "RV Item Trace Collect"
 
         //Create Item Trace Detail: Other Entry Types.
         ILE.Reset();
-        ILE.SetRange("Source Type", Enum::"Analysis Source Type"::Vendor);
         ILE.SetFilter("Entry Type", '%1|%2|%3|%4',
                                     Enum::"Item Ledger Entry Type"::Consumption,
                                     Enum::"Item Ledger Entry Type"::Sale,
@@ -177,7 +176,7 @@ report 50900 "RV Item Trace Collect"
         case ILE."Entry Type" of
             Enum::"Item Ledger Entry Type"::Purchase:
                 begin
-                    ItemDetail."Vendor No." := ILE."Source No.";
+                    ItemDetail."Vendor No." := ILE."RV_Vendor No.";
                     if Vendor.Get(ItemDetail."Vendor No.") then begin
                         ItemDetail."Gen. Bus. Posting Group " := Vendor."Gen. Bus. Posting Group";
                     end;
@@ -211,6 +210,7 @@ report 50900 "RV Item Trace Collect"
 
             Enum::"Item Ledger Entry Type"::Consumption:
                 begin
+                    /*
                     ItemDetailFinder.Reset();
                     ItemDetailFinder.SetRange("Entry Type", Enum::"Item Ledger Entry Type"::Purchase);
                     ItemDetailFinder.SetRange("Item No.", ILE."Item No.");
@@ -218,6 +218,8 @@ report 50900 "RV Item Trace Collect"
                     if ItemDetailFinder.FindFirst() then begin
                         ItemDetail."Vendor No." := ItemDetailFinder."Vendor No.";
                     end;
+                    */
+                    ItemDetail."Vendor No." := ILE."RV_Vendor No.";
 
                     if Vendor.Get(ItemDetail."Vendor No.") then begin
                         ItemDetail."Gen. Bus. Posting Group " := Vendor."Gen. Bus. Posting Group";
@@ -251,6 +253,7 @@ report 50900 "RV Item Trace Collect"
 
             Enum::"Item Ledger Entry Type"::Sale:
                 begin
+                    /*
                     ItemDetailFinder.Reset();
                     ItemDetailFinder.SetRange("Entry Type", Enum::"Item Ledger Entry Type"::Purchase);
                     ItemDetailFinder.SetRange("Item No.", ILE."Item No.");
@@ -258,6 +261,8 @@ report 50900 "RV Item Trace Collect"
                     if ItemDetailFinder.FindFirst() then begin
                         ItemDetail."Vendor No." := ItemDetailFinder."Vendor No.";
                     end;
+                    */
+                    ItemDetail."Vendor No." := ILE."RV_Vendor No.";
 
                     if Vendor.Get(ItemDetail."Vendor No.") then begin
                         ItemDetail."Gen. Bus. Posting Group " := Vendor."Gen. Bus. Posting Group";
@@ -282,6 +287,7 @@ report 50900 "RV Item Trace Collect"
             Enum::"Item Ledger Entry Type"::"Positive Adjmt.",
             Enum::"Item Ledger Entry Type"::"Negative Adjmt.":
                 begin
+                    /*
                     ItemDetailFinder.Reset();
                     ItemDetailFinder.SetRange("Entry Type", Enum::"Item Ledger Entry Type"::Purchase);
                     ItemDetailFinder.SetRange("Item No.", ILE."Item No.");
@@ -289,6 +295,8 @@ report 50900 "RV Item Trace Collect"
                     if ItemDetailFinder.FindFirst() then begin
                         ItemDetail."Vendor No." := ItemDetailFinder."Vendor No.";
                     end;
+                    */
+                    ItemDetail."Vendor No." := ILE."RV_Vendor No.";
 
                     if Vendor.Get(ItemDetail."Vendor No.") then begin
                         ItemDetail."Gen. Bus. Posting Group " := Vendor."Gen. Bus. Posting Group";

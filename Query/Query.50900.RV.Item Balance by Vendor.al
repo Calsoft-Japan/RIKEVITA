@@ -12,11 +12,13 @@ query 50900 "RV Item Balance by Vendor"
     {
         dataitem(ItemLedgerEntry; "Item Ledger Entry")
         {
-            DataItemTableFilter = "Source Type" = const(Vendor);
+            filter(Posting_Date; "Posting Date")
+            {
+            }
             column(Item_No_; "Item No.")
             {
             }
-            column(Source_No_; "Source No.")
+            column(RV_Vendor_No__No_; "RV_Vendor No.")
             {
             }
             column(Quantity; Quantity)
@@ -27,20 +29,9 @@ query 50900 "RV Item Balance by Vendor"
             {
                 Method = Sum;
             }
-            filter(Posting_Date; "Posting Date")
+            column(Cost_Amount__Actual_; "Cost Amount (Actual)")
             {
-            }
-
-            dataitem(Value_Entry; "Value Entry")
-            {
-                DataItemLink = "Item Ledger Entry No." = ItemLedgerEntry."Entry No.";
-                SqlJoinType = InnerJoin;
-
-                column(Cost_Amount__Actual_; "Cost Amount (Actual)")
-                {
-                    Method = Sum;
-                }
-
+                Method = Sum;
             }
         }
     }
@@ -48,6 +39,7 @@ query 50900 "RV Item Balance by Vendor"
     var
         StartDate: Date;
         EndDate: Date;
+        ItemNoFilter: Text[250];
 
     procedure SetDate(pStartDate: Date; pEndDate: Date)
     begin
@@ -55,9 +47,15 @@ query 50900 "RV Item Balance by Vendor"
         EndDate := pEndDate;
     end;
 
+    procedure SetItemNoFilter(pItemNoFilter: Text[250])
+    begin
+        ItemNoFilter := pItemNoFilter;
+    end;
+
     trigger OnBeforeOpen()
     begin
+        SetFilter(RV_Vendor_No__No_, '<>%1', '');
         SetRange(Posting_Date, StartDate, EndDate);
-
+        SetFilter(Item_No_, ItemNoFilter);
     end;
 }

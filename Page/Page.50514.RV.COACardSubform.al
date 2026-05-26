@@ -229,7 +229,7 @@ page 50514 "RV COA Card Subform"
                             QAInternalQCResults."QC Parameter Name" := FQCLine."QC Parameter Name";
                             QAInternalQCResults."QC Result" := FQCLine."QC Result";
                             QAInternalQCResults."QC Type" := QAInternalQCResults."QC Type"::FQC;
-                            //QAInternalQCResults."Check Status" := FQCHeader."QC Status";
+                            QAInternalQCResults."Check Status" := FQCLine."Check Status";
                             QAInternalQCResults."QC Checked Remark" := FQCHeader."QC Checked Remark";
                             QAInternalQCResults."QC Approved Remark" := FQCHeader."QC Approved Remark";
                             QAInternalQCResults."Value Table Type" := FQCLine."Value Table Type";
@@ -312,7 +312,7 @@ page 50514 "RV COA Card Subform"
             until QAShipmentLotNo.Next() = 0;
     end;
 
-    procedure ExternalSpecCheck_Action()
+    procedure QACheck_Action()
     begin
         //IsQACheckAllowed
         Rec.IsQACheckAllowed();

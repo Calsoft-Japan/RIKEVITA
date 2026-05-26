@@ -46,9 +46,9 @@ tableextension 50106 "RV Sales Line Ext." extends "Sales Line"
             Description = 'FDD012';
             DataClassification = ToBeClassified;
         }
-        field(50101; "RV_Cosing Date"; Date)
+        field(50101; "RV_Closing Date"; Date)
         {
-            Caption = 'Cosing Date';
+            Caption = 'Closing Date';
             Description = 'FDD012';
             DataClassification = ToBeClassified;
 
@@ -59,15 +59,15 @@ tableextension 50106 "RV Sales Line Ext." extends "Sales Line"
             begin
                 Clear(DateFormulaVar);
 
-                if Rec."RV_Cosing Date" = 0D then begin
+                if Rec."RV_Closing Date" = 0D then begin
                     validate("RV_Stuffing Date", 0D);
                 end else begin
                     RVSteup.get();
                     DateFormulaVar := RVSteup."Stuffing Date Calculation";
                     if (Format(DateFormulaVar) <> '') then
-                        Validate("RV_Stuffing Date", CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date"))//Stuffing Date = Closing Date - Stuffing Date Calculation
+                        Validate("RV_Stuffing Date", CalcDate('-' + Format(DateFormulaVar), "RV_Closing Date"))//Stuffing Date = Closing Date - Stuffing Date Calculation
                     else
-                        Validate("RV_Stuffing Date", "RV_Cosing Date")
+                        Validate("RV_Stuffing Date", "RV_Closing Date")
                 end;
             end;
         }

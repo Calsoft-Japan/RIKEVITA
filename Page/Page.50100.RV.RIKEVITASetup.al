@@ -109,6 +109,11 @@ page 50100 "RIKEVITA Setup"///
                     Description = 'FDD028';
                     ApplicationArea = All;
                 }
+                field("ILE Last Entry No (Item Trace)"; Rec."ILE Last Entry No (Item Trace)")
+                {
+                    Description = 'FDD028';
+                    ApplicationArea = All;
+                }
             }
             group(BankInformation)
             {

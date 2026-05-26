@@ -74,14 +74,17 @@ table 50604 "RV MPS Rescheduling Line"
         field(16; "New Work Center No. 1"; Code[20])
         {
             Caption = 'New Work Center No. 1';
+            TableRelation = "Work Center";
         }
         field(17; "New Work Center No. 2"; Code[20])
         {
             Caption = 'New Work Center No. 2';
+            TableRelation = "Work Center";
         }
         field(18; "New Work Center No. 3"; Code[20])
         {
             Caption = 'New Work Center No. 3';
+            TableRelation = "Work Center";
         }
         field(19; "Planning Status"; Enum "RV Planning Status")
         {

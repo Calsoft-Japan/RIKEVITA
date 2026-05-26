@@ -33,9 +33,9 @@ tableextension 50607 "RV Sales Header" extends "Sales Header"
                 end;
             end;
         }
-        field(50101; "RV_Cosing Date"; Date)
+        field(50101; "RV_Closing Date"; Date)
         {
-            Caption = 'Cosing Date';
+            Caption = 'Closing Date';
             Description = 'FDD012';
             DataClassification = ToBeClassified;
 
@@ -45,9 +45,9 @@ tableextension 50607 "RV Sales Header" extends "Sales Header"
                 RVSteup: Record "RV RIKEVITA Setup";
                 DateFormulaVar: DateFormula;
             begin
-                if ("RV_Cosing Date" <> xRec."RV_Cosing Date") then begin
+                if ("RV_Closing Date" <> xRec."RV_Closing Date") then begin
 
-                    if Rec."RV_Cosing Date" = 0D then begin
+                    if Rec."RV_Closing Date" = 0D then begin
                         "RV_Stuffing Date" := 0D;
                     end else begin
                         //Zhao BEGIN
@@ -61,9 +61,9 @@ tableextension 50607 "RV Sales Header" extends "Sales Header"
                         RVSteup.get();
                         DateFormulaVar := RVSteup."Stuffing Date Calculation";
                         if (Format(DateFormulaVar) <> '') then
-                            "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Cosing Date")//Stuffing Date = Closing Date - Stuffing Date Calculation
+                            "RV_Stuffing Date" := CalcDate('-' + Format(DateFormulaVar), "RV_Closing Date")//Stuffing Date = Closing Date - Stuffing Date Calculation
                         else
-                            "RV_Stuffing Date" := "RV_Cosing Date";
+                            "RV_Stuffing Date" := "RV_Closing Date";
                     end;
 
                     SalesLine.Reset();
@@ -72,7 +72,7 @@ tableextension 50607 "RV Sales Header" extends "Sales Header"
                     if SalesLine.FindSet() then
                         if Confirm('Do you want to update the related sales lines with the same Cosing Date and Stuffing Date?') then begin
                             repeat
-                                SalesLine.Validate("RV_Cosing Date", "RV_Cosing Date");
+                                SalesLine.Validate("RV_Closing Date", "RV_Closing Date");
                                 SalesLine.Validate("RV_Stuffing Date", "RV_Stuffing Date");
                                 SalesLine.Modify();
                             until SalesLine.Next() = 0;
