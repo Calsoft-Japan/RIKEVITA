@@ -76,13 +76,30 @@ pageextension 50211 "RV Sales Invoice Ext" extends "Sales Invoice"
                     Report.Run(50203, TRUE, FALSE, ReportRec);
                 end;
             }
+            action("SalesInvoiceOversea")
+            {
+                Caption = 'Pre Sales Invoice (Oversea)';
+                Image = ViewPage;
+                ApplicationArea = all;
+                trigger OnAction()
+                var
+                    ReportRec: Record "Sales Header";
+                begin
+                    ReportRec.Reset();
+                    ReportRec.SetRange("No.", Rec."No.");
+                    ReportRec.SetRange("Document Type", ReportRec."Document Type"::Invoice);
+                    Report.Run(50205, TRUE, FALSE, ReportRec);
+                end;
+            }
         }
         addafter("ProformaInvoice_Promoted")
         {
             actionref("SalesInvoiceLocal_Promoted"; "SalesInvoiceLocal")
             {
             }
-
+            actionref("SalesInvoiceOversea_Promoted"; "SalesInvoiceOversea")
+            {
+            }
         }
     }
 }

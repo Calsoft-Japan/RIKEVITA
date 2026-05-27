@@ -39,6 +39,9 @@
         <Field Name="ISODocVersion">
           <DataField>ISODocVersion</DataField>
         </Field>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
+        </Field>
         <Field Name="PrintDate">
           <DataField>PrintDate</DataField>
         </Field>
@@ -63,11 +66,23 @@
         <Field Name="Sell_to_Country_Region_Code">
           <DataField>Sell_to_Country_Region_Code</DataField>
         </Field>
+        <Field Name="Currency_Code">
+          <DataField>Currency_Code</DataField>
+        </Field>
         <Field Name="Tranfportation">
           <DataField>Tranfportation</DataField>
         </Field>
         <Field Name="OrderNo">
           <DataField>OrderNo</DataField>
+        </Field>
+        <Field Name="FeederVessel">
+          <DataField>FeederVessel</DataField>
+        </Field>
+        <Field Name="MotherVessel">
+          <DataField>MotherVessel</DataField>
+        </Field>
+        <Field Name="VIA">
+          <DataField>VIA</DataField>
         </Field>
         <Field Name="FromValue">
           <DataField>FromValue</DataField>
@@ -78,32 +93,23 @@
         <Field Name="Terms">
           <DataField>Terms</DataField>
         </Field>
-        <Field Name="QRCode">
-          <DataField>QRCode</DataField>
+        <Field Name="TotalFreightCharges">
+          <DataField>TotalFreightCharges</DataField>
+        </Field>
+        <Field Name="TotalFreightChargesFormat">
+          <DataField>TotalFreightChargesFormat</DataField>
         </Field>
         <Field Name="Ship_to_Name">
           <DataField>Ship_to_Name</DataField>
         </Field>
-        <Field Name="Ship_to_Address">
-          <DataField>Ship_to_Address</DataField>
+        <Field Name="ShowFOBPrice">
+          <DataField>ShowFOBPrice</DataField>
         </Field>
-        <Field Name="Ship_to_Address2">
-          <DataField>Ship_to_Address2</DataField>
+        <Field Name="ShowExchangeRates">
+          <DataField>ShowExchangeRates</DataField>
         </Field>
-        <Field Name="Ship_to_Post_Code">
-          <DataField>Ship_to_Post_Code</DataField>
-        </Field>
-        <Field Name="Ship_to_Country_Region_Code">
-          <DataField>Ship_to_Country_Region_Code</DataField>
-        </Field>
-        <Field Name="RIKEVITASetup1">
-          <DataField>RIKEVITASetup1</DataField>
-        </Field>
-        <Field Name="RIKEVITASetup2">
-          <DataField>RIKEVITASetup2</DataField>
-        </Field>
-        <Field Name="RIKEVITASetup3">
-          <DataField>RIKEVITASetup3</DataField>
+        <Field Name="QRCode">
+          <DataField>QRCode</DataField>
         </Field>
         <Field Name="QRCodeText">
           <DataField>QRCodeText</DataField>
@@ -141,11 +147,11 @@
         <Field Name="Line_AmountFormat">
           <DataField>Line_AmountFormat</DataField>
         </Field>
-        <Field Name="Total_VAT_Base_Amount">
-          <DataField>Total_VAT_Base_Amount</DataField>
+        <Field Name="SalesOrderNo">
+          <DataField>SalesOrderNo</DataField>
         </Field>
-        <Field Name="Total_VAT_Base_AmountFormat">
-          <DataField>Total_VAT_Base_AmountFormat</DataField>
+        <Field Name="CustomerPO">
+          <DataField>CustomerPO</DataField>
         </Field>
       </Fields>
     </DataSet>
@@ -158,19 +164,19 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>2.16924in</Width>
+                  <Width>2.05469in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.37234in</Width>
+                  <Width>1in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.26401in</Width>
+                  <Width>2.17548in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.22834in</Width>
+                  <Width>0.91393in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.22917in</Width>
+                  <Width>0.92972in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -194,13 +200,11 @@ Cstr(Fields!Sell_to_Country_Region_Code.Value) + Chr(177) +
 Cstr(Fields!FromValue.Value) + Chr(177) + 
 Cstr(Fields!SailingOnOrAbout.Value) + Chr(177) + 
 Cstr(Fields!Ship_to_Name.Value) + Chr(177) + 
-Cstr(Fields!Ship_to_Address.Value) + Chr(177) + 
-Cstr(Fields!Ship_to_Address2.Value) + Chr(177) + 
-Cstr(Fields!Ship_to_Post_Code.Value) + Chr(177) + 
-Cstr(Fields!Ship_to_Country_Region_Code.Value) + Chr(177) + 
-Cstr(Fields!Tranfportation.Value) + Chr(177) + 
-Cstr(Fields!OrderNo.Value) + Chr(177) + 
+Cstr(Fields!FeederVessel.Value) + Chr(177) + 
+Cstr(Fields!MotherVessel.Value) + Chr(177) + 
+Cstr(Fields!VIA.Value) + Chr(177) + 
 Cstr(Fields!Terms.Value) + Chr(177) + 
+Cstr(Fields!OrderNo.Value) + Chr(177) + 
 Cstr(Fields!QRCodeText.Value)</Value>
                                   <Style>
                                     <FontStyle>Normal</FontStyle>
@@ -241,6 +245,124 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <TablixRow>
                   <Height>0.25in</Height>
                   <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox3">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>MARKS &amp; NO</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Calibri</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox71">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>QUANTITY</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Calibri</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox40</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="Textbox39">
@@ -302,65 +424,6 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox40">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>QUANTITY</Value>
-                                  <Style>
-                                    <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Calibri</FontFamily>
-                                    <FontSize>12pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>None</TextDecoration>
-                                    <Color>#000000</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox40</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>Solid</Style>
-                            </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
                         <Textbox Name="Textbox44">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -385,65 +448,6 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox44</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>Solid</Style>
-                            </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox46">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>DISCOUNT</Value>
-                                  <Style>
-                                    <FontStyle>Normal</FontStyle>
-                                    <FontFamily>Calibri</FontFamily>
-                                    <FontSize>12pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <TextDecoration>None</TextDecoration>
-                                    <Color>#000000</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox46</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -539,8 +543,791 @@ Cstr(Fields!QRCodeText.Value)</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.34375in</Height>
+                  <Height>0.25in</Height>
                   <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox126">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Calibri</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox126</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox127">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Calibri</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox127</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox128">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Calibri</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox128</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox129">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Calibri</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox129</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox130">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>FOB</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Calibri</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox130</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox131">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Calibri</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox131</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox132">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Calibri</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox132</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox133">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Calibri</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox133</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="ReportTitle">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Currency_Code.Value+" / KG"</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Calibri</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>ReportTitle</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox135">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Currency_Code.Value</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontFamily>Calibri</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox135</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>None</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.59944in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Rectangle Name="Rectangle3">
+                          <ReportItems>
+                            <Textbox Name="Textbox35">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=Fields!Sell_to_Customer_Name.Value</Value>
+                                      <Style>
+                                        <FontSize>8pt</FontSize>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox35</rd:DefaultName>
+                              <Left>0.02412in</Left>
+                              <Height>11pt</Height>
+                              <Width>1.96113in</Width>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="Textbox36">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=Fields!Sell_to_City.Value</Value>
+                                      <Style>
+                                        <FontSize>8pt</FontSize>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox35</rd:DefaultName>
+                              <Top>0.15278in</Top>
+                              <Left>0.02412in</Left>
+                              <Height>11pt</Height>
+                              <Width>1.96113in</Width>
+                              <ZIndex>1</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="Textbox37">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>MADE IN MALAYSIA</Value>
+                                      <Style>
+                                        <FontSize>8pt</FontSize>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox35</rd:DefaultName>
+                              <Top>0.30556in</Top>
+                              <Left>0.02412in</Left>
+                              <Height>11pt</Height>
+                              <Width>1.96113in</Width>
+                              <ZIndex>2</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                              </Style>
+                            </Textbox>
+                          </ReportItems>
+                          <KeepTogether>true</KeepTogether>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                          </Style>
+                        </Rectangle>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Rectangle Name="Rectangle6">
+                          <ReportItems>
+                            <Textbox Name="Textbox87">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=Fields!Quantity.Value</Value>
+                                      <Style>
+                                        <FontSize>8pt</FontSize>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox83</rd:DefaultName>
+                              <Height>11pt</Height>
+                              <Width>1in</Width>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                                <VerticalAlign>Middle</VerticalAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                                <PaddingBottom>2pt</PaddingBottom>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="Textbox91">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=Fields!Quantity_Base.Value</Value>
+                                      <Style>
+                                        <FontSize>8pt</FontSize>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox83</rd:DefaultName>
+                              <Top>0.15278in</Top>
+                              <Height>11pt</Height>
+                              <Width>1in</Width>
+                              <ZIndex>1</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                                <VerticalAlign>Middle</VerticalAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                                <PaddingBottom>2pt</PaddingBottom>
+                              </Style>
+                            </Textbox>
+                          </ReportItems>
+                          <KeepTogether>true</KeepTogether>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BottomBorder>
+                              <Style>None</Style>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                          </Style>
+                        </Rectangle>
+                      </CellContents>
+                    </TablixCell>
                     <TablixCell>
                       <CellContents>
                         <Rectangle Name="Rectangle1">
@@ -627,88 +1414,6 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Rectangle Name="Rectangle2">
-                          <ReportItems>
-                            <Textbox Name="Textbox83">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Fields!Quantity.Value</Value>
-                                      <Style>
-                                        <FontSize>8pt</FontSize>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox83</rd:DefaultName>
-                              <Height>11pt</Height>
-                              <Width>1in</Width>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Middle</VerticalAlign>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox84">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Fields!Quantity_Base.Value</Value>
-                                      <Style>
-                                        <FontSize>8pt</FontSize>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox83</rd:DefaultName>
-                              <Top>0.15278in</Top>
-                              <Height>11pt</Height>
-                              <Width>1in</Width>
-                              <ZIndex>1</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Middle</VerticalAlign>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                          </ReportItems>
-                          <KeepTogether>true</KeepTogether>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <BottomBorder>
-                              <Style>None</Style>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Style>Solid</Style>
-                            </LeftBorder>
-                          </Style>
-                        </Rectangle>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
                         <Textbox Name="Unit_Price">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -723,7 +1428,9 @@ Cstr(Fields!QRCodeText.Value)</Value>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Unit_Price</rd:DefaultName>
@@ -751,58 +1458,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               <Style>Solid</Style>
                               <Width>1pt</Width>
                             </RightBorder>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Line_Discount_Amount">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Line_Discount_Amount.Value</Value>
-                                  <Style>
-                                    <FontSize>8pt</FontSize>
-                                    <Format>=Fields!Line_Discount_AmountFormat.Value</Format>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Line_Discount_Amount</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>Solid</Style>
-                            </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>None</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>None</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -827,7 +1483,9 @@ Cstr(Fields!QRCodeText.Value)</Value>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Line_Amount</rd:DefaultName>
@@ -855,6 +1513,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               <Style>Solid</Style>
                               <Width>1pt</Width>
                             </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -866,11 +1525,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>1.02777in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox74">
+                        <Textbox Name="Textbox51">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -884,14 +1543,14 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox74</rd:DefaultName>
+                          <rd:DefaultName>Textbox51</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <TopBorder>
+                            <LeftBorder>
                               <Style>Solid</Style>
-                            </TopBorder>
+                            </LeftBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -902,7 +1561,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox75">
+                        <Textbox Name="Textbox60">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -916,14 +1575,17 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox75</rd:DefaultName>
+                          <rd:DefaultName>Textbox60</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <TopBorder>
+                            <LeftBorder>
                               <Style>Solid</Style>
-                            </TopBorder>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -934,14 +1596,158 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox76">
+                        <Rectangle Name="Rectangle8">
+                          <ReportItems>
+                            <Textbox Name="Textbox136">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>FREIGHT PREPAID</Value>
+                                      <Style>
+                                        <FontStyle>Normal</FontStyle>
+                                        <FontSize>8pt</FontSize>
+                                        <FontWeight>Normal</FontWeight>
+                                        <TextDecoration>None</TextDecoration>
+                                        <Color>#000000</Color>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style>
+                                    <TextAlign>Left</TextAlign>
+                                  </Style>
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox136</rd:DefaultName>
+                              <Top>0.07166in</Top>
+                              <Left>0.02384in</Left>
+                              <Height>11pt</Height>
+                              <Width>2.0998in</Width>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                                <VerticalAlign>Middle</VerticalAlign>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="Textbox137">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>COUNTRY OF ORIGN:MALAYSIA</Value>
+                                      <Style>
+                                        <FontStyle>Normal</FontStyle>
+                                        <FontSize>8pt</FontSize>
+                                        <FontWeight>Normal</FontWeight>
+                                        <TextDecoration>None</TextDecoration>
+                                        <Color>#000000</Color>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox136</rd:DefaultName>
+                              <Top>0.22444in</Top>
+                              <Left>0.02384in</Left>
+                              <Height>11pt</Height>
+                              <Width>2.0998in</Width>
+                              <ZIndex>1</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="Textbox138">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>="CUSTOMER’S PO : "+Fields!CustomerPO.Value</Value>
+                                      <Style>
+                                        <FontStyle>Normal</FontStyle>
+                                        <FontSize>8pt</FontSize>
+                                        <FontWeight>Normal</FontWeight>
+                                        <TextDecoration>None</TextDecoration>
+                                        <Color>#000000</Color>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox136</rd:DefaultName>
+                              <Top>0.53in</Top>
+                              <Left>0.02384in</Left>
+                              <Height>11pt</Height>
+                              <Width>2.0998in</Width>
+                              <ZIndex>2</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="Textbox139">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>="SALES ORDER NO. : " + Fields!SalesOrderNo.Value</Value>
+                                      <Style>
+                                        <FontStyle>Normal</FontStyle>
+                                        <FontSize>8pt</FontSize>
+                                        <FontWeight>Normal</FontWeight>
+                                        <TextDecoration>None</TextDecoration>
+                                        <Color>#000000</Color>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox136</rd:DefaultName>
+                              <Top>0.37722in</Top>
+                              <Left>0.02384in</Left>
+                              <Height>11pt</Height>
+                              <Width>2.0998in</Width>
+                              <ZIndex>3</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                              </Style>
+                            </Textbox>
+                          </ReportItems>
+                          <KeepTogether>true</KeepTogether>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Rectangle>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox140">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>TOTAL AMT EXCL. SST(RM)</Value>
+                                  <Value />
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -953,14 +1759,14 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox76</rd:DefaultName>
+                          <rd:DefaultName>Textbox140</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <TopBorder>
+                            <LeftBorder>
                               <Style>Solid</Style>
-                            </TopBorder>
+                            </LeftBorder>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -968,37 +1774,37 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <ColSpan>2</ColSpan>
                       </CellContents>
                     </TablixCell>
-                    <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox78">
+                        <Textbox Name="Textbox141">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Sum(Fields!Line_Amount.Value)</Value>
+                                  <Value />
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <Format>=Fields!Line_AmountFormat.Value</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox78</rd:DefaultName>
+                          <rd:DefaultName>Textbox141</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <TopBorder>
+                            <LeftBorder>
                               <Style>Solid</Style>
-                            </TopBorder>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1012,6 +1818,304 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <TablixRow>
                   <Height>0.25in</Height>
                   <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox144">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox144</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox145">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox145</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox146">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>FREIGHT CHARGES</Value>
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox146</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox147">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox147</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox148">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!TotalFreightCharges.Value</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Format>=Fields!TotalFreightChargesFormat.Value</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox148</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.38445in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Rectangle Name="Rectangle2">
+                          <ReportItems>
+                            <Textbox Name="QRCode">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=First(Fields!CurrencyInformation.Value)</Value>
+                                      <Style>
+                                        <FontSize>8pt</FontSize>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>QRCode</rd:DefaultName>
+                              <Left>0.02412in</Left>
+                              <Height>11pt</Height>
+                              <Width>1.96113in</Width>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="Textbox34">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=Fields!WorkDescription.Value</Value>
+                                      <Style>
+                                        <FontSize>8pt</FontSize>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox31</rd:DefaultName>
+                              <Top>0.18056in</Top>
+                              <Left>0.02412in</Left>
+                              <Height>11pt</Height>
+                              <Width>1.96113in</Width>
+                              <ZIndex>1</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                              </Style>
+                            </Textbox>
+                          </ReportItems>
+                          <KeepTogether>true</KeepTogether>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                          </Style>
+                        </Rectangle>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox40">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox40</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                     <TablixCell>
                       <CellContents>
                         <Textbox Name="Textbox93">
@@ -1033,35 +2137,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox94">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox94</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1079,7 +2159,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>TOTAL SST(RM)</Value>
+                                  <Value />
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1096,6 +2176,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -1103,30 +2188,27 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <ColSpan>2</ColSpan>
                       </CellContents>
                     </TablixCell>
-                    <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox97">
+                        <Textbox Name="Textbox143">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Sum(Fields!Total_VAT_Base_Amount.Value)</Value>
+                                  <Value />
                                   <Style>
                                     <FontSize>8pt</FontSize>
-                                    <Format>=Fields!Total_VAT_Base_AmountFormat.Value</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox97</rd:DefaultName>
+                          <rd:DefaultName>Textbox143</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1136,6 +2218,14 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               <Style>Solid</Style>
                               <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1151,7 +2241,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox88">
+                        <Textbox Name="Textbox54">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -1165,11 +2255,19 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox88</rd:DefaultName>
+                          <rd:DefaultName>Textbox54</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1180,7 +2278,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox89">
+                        <Textbox Name="Textbox62">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -1194,15 +2292,61 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox89</rd:DefaultName>
+                          <rd:DefaultName>Textbox62</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox88">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>TOTAL AMOUNT</Value>
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox88</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
                           </Style>
                         </Textbox>
                       </CellContents>
@@ -1216,7 +2360,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>TOTAL AMOUNT(RM)</Value>
+                                  <Value />
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1233,6 +2377,14 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
@@ -1240,20 +2392,18 @@ Cstr(Fields!QRCodeText.Value)</Value>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <ColSpan>2</ColSpan>
                       </CellContents>
                     </TablixCell>
-                    <TablixCell />
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox92">
+                        <Textbox Name="Textbox142">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Sum(Fields!Line_Amount.Value)+Sum(Fields!Total_VAT_Base_Amount.Value)</Value>
+                                  <Value>=Sum(Fields!Line_Amount.Value)</Value>
                                   <Style>
                                     <FontSize>8pt</FontSize>
                                     <Format>=Fields!Line_AmountFormat.Value</Format>
@@ -1263,16 +2413,22 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox92</rd:DefaultName>
+                          <rd:DefaultName>Textbox142</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
                             <BottomBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
+                              <Style>Dashed</Style>
                               <Width>1pt</Width>
                             </BottomBorder>
+                            <LeftBorder>
+                              <Style>Solid</Style>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Style>Solid</Style>
+                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1284,235 +2440,160 @@ Cstr(Fields!QRCodeText.Value)</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.98959in</Height>
+                  <Height>0.25in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Rectangle Name="Rectangle3">
-                          <ReportItems>
-                            <Textbox Name="Textbox35">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>GOODS DELIVER TO:-</Value>
-                                      <Style>
-                                        <FontStyle>Normal</FontStyle>
-                                        <FontFamily>Calibri</FontFamily>
-                                        <FontSize>8pt</FontSize>
-                                        <FontWeight>Normal</FontWeight>
-                                        <TextDecoration>None</TextDecoration>
-                                        <Color>#000000</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox35</rd:DefaultName>
-                              <Top>0.07292in</Top>
-                              <Left>0.06944in</Left>
-                              <Height>11pt</Height>
-                              <Width>1.0759in</Width>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Middle</VerticalAlign>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox36">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Cstr(Choose(8, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
-                                      <Style>
-                                        <FontStyle>Normal</FontStyle>
-                                        <FontFamily>Calibri</FontFamily>
-                                        <FontSize>8pt</FontSize>
-                                        <FontWeight>Normal</FontWeight>
-                                        <TextDecoration>None</TextDecoration>
-                                        <Color>#000000</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox35</rd:DefaultName>
-                              <Top>0.2257in</Top>
-                              <Left>0.06944in</Left>
-                              <Height>11pt</Height>
-                              <Width>4.03714in</Width>
-                              <ZIndex>1</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Middle</VerticalAlign>
-                                <PaddingLeft>2pt</PaddingLeft>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox66">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Cstr(Choose(9, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
-                                      <Style>
-                                        <FontStyle>Normal</FontStyle>
-                                        <FontFamily>Calibri</FontFamily>
-                                        <FontSize>8pt</FontSize>
-                                        <FontWeight>Normal</FontWeight>
-                                        <TextDecoration>None</TextDecoration>
-                                        <Color>#000000</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox35</rd:DefaultName>
-                              <Top>0.37848in</Top>
-                              <Left>0.06944in</Left>
-                              <Height>11pt</Height>
-                              <Width>4.03714in</Width>
-                              <ZIndex>2</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Middle</VerticalAlign>
-                                <PaddingLeft>2pt</PaddingLeft>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox65">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Cstr(Choose(10, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
-                                      <Style>
-                                        <FontStyle>Normal</FontStyle>
-                                        <FontFamily>Calibri</FontFamily>
-                                        <FontSize>8pt</FontSize>
-                                        <FontWeight>Normal</FontWeight>
-                                        <TextDecoration>None</TextDecoration>
-                                        <Color>#000000</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox35</rd:DefaultName>
-                              <Top>0.53126in</Top>
-                              <Left>0.06944in</Left>
-                              <Height>11pt</Height>
-                              <Width>4.03714in</Width>
-                              <ZIndex>3</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Middle</VerticalAlign>
-                                <PaddingLeft>2pt</PaddingLeft>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox38">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Cstr(Choose(11, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
-                                      <Style>
-                                        <FontStyle>Normal</FontStyle>
-                                        <FontFamily>Calibri</FontFamily>
-                                        <FontSize>8pt</FontSize>
-                                        <FontWeight>Normal</FontWeight>
-                                        <TextDecoration>None</TextDecoration>
-                                        <Color>#000000</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox35</rd:DefaultName>
-                              <Top>0.68403in</Top>
-                              <Left>0.06944in</Left>
-                              <Height>11pt</Height>
-                              <Width>4.03714in</Width>
-                              <ZIndex>4</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Middle</VerticalAlign>
-                                <PaddingLeft>2pt</PaddingLeft>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox37">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Cstr(Choose(12, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
-                                      <Style>
-                                        <FontStyle>Normal</FontStyle>
-                                        <FontFamily>Calibri</FontFamily>
-                                        <FontSize>8pt</FontSize>
-                                        <FontWeight>Normal</FontWeight>
-                                        <TextDecoration>None</TextDecoration>
-                                        <Color>#000000</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox35</rd:DefaultName>
-                              <Top>0.83681in</Top>
-                              <Left>0.06944in</Left>
-                              <Height>11pt</Height>
-                              <Width>4.03714in</Width>
-                              <ZIndex>5</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Middle</VerticalAlign>
-                                <PaddingLeft>2pt</PaddingLeft>
-                              </Style>
-                            </Textbox>
-                          </ReportItems>
+                        <Textbox Name="Textbox21">
+                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox21</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
-                        </Rectangle>
-                        <ColSpan>5</ColSpan>
+                        </Textbox>
                       </CellContents>
                     </TablixCell>
-                    <TablixCell />
-                    <TablixCell />
-                    <TablixCell />
-                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox22">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox22</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox149">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontStyle>Normal</FontStyle>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Normal</FontWeight>
+                                    <TextDecoration>None</TextDecoration>
+                                    <Color>#000000</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox146</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox27">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox27</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox150">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value />
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                    <Format>=Fields!TotalFreightChargesFormat.Value</Format>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox148</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
               </TablixRows>
@@ -1550,9 +2631,24 @@ Cstr(Fields!QRCodeText.Value)</Value>
                       <RepeatOnNewPage>true</RepeatOnNewPage>
                     </TablixMember>
                     <TablixMember>
+                      <Visibility>
+                        <Hidden>=IIF(Fields!ShowFOBPrice.Value,false,true)</Hidden>
+                      </Visibility>
+                      <KeepWithGroup>After</KeepWithGroup>
+                      <RepeatOnNewPage>true</RepeatOnNewPage>
+                    </TablixMember>
+                    <TablixMember>
+                      <Visibility>
+                        <Hidden>=IIF(Fields!ShowFOBPrice.Value,false,true)</Hidden>
+                      </Visibility>
+                      <KeepWithGroup>After</KeepWithGroup>
+                      <RepeatOnNewPage>true</RepeatOnNewPage>
+                    </TablixMember>
+                    <TablixMember>
                       <Group Name="Sales_Header_No1">
                         <GroupExpressions>
-                          <GroupExpression>=Fields!Sales_Header_No.Value</GroupExpression>
+                          <GroupExpression>=Fields!SalesOrderNo.Value</GroupExpression>
+                          <GroupExpression>=Fields!CustomerPO.Value</GroupExpression>
                         </GroupExpressions>
                       </Group>
                       <SortExpressions>
@@ -1571,12 +2667,18 @@ Cstr(Fields!QRCodeText.Value)</Value>
                           <KeepWithGroup>Before</KeepWithGroup>
                         </TablixMember>
                         <TablixMember>
+                          <Visibility>
+                            <Hidden>=IIF(Fields!ShowExchangeRates.Value,false,true)</Hidden>
+                          </Visibility>
                           <KeepWithGroup>Before</KeepWithGroup>
                         </TablixMember>
                         <TablixMember>
                           <KeepWithGroup>Before</KeepWithGroup>
                         </TablixMember>
                       </TablixMembers>
+                    </TablixMember>
+                    <TablixMember>
+                      <KeepWithGroup>Before</KeepWithGroup>
                     </TablixMember>
                   </TablixMembers>
                 </TablixMember>
@@ -1585,8 +2687,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
             <DataSetName>DataSet_Result</DataSetName>
             <Top>0.04111in</Top>
             <Left>0.04063in</Left>
-            <Height>2.39237in</Height>
-            <Width>7.2631in</Width>
+            <Height>3.57069in</Height>
+            <Width>7.07382in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1594,13 +2696,13 @@ Cstr(Fields!QRCodeText.Value)</Value>
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>2.43348in</Height>
+        <Height>4.21125in</Height>
         <Style />
       </Body>
-      <Width>7.43389in</Width>
+      <Width>7.32785in</Width>
       <Page>
         <PageHeader>
-          <Height>3.73145in</Height>
+          <Height>3.92937in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1655,72 +2757,6 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Textbox Name="Textbox2">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!SSTRegNo.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.5925in</Top>
-              <Left>1.57167in</Left>
-              <Height>0.25in</Height>
-              <Width>2.09375in</Width>
-              <ZIndex>2</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Middle</VerticalAlign>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox3">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!RegistrationNo.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>0.5925in</Top>
-              <Left>3.73486in</Left>
-              <Height>0.25in</Height>
-              <Width>2.625in</Width>
-              <ZIndex>3</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Middle</VerticalAlign>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
             <Textbox Name="Textbox4">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
@@ -1738,11 +2774,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox4</rd:DefaultName>
-              <Top>1.2175in</Top>
+              <Top>0.89042in</Top>
               <Left>5.32785in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
-              <ZIndex>4</ZIndex>
+              <ZIndex>2</ZIndex>
               <Style>
                 <Border>
                   <Style>Solid</Style>
@@ -1793,11 +2829,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox5</rd:DefaultName>
-              <Top>1.2175in</Top>
+              <Top>0.89042in</Top>
               <Left>6.32785in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
-              <ZIndex>5</ZIndex>
+              <ZIndex>3</ZIndex>
               <Style>
                 <Border>
                   <Style>Solid</Style>
@@ -1846,11 +2882,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox6</rd:DefaultName>
-              <Top>1.4675in</Top>
+              <Top>1.14042in</Top>
               <Left>5.32785in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
-              <ZIndex>6</ZIndex>
+              <ZIndex>4</ZIndex>
               <Style>
                 <Border>
                   <Style>Solid</Style>
@@ -1901,11 +2937,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox7</rd:DefaultName>
-              <Top>1.4675in</Top>
+              <Top>1.14042in</Top>
               <Left>6.32785in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
-              <ZIndex>7</ZIndex>
+              <ZIndex>5</ZIndex>
               <Style>
                 <Border>
                   <Style>Solid</Style>
@@ -1954,11 +2990,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>1.88648in</Top>
-              <Left>4.32785in</Left>
+              <Top>1.45986in</Top>
+              <Left>3.84622in</Left>
               <Height>11pt</Height>
               <Width>1in</Width>
-              <ZIndex>8</ZIndex>
+              <ZIndex>6</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -1983,11 +3019,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox9</rd:DefaultName>
-              <Top>2.36736in</Top>
-              <Left>0.06475in</Left>
+              <Top>2.0618in</Top>
+              <Left>0.03439in</Left>
               <Height>0.15278in</Height>
               <Width>1in</Width>
-              <ZIndex>9</ZIndex>
+              <ZIndex>7</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2004,7 +3040,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     <TextRun>
                       <Value>=Cstr(Choose(1, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2012,11 +3048,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>2.36736in</Top>
-              <Left>1.21009in</Left>
+              <Top>2.0618in</Top>
+              <Left>1.17973in</Left>
               <Height>11pt</Height>
               <Width>2.43938in</Width>
-              <ZIndex>10</ZIndex>
+              <ZIndex>8</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2033,7 +3069,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     <TextRun>
                       <Value>=Cstr(Choose(3, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2041,11 +3077,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>2.67291in</Top>
-              <Left>1.21009in</Left>
+              <Top>2.36735in</Top>
+              <Left>1.17973in</Left>
               <Height>11pt</Height>
               <Width>2.43938in</Width>
-              <ZIndex>11</ZIndex>
+              <ZIndex>9</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2062,7 +3098,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     <TextRun>
                       <Value>=Cstr(Choose(2, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2070,11 +3106,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>2.52014in</Top>
-              <Left>1.21008in</Left>
+              <Top>2.21458in</Top>
+              <Left>1.17972in</Left>
               <Height>11pt</Height>
               <Width>2.43939in</Width>
-              <ZIndex>12</ZIndex>
+              <ZIndex>10</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2091,7 +3127,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     <TextRun>
                       <Value>=Cstr(Choose(4, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2099,11 +3135,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>2.82569in</Top>
-              <Left>1.21009in</Left>
+              <Top>2.52013in</Top>
+              <Left>1.17973in</Left>
               <Height>11pt</Height>
               <Width>2.43938in</Width>
-              <ZIndex>13</ZIndex>
+              <ZIndex>11</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2120,7 +3156,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     <TextRun>
                       <Value>=Cstr(Choose(5, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2128,11 +3164,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>2.97847in</Top>
-              <Left>1.21009in</Left>
+              <Top>2.67291in</Top>
+              <Left>1.17973in</Left>
               <Height>11pt</Height>
               <Width>2.43938in</Width>
-              <ZIndex>14</ZIndex>
+              <ZIndex>12</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2149,7 +3185,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     <TextRun>
                       <Value>=First(Fields!PrintDate.Value, "DataSet_Result")</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2157,11 +3193,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>1.88648in</Top>
-              <Left>5.32785in</Left>
+              <Top>1.45986in</Top>
+              <Left>4.84622in</Left>
               <Height>11pt</Height>
-              <Width>1.7866in</Width>
-              <ZIndex>15</ZIndex>
+              <Width>1in</Width>
+              <ZIndex>13</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2176,7 +3212,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>INVOICE</Value>
+                      <Value>=First(Fields!ReportTitle.Value, "DataSet_Result")</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontSize>18pt</FontSize>
@@ -2192,11 +3228,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox45</rd:DefaultName>
-              <Top>1.2175in</Top>
+              <Top>0.78in</Top>
               <Left>2.44667in</Left>
               <Height>0.36042in</Height>
               <Width>2.76312in</Width>
-              <ZIndex>16</ZIndex>
+              <ZIndex>14</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2227,11 +3263,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox26</rd:DefaultName>
-              <Top>0.9675in</Top>
+              <Top>0.49527in</Top>
               <Left>1.57167in</Left>
               <Height>11pt</Height>
               <Width>4.78819in</Width>
-              <ZIndex>17</ZIndex>
+              <ZIndex>15</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2256,11 +3292,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>1.88648in</Top>
-              <Left>0.03439in</Left>
+              <Top>1.45986in</Top>
+              <Left>0.03036in</Left>
               <Height>11pt</Height>
               <Width>1.03036in</Width>
-              <ZIndex>18</ZIndex>
+              <ZIndex>16</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2277,7 +3313,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     <TextRun>
                       <Value>=First(Fields!Sales_Header_No.Value, "DataSet_Result")</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2285,11 +3321,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>1.88695in</Top>
-              <Left>1.21008in</Left>
+              <Top>1.46033in</Top>
+              <Left>1.20605in</Left>
               <Height>11pt</Height>
               <Width>2.43938in</Width>
-              <ZIndex>19</ZIndex>
+              <ZIndex>17</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2304,7 +3340,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>CUSTOMER PO :</Value>
+                      <Value>PCN NO :</Value>
                       <Style>
                         <FontSize>8pt</FontSize>
                       </Style>
@@ -2314,11 +3350,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>2.03926in</Top>
+              <Top>1.68209in</Top>
               <Left>0.03439in</Left>
               <Height>11pt</Height>
               <Width>1.03036in</Width>
-              <ZIndex>20</ZIndex>
+              <ZIndex>18</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2333,9 +3369,10 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=First(Fields!External_Document_No.Value, "DataSet_Result")</Value>
+                      <Value>=Cstr(Choose(13, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
+                      <MarkupType>HTML</MarkupType>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2343,11 +3380,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>2.03972in</Top>
+              <Top>1.68209in</Top>
               <Left>1.21008in</Left>
               <Height>11pt</Height>
-              <Width>2.43938in</Width>
-              <ZIndex>21</ZIndex>
+              <Width>4.63614in</Width>
+              <ZIndex>19</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2362,7 +3399,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>TRANSPORTATION :</Value>
+                      <Value>FEEDER VESSEL :</Value>
                       <Style>
                         <FontSize>8pt</FontSize>
                       </Style>
@@ -2376,7 +3413,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Left>0.03439in</Left>
               <Height>11pt</Height>
               <Width>1.1757in</Width>
-              <ZIndex>22</ZIndex>
+              <ZIndex>20</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2391,9 +3428,9 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Cstr(Choose(13, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
+                      <Value>=Cstr(Choose(9, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2405,7 +3442,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Left>1.21009in</Left>
               <Height>11pt</Height>
               <Width>2.43938in</Width>
-              <ZIndex>23</ZIndex>
+              <ZIndex>21</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2434,7 +3471,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Left>0.03036in</Left>
               <Height>11pt</Height>
               <Width>1.1757in</Width>
-              <ZIndex>24</ZIndex>
+              <ZIndex>22</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2463,7 +3500,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Left>0.03036in</Left>
               <Height>11pt</Height>
               <Width>1.1757in</Width>
-              <ZIndex>25</ZIndex>
+              <ZIndex>23</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2478,7 +3515,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>ORDER NO :</Value>
+                      <Value>MOTHER VESSEL :</Value>
                       <Style>
                         <FontSize>8pt</FontSize>
                       </Style>
@@ -2492,7 +3529,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Left>4.32785in</Left>
               <Height>11pt</Height>
               <Width>1.50682in</Width>
-              <ZIndex>26</ZIndex>
+              <ZIndex>24</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2521,7 +3558,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Left>4.32785in</Left>
               <Height>11pt</Height>
               <Width>1.50682in</Width>
-              <ZIndex>27</ZIndex>
+              <ZIndex>25</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2546,11 +3583,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>3.57867in</Top>
+              <Top>3.74186in</Top>
               <Left>4.32785in</Left>
               <Height>11pt</Height>
               <Width>0.42359in</Width>
-              <ZIndex>28</ZIndex>
+              <ZIndex>26</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2565,9 +3602,9 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Cstr(Choose(14, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
+                      <Value>=Cstr(Choose(10, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2579,7 +3616,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Left>5.83467in</Left>
               <Height>11pt</Height>
               <Width>1.27978in</Width>
-              <ZIndex>29</ZIndex>
+              <ZIndex>27</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2596,7 +3633,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     <TextRun>
                       <Value>=Cstr(Choose(7, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2608,7 +3645,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Left>5.83467in</Left>
               <Height>11pt</Height>
               <Width>1.27978in</Width>
-              <ZIndex>30</ZIndex>
+              <ZIndex>28</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2625,7 +3662,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     <TextRun>
                       <Value>=Cstr(Choose(8, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2633,11 +3670,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>3.57867in</Top>
+              <Top>3.74186in</Top>
               <Left>4.75144in</Left>
               <Height>11pt</Height>
               <Width>2.36301in</Width>
-              <ZIndex>31</ZIndex>
+              <ZIndex>29</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2654,7 +3691,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                     <TextRun>
                       <Value>=Cstr(Choose(6, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2666,7 +3703,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Left>1.21008in</Left>
               <Height>11pt</Height>
               <Width>2.43938in</Width>
-              <ZIndex>32</ZIndex>
+              <ZIndex>30</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2681,9 +3718,9 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Cstr(Choose(15, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
+                      <Value>=Cstr(Choose(12, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
                       <Style>
-                        <FontSize>9pt</FontSize>
+                        <FontSize>8pt</FontSize>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -2695,7 +3732,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Left>1.20606in</Left>
               <Height>11pt</Height>
               <Width>2.43938in</Width>
-              <ZIndex>33</ZIndex>
+              <ZIndex>31</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2705,13 +3742,13 @@ Cstr(Fields!QRCodeText.Value)</Value>
             </Textbox>
             <Image Name="Image2">
               <Source>Embedded</Source>
-              <Value>RVMM2507037</Value>
+              <Value>QQ_1779871389219</Value>
               <Sizing>FitProportional</Sizing>
               <Top>2.21458in</Top>
               <Left>5.83467in</Left>
               <Height>0.76389in</Height>
-              <Width>0.77084in</Width>
-              <ZIndex>34</ZIndex>
+              <Width>0.78542in</Width>
+              <ZIndex>32</ZIndex>
               <Visibility>
                 <Hidden>=iif(First(Fields!QRCode.Value, "DataSet_Result"),false,true)</Hidden>
               </Visibility>
@@ -2728,7 +3765,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Cstr(Choose(16, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
+                      <Value>=Cstr(Choose(14, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
                       <Style>
                         <FontFamily>IDAutomation2D</FontFamily>
                       </Style>
@@ -2741,7 +3778,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Left>4.9598in</Left>
               <Height>0.76389in</Height>
               <Width>0.80543in</Width>
-              <ZIndex>35</ZIndex>
+              <ZIndex>33</ZIndex>
               <Visibility>
                 <Hidden>=iif(First(Fields!QRCode.Value, "DataSet_Result"),false,true)</Hidden>
               </Visibility>
@@ -2755,6 +3792,64 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
+            <Textbox Name="Textbox46">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>VIA :</Value>
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox8</rd:DefaultName>
+              <Top>3.58909in</Top>
+              <Left>4.32785in</Left>
+              <Height>11pt</Height>
+              <Width>0.42359in</Width>
+              <ZIndex>34</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox56">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Cstr(Choose(11, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox10</rd:DefaultName>
+              <Top>3.58909in</Top>
+              <Left>4.75144in</Left>
+              <Height>11pt</Height>
+              <Width>2.36301in</Width>
+              <ZIndex>35</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
           </ReportItems>
           <Style>
             <Border>
@@ -2763,7 +3858,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>2.29305in</Height>
+          <Height>0.35649in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -2789,7 +3884,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>1.93057in</Top>
+              <Top>0.01389in</Top>
               <Left>2.03439in</Left>
               <Height>11pt</Height>
               <Width>3.76992in</Width>
@@ -2823,304 +3918,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>2.08334in</Top>
+              <Top>0.16666in</Top>
               <Left>2.03439in</Left>
               <Height>11pt</Height>
               <Width>3.76992in</Width>
               <ZIndex>1</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Textbox>
-            <Rectangle Name="Rectangle5">
-              <ReportItems>
-                <Textbox Name="Textbox20">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>PREPARED BY:</Value>
-                          <Style>
-                            <FontStyle>Normal</FontStyle>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Normal</FontWeight>
-                            <TextDecoration>None</TextDecoration>
-                            <Color>#000000</Color>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style />
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>Textbox10</rd:DefaultName>
-                  <Left>0.0632in</Left>
-                  <Height>11pt</Height>
-                  <Width>2.0366in</Width>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <VerticalAlign>Middle</VerticalAlign>
-                  </Style>
-                </Textbox>
-                <Textbox Name="Textbox22">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>DATE:</Value>
-                          <Style>
-                            <FontStyle>Normal</FontStyle>
-                            <FontFamily>Calibri</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Normal</FontWeight>
-                            <TextDecoration>None</TextDecoration>
-                            <Color>#000000</Color>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style>
-                        <TextAlign>Left</TextAlign>
-                      </Style>
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>Textbox10</rd:DefaultName>
-                  <Top>0.84722in</Top>
-                  <Left>0.0632in</Left>
-                  <Height>11pt</Height>
-                  <Width>2.0366in</Width>
-                  <ZIndex>1</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <TopBorder>
-                      <Style>Solid</Style>
-                    </TopBorder>
-                    <VerticalAlign>Middle</VerticalAlign>
-                  </Style>
-                </Textbox>
-                <Textbox Name="Textbox23">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>DATE:</Value>
-                          <Style>
-                            <FontStyle>Normal</FontStyle>
-                            <FontFamily>Calibri</FontFamily>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Normal</FontWeight>
-                            <TextDecoration>None</TextDecoration>
-                            <Color>#000000</Color>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style>
-                        <TextAlign>Left</TextAlign>
-                      </Style>
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>Textbox10</rd:DefaultName>
-                  <Top>0.84722in</Top>
-                  <Left>4.78732in</Left>
-                  <Height>11pt</Height>
-                  <Width>2.60594in</Width>
-                  <ZIndex>2</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                    <TopBorder>
-                      <Style>Solid</Style>
-                    </TopBorder>
-                    <VerticalAlign>Middle</VerticalAlign>
-                  </Style>
-                </Textbox>
-                <Textbox Name="Textbox21">
-                  <CanGrow>true</CanGrow>
-                  <KeepTogether>true</KeepTogether>
-                  <Paragraphs>
-                    <Paragraph>
-                      <TextRuns>
-                        <TextRun>
-                          <Value>APPROVED BY:</Value>
-                          <Style>
-                            <FontStyle>Normal</FontStyle>
-                            <FontSize>8pt</FontSize>
-                            <FontWeight>Normal</FontWeight>
-                            <TextDecoration>None</TextDecoration>
-                            <Color>#000000</Color>
-                          </Style>
-                        </TextRun>
-                      </TextRuns>
-                      <Style>
-                        <TextAlign>Left</TextAlign>
-                      </Style>
-                    </Paragraph>
-                  </Paragraphs>
-                  <rd:DefaultName>Textbox10</rd:DefaultName>
-                  <Top>0.0125in</Top>
-                  <Left>4.78732in</Left>
-                  <Height>11pt</Height>
-                  <Width>2.60594in</Width>
-                  <ZIndex>3</ZIndex>
-                  <Style>
-                    <Border>
-                      <Style>None</Style>
-                    </Border>
-                  </Style>
-                </Textbox>
-              </ReportItems>
-              <KeepTogether>true</KeepTogether>
-              <Top>0.70834in</Top>
-              <Left>0.04063in</Left>
-              <Height>1in</Height>
-              <Width>7.39326in</Width>
-              <ZIndex>2</ZIndex>
-              <Visibility>
-                <Hidden>=Globals!PageNumber&lt;&gt;Globals!TotalPages</Hidden>
-              </Visibility>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Rectangle>
-            <Textbox Name="Textbox27">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>All payment should be made payable to:</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Calibri</FontFamily>
-                        <FontSize>8pt</FontSize>
-                        <FontWeight>Normal</FontWeight>
-                        <TextDecoration>None</TextDecoration>
-                        <Color>#000000</Color>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox27</rd:DefaultName>
-              <Top>0.02778in</Top>
-              <Left>0.10383in</Left>
-              <Height>11pt</Height>
-              <Width>4.03714in</Width>
-              <ZIndex>3</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox29">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!RIKEVITASetup1.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Calibri</FontFamily>
-                        <FontSize>8pt</FontSize>
-                        <FontWeight>Normal</FontWeight>
-                        <TextDecoration>None</TextDecoration>
-                        <Color>#000000</Color>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox27</rd:DefaultName>
-              <Top>0.18056in</Top>
-              <Left>0.10383in</Left>
-              <Height>11pt</Height>
-              <Width>4.03714in</Width>
-              <ZIndex>4</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox31">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!RIKEVITASetup2.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Calibri</FontFamily>
-                        <FontSize>8pt</FontSize>
-                        <FontWeight>Normal</FontWeight>
-                        <TextDecoration>None</TextDecoration>
-                        <Color>#000000</Color>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox27</rd:DefaultName>
-              <Top>0.33334in</Top>
-              <Left>0.10383in</Left>
-              <Height>11pt</Height>
-              <Width>4.03714in</Width>
-              <ZIndex>5</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox34">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!RIKEVITASetup3.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontStyle>Normal</FontStyle>
-                        <FontFamily>Calibri</FontFamily>
-                        <FontSize>8pt</FontSize>
-                        <FontWeight>Normal</FontWeight>
-                        <TextDecoration>None</TextDecoration>
-                        <Color>#000000</Color>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox27</rd:DefaultName>
-              <Top>0.48612in</Top>
-              <Left>0.10383in</Left>
-              <Height>11pt</Height>
-              <Width>4.03714in</Width>
-              <ZIndex>6</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3209,6 +4011,27 @@ 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</ImageData>
+    </EmbeddedImage>
+    <EmbeddedImage Name="QQ_1779871389219">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>iVBORw0KGgoAAAANSUhEUgAAAGIAAABfCAYAAAATQRJ9AAAAAXNSR0IArs4c6QAAIABJREFUeF7t3feTbWWVxvF9rlkRTAjmLGbEBGLOOeeImHVqmKr5Zf6GqbKsEcSEAcw555xQMGGOYE6IARQj0mfq89rfnt3d596+V/lxTtW5ffucvd93hWc9a71p92Jafy2XywOnafq3aZoOn6bpsGmaDuq7ff25XC6nxWKx29t832vrdXu6d0/3zTtb1cbe3Du/Rnv7Its+2OjMaZpOW1tbO3XXrl3HLxaLs0Zf/lkul0dP03TsNE377UOD/9KlOzlrd41nrD05ek/37nTfv9L+vhpkuVyeu1gs/nOxWJywWI+E088777z9//CHP0y/+tWvpt///vfTX//619HuToLPImq6xCUuMV3ucpcb7wtd6ELTWWedNf3mN7+Z/vSnP00XuchFxudXvOIVpwMOOGB8v7a2Nr7/3e9+N/3973+fLnOZy0z777//uP63v/3t+M7nl7rUpcZ9Bx544OjD6y9/+cu4j7zk9tK+a7Tv/rPPPns6//zzp8tf/vLTFa5whenCF77wdN555w39fvnLX477//a3v432XaMP/9+1a9dovzYudrGLDbn222+/cY/PtUH+fXnR+dKXvvSGjbS7a9cuhj6EI/5nmqb/0PDpp58+ffKTn5y++93vDiXc6L3Ti0AUOuigg6Zb3epW0y1vecvp4he/+HTqqadOX/ziF6cf/ehHQ8Gb3OQm0+1ud7vxk0Du+dznPjd99atfHca8+c1vPt3gBjeYfvrTn06f//znx70AcfWrX3064ogjptvc5jbj/14/+clPpi9/+cvTZz/72dG+101vetNxzQ1veMPp61//+vTtb397GPSwww6bbn3rWw8HnXvuuUO/T3ziE9PXvva1YdirXe1q0y1ucYvpDne4w2ifzhxMBtfQ65BDDpmuda1rjT6/8IUvTN///veHUwFsb16uZfhrXvOa
+w0benA8ca2trx3PEKfJCHb/61a8eBuCIS17ykuPm3b1ECyfoBEqucpWrTPe5z32mBz7wgdNlL3vZ6b3vfe/0/ve/fwhPYMZ40IMeNN373veernGNawzkv/3tb58+/OEPT7/+9a/HvYxB+Xe/+93jXu3f6EY3Gt/d4x73GI7y+spXvjJ96EMfGtcwivYZ/O53v/t0+9vffuigX3343b3Xuc51hiM4/w1veMP0qU99ahickd330Ic+dLTPOD/4wQ+md7zjHaOPa1/72qMN7evvPe95z+hf5IiUncAqKgHddUDygAc8YLwB4KIXvajUcCpHnD1N0wG/+MUvhmAveMELpm9+85vDCYQ6+OCDt1FU/K5hiENBUKLRu971rtPjH//4oRxjfPCDHxxR9uMf/3jQw+GHHz7d9773HT9RCWU57Oc///n0yEc+crrXve41nXLKKdNb3/rW6WMf+9gwggjSHuogF+dANcR6k8Hryle+8jAWtJHxj3/844gooOAEQPB/8n7kIx8ZxgQ4USCKGRtiGfiMM86YXvOa1wygXP/615/udre7DZnf/OY3T+985zuHPq4lF7p0z5yqgDSg/vnPfx7goiMZH/awh02Pe9zjxv2Avlwuz+GIUcJwxKc//enhCMLplGEYgUddtrUj9ANh3/nOd6aXv/zl0/e+970h2BOe8ISBMMiiLEO/5S1vGXShHYaCCJHxpS99aTjqhz/84YiWu9zlLtNnPvOZ6eMf//ignEc96lGDEhgGOtGYlyhEbRA/l4ujROZDHvKQ0Y/v0JCoIZM3CjznnHMGHcpBAMSYMYDPXP+mN71pRCZH3PnOdx7OeuMb3zjkZUA6iFQ0y+hkmr/W0T764sD3ve99E6e454lPfOJgha7Z5ojnP//5A0WQzRFXutKVBvqEMIQxLsdwwnWve92Bajz7ohe9aBhJ4xwB2SKGMTnixBNPHOjlCPehr8c85jGjL+1DjDCXbEuifieH/lACZ6KMG9/4
+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</ImageData>
     </EmbeddedImage>
   </EmbeddedImages>
   <Language>=User!Language</Language>
