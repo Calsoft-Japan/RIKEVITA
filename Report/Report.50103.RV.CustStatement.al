@@ -329,17 +329,19 @@ report 50103 "RV Cust Statement"
                                     ItemCard.Get("No.");
                                     CalcFields("RV_Charge Type");
 
-                                    if "No." = RVSetup."Freight Charge Item No" then begin
+                                    //if "No." = RVSetup."Freight Charge Item No" then begin
+                                    //SInvLnFreiCharge := "RV_Freight Charge";
+                                    //end else
+                                    if (ItemCard.Type = "Item Type"::Inventory) then begin
                                         SInvLnFreiCharge := "RV_Freight Charge";
-                                    end else
-                                        if (ItemCard.Type = "Item Type"::Inventory) then begin
-                                            if ("RV_Charge Type" = "RV Charge Type"::FOB) then
-                                                SInvLineAmt := "Line Amount" + "RV_Other Charge"
-                                            else
-                                                SInvLineAmt := "Line Amount";
-                                        end
+
+                                        if ("RV_Charge Type" = "RV Charge Type"::FOB) then
+                                            SInvLineAmt := "Line Amount" + "RV_Other Charge"
                                         else
-                                            CurrReport.Skip();
+                                            SInvLineAmt := "Line Amount";
+                                    end
+                                    else
+                                        CurrReport.Skip();
                                 end;
 
                                 trigger OnPreDataItem()

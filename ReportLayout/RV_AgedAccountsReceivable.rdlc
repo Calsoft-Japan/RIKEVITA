@@ -9245,15 +9245,12 @@ End Function
         <Field Name="CurrencyFilter">
           <DataField>CurrencyFilter</DataField>
         </Field>
-<<<<<<< HEAD
-=======
         <Field Name="CustPayTerm">
           <DataField>CustPayTerm</DataField>
         </Field>
         <Field Name="CustCurrency">
           <DataField>CustCurrency</DataField>
         </Field>
->>>>>>> e117730a6f5edffccfd12f1cf73bf2f72bf12e56
         <Field Name="PageGroupNo">
           <DataField>PageGroupNo</DataField>
         </Field>
@@ -9455,8 +9452,6 @@ End Function
         <Field Name="TotalCheck">
           <DataField>TotalCheck</DataField>
         </Field>
-<<<<<<< HEAD
-=======
         <Field Name="CLEDocumentDate">
           <DataField>CLEDocumentDate</DataField>
         </Field>
@@ -9469,7 +9464,6 @@ End Function
         <Field Name="GLLCYCode">
           <DataField>GLLCYCode</DataField>
         </Field>
->>>>>>> e117730a6f5edffccfd12f1cf73bf2f72bf12e56
         <Field Name="CurrNo">
           <DataField>CurrNo</DataField>
         </Field>
