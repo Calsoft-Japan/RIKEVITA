@@ -6,7 +6,7 @@
 report 50400 "RV Aged Accounts Payable"
 {
     DefaultLayout = RDLC;
-    RDLCLayout = 'ReportLayout\RV_AgedAccountsPayable.rdlc';
+    RDLCLayout = 'ReportLayout\RV_AgedAccountsPayable_checked_fixed.rdlc';
     ApplicationArea = All;
     Caption = 'RIKE Aged Accounts Payable';
     UsageCategory = ReportsAndAnalysis;
