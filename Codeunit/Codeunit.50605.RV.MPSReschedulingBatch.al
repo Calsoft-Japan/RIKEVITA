@@ -25,9 +25,6 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
         RoutingCount: Integer;
     begin
         MfgSetup.get();
-        ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
-        ProdOrderLine.get(ProdOrderLine.Status::"Firm Planned", MPSReschedulingLine."Production No.", MPSReschedulingLine."Prod. Line No.");
-
         ProdOrderRoutingLine.Reset();
         ProdOrderRoutingLine.SetRange("Status", ProdOrderRoutingLine.Status::"Firm Planned");
         ProdOrderRoutingLine.SetRange("Prod. Order No.", MPSReschedulingLine."Production No.");
@@ -101,14 +98,17 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
                 end;
             until ProdOrderRoutingLine.Next() = 0;
 
-        if MPSReschedulingLine."New Ending Date" <> 0DT then
+        if MPSReschedulingLine."New Ending Date" <> 0DT then begin
+            ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
             if ProdOrder."Ending Date" <> DT2Date(MPSReschedulingLine."New Ending Date") then begin
                 ProdOrder.Validate("Ending Date-Time", CreateDateTime(DT2Date(MPSReschedulingLine."New Ending Date"), MfgSetup."Normal Ending Time"));
                 ProdOrder.Validate("RV_Rescheduling Ending Date", MPSReschedulingLine."New Ending Date");
                 ProdOrder.Modify();
             end;
+        end;
 
-        if MPSReschedulingLine."New Starting Date" <> 0DT then
+        if MPSReschedulingLine."New Starting Date" <> 0DT then begin
+            ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
             if ProdOrder."Starting Date" <> DT2Date(MPSReschedulingLine."New Starting Date") then begin
                 ProdOrder.Validate("RV_Rescheduling Starting Date", MPSReschedulingLine."New Starting Date");
 
@@ -117,26 +117,32 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
                 ProdOrder.Validate("Ending Date-Time", ProdOrder."Ending Date-Time" + DiffDays);
                 ProdOrder.Modify();
             end;
+        end;
 
+        ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
         if ProdOrder."RV_Planning Status" <> MPSReschedulingLine."Planning Status" then begin
             ProdOrder.Validate("RV_Planning Status", MPSReschedulingLine."Planning Status");
             ProdOrder."RV_Planning Controller" := UserId();
             ProdOrder."RV_Planning Date" := Today();
             ProdOrder.Modify();
 
-            if ProdOrder."RV_Planning Status" = ProdOrder."RV_Planning Status"::Planning then
+            if ProdOrder."RV_Planning Status" = ProdOrder."RV_Planning Status"::Planning then begin
+                ProdOrderLine.get(ProdOrderLine.Status::"Firm Planned", MPSReschedulingLine."Production No.", MPSReschedulingLine."Prod. Line No.");
                 if ProdOrderLine."Planning Flexibility" <> ProdOrderLine."Planning Flexibility"::Unlimited then begin
                     ProdOrderLine.Validate("Planning Flexibility", ProdOrderLine."Planning Flexibility"::Unlimited);
                     ProdOrderLine.Modify();
                 end;
-            if ProdOrder."RV_Planning Status" = ProdOrder."RV_Planning Status"::Fixed then
+            end;
+
+            if ProdOrder."RV_Planning Status" = ProdOrder."RV_Planning Status"::Fixed then begin
+                ProdOrderLine.get(ProdOrderLine.Status::"Firm Planned", MPSReschedulingLine."Production No.", MPSReschedulingLine."Prod. Line No.");
                 if ProdOrderLine."Planning Flexibility" <> ProdOrderLine."Planning Flexibility"::None then begin
                     ProdOrderLine.Validate("Planning Flexibility", ProdOrderLine."Planning Flexibility"::None);
                     ProdOrderLine.Modify();
                 end;
+            end;
         end;
         MPSReschedulingLine.Delete();
-
     end;
 
     var

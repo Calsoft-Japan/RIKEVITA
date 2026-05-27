@@ -144,8 +144,29 @@ page 50607 "RV Sales ECR Status Info."
                 var
                     SalesECRStatusInfo: Record "RV Sales ECR Status Info.";
                 begin
+                    if not Confirm(ConfirmUpdateBypassECR) then
+                        exit;
+
                     CurrPage.SetSelectionFilter(SalesECRStatusInfo);
-                    SalesECRStatusInfo.ModifyAll("Bypass ECR", true);
+                    // SalesECRStatusInfo.ModifyAll("Bypass ECR", true);
+                    ResetECRStatus(SalesECRStatusInfo, false);
+                end;
+            }
+            action(UndoECRPass)
+            {
+                Caption = 'Undo ECR Pass';
+                ToolTip = 'Undo the ECR pass for current sales order line.';
+                Image = Undo;
+
+                trigger OnAction()
+                var
+                    SalesECRStatusInfo: Record "RV Sales ECR Status Info.";
+                begin
+                    if not Confirm(ConfirmUpdateBypassECR) then
+                        exit;
+
+                    CurrPage.SetSelectionFilter(SalesECRStatusInfo);
+                    ResetECRStatus(SalesECRStatusInfo, true);
                 end;
             }
             action(ReservationEntries)
@@ -168,9 +189,13 @@ page 50607 "RV Sales ECR Status Info."
         {
             actionref(ECRInfoRefresh_Promoted; ECRInfoRefresh) { }
             actionref(ECRPass_Promoted; ECRPass) { }
+            actionref(UndoECRPass_Promoted; UndoECRPass) { }
             actionref(ReservationEntries_Promoted; ReservationEntries) { }
         }
     }
+
+    var
+        ConfirmUpdateBypassECR: Label 'Are you sure you want to update Bypass ECR for the selected records?';
     /// <summary>
     /// Filters the reservation entries for the sales line.
     /// </summary>
@@ -182,5 +207,21 @@ page 50607 "RV Sales ECR Status Info."
         SalesLine.get(SalesLine."Document Type"::Order, Rec."Sales Order No.", Rec."SO Line No.");
         ReservEntry.SetSourceFilter(DATABASE::"Sales Line", SalesLine."Document Type".AsInteger(), SalesLine."Document No.", SalesLine."Line No.", false);
         ReservEntry.SetSourceFilter('', 0);
+    end;
+
+    procedure ResetECRStatus(var SalesECRStatusInfo: Record "RV Sales ECR Status Info."; isUndo: boolean)
+    begin
+        if SalesECRStatusInfo.FindSet() then
+            repeat
+                if isUndo then
+                    SalesECRStatusInfo."Bypass ECR" := false
+                else
+                    SalesECRStatusInfo."Bypass ECR" := true;
+                if Today() > SalesECRStatusInfo."Latest ECR Date" then
+                    SalesECRStatusInfo."ECR Status" := SalesECRStatusInfo."ECR Status"::Released
+                else
+                    SalesECRStatusInfo."ECR Status" := SalesECRStatusInfo."ECR Status"::"On-Hold";
+                SalesECRStatusInfo.Modify();
+            until SalesECRStatusInfo.Next() = 0;
     end;
 }
