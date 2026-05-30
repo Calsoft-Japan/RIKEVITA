@@ -53,9 +53,9 @@ tableextension 50600 "RV User Setup" extends "User Setup"
             Caption = 'Allow Edit of Closing Date';
             Description = 'FDD008';
         }
-        field(50103; "RV_Allow Edit of Staffing Date"; Enum "RV EditPermission")
+        field(50103; "RV_Allow Edit of Stuffing Date"; Enum "RV EditPermission")
         {
-            Caption = 'Allow Edit of Staffing Date';
+            Caption = 'Allow Edit of Stuffing Date';
             Description = 'FDD008';
         }
 

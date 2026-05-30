@@ -35,7 +35,7 @@ pageextension 50600 "RIKE User Setup" extends "User Setup"
                 ApplicationArea = All;
                 Description = 'FDD008';
             }
-            field("Allow Edit of Staffing Date"; Rec."RV_Allow Edit of Staffing Date")
+            field("Allow Edit of Staffing Date"; Rec."RV_Allow Edit of Stuffing Date")
             {
                 ApplicationArea = All;
                 Description = 'FDD008';

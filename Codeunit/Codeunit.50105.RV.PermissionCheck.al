@@ -23,7 +23,7 @@ codeunit 50105 "RV User Permission Check"
             AllowBLDate := true;
         if UsrSetup."RV_Allow Edit of Closing Date" = "RV EditPermission"::Allowed then
             AllowClosingDate := true;
-        if UsrSetup."RV_Allow Edit of Staffing Date" = "RV EditPermission"::Allowed then
+        if UsrSetup."RV_Allow Edit of Stuffing Date" = "RV EditPermission"::Allowed then
             AllowStaffingDate := true;
     end;
 
