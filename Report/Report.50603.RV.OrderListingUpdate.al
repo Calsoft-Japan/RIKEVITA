@@ -45,10 +45,13 @@ report 50603 "RV Order Listing Update"
                 SLReserveEntry: Record "Reservation Entry";
 
             begin
-                TransferOrderNo := '';
-                TransferOrderLineNo := '';
-                ProdOrderNo := '';
-                ProdOrderLineNo := '';
+                //TransferOrderNo := '';
+                //TransferOrderLineNo := '';
+                //ProdOrderNo := '';
+                //ProdOrderLineNo := '';
+                Temtransferorder.deleteall;
+                Temtransferline.deleteall;
+                Temprodorder.deleteall;
                 EntryNo += 1;
                 SalesHeader.Get(SalesLine."Document Type", SalesLine."Document No.");
                 OrderListing.reset;
@@ -113,10 +116,40 @@ report 50603 "RV Order Listing Update"
                 OrderListing."Blanket Sales Order No." := SalesLine."Blanket Order No.";
                 OrderListing."Blanket Sales Order Line No." := SalesLine."Blanket Order Line No.";
                 FindReservationEntry(SalesLine);
-                OrderListing."Prod. Order No." := ProdOrderNo;
-                OrderListing."Prod. Order Line No." := ProdOrderLineNo;
-                OrderListing."Transfer Order No." := TransferOrderNo;
-                OrderListing."Transfer Order Line No." := TransferOrderLineNo;
+                OrderListing."Transfer Order No." := '';
+                OrderListing."Prod. Order No." := '';
+                OrderListing."Transfer Order Line No." := '';
+                OrderListing."Prod. Order Line No." := '';
+                IF TemTransferOrder.FindSet() then
+                    repeat
+                        if OrderListing."Transfer Order No." = '' then
+                            OrderListing."Transfer Order No." := TemTransferOrder."No."
+                        else
+                            OrderListing."Transfer Order No." := OrderListing."Transfer Order No." + '|' + TemTransferOrder."No.";
+                        transferLine.Reset;
+                        transferLine.SetRange("Document No.", TemTransferOrder."No.");
+                        transferLine.SetRange("Item No.", salesLine."No.");
+                        if transferLine.Findfirst() then
+                            if OrderListing."Transfer Order Line No." <> FORMAT(transferLine."Line No.") then
+                                OrderListing."Transfer Order Line No." := FORMAT(transferLine."Line No.");
+                    until TemTransferOrder.Next() = 0;
+
+                IF TemProdOrder.FindSet() then
+                    repeat
+                        if OrderListing."Prod. Order No." = '' then
+                            OrderListing."Prod. Order No." := TemProdOrder."No."
+                        else
+                            OrderListing."Prod. Order No." := OrderListing."Prod. Order No." + '|' + TemProdOrder."No.";
+                        ProdLine.Reset;
+                        ProdLine.SetRange("Prod. Order No.", TemProdOrder."No.");
+                        ProdLine.SetRange("Item No.", salesLine."No.");
+                        if ProdLine.Findfirst() then
+                            if OrderListing."Prod. Order Line No." <> FORMAT(ProdLine."Line No.") then
+                                OrderListing."Prod. Order Line No." := FORMAT(ProdLine."Line No.");
+                    until TemProdOrder.Next() = 0;
+                //OrderListing."Prod. Order Line No." := ProdOrderLineNo;
+                //OrderListing."Transfer Order No." := TransferOrderNo;
+                //OrderListing."Transfer Order Line No." := TransferOrderLineNo;
 
                 ProdHeader.Reset();
                 ProdHeader.SetFilter("No.", OrderListing."Prod. Order No.");
@@ -211,6 +244,11 @@ report 50603 "RV Order Listing Update"
                                         TransferOrderLineNo := FORMAT(TransferLine."Line No.")
                                     else
                                         TransferOrderLineNo := TransferOrderLineNo + '|' + FORMAT(TransferLine."Line No.");
+                                    IF NOT TemTransferOrder.Get(TransferLine."Document No.") THEN BEGIN
+                                        TemTransferOrder.Init();
+                                        TemTransferOrder."No." := TransferLine."Document No.";
+                                        TemTransferOrder.Insert();
+                                    END;
                                     FindTransferLineReservationEntry(ResEntryPlus);
 
                                 end;
@@ -227,6 +265,12 @@ report 50603 "RV Order Listing Update"
                                         ProdOrderLineNo := FORMAT(ResEntryPlus."Source Prod. Order Line")
                                     else
                                         ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(ResEntryPlus."Source Prod. Order Line");
+                                    TemProdOrder.Reset();
+                                    TemProdOrder.SetRange("No.", ResEntryPlus."Source ID");
+                                    IF TemProdOrder.isempty THEN BEGIN
+                                        TemProdOrder."No." := ResEntryPlus."Source ID";
+                                        TemProdOrder.Insert();
+                                    END;
                                 end else begin
                                     if ILEntry."Entry Type" = ILEntry."Entry Type"::Transfer then begin
                                         IF TransferOrderNo = '' then
@@ -237,6 +281,11 @@ report 50603 "RV Order Listing Update"
                                             TransferOrderLineNo := FORMAT(ILEntry."Order Line No.")
                                         else
                                             TransferOrderLineNo := TransferOrderLineNo + '|' + FORMAT(ILEntry."Order Line No.");
+                                        IF NOT TemTransferOrder.Get(ILEntry."Order No.") THEN BEGIN
+                                            TemTransferOrder.Init();
+                                            TemTransferOrder."No." := ILEntry."Order No.";
+                                            TemTransferOrder.Insert();
+                                        END;
                                     end;
                                     //Since the inventory is transfered, the production has been completed. just get related item ledger entry by lot no.                                 IF ILEntry."Lot No." <> '' then begin
                                     OutputILEntry.reset;
@@ -252,6 +301,12 @@ report 50603 "RV Order Listing Update"
                                             ProdOrderLineNo := FORMAT(OutputILEntry."Order Line No.")
                                         else
                                             ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(OutputILEntry."Order Line No.");
+                                        TemProdOrder.Reset();
+                                        TemProdOrder.SetRange("No.", OutputILEntry."Document No.");
+                                        IF TemProdOrder.isempty THEN BEGIN
+                                            TemProdOrder."No." := OutputILEntry."Document No.";
+                                            TemProdOrder.Insert();
+                                        END;
                                     end;
                                 end;
                             end;
@@ -265,7 +320,12 @@ report 50603 "RV Order Listing Update"
                                     ProdOrderLineNo := FORMAT(ResEntryPlus."Source Prod. Order Line")
                                 else
                                     ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(ResEntryPlus."Source Prod. Order Line");
-
+                                TemProdOrder.Reset();
+                                TemProdOrder.SetRange("No.", ResEntryPlus."Source ID");
+                                IF TemProdOrder.isempty THEN BEGIN
+                                    TemProdOrder."No." := ResEntryPlus."Source ID";
+                                    TemProdOrder.Insert();
+                                END;
                             end;
                     end;
                 end;
@@ -323,6 +383,12 @@ report 50603 "RV Order Listing Update"
                                             TransferOrderLineNo := FORMAT(TransferLine."Line No.")
                                         else
                                             TransferOrderLineNo := TransferOrderLineNo + '|' + FORMAT(TransferLine."Line No.");
+
+                                        IF NOT TemTransferOrder.Get(TransferLine."Document No.") THEN BEGIN
+                                            TemTransferOrder.Init();
+                                            TemTransferOrder."No." := TransferLine."Document No.";
+                                            TemTransferOrder.Insert();
+                                        END;
                                         FindTransferLineReservationEntry(TransResEntryPlus);
 
                                     end;
@@ -339,6 +405,12 @@ report 50603 "RV Order Listing Update"
                                             ProdOrderLineNo := FORMAT(ResEntryPlus."Source Prod. Order Line")
                                         else
                                             ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(ResEntryPlus."Source Prod. Order Line");
+                                        TemProdOrder.Reset();
+                                        TemProdOrder.SetRange("No.", ResEntryPlus."Source ID");
+                                        IF TemProdOrder.isempty THEN BEGIN
+                                            TemProdOrder."No." := ResEntryPlus."Source ID";
+                                            TemProdOrder.Insert();
+                                        END;
                                     end else begin
                                         if ILEntry."Entry Type" = ILEntry."Entry Type"::Transfer then begin
                                             IF TransferOrderNo = '' then
@@ -349,6 +421,11 @@ report 50603 "RV Order Listing Update"
                                                 TransferOrderLineNo := FORMAT(ILEntry."Order Line No.")
                                             else
                                                 TransferOrderLineNo := TransferOrderLineNo + '|' + FORMAT(ILEntry."Order Line No.");
+                                            IF NOT TemTransferOrder.Get(ILEntry."Order No.") THEN BEGIN
+                                                TemTransferOrder.Init();
+                                                TemTransferOrder."No." := ILEntry."Order No.";
+                                                TemTransferOrder.Insert();
+                                            END;
                                         end;
                                         //Since the inventory is transfered, the production has been completed. just get related item ledger entry by lot no.                                 IF ILEntry."Lot No." <> '' then begin
                                         OutputILEntry.reset;
@@ -364,6 +441,12 @@ report 50603 "RV Order Listing Update"
                                                 ProdOrderLineNo := FORMAT(OutputILEntry."Order Line No.")
                                             else
                                                 ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(OutputILEntry."Order Line No.");
+                                            TemProdOrder.Reset();
+                                            TemProdOrder.SetRange("No.", OutputILEntry."Document No.");
+                                            IF TemProdOrder.isempty THEN BEGIN
+                                                TemProdOrder."No." := OutputILEntry."Document No.";
+                                                TemProdOrder.Insert();
+                                            END;
                                         end;
                                     end;
                                 end;
@@ -377,7 +460,12 @@ report 50603 "RV Order Listing Update"
                                         ProdOrderLineNo := FORMAT(ResEntryPlus."Source Prod. Order Line")
                                     else
                                         ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(ResEntryPlus."Source Prod. Order Line");
-
+                                    TemProdOrder.Reset();
+                                    TemProdOrder.SetRange("No.", ResEntryPlus."Source ID");
+                                    IF TemProdOrder.isempty THEN BEGIN
+                                        TemProdOrder."No." := ResEntryPlus."Source ID";
+                                        TemProdOrder.Insert();
+                                    END;
                                 end;
                         end;
                     until ResEntryPlus.Next() = 0;
@@ -426,11 +514,16 @@ report 50603 "RV Order Listing Update"
     end;
 
     var
+
         TransferOrderNo: Text[250];
         TransferOrderLineNo: Text[250];
         ProdOrderNo: Text[250];
         ProdOrderLineNo: Text[250];
         EntryNo: Integer;
         Counts: Integer;
+        TemTransferOrder: Record "Transfer Header" temporary;
+        TemTransferLine: Record "Transfer Line" temporary;
+        TemProdOrder: Record "Production Order" temporary;
+
 
 }

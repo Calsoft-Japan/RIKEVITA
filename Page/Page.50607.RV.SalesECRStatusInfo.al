@@ -1,7 +1,7 @@
 page 50607 "RV Sales ECR Status Info."
 {
     ApplicationArea = All;
-    Caption = 'ECR Calculation Details';
+    Caption = 'Sales ECR Status Information';
     PageType = List;
     SourceTable = "RV Sales ECR Status Info.";
     UsageCategory = Lists;

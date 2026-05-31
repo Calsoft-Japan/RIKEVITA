@@ -13,6 +13,8 @@ codeunit 50607 ReservationEntryMgt
         ResEntryTransfer: Record "Reservation Entry";
         PlanBOM: Record "Planning Component";
     begin
+        TemTransferOrder.DeleteAll();
+        TemProdOrder.DeleteAll();
         ResEntryMinus.Reset();
         ResEntryMinus.setrange("Source Type", 37);
         ResEntryMinus.setrange("Source ID", ProcessingsalesLine."Document No.");
@@ -49,6 +51,12 @@ codeunit 50607 ReservationEntryMgt
                                         TransferOrderLineNo := FORMAT(TransferLine."Line No.")
                                     else
                                         TransferOrderLineNo := TransferOrderLineNo + '|' + FORMAT(TransferLine."Line No.");
+
+                                    IF NOT TemTransferOrder.Get(TransferLine."Document No.") THEN BEGIN
+                                        TemTransferOrder.Init();
+                                        TemTransferOrder."No." := TransferLine."Document No.";
+                                        TemTransferOrder.Insert();
+                                    END;
                                     FindTransferLineReservationEntry(ResEntryPlus);
 
                                 end;
@@ -65,6 +73,12 @@ codeunit 50607 ReservationEntryMgt
                                         ProdOrderLineNo := FORMAT(ResEntryPlus."Source Prod. Order Line")
                                     else
                                         ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(ResEntryPlus."Source Prod. Order Line");
+                                    TemProdOrder.Reset();
+                                    TemProdOrder.SetRange("No.", ResEntryPlus."Source ID");
+                                    IF TemProdOrder.isempty THEN BEGIN
+                                        TemProdOrder."No." := ResEntryPlus."Source ID";
+                                        TemProdOrder.Insert();
+                                    END;
                                 end else begin
                                     if ILEntry."Entry Type" = ILEntry."Entry Type"::Transfer then begin
                                         IF TransferOrderNo = '' then
@@ -75,6 +89,11 @@ codeunit 50607 ReservationEntryMgt
                                             TransferOrderLineNo := FORMAT(ILEntry."Order Line No.")
                                         else
                                             TransferOrderLineNo := TransferOrderLineNo + '|' + FORMAT(ILEntry."Order Line No.");
+                                        IF NOT TemTransferOrder.Get(ILEntry."Order No.") THEN BEGIN
+                                            TemTransferOrder.Init();
+                                            TemTransferOrder."No." := ILEntry."Order No.";
+                                            TemTransferOrder.Insert();
+                                        END;
                                     end;
                                     //Since the inventory is transfered, the production has been completed. just get related item ledger entry by lot no.                                 IF ILEntry."Lot No." <> '' then begin
                                     OutputILEntry.reset;
@@ -90,6 +109,12 @@ codeunit 50607 ReservationEntryMgt
                                             ProdOrderLineNo := FORMAT(OutputILEntry."Order Line No.")
                                         else
                                             ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(OutputILEntry."Order Line No.");
+                                        TemProdOrder.Reset();
+                                        TemProdOrder.SetRange("No.", OutputILEntry."Document No.");
+                                        IF TemProdOrder.isempty THEN BEGIN
+                                            TemProdOrder."No." := OutputILEntry."Document No.";
+                                            TemProdOrder.Insert();
+                                        END;
                                     end;
                                 end;
                             end;
@@ -103,14 +128,20 @@ codeunit 50607 ReservationEntryMgt
                                     ProdOrderLineNo := FORMAT(ResEntryPlus."Source Prod. Order Line")
                                 else
                                     ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(ResEntryPlus."Source Prod. Order Line");
-
+                                TemProdOrder.Reset();
+                                TemProdOrder.SetRange("No.", ResEntryPlus."Source ID");
+                                IF TemProdOrder.isempty THEN BEGIN
+                                    TemProdOrder."No." := ResEntryPlus."Source ID";
+                                    TemProdOrder.Insert();
+                                END;
                             end;
                     end;
                 end;
             until ResEntryMinus.Next() = 0;
     end;
 
-    procedure FindTransferLineReservationEntry(var TransResEntryPlus: Record "Reservation Entry")
+    procedure FindTransferLineReservationEntry(var
+                                                   TransResEntryPlus: Record "Reservation Entry")
     var
         ResEntryPlus: Record "Reservation Entry";
         ResEntryMinus: Record "Reservation Entry";
@@ -161,6 +192,11 @@ codeunit 50607 ReservationEntryMgt
                                             TransferOrderLineNo := FORMAT(TransferLine."Line No.")
                                         else
                                             TransferOrderLineNo := TransferOrderLineNo + '|' + FORMAT(TransferLine."Line No.");
+                                        IF NOT TemTransferOrder.Get(TransferLine."Document No.") THEN BEGIN
+                                            TemTransferOrder.Init();
+                                            TemTransferOrder."No." := TransferLine."Document No.";
+                                            TemTransferOrder.Insert();
+                                        END;
                                         FindTransferLineReservationEntry(TransResEntryPlus);
 
                                     end;
@@ -177,6 +213,13 @@ codeunit 50607 ReservationEntryMgt
                                             ProdOrderLineNo := FORMAT(ResEntryPlus."Source Prod. Order Line")
                                         else
                                             ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(ResEntryPlus."Source Prod. Order Line");
+
+                                        TemProdOrder.Reset();
+                                        TemProdOrder.SetRange("No.", ResEntryPlus."Source ID");
+                                        IF TemProdOrder.isempty THEN BEGIN
+                                            TemProdOrder."No." := ResEntryPlus."Source ID";
+                                            TemProdOrder.Insert();
+                                        END;
                                     end else begin
                                         if ILEntry."Entry Type" = ILEntry."Entry Type"::Transfer then begin
                                             IF TransferOrderNo = '' then
@@ -187,6 +230,11 @@ codeunit 50607 ReservationEntryMgt
                                                 TransferOrderLineNo := FORMAT(ILEntry."Order Line No.")
                                             else
                                                 TransferOrderLineNo := TransferOrderLineNo + '|' + FORMAT(ILEntry."Order Line No.");
+                                            IF NOT TemTransferOrder.Get(ILEntry."Order No.") THEN BEGIN
+                                                TemTransferOrder.Init();
+                                                TemTransferOrder."No." := ILEntry."Order No.";
+                                                TemTransferOrder.Insert();
+                                            END;
                                         end;
                                         //Since the inventory is transfered, the production has been completed. just get related item ledger entry by lot no.                                 IF ILEntry."Lot No." <> '' then begin
                                         OutputILEntry.reset;
@@ -202,6 +250,12 @@ codeunit 50607 ReservationEntryMgt
                                                 ProdOrderLineNo := FORMAT(OutputILEntry."Order Line No.")
                                             else
                                                 ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(OutputILEntry."Order Line No.");
+                                            TemProdOrder.Reset();
+                                            TemProdOrder.SetRange("No.", OutputILEntry."Document No.");
+                                            IF TemProdOrder.isempty THEN BEGIN
+                                                TemProdOrder."No." := OutputILEntry."Document No.";
+                                                TemProdOrder.Insert();
+                                            END;
                                         end;
                                     end;
                                 end;
@@ -215,7 +269,12 @@ codeunit 50607 ReservationEntryMgt
                                         ProdOrderLineNo := FORMAT(ResEntryPlus."Source Prod. Order Line")
                                     else
                                         ProdOrderLineNo := ProdOrderLineNo + '|' + FORMAT(ResEntryPlus."Source Prod. Order Line");
-
+                                    TemProdOrder.Reset();
+                                    TemProdOrder.SetRange("No.", ResEntryPlus."Source ID");
+                                    IF TemProdOrder.isempty THEN BEGIN
+                                        TemProdOrder."No." := ResEntryPlus."Source ID";
+                                        TemProdOrder.Insert();
+                                    END;
                                 end;
                         end;
                     until ResEntryPlus.Next() = 0;
@@ -226,7 +285,14 @@ codeunit 50607 ReservationEntryMgt
 
     procedure GetProdNoInfo(var ProdNo: Text[250])
     begin
-        ProdNo := ProdOrderNo;
+        ProdNo := '';
+        if TemProdOrder.FindSet() then
+            repeat
+                if ProdNo = '' then
+                    ProdNo := TemProdOrder."No."
+                else
+                    ProdNo := ProdNo + '|' + TemProdOrder."No.";
+            until TemProdOrder.Next() = 0;
     end;
 
     var
@@ -236,5 +302,8 @@ codeunit 50607 ReservationEntryMgt
         ProdOrderLineNo: Text[250];
         EntryNo: Integer;
         Counts: Integer;
+        TemTransferOrder: Record "Transfer Header" temporary;
+        TemTransferLine: Record "Transfer Line" temporary;
+        TemProdOrder: Record "Production Order" temporary;
 
 }
