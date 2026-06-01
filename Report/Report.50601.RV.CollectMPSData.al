@@ -90,12 +90,12 @@ report 50601 "RV Collect MPS Data"
                     Caption = 'General';
                     field(StartingDate; StartingDate)
                     {
-                        Caption = 'Starting Date';
+                        Caption = 'Starting After';
                         ApplicationArea = All;
                     }
                     field(EndingDate; EndingDate)
                     {
-                        Caption = 'Ending Date';
+                        Caption = 'Ending Before';
                         ApplicationArea = All;
                     }
 
@@ -114,8 +114,8 @@ report 50601 "RV Collect MPS Data"
                 if (StartingDate = 0D)
                and (EndingDate = 0D) then
                     Error(ErrDateBlank);
-
-                if StartingDate > EndingDate then
+                IF (EndingDate <> 0D)
+                    and (StartingDate > EndingDate) then
                     Error(ErrStartDateAfterEndDate);
             end;
         end;
