@@ -1312,6 +1312,12 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
             </Border>
           </Style>
         </PageFooter>
+        <PageHeight>11.69in</PageHeight>
+        <PageWidth>8.27in</PageWidth>
+        <LeftMargin>0.2in</LeftMargin>
+        <RightMargin>0.2in</RightMargin>
+        <TopMargin>0.2in</TopMargin>
+        <BottomMargin>0.2in</BottomMargin>
         <Style />
       </Page>
     </ReportSection>
