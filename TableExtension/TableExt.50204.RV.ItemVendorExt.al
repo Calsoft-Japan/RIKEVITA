@@ -6,15 +6,17 @@ tableextension 50204 "RV Item Vendor" extends "Item Vendor"
 {
     fields
     {
-        field(50200; "RV_Minimum Order Quantity"; Integer)
+        field(50200; "RV_Minimum Order Quantity"; Decimal)
         {
             Caption = 'Minimum Order Quantity';
             Description = 'FDD002';
+            DecimalPlaces = 0 : 5;
         }
-        field(50201; "RV_Maximum Order Quantity"; Integer)
+        field(50201; "RV_Maximum Order Quantity"; Decimal)
         {
             Caption = 'Maximum Order Quantity';
             Description = 'FDD002';
+            DecimalPlaces = 0 : 5;
         }
     }
 }

@@ -36,6 +36,7 @@ reportextension 50200 "RV Carry Out Action Msg Plan" extends "Carry Out Action M
                             VendorSelection.Reset();
                             VendorSelection.SetRange("Item No.", "Requisition Line"."No.");
                             VendorSelection.SetRange("Journal Batch Name", CurrReqWkshName);
+                            VendorSelection.SetRange("Line No.", "Requisition Line"."Line No.");
                             if VendorSelection.FindSet() then begin
                                 repeat
                                     LineNo := LineNo + 10000;
