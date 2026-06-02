@@ -7,8 +7,9 @@ report 50102 "RV Payment Voucher"
     ApplicationArea = All;
     Caption = 'RV Payment Voucher';
     UsageCategory = ReportsAndAnalysis;
-    DefaultLayout = RDLC;
-    RDLCLayout = '.\ReportLayout\RV_PaymentVoucher.rdlc';
+    //DefaultLayout = RDLC;
+    //RDLCLayout = '.\ReportLayout\RV_PaymentVoucher.rdlc';
+    DefaultRenderingLayout = "RV_PaymentVoucher.rdlc";
     dataset
     {
         dataitem(GenJnlLine; "Gen. Journal Line")
@@ -48,6 +49,12 @@ report 50102 "RV Payment Voucher"
             column(GenJnlLine_Currency_Code; UpperCase("Currency Code"))
             { }
             column(PayToName; PayToName) { }
+            column(DescriptionLine1; DescriptionLine[1])
+            {
+            }
+            column(DescriptionLine2; DescriptionLine[2])
+            {
+            }
 
             dataitem(VendorLedgerEntryApplyID; "Vendor Ledger Entry")
             {
@@ -146,6 +153,8 @@ report 50102 "RV Payment Voucher"
             var
                 Vend: Record Vendor;
                 Empl: Record Employee;
+
+                RptCheck: Report Check;
             begin
                 GenPostDate := Format("Posting Date", 0, '<Closing><Day,2>/<Month,2>/<Year>');
                 GenAmtLCY := Format("Amount (LCY)", 0, '<Precision,2><Sign><Integer Thousand><Decimals>');
@@ -164,6 +173,8 @@ report 50102 "RV Payment Voucher"
                         end;
                 end;
 
+                RptCheck.FormatNoText(DescriptionLine, Round("Amount (LCY)", 0.01), "Currency Code");
+
                 Clear(VendID);
                 Clear(VendDoc);
                 Clear(EmplID);
@@ -172,6 +183,23 @@ report 50102 "RV Payment Voucher"
         }
     }
 
+    rendering
+    {
+        layout("RV_PaymentVoucher.rdlc")
+        {
+            Type = RDLC;
+            LayoutFile = '.\ReportLayout\RV_PaymentVoucher.rdlc';
+            Caption = 'Payment Voucher';
+            Summary = 'The Payment Voucher provides a basic layout.';
+        }
+        layout("RV_PaymentVoucherWithCheck.rdlc")
+        {
+            Type = RDLC;
+            LayoutFile = '.\ReportLayout\RV_PaymentVoucherWithCheck.rdlc';
+            Caption = 'Payment Voucher With Check';
+            Summary = 'The Payment Voucher With Check provides a detailed layout.';
+        }
+    }
 
     var
         AmtToApply, TotalAmt : decimal;
@@ -180,5 +208,6 @@ report 50102 "RV Payment Voucher"
 
         VendID, VendDoc, EmplID, EmplDoc : Boolean;
         PayToName: Text;
+        DescriptionLine: array[2] of Text[80];
 
 }

@@ -186,7 +186,12 @@
                           <Visibility>
                             <Hidden>=Code.SetData(CStr(First(Fields!GenAmtLCY.Value)) + Chr(177) +
 CStr(First(Fields!AccountDescription.Value)) + Chr(177) +
-CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
+CStr(First(Fields!RV_APV_No_.Value)) + Chr(177) +
+CStr(First(Fields!GenPostDate_ddMMyy.Value)) + Chr(177) +
+CStr(First(Fields!DescriptionLine1.Value)) + Chr(177) +
+CStr(First(Fields!DescriptionLine2.Value)) + Chr(177) +
+CStr(First(Fields!PayToName.Value))
+, 3)</Hidden>
                           </Visibility>
                           <Style>
                             <Border>
@@ -1271,7 +1276,7 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
           </Style>
         </PageHeader>
         <PageFooter>
-          <Height>1.05208in</Height>
+          <Height>3.62493in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -1299,6 +1304,159 @@ CStr(First(Fields!RV_APV_No_.Value)), 3)</Hidden>
               <Width>3.57187cm</Width>
               <Style>
                 <Border />
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="DescriptionLine1">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Code.GetData(5,3)</Value>
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                        <FontWeight>Normal</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>2.27613in</Top>
+              <Left>0.67584in</Left>
+              <Height>0.423cm</Height>
+              <Width>13.1cm</Width>
+              <ZIndex>1</ZIndex>
+              <Style>
+                <Border />
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="DescriptionLine2">
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Code.GetData(6,3)</Value>
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>2.44285in</Top>
+              <Left>0.67584in</Left>
+              <Height>0.423cm</Height>
+              <Width>13.1cm</Width>
+              <ZIndex>2</ZIndex>
+              <Style>
+                <Border />
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="CheckAmountText">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Code.GetData(1,3)</Value>
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                        <FontWeight>Normal</FontWeight>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <Top>2.79173in</Top>
+              <Left>5.17658in</Left>
+              <Height>0.423cm</Height>
+              <Width>4.99875cm</Width>
+              <ZIndex>3</ZIndex>
+              <Style>
+                <Border />
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="PayToName2">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Code.GetData(7,3)</Value>
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style />
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>PayToName</rd:DefaultName>
+              <Top>1.76562in</Top>
+              <Left>1.71665cm</Left>
+              <Height>0.25in</Height>
+              <Width>3.89583in</Width>
+              <ZIndex>4</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
+              </Style>
+            </Textbox>
+            <Textbox Name="GenJnlPostingDate2">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=Code.GetData(4,3)</Value>
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>GenJnlPostingDate</rd:DefaultName>
+              <Top>1.27604in</Top>
+              <Left>4.80084in</Left>
+              <Height>0.25in</Height>
+              <Width>2.34375in</Width>
+              <ZIndex>5</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
