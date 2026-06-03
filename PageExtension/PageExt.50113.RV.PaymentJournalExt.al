@@ -57,6 +57,11 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
 
     actions
     {
+        modify(PrintCheck)
+        {
+            Visible = false;
+        }
+
         addbefore(PrintCheck)
         {
             action(PrintVoucher)
@@ -90,7 +95,7 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
             action(PrintVoucherDetail)
             {
                 Description = 'FDD017';
-                Caption = 'Payment Voucher with Cheque Details';
+                Caption = 'Print Check';
                 ApplicationArea = All;
                 Image = Print;
                 Ellipsis = true;
@@ -98,9 +103,10 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
 
                 trigger OnAction()
                 var
-                    RptPayVoucher: Report "RV Payment Voucher";
+                    //RptPayVoucher: Report "RV Payment Voucher";
+                    RptVoucherCheck: Report "RV Payment Voucher With Check";
                     GenJournalLine: Record "Gen. Journal Line";
-                    DesignTimeRptSelect: Codeunit "Design-time Report Selection";
+                //DesignTimeRptSelect: Codeunit "Design-time Report Selection";
                 begin
                     //Report.RunModal(Report::"RV Payment Voucher", true, false, Rec);
                     GenJournalLine.Reset();
@@ -108,9 +114,14 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                     GenJournalLine.SetRange("Journal Template Name", Rec."Journal Template Name");
                     GenJournalLine.SetRange("Journal Batch Name", Rec."Journal Batch Name");
 
-                    DesignTimeRptSelect.SetSelectedLayout('RV_PaymentVoucherWithCheck.rdlc');
-                    RptPayVoucher.SetTableView(GenJournalLine);
-                    RptPayVoucher.RunModal();
+                    //DesignTimeRptSelect.SetSelectedLayout('RV_PaymentVoucherWithCheck.rdlc');
+                    //RptPayVoucher.SetTableView(GenJournalLine);
+                    //RptPayVoucher.RunModal();
+
+                    RptVoucherCheck.SetTableView(GenJournalLine);
+                    RptVoucherCheck.RunModal();
+
+                    CODEUNIT.Run(CODEUNIT::"Adjust Gen. Journal Balance", Rec);
                 end;
             }
         }

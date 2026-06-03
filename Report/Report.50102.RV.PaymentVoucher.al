@@ -201,6 +201,7 @@ report 50102 "RV Payment Voucher"
         }
     }
 
+
     var
         AmtToApply, TotalAmt : decimal;
 
