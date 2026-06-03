@@ -919,7 +919,7 @@ page 50601 "RV Prod. Result Journal Line"
             repeat
                 ItemLedgerEntry.SetLoadFields("Document No.");
                 if ItemLedgerEntry.Get(TempTrackingSpecification."Item Ledger Entry No.") then begin
-                    TempTrackingSpecification."Receipt/Shipment No." := ItemLedgerEntry."Document No.";
+                    //TempTrackingSpecification."Receipt/Shipment No." := ItemLedgerEntry."Document No.";
                     TempTrackingSpecification.Modify();
                 end;
             until TempTrackingSpecification.Next() = 0;
