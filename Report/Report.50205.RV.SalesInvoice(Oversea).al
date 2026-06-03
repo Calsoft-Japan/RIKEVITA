@@ -218,7 +218,7 @@ report 50205 "RV Sales Invoice(Oversea)"
                 CerfiticateNo := '';
                 TempNo := 1;
                 ISODoc.Reset();
-                ISODoc.SetRange("Report Code", 'LOCAL INVOICE');
+                ISODoc.SetRange("Report Code", 'OVERSEA INVOICE');
                 if ISODoc.FindFirst() then begin
                     ISODocumentNo := ISODoc."ISO Document No.";
                     ISODocVersion := ISODoc."ISO Doc. Version No.";

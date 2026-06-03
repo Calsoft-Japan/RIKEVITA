@@ -143,7 +143,12 @@ report 50203 "RV Sales Invoice(Local)"
             column(RIKEVITASetup3; 'Bank: ' + RIKEVITASetup."USD Bank Name" + ' ' + RIKEVITASetup."USD Bank Branch No." + ' ' + RIKEVITASetup."USD Bank Account No." + '(USD)')
             {
             }
-            column(QRCodeText; QRCodeText) { }
+            column(QRCodeText; QRCodeText)
+            {
+            }
+            column(QRCode; QRCode)
+            {
+            }
             trigger OnAfterGetRecord()
             var
                 ISODoc: Record "RV ISO Document";
@@ -208,11 +213,13 @@ report 50203 "RV Sales Invoice(Local)"
         Tranfportation: Text;
         OrderNo: Text;
         QRCodeText: Text;
+        QRCode: Boolean;
 
     trigger OnPreReport()
     begin
         CompanyInfo.Get();
         CompanyInfo.CalcFields(Picture);
         RIKEVITASetup.Get();
+        QRCode := false;
     end;
 }

@@ -3133,9 +3133,6 @@ gUEPuujm4radxTKiO/JaLfYuVrNZgCo1E96eV0XLLwwIX88VxHmaFCVxxISGf+d3QgvpRVs92JsAKBQo
         <Field Name="Terms">
           <DataField>Terms</DataField>
         </Field>
-        <Field Name="QRCode">
-          <DataField>QRCode</DataField>
-        </Field>
         <Field Name="Ship_to_Name">
           <DataField>Ship_to_Name</DataField>
         </Field>
@@ -3162,6 +3159,9 @@ gUEPuujm4radxTKiO/JaLfYuVrNZgCo1E96eV0XLLwwIX88VxHmaFCVxxISGf+d3QgvpRVs92JsAKBQo
         </Field>
         <Field Name="QRCodeText">
           <DataField>QRCodeText</DataField>
+        </Field>
+        <Field Name="QRCode">
+          <DataField>QRCode</DataField>
         </Field>
         <Field Name="Item_No">
           <DataField>Item_No</DataField>
