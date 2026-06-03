@@ -11,169 +11,6 @@
       <rd:DataSourceID>954c61a0-5311-4824-910c-a6d8a50edaad</rd:DataSourceID>
     </DataSource>
   </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-      <Fields>
-        <Field Name="Number">
-          <DataField>Number</DataField>
-        </Field>
-        <Field Name="CompanyLogo">
-          <DataField>CompanyLogo</DataField>
-        </Field>
-        <Field Name="CompanyName">
-          <DataField>CompanyName</DataField>
-        </Field>
-        <Field Name="RegistrationNo">
-          <DataField>RegistrationNo</DataField>
-        </Field>
-        <Field Name="SSTRegNo">
-          <DataField>SSTRegNo</DataField>
-        </Field>
-        <Field Name="CerfiticateNo">
-          <DataField>CerfiticateNo</DataField>
-        </Field>
-        <Field Name="ReportTitle">
-          <DataField>ReportTitle</DataField>
-        </Field>
-        <Field Name="ISODocumentNo">
-          <DataField>ISODocumentNo</DataField>
-        </Field>
-        <Field Name="ISODocVersion">
-          <DataField>ISODocVersion</DataField>
-        </Field>
-        <Field Name="PrintDate">
-          <DataField>PrintDate</DataField>
-        </Field>
-        <Field Name="InvoiceNo">
-          <DataField>InvoiceNo</DataField>
-        </Field>
-        <Field Name="PackingListNo">
-          <DataField>PackingListNo</DataField>
-        </Field>
-        <Field Name="ConsigneeName">
-          <DataField>ConsigneeName</DataField>
-        </Field>
-        <Field Name="ConsigneeAddress">
-          <DataField>ConsigneeAddress</DataField>
-        </Field>
-        <Field Name="ConsigneeAddress2">
-          <DataField>ConsigneeAddress2</DataField>
-        </Field>
-        <Field Name="ConsigneePostCode">
-          <DataField>ConsigneePostCode</DataField>
-        </Field>
-        <Field Name="ConsigneeCountryRegion">
-          <DataField>ConsigneeCountryRegion</DataField>
-        </Field>
-        <Field Name="FeederVessel">
-          <DataField>FeederVessel</DataField>
-        </Field>
-        <Field Name="MotherVessel">
-          <DataField>MotherVessel</DataField>
-        </Field>
-        <Field Name="VIA">
-          <DataField>VIA</DataField>
-        </Field>
-        <Field Name="FromValue">
-          <DataField>FromValue</DataField>
-        </Field>
-        <Field Name="ToValue">
-          <DataField>ToValue</DataField>
-        </Field>
-        <Field Name="SailingOnOrAbout">
-          <DataField>SailingOnOrAbout</DataField>
-        </Field>
-        <Field Name="Shipment_Method_Code">
-          <DataField>Shipment_Method_Code</DataField>
-        </Field>
-        <Field Name="MARKS">
-          <DataField>MARKS</DataField>
-        </Field>
-        <Field Name="Case_No">
-          <DataField>Case_No</DataField>
-        </Field>
-        <Field Name="Item_No">
-          <DataField>Item_No</DataField>
-        </Field>
-        <Field Name="Sales_Order_No">
-          <DataField>Sales_Order_No</DataField>
-        </Field>
-        <Field Name="Description">
-          <DataField>Description</DataField>
-        </Field>
-        <Field Name="Description2">
-          <DataField>Description2</DataField>
-        </Field>
-        <Field Name="Package_Info">
-          <DataField>Package_Info</DataField>
-        </Field>
-        <Field Name="No_of_Packages">
-          <DataField>No_of_Packages</DataField>
-        </Field>
-        <Field Name="No_of_PackagesFormat">
-          <DataField>No_of_PackagesFormat</DataField>
-        </Field>
-        <Field Name="No_of_Packages2">
-          <DataField>No_of_Packages2</DataField>
-        </Field>
-        <Field Name="Contents_Per_Package">
-          <DataField>Contents_Per_Package</DataField>
-        </Field>
-        <Field Name="Contents_Per_PackageFormat">
-          <DataField>Contents_Per_PackageFormat</DataField>
-        </Field>
-        <Field Name="Contents_UOM">
-          <DataField>Contents_UOM</DataField>
-        </Field>
-        <Field Name="Net_Weight">
-          <DataField>Net_Weight</DataField>
-        </Field>
-        <Field Name="Net_WeightFormat">
-          <DataField>Net_WeightFormat</DataField>
-        </Field>
-        <Field Name="Gross_Weight">
-          <DataField>Gross_Weight</DataField>
-        </Field>
-        <Field Name="Gross_WeightFormat">
-          <DataField>Gross_WeightFormat</DataField>
-        </Field>
-        <Field Name="Gross_Weight_UOM">
-          <DataField>Gross_Weight_UOM</DataField>
-        </Field>
-        <Field Name="Measurement">
-          <DataField>Measurement</DataField>
-        </Field>
-        <Field Name="MeasurementFormat">
-          <DataField>MeasurementFormat</DataField>
-        </Field>
-        <Field Name="Measurement_UOM">
-          <DataField>Measurement_UOM</DataField>
-        </Field>
-        <Field Name="Symbol_Display_Packing_List">
-          <DataField>Symbol_Display_Packing_List</DataField>
-        </Field>
-        <Field Name="Symbol_Picture">
-          <DataField>Symbol_Picture</DataField>
-        </Field>
-        <Field Name="External_Document_No">
-          <DataField>External_Document_No</DataField>
-        </Field>
-        <Field Name="Entry_No">
-          <DataField>Entry_No</DataField>
-        </Field>
-        <Field Name="LotNo1">
-          <DataField>LotNo1</DataField>
-        </Field>
-        <Field Name="LotNo2">
-          <DataField>LotNo2</DataField>
-        </Field>
-      </Fields>
-    </DataSet>
-  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -3964,12 +3801,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
       </Page>
     </ReportSection>
   </ReportSections>
-  <ReportParametersLayout>
-    <GridLayoutDefinition>
-      <NumberOfColumns>4</NumberOfColumns>
-      <NumberOfRows>2</NumberOfRows>
-    </GridLayoutDefinition>
-  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
@@ -4009,4 +3840,167 @@ End Function
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Number">
+          <DataField>Number</DataField>
+        </Field>
+        <Field Name="CompanyLogo">
+          <DataField>CompanyLogo</DataField>
+        </Field>
+        <Field Name="CompanyName">
+          <DataField>CompanyName</DataField>
+        </Field>
+        <Field Name="RegistrationNo">
+          <DataField>RegistrationNo</DataField>
+        </Field>
+        <Field Name="SSTRegNo">
+          <DataField>SSTRegNo</DataField>
+        </Field>
+        <Field Name="CerfiticateNo">
+          <DataField>CerfiticateNo</DataField>
+        </Field>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
+        </Field>
+        <Field Name="ISODocumentNo">
+          <DataField>ISODocumentNo</DataField>
+        </Field>
+        <Field Name="ISODocVersion">
+          <DataField>ISODocVersion</DataField>
+        </Field>
+        <Field Name="PrintDate">
+          <DataField>PrintDate</DataField>
+        </Field>
+        <Field Name="InvoiceNo">
+          <DataField>InvoiceNo</DataField>
+        </Field>
+        <Field Name="PackingListNo">
+          <DataField>PackingListNo</DataField>
+        </Field>
+        <Field Name="ConsigneeName">
+          <DataField>ConsigneeName</DataField>
+        </Field>
+        <Field Name="ConsigneeAddress">
+          <DataField>ConsigneeAddress</DataField>
+        </Field>
+        <Field Name="ConsigneeAddress2">
+          <DataField>ConsigneeAddress2</DataField>
+        </Field>
+        <Field Name="ConsigneePostCode">
+          <DataField>ConsigneePostCode</DataField>
+        </Field>
+        <Field Name="ConsigneeCountryRegion">
+          <DataField>ConsigneeCountryRegion</DataField>
+        </Field>
+        <Field Name="FeederVessel">
+          <DataField>FeederVessel</DataField>
+        </Field>
+        <Field Name="MotherVessel">
+          <DataField>MotherVessel</DataField>
+        </Field>
+        <Field Name="VIA">
+          <DataField>VIA</DataField>
+        </Field>
+        <Field Name="FromValue">
+          <DataField>FromValue</DataField>
+        </Field>
+        <Field Name="ToValue">
+          <DataField>ToValue</DataField>
+        </Field>
+        <Field Name="SailingOnOrAbout">
+          <DataField>SailingOnOrAbout</DataField>
+        </Field>
+        <Field Name="Shipment_Method_Code">
+          <DataField>Shipment_Method_Code</DataField>
+        </Field>
+        <Field Name="MARKS">
+          <DataField>MARKS</DataField>
+        </Field>
+        <Field Name="Case_No">
+          <DataField>Case_No</DataField>
+        </Field>
+        <Field Name="Item_No">
+          <DataField>Item_No</DataField>
+        </Field>
+        <Field Name="Sales_Order_No">
+          <DataField>Sales_Order_No</DataField>
+        </Field>
+        <Field Name="Description">
+          <DataField>Description</DataField>
+        </Field>
+        <Field Name="Description2">
+          <DataField>Description2</DataField>
+        </Field>
+        <Field Name="Package_Info">
+          <DataField>Package_Info</DataField>
+        </Field>
+        <Field Name="No_of_Packages">
+          <DataField>No_of_Packages</DataField>
+        </Field>
+        <Field Name="No_of_PackagesFormat">
+          <DataField>No_of_PackagesFormat</DataField>
+        </Field>
+        <Field Name="No_of_Packages2">
+          <DataField>No_of_Packages2</DataField>
+        </Field>
+        <Field Name="Contents_Per_Package">
+          <DataField>Contents_Per_Package</DataField>
+        </Field>
+        <Field Name="Contents_Per_PackageFormat">
+          <DataField>Contents_Per_PackageFormat</DataField>
+        </Field>
+        <Field Name="Contents_UOM">
+          <DataField>Contents_UOM</DataField>
+        </Field>
+        <Field Name="Net_Weight">
+          <DataField>Net_Weight</DataField>
+        </Field>
+        <Field Name="Net_WeightFormat">
+          <DataField>Net_WeightFormat</DataField>
+        </Field>
+        <Field Name="Gross_Weight">
+          <DataField>Gross_Weight</DataField>
+        </Field>
+        <Field Name="Gross_WeightFormat">
+          <DataField>Gross_WeightFormat</DataField>
+        </Field>
+        <Field Name="Gross_Weight_UOM">
+          <DataField>Gross_Weight_UOM</DataField>
+        </Field>
+        <Field Name="Measurement">
+          <DataField>Measurement</DataField>
+        </Field>
+        <Field Name="MeasurementFormat">
+          <DataField>MeasurementFormat</DataField>
+        </Field>
+        <Field Name="Measurement_UOM">
+          <DataField>Measurement_UOM</DataField>
+        </Field>
+        <Field Name="Symbol_Display_Packing_List">
+          <DataField>Symbol_Display_Packing_List</DataField>
+        </Field>
+        <Field Name="Symbol_Picture">
+          <DataField>Symbol_Picture</DataField>
+        </Field>
+        <Field Name="External_Document_No">
+          <DataField>External_Document_No</DataField>
+        </Field>
+        <Field Name="Entry_No">
+          <DataField>Entry_No</DataField>
+        </Field>
+        <Field Name="LotNo1">
+          <DataField>LotNo1</DataField>
+        </Field>
+        <Field Name="LotNo2">
+          <DataField>LotNo2</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
 </Report>
