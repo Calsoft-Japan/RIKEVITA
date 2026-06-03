@@ -42,7 +42,7 @@ table 50508 "RV QA Header"
             Caption = 'Ship-to Code';
             TableRelation = "Ship-to Address".Code where("Customer No." = field("Ship-to Customer No."));
         }
-        field(9; Mark; Code[10])
+        field(9; Mark; Text[250])
         {
             Caption = 'Mark';
         }

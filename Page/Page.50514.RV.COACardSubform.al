@@ -68,9 +68,7 @@ page 50514 "RV COA Card Subform"
                             Text := PostedWhShipLine."No.";
                             Rec."Item No." := PostedWhShipLine."Item No.";
                             Rec."Line No." := PostedWhShipLine."Line No.";
-                            //CurrPage.Update(true);
                             exit(true);
-
 
                         end else if Rec."Ref. Order Type QA" = RefOrderTypeQA::"Warehouse Shipment" then begin
                             if Page.RunModal(Page::"Whse. Shipment Lines", WhShipline) <> Action::LookupOK then

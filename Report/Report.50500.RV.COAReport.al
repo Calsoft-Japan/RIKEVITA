@@ -245,14 +245,7 @@ report 50500 "RV_COA Report"
                     if Number > 1 then begin
                         OutputNo += 1;
                     end;
-                    //MARKS
-                    MARKSText[1] := 'BRENNTAG';
-                    MARKSText[2] := 'INGREDIENTS';
-                    MARKSText[3] := 'BANGKOK';
-                    MARKSText[4] := 'MADE IN MALAYSIA';
-
                     PRODUCTText := "QA Header"."Item Description";
-
                 end;
 
                 trigger OnPreDataItem()
@@ -280,6 +273,22 @@ report 50500 "RV_COA Report"
 
                 Clear(PRODUCTText);
                 Clear(MARKSText);
+                Clear(MARKSList);
+
+                //MARKSText
+                if "Mark" <> '' then begin
+                    MARKSList := "Mark".Split(TypeHelper.LFSeparator());
+                    if MARKSList.Get(1, MARKSText[1]) then;
+                    if MARKSList.Get(2, MARKSText[2]) then;
+                    if MARKSList.Get(3, MARKSText[3]) then;
+                    if MARKSList.Get(4, MARKSText[4]) then;
+                end;
+
+                //MARKS
+                //MARKSText[1] := 'BRENNTAG';
+                //MARKSText[2] := 'INGREDIENTS';
+                //MARKSText[3] := 'BANGKOK';
+                //MARKSText[4] := 'MADE IN MALAYSIA';
 
                 Clear(DisplayQuantityPerLot);
                 Clear(DateCalculation);
@@ -401,7 +410,9 @@ report 50500 "RV_COA Report"
         QtyCalculated: Decimal;
         SPECIFICATIONText: Text;
         SalesOrderNoText: Text;
-        MARKSText: array[4] of Text[100];
+        MARKSText: array[4] of Text;
+        MARKSList: List of [Text];
+        TypeHelper: Codeunit "Type Helper";
         CopyText: Text[50];
         OutputNo: Integer;
         UOM: Text[50];
@@ -453,6 +464,7 @@ report 50500 "RV_COA Report"
         Clear(SPECIFICATIONText);
         Clear(SalesOrderNoText);
         Clear(MARKSText);
+        Clear(MARKSList);
         Clear(FormatExpireDateText);
         Clear(resultText);
         Clear(SpecLineNoText);
@@ -460,6 +472,5 @@ report 50500 "RV_COA Report"
         Clear(Format_DateText);
         Clear(UOM);
     end;
-
 }
 
