@@ -119,6 +119,10 @@ report 50600 "RV Calc. Consumption"
                     RVProdResultJnlLine."Posting Date" := WorkDate();
                     RVProdResultJnlLine."Prod. Order Line No." := ProdOrderComp."Prod. Order Line No.";
                     RVProdResultJnlLine."Prod. Order Comp. Line No." := ProdOrderComp."Line No.";
+                    RVProdResultJnlLine."Location Code" := ProdOrderComp."Location Code";
+                    RVProdResultJnlLine."Variant Code" := ProdOrderComp."Variant Code";
+                    RVProdResultJnlLine."Bin Code" := ProdOrderComp."Bin Code";
+                    RVProdResultJnlLine."Qty. per Unit of Measure" := ProdOrderComp."Qty. per Unit of Measure";
                     RVProdResultJnlLine.Insert();
                 end;
             until ProdOrderComp.Next() = 0;
@@ -154,6 +158,10 @@ report 50600 "RV Calc. Consumption"
                 RVProdResultJnlLine."Posting Date" := WorkDate();
                 RVProdResultJnlLine."Prod. Order Line No." := ProdOrderLine."Line No.";
                 RVProdResultJnlLine."Routing No." := ProdOrderLine."Routing No.";
+                RVProdResultJnlLine."Location Code" := ProdOrderLine."Location Code";
+                RVProdResultJnlLine."Variant Code" := ProdOrderLine."Variant Code";
+                RVProdResultJnlLine."Bin Code" := ProdOrderLine."Bin Code";
+                RVProdResultJnlLine."Qty. per Unit of Measure" := ProdOrderLine."Qty. per Unit of Measure";
                 RVProdResultJnlLine.Insert();
             until ProdOrderRtngLine.Next() = 0;
         end else begin
@@ -169,6 +177,10 @@ report 50600 "RV Calc. Consumption"
             RVProdResultJnlLine."Posting Date" := WorkDate();
             RVProdResultJnlLine."Prod. Order Line No." := ProdOrderLine."Line No.";
             RVProdResultJnlLine."Routing No." := ProdOrderLine."Routing No.";
+            RVProdResultJnlLine."Location Code" := ProdOrderLine."Location Code";
+            RVProdResultJnlLine."Variant Code" := ProdOrderLine."Variant Code";
+            RVProdResultJnlLine."Bin Code" := ProdOrderLine."Bin Code";
+            RVProdResultJnlLine."Qty. per Unit of Measure" := ProdOrderLine."Qty. per Unit of Measure";
             RVProdResultJnlLine.Insert();
         end;
     end;

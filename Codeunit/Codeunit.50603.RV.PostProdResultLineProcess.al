@@ -192,11 +192,11 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         ItemJnlLine.Validate("Order Line No.", ProdOrderLine."Line No.");
         ItemJnlLine.Validate("Item No.", ProdOrderLine."Item No.");
         ItemJnlLine.Validate("Variant Code", ProdOrderLine."Variant Code");
-        ItemJnlLine.Validate("Location Code", ProdOrderLine."Location Code");
-        ItemJnlLine.Validate("Bin Code", ProdOrderLine."Bin Code");
+        ItemJnlLine.Validate("Location Code", ProdResultJournalLine."Location Code");
+        ItemJnlLine.Validate("Bin Code", ProdResultJournalLine."Bin Code");
         ItemJnlLine.Validate("Dimension Set ID", ProdOrderLine."Dimension Set ID");
-        if ProdOrderLine."Bin Code" <> '' then
-            ItemJnlLine.Validate("Bin Code", ProdOrderLine."Bin Code");
+        if ProdResultJournalLine."Bin Code" <> '' then
+            ItemJnlLine.Validate("Bin Code", ProdResultJournalLine."Bin Code");
         ItemJnlLine.Validate("Routing No.", ProdOrderLine."Routing No.");
         ItemJnlLine.Validate("Routing Reference No.", ProdOrderLine."Routing Reference No.");
         ItemJnlLine.Validate("Operation No.", ProdResultJournalLine."Operation No.");
@@ -289,11 +289,14 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         ProdOrderComp.SetRange("Prod. Order No.", ProdOrderLine."Prod. Order No.");
         ProdOrderComp.SetRange("Prod. Order Line No.", ProdOrderLine."Line No.");
         ProdOrderComp.SetRange("Line No.", ProdResultJournalLine."Prod. Order Comp. Line No.");
+        ItemJnlLine.Validate("Location Code", ProdResultJournalLine."Location Code");
+        ItemJnlLine.Validate("Bin Code", ProdResultJournalLine."Bin Code");
+        ItemJnlLine."Variant Code" := ProdResultJournalLine."Variant Code";
         if ProdOrderComp.FindFirst() then begin
-            ItemJnlLine.Validate("Location Code", ProdOrderComp."Location Code");
-            ItemJnlLine.Validate("Bin Code", ProdOrderLine."Bin Code");
+            // ItemJnlLine.Validate("Location Code", ProdOrderComp."Location Code");
+            // ItemJnlLine.Validate("Bin Code", ProdOrderLine."Bin Code");
             ItemJnlLine.Validate("Dimension Set ID", ProdOrderComp."Dimension Set ID");
-            ItemJnlLine."Variant Code" := ProdOrderComp."Variant Code";
+            // ItemJnlLine."Variant Code" := ProdOrderComp."Variant Code";
             ItemJnlLine.Validate("Prod. Order Comp. Line No.", ProdOrderComp."Line No.");
             ItemJnlLine."Flushing Method" := ProdOrderComp."Flushing Method";
         end;

@@ -32,7 +32,7 @@ table 50601 "RV Prod. Result Journal Line"
             var
                 ProdOrderLine: Record "Prod. Order Line";
             begin
-                if "Data Type" IN [rec."Data Type"::"Adjust Consumption", rec."Data Type"::"Planned Consumption"] then
+                if "Data Type" IN [rec."Data Type"::"Adjust Consumption", rec."Data Type"::"Planned Consumption", rec."Data Type"::"Recycle Consumption"] then
                     if "Prod. Order No." <> '' then begin
                         ProdOrderLine.SetFilterByReleasedOrderNo(Rec."Prod. Order No.");
                         if ProdOrderLine.Count = 1 then begin
@@ -133,31 +133,43 @@ table 50601 "RV Prod. Result Journal Line"
             var
                 UOM: Record "Item Unit of Measure";
                 ProdOrderComponent: Record "Prod. Order Component";
+                Item: Record Item;
             begin
-                ProdOrderComponent.SetFilterByReleasedOrderNo(Rec."Prod. Order No.");
-                if Rec."Prod. Order Line No." <> 0 then
-                    ProdOrderComponent.SetRange("Prod. Order Line No.", Rec."Prod. Order Line No.");
-                ProdOrderComponent.SetRange("Item No.", Rec."Item No.");
-                if ProdOrderComponent.FindFirst() then begin
-                    if Rec."Prod. Order Line No." = 0 then
-                        Rec."Prod. Order Line No." := ProdOrderComponent."Prod. Order Line No.";
-                    Validate("Prod. Order Comp. Line No.", ProdOrderComponent."Line No.");
-                    rec.UOM := ProdOrderComponent."Unit of Measure Code";
-                end else begin
-                    Validate("Prod. Order Comp. Line No.", 0);
-                    rec.UOM := '';
-                end;
-
-                if rec.uom = '' then
-                    case "Data Type" of
-                        "RV Prod. Results Data Type"::"Adjust Consumption",
-                        "RV Prod. Results Data Type"::"Planned Consumption":
-                            begin
-                                UOM.SetRange("Item No.", Rec."Item No.");
-                                if UOM.FindFirst() then
-                                    Validate(rec."UOM", UOM.Code);
-                            end;
+                if rec."Data Type" in [rec."Data Type"::"Adjust Consumption", rec."Data Type"::"Planned Consumption", rec."Data Type"::"Recycle Consumption"] then begin
+                    ProdOrderComponent.SetFilterByReleasedOrderNo(Rec."Prod. Order No.");
+                    if Rec."Prod. Order Line No." <> 0 then
+                        ProdOrderComponent.SetRange("Prod. Order Line No.", Rec."Prod. Order Line No.");
+                    ProdOrderComponent.SetRange("Item No.", Rec."Item No.");
+                    if ProdOrderComponent.FindFirst() then begin
+                        if Rec."Prod. Order Line No." = 0 then
+                            Rec."Prod. Order Line No." := ProdOrderComponent."Prod. Order Line No.";
+                        Validate("Prod. Order Comp. Line No.", ProdOrderComponent."Line No.");
+                        rec.UOM := ProdOrderComponent."Unit of Measure Code";
+                        rec."Location Code" := ProdOrderComponent."Location Code";
+                        rec."Bin Code" := ProdOrderComponent."Bin Code";
+                    end else begin
+                        Validate("Prod. Order Comp. Line No.", 0);
+                        rec.UOM := '';
+                        rec."Location Code" := '';
+                        rec."Bin Code" := '';
                     end;
+
+                    if rec.uom = '' then
+                        case "Data Type" of
+                            "RV Prod. Results Data Type"::"Adjust Consumption",
+                            "RV Prod. Results Data Type"::"Planned Consumption":
+                                begin
+                                    UOM.SetRange("Item No.", Rec."Item No.");
+                                    if UOM.FindFirst() then
+                                        Validate(rec."UOM", UOM.Code);
+                                end;
+                        end;
+
+                    if rec.UOM = '' then begin
+                        if item.Get(Rec."Item No.") then
+                            Validate(rec."UOM", item."Base Unit of Measure");
+                    end;
+                end;
             end;
         }
         field(9; "Work Center No."; Code[20])
@@ -271,8 +283,50 @@ table 50601 "RV Prod. Result Journal Line"
         {
             Caption = 'Error Message';
         }
+        field(22; "Location Code"; Code[20])
+        {
+            Caption = 'Location Code';
+            TableRelation = "Location";
+            trigger OnValidate()
+            begin
+                if rec."Location Code" <> xrec."Location Code" then
+                    rec."Bin Code" := '';
+            end;
+        }
+        field(23; "Bin Code"; Code[20])
+        {
+            Caption = 'Bin Code';
+            TableRelation = if ("Data Type" = filter("Planned Output" | "Adjust Output"),
+                                Quantity = filter(>= 0)) Bin.Code
+                                where("Location Code" = field("Location Code"),
+                                "Item Filter" = field("Item No."))
+            else
+            if ("Data Type" = filter("Planned Output" | "Adjust Output"),
+                              Quantity = filter(< 0)) "Bin Content"."Bin Code"
+                              where("Location Code" = field("Location Code"),
+                              "Item No." = field("Item No."))
+            else
+            if ("Data Type" = filter("Planned Consumption" | "Adjust Consumption" | "Recycle Consumption"),
+                              Quantity = filter(> 0)) "Bin Content"."Bin Code"
+                              where("Location Code" = field("Location Code"),
+                              "Item No." = field("Item No."))
+            else
+            if ("Data Type" = filter("Planned Consumption" | "Adjust Consumption" | "Recycle Consumption"),
+                              Quantity = filter(<= 0)) Bin.Code where("Location Code" = field("Location Code"),
+                              "Item Filter" = field("Item No."));
+        }
+        field(24; "Variant Code"; Code[10])
+        {
+            Caption = 'Variant Code';
+            ToolTip = 'Specifies the variant of the item on the line.';
+            TableRelation = "Item Variant".Code where("Item No." = field("Item No."));
+        }
+        field(25; "Qty. per Unit of Measure"; decimal)
+        {
+            Caption = 'Qty. per Unit of Measure';
+            DecimalPlaces = 0 : 5;
+        }
     }
-
     keys
     {
         key(PK; "Batch Name", "Journal Line No.")

@@ -87,6 +87,16 @@ page 50601 "RV Prod. Result Journal Line"
                     ToolTip = 'Specifies the value of the Posting Date field.', Comment = '%';
                     Editable = CanEdit;
                 }
+                field("Location Code"; Rec."Location Code")
+                {
+                    ToolTip = 'Specifies the value of the Location Code field.', Comment = '%';
+                    Editable = CanEdit;
+                }
+                field("Bin Code"; Rec."Bin Code")
+                {
+                    ToolTip = 'Specifies the value of the Bin Code field.', Comment = '%';
+                    Editable = CanEdit;
+                }
                 field("Lot No."; Rec."Lot No.")
                 {
                     ToolTip = 'Specifies the value of the Lot No. field.', Comment = '%';
@@ -105,23 +115,23 @@ page 50601 "RV Prod. Result Journal Line"
                     begin
                         // InitFromItemJnlLine(TrackingSpecification, Rec);
                         // SetSourceSpec(TrackingSpecification, Rec."Posting Date");
+                        CurrPage.SaveRecord();
+                        commit;
                         case rec."Data Type" of
                             rec."Data Type"::"Adjust Consumption",
                             rec."Data Type"::"Planned Consumption",
                             rec."Data Type"::"Recycle Consumption":
                                 begin
-                                    ProdBOM.get(ProdBOM.Status::Released,
-                                        rec."Prod. Order No.",
-                                        rec."Prod. Order Line No.",
-                                        rec."Prod. Order Comp. Line No.");
+
+                                    recTrackingSpec.Reset();
                                     recTrackingSpec.DeleteAll();
                                     recTrackingSpec.Init();
                                     recTrackingSpec."Entry No." := 1;
                                     recTrackingSpec."Item No." := Rec."Item No.";
-                                    recTrackingSpec."Location Code" := ProdBOM."Location Code";
-                                    recTrackingSpec."Variant Code" := ProdBOM."Variant Code";
-                                    recTrackingSpec."Bin Code" := ProdBOM."Bin Code";
-                                    recTrackingSpec."Qty. per Unit of Measure" := ProdBOM."Qty. per Unit of Measure";
+                                    recTrackingSpec."Location Code" := Rec."Location Code";
+                                    recTrackingSpec."Variant Code" := Rec."Variant Code";
+                                    recTrackingSpec."Bin Code" := Rec."Bin Code";
+                                    recTrackingSpec."Qty. per Unit of Measure" := Rec."Qty. per Unit of Measure";
                                     recTrackingSpec.Insert();
 
                                     AssistEditTrackingNo(recTrackingSpec,
@@ -909,7 +919,7 @@ page 50601 "RV Prod. Result Journal Line"
             repeat
                 ItemLedgerEntry.SetLoadFields("Document No.");
                 if ItemLedgerEntry.Get(TempTrackingSpecification."Item Ledger Entry No.") then begin
-                    //TempTrackingSpecification."Receipt/Shipment No." := ItemLedgerEntry."Document No.";
+                    TempTrackingSpecification."Receipt/Shipment No." := ItemLedgerEntry."Document No.";
                     TempTrackingSpecification.Modify();
                 end;
             until TempTrackingSpecification.Next() = 0;
@@ -1075,8 +1085,8 @@ page 50601 "RV Prod. Result Journal Line"
     begin
         Window.Open(Text004);
 
-        if not FullGlobalDataSetExists then
-            RetrieveLookupData(TempTrackingSpecification, true);
+        // if not FullGlobalDataSetExists then
+        RetrieveLookupData(TempTrackingSpecification, true);
 
         TempGlobalReservEntry.Reset();
         TempGlobalEntrySummary.Reset();
