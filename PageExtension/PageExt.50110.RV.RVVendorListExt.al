@@ -11,6 +11,24 @@ pageextension 50110 "RV Vendor List Ext" extends "Vendor List"
 {
     actions
     {
+
+        modify("Aged Accounts Payable")
+        {
+            Visible = false;
+        }
+
+        addafter("Aged Accounts Payable")
+        {
+            action("RV Aged Accounts Payable")
+            {
+                ApplicationArea = Basic, Suite;
+                Caption = 'Aged Accounts Payable';
+                Image = "Report";
+                RunObject = Report "RV Aged Accounts Payable Basic";
+                ToolTip = 'View a list of aged remaining balances for each vendor.';
+            }
+        }
+
         addafter(ApprovalEntries)
         {
             action(ISOCertificates)
