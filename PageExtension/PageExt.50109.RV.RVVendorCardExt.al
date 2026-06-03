@@ -31,6 +31,21 @@ pageextension 50109 "RV Vendor Card Ext" extends "Vendor Card"
     }
     actions
     {
+        addlast(reporting)
+        {
+            action("Aged Accounts Payable")
+            {
+                ApplicationArea = Basic, Suite;
+                Caption = 'Aged Accounts Payable';
+                Image = "Report";
+                RunObject = Report "RV Aged Accounts Payable Basic";
+                ToolTip = 'View a list of aged remaining balances for each vendor.';
+            }
+        }
+        addlast(Category_Report)
+        {
+            actionref(Aged_Accounts_Payable_Promoted; "Aged Accounts Payable") { }
+        }
         addafter(Attachments)//addlast("Ven&dor")//processing
         {
             action(ISOCertificates)
