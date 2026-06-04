@@ -509,6 +509,7 @@ report 50107 "RV Payment Voucher With Check"
                 trigger OnPostDataItem()
                 var
                     RecordRestrictionMgt: Codeunit "Record Restriction Mgt.";
+                    BankAct: Record "Bank Account";
                 begin
                     if not TestPrint then begin
                         if UseCheckNo <> GenJnlLine."Document No." then begin
@@ -525,6 +526,12 @@ report 50107 "RV Payment Voucher With Check"
                         if ApplyMethod <> ApplyMethod::MoreLinesOneEntry then begin
                             GenJnlLine3 := GenJnlLine;
                             GenJnlLine3.TestField("Posting No. Series", '');
+
+                            GenJnlLine3."RV_Cheque No." := GenJnlLine."RV_Cheque No.";
+                            GenJnlLine3."RV_APV No." := GenJnlLine."Document No.";
+                            if (GenJnlLine."Bal. Account Type" = "Gen. Journal Account Type"::"Bank Account") and (GenJnlLine."Bal. Account No." <> '') and BankAct.Get(GenJnlLine."Bal. Account No.") then
+                                GenJnlLine3."RV_Cheque No." := BankAct."Last Check No.";
+
                             GenJnlLine3."Document No." := UseCheckNo;
 
                             //OnAfterAssignGenJnlLineDocNoAndAccountType(GenJnlLine3, GenJnlLine."Document No.", ApplyMethod);
@@ -542,6 +549,12 @@ report 50107 "RV Payment Voucher With Check"
                                     GenJnlLine3.TestField("Posting No. Series", '');
                                     GenJnlLine3."Bal. Account No." := '';
                                     GenJnlLine3."Bank Payment Type" := GenJnlLine3."Bank Payment Type"::" ";
+
+                                    GenJnlLine3."RV_Cheque No." := GenJnlLine."RV_Cheque No.";
+                                    GenJnlLine3."RV_APV No." := GenJnlLine."Document No.";
+                                    if (GenJnlLine."Bal. Account Type" = "Gen. Journal Account Type"::"Bank Account") and (GenJnlLine."Bal. Account No." <> '') and BankAct.Get(GenJnlLine."Bal. Account No.") then
+                                        GenJnlLine3."RV_Cheque No." := BankAct."Last Check No.";
+
                                     GenJnlLine3."Document No." := UseCheckNo;
 
                                     //OnAfterAssignGenJnlLineDocNoAndAccountType(GenJnlLine3, GenJnlLine."Document No.", ApplyMethod);
@@ -570,6 +583,12 @@ report 50107 "RV Payment Voucher With Check"
                             GenJnlLine3.Init();
                             GenJnlLine3.Validate("Posting Date", GenJnlLine."Posting Date");
                             GenJnlLine3."Document Type" := GenJnlLine."Document Type";
+
+                            GenJnlLine3."RV_Cheque No." := GenJnlLine."RV_Cheque No.";
+                            GenJnlLine3."RV_APV No." := GenJnlLine."Document No.";
+                            if (GenJnlLine."Bal. Account Type" = "Gen. Journal Account Type"::"Bank Account") and (GenJnlLine."Bal. Account No." <> '') and BankAct.Get(GenJnlLine."Bal. Account No.") then
+                                GenJnlLine3."RV_Cheque No." := BankAct."Last Check No.";
+
                             GenJnlLine3."Document No." := UseCheckNo;
 
                             //OnAfterAssignGenJnlLineDocumentNo(GenJnlLine3, GenJnlLine."Document No.");
@@ -752,7 +771,7 @@ report 50107 "RV Payment Voucher With Check"
                 end;
 
                 GenPostDate := Format("Posting Date", 0, '<Closing><Day,2>/<Month,2>/<Year>');
-                GenAmtLCY := Format("Amount (LCY)", 0, '<Precision,2><Sign><Integer Thousand><Decimals>');
+                GenAmtLCY := Format(Abs("Amount (LCY)"), 0, '<Precision,2><Sign><Integer Thousand><Decimals>');
 
 
                 case GenJnlLine."Account Type" of
