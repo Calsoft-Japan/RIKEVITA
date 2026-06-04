@@ -13,259 +13,282 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
 
     dataset
     {
-        dataitem(SalesInvoiceHeader; "Sales Invoice Header")
+        dataitem(Integer; Integer)
         {
-            DataItemTableView = sorting("No.");
-            RequestFilterFields = "No.", "Bill-to Customer No.", "Sell-to Customer No.", "No. Printed";
-            column(CompanyLogo; CompanyInfo.Picture)
+            DataItemTableView = sorting(Number);
+            column(Number; Number)
             {
             }
-            column(CompanyName; CompanyInfo.Name)
+            dataitem(SalesInvoiceHeader; "Sales Invoice Header")
             {
-            }
-            column(RegistrationNo; 'Registration No. ' + CompanyInfo."Registration No.")
-            {
-            }
-            column(SSTRegNo; 'SST Reg No. ' + CompanyInfo."RV_SST Reg No.")
-            {
-            }
-            column(CerfiticateNo; CerfiticateNo)
-            {
-            }
-            column(ISODocumentNo; ISODocumentNo)
-            {
-            }
-            column(ISODocVersion; ISODocVersion)
-            {
-            }
-            column(ReportTitle; ReportTitle)
-            {
-            }
-            column(PrintDate; Format(Today(), 0, '<Day,2>/<Month,2>/<Year,4>'))
-            {
-            }
-            column(Sales_Header_No; "No.")
-            {
-            }
-            column(External_Document_No; "External Document No.")
-            {
-            }
-            column(Sell_to_Customer_Name; "Sell-to Customer Name")
-            {
-            }
-            column(Sell_to_Address; "Sell-to Address")
-            {
-            }
-            column(Sell_to_Address2; "Sell-to Address 2")
-            {
-            }
-            column(Sell_to_City; "Sell-to City")
-            {
-            }
-            column(Sell_to_Post_Code; "Sell-to Post Code" + ' ' + "Sell-to City")
-            {
-            }
-            column(Sell_to_Country_Region_Code; "Sell-to Country/Region Code")
-            {
-            }
-            column(Currency_Code; "Currency Code")
-            {
-            }
-            column(Tranfportation; Tranfportation)
-            {
-            }
-            column(OrderNo; OrderNo)
-            {
-            }
-            column(FeederVessel; "RV_Feeder Vessel")
-            {
-            }
-            column(MotherVessel; "RV_Mother Vessel")
-            {
-            }
-            column(VIA; "RV_VIA")
-            {
-            }
-            column(FromValue; "RV_Country of Origin")
-            {
-            }
-            column(SailingOnOrAbout; Format("RV_SAILING ON OR ABOUT", 0, '<Day,2>/<Month,2>/<Year,4>'))
-            {
-            }
-            column(Terms; Terms)
-            {
-            }
-            dataitem(SalesInvoiceLine; "Sales Invoice Line")
-            {
-                DataItemTableView = where(Type = const(Item));
-                DataItemLink = "Document No." = field("No.");
-                column(Item_No; "No.")
+                DataItemTableView = sorting("No.");
+                RequestFilterFields = "No.", "Bill-to Customer No.", "Sell-to Customer No.", "No. Printed";
+                column(CompanyLogo; CompanyInfo.Picture)
                 {
                 }
-                column(Description; Description)
+                column(CompanyName; CompanyInfo.Name)
                 {
                 }
-                column(Description2; Description2)
+                column(RegistrationNo; 'Registration No. ' + CompanyInfo."Registration No.")
                 {
                 }
-                column(Quantity; Format(Quantity) + ' ' + "Unit of Measure Code")
+                column(SSTRegNo; 'SST Reg No. ' + CompanyInfo."RV_SST Reg No.")
                 {
                 }
-                column(Quantity_Base; '(' + Format("Quantity (Base)") + ' ' + BaseUnitofMeasure + ')')
+                column(CerfiticateNo; CerfiticateNo)
                 {
                 }
-                column(Unit_Price; UnitPrice)
+                column(ISODocumentNo; ISODocumentNo)
                 {
                 }
-                column(Line_Discount_Amount; "Line Discount Amount")
+                column(ISODocVersion; ISODocVersion)
                 {
                 }
-                column(Line_Amount; LineAmount)
+                column(ReportTitle; ReportTitle)
                 {
                 }
-                column(SalesOrderNo; SalesOrderNo)
+                column(PrintDate; Format(Today(), 0, '<Day,2>/<Month,2>/<Year,4>'))
                 {
                 }
-                column(CustomerPO; CustomerPO)
+                column(Sales_Header_No; "No.")
+                {
+                }
+                column(External_Document_No; "External Document No.")
+                {
+                }
+                column(Sell_to_Customer_Name; "Sell-to Customer Name")
+                {
+                }
+                column(Sell_to_Address; "Sell-to Address")
+                {
+                }
+                column(Sell_to_Address2; "Sell-to Address 2")
+                {
+                }
+                column(Sell_to_City; "Sell-to City")
+                {
+                }
+                column(Sell_to_Post_Code; "Sell-to Post Code" + ' ' + "Sell-to City")
+                {
+                }
+                column(Sell_to_Country_Region_Code; "Sell-to Country/Region Code")
+                {
+                }
+                column(Currency_Code; "Currency Code")
+                {
+                }
+                column(Tranfportation; Tranfportation)
+                {
+                }
+                column(OrderNo; OrderNo)
+                {
+                }
+                column(FeederVessel; "RV_Feeder Vessel")
+                {
+                }
+                column(MotherVessel; "RV_Mother Vessel")
+                {
+                }
+                column(VIA; "RV_VIA")
+                {
+                }
+                column(FromValue; "RV_Country of Origin")
+                {
+                }
+                column(SailingOnOrAbout; Format("RV_SAILING ON OR ABOUT", 0, '<Day,2>/<Month,2>/<Year,4>'))
+                {
+                }
+                column(Terms; Terms)
+                {
+                }
+                dataitem(SalesInvoiceLine; "Sales Invoice Line")
+                {
+                    DataItemTableView = where(Type = const(Item));
+                    DataItemLink = "Document No." = field("No.");
+                    column(Item_No; "No.")
+                    {
+                    }
+                    column(Description; Description)
+                    {
+                    }
+                    column(Description2; Description2)
+                    {
+                    }
+                    column(Quantity; Format(Quantity) + ' ' + "Unit of Measure Code")
+                    {
+                    }
+                    column(Quantity_Base; '(' + Format("Quantity (Base)") + ' ' + BaseUnitofMeasure + ')')
+                    {
+                    }
+                    column(Unit_Price; UnitPrice)
+                    {
+                    }
+                    column(Line_Discount_Amount; "Line Discount Amount")
+                    {
+                    }
+                    column(Line_Amount; LineAmount)
+                    {
+                    }
+                    column(SalesOrderNo; SalesOrderNo)
+                    {
+                    }
+                    column(CustomerPO; CustomerPO)
+                    {
+                    }
+                    trigger OnAfterGetRecord()
+                    var
+                        RecItem: Record Item;
+                        RecSalesShipmentHeader: Record "Sales Shipment Header";
+                        RecItemReference: Record "Item Reference";
+                    begin
+                        SalesOrderNo := '';
+                        CustomerPO := '';
+                        FOBAmount := 0;
+                        RecItem.Get("No.");
+                        if RecItem.Type = RecItem.Type::Inventory then begin
+                            RecSalesShipmentHeader.Reset();
+                            RecSalesShipmentHeader.SetRange("No.", "Shipment No.");
+                            if RecSalesShipmentHeader.FindFirst() then begin
+                                SalesOrderNo := RecSalesShipmentHeader."Order No.";
+                                CustomerPO := RecSalesShipmentHeader."External Document No.";
+                            end;
+
+                        end;
+                        BaseUnitofMeasure := RecItem."Base Unit of Measure";
+                        CALCFIELDS("RV_Charge Type");
+                        if ShowFOBPrice then begin
+                            if "RV_Charge Type" = "RV_Charge Type"::FOB then begin
+                                FOBAmount := "RV_Other Charge";
+                            end;
+                            UnitPrice := "Line Amount" + FOBAmount;
+                            LineAmount := ("Line Amount" + FOBAmount) / Quantity;
+                        end else begin
+                            UnitPrice := "Unit Price";
+                            LineAmount := Amount;
+                        end;
+
+                        if "No." = RIKEVITASetup."Freight Charge Item No" then begin
+                            TotalFreightCharges := TotalFreightCharges + "Line Amount";
+                        end;
+                        RecItemReference.Reset();
+                        RecItemReference.SetRange("Item No.", "No.");
+                        RecItemReference.SetRange("Reference Type No.", SalesInvoiceHeader."Sell-to Customer No.");
+                        if RecItemReference.FindFirst() then begin
+                            Description := RecItemReference.Description;
+                            Description2 := RecItemReference."Description 2";
+                        end else begin
+                            Description := SalesInvoiceLine.Description;
+                            Description2 := SalesInvoiceLine."Description 2";
+                        end;
+                    end;
+
+                }
+                column(TotalFreightCharges; TotalFreightCharges)
+                {
+                }
+                column(Ship_to_Name; "Ship-to Name")
+                {
+                }
+                column(ShowFOBPrice; ShowFOBPrice)
+                {
+                }
+                column(ShowExchangeRates; ShowExchangeRates)
+                {
+                }
+                column(QRCode; QRCode)
+                {
+                }
+                column(QRCodeText; QRCodeText)
+                {
+                }
+                column(CurrencyInformation; CurrencyInformation)
+                {
+                }
+                column(WorkDescription; ShowWorkDescription)
                 {
                 }
                 trigger OnAfterGetRecord()
                 var
+                    ISODoc: Record "RV ISO Document";
+                    PaymentTerms: Record "Payment Terms";
+                    SalesShipmentLine: Record "Sales Shipment Line";
+                    RecItemLedgerEntry: Record "Item Ledger Entry";
+                    TempNo: Integer;
                     RecItem: Record Item;
                     RecSalesShipmentHeader: Record "Sales Shipment Header";
-                    RecItemReference: Record "Item Reference";
+                    SalesInvoiceLine: Record "Sales Invoice Line";
+                    TypeHelper: Codeunit "Type Helper";
                 begin
-                    SalesOrderNo := '';
-                    CustomerPO := '';
-                    FOBAmount := 0;
-                    RecItem.Get("No.");
-                    if RecItem.Type = RecItem.Type::Inventory then begin
-                        RecSalesShipmentHeader.Reset();
-                        RecSalesShipmentHeader.SetRange("No.", "Shipment No.");
-                        if RecSalesShipmentHeader.FindFirst() then begin
-                            SalesOrderNo := RecSalesShipmentHeader."Order No.";
-                            CustomerPO := RecSalesShipmentHeader."External Document No.";
-                        end;
-
-                    end;
-                    BaseUnitofMeasure := RecItem."Base Unit of Measure";
-                    CALCFIELDS("RV_Charge Type");
-                    if ShowFOBPrice then begin
-                        if "RV_Charge Type" = "RV_Charge Type"::FOB then begin
-                            FOBAmount := "RV_Other Charge";
-                        end;
-                        UnitPrice := "Line Amount" + FOBAmount;
-                        LineAmount := ("Line Amount" + FOBAmount) / Quantity;
-                    end else begin
-                        UnitPrice := "Unit Price";
-                        LineAmount := Amount;
+                    CompanyInfo.Get();
+                    CompanyInfo.CalcFields(Picture);
+                    CerfiticateNo := '';
+                    TempNo := 1;
+                    ISODoc.Reset();
+                    ISODoc.SetRange("Report Code", 'OVERSEA INVOICE');
+                    if ISODoc.FindFirst() then begin
+                        ISODocumentNo := ISODoc."ISO Document No.";
+                        ISODocVersion := ISODoc."ISO Doc. Version No.";
                     end;
 
-                    if "No." = RIKEVITASetup."Freight Charge Item No" then begin
-                        TotalFreightCharges := TotalFreightCharges + "Line Amount";
+                    PaymentTerms.Reset();
+                    PaymentTerms.SetRange(Code, "Payment Terms Code");
+                    if PaymentTerms.FindFirst() then begin
+                        Terms := PaymentTerms.Description;
                     end;
-                    RecItemReference.Reset();
-                    RecItemReference.SetRange("Item No.", "No.");
-                    RecItemReference.SetRange("Reference Type No.", SalesInvoiceHeader."Sell-to Customer No.");
-                    if RecItemReference.FindFirst() then begin
-                        Description := RecItemReference.Description;
-                        Description2 := RecItemReference."Description 2";
-                    end else begin
-                        Description := SalesInvoiceLine.Description;
-                        Description2 := SalesInvoiceLine."Description 2";
-                    end;
-                end;
 
-            }
-            column(TotalFreightCharges; TotalFreightCharges)
-            {
-            }
-            column(Ship_to_Name; "Ship-to Name")
-            {
-            }
-            column(ShowFOBPrice; ShowFOBPrice)
-            {
-            }
-            column(ShowExchangeRates; ShowExchangeRates)
-            {
-            }
-            column(QRCode; QRCode)
-            {
-            }
-            column(QRCodeText; QRCodeText)
-            {
-            }
-            column(CurrencyInformation; CurrencyInformation)
-            {
-            }
-            column(WorkDescription; ShowWorkDescription)
-            {
-            }
-            trigger OnAfterGetRecord()
-            var
-                ISODoc: Record "RV ISO Document";
-                PaymentTerms: Record "Payment Terms";
-                SalesShipmentLine: Record "Sales Shipment Line";
-                RecItemLedgerEntry: Record "Item Ledger Entry";
-                TempNo: Integer;
-                RecItem: Record Item;
-                RecSalesShipmentHeader: Record "Sales Shipment Header";
-                SalesInvoiceLine: Record "Sales Invoice Line";
-                TypeHelper: Codeunit "Type Helper";
-            begin
-                CompanyInfo.Get();
-                CompanyInfo.CalcFields(Picture);
-                CerfiticateNo := '';
-                TempNo := 1;
-                ISODoc.Reset();
-                ISODoc.SetRange("Report Code", 'OVERSEA INVOICE');
-                if ISODoc.FindFirst() then begin
-                    ISODocumentNo := ISODoc."ISO Document No.";
-                    ISODocVersion := ISODoc."ISO Doc. Version No.";
-                end;
-
-                PaymentTerms.Reset();
-                PaymentTerms.SetRange(Code, "Payment Terms Code");
-                if PaymentTerms.FindFirst() then begin
-                    Terms := PaymentTerms.Description;
-                end;
-
-                SalesInvoiceLine.Reset();
-                SalesInvoiceLine.SetRange("Document No.", "No.");
-                SalesInvoiceLine.SetRange(Type, SalesInvoiceLine.Type::Item);
-                SalesInvoiceLine.SetFilter("Shipment No.", '<>%1', '');
-                if SalesInvoiceLine.FindSet() then begin
-                    repeat
-                        RecSalesShipmentHeader.Reset();
-                        RecSalesShipmentHeader.SetRange("No.", SalesInvoiceLine."Shipment No.");
-                        if RecSalesShipmentHeader.FindFirst() then begin
-                            if TempNo mod 5 = 0 then begin
-                                OrderNo += RecSalesShipmentHeader."Order No." + '<br>';
-                            end else begin
-                                OrderNo += RecSalesShipmentHeader."Order No." + '  ';
+                    SalesInvoiceLine.Reset();
+                    SalesInvoiceLine.SetRange("Document No.", "No.");
+                    SalesInvoiceLine.SetRange(Type, SalesInvoiceLine.Type::Item);
+                    if SalesInvoiceLine.FindSet() then begin
+                        repeat
+                            RecItem.Get(SalesInvoiceLine."No.");
+                            if RecItem."RV_Print RSPO No." then begin
+                                CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
                             end;
-                            TempNo := TempNo + 1;
-                            if TempNo > 10 then
-                                break;
-                        end;
-                    until SalesInvoiceLine.Next() = 0;
+                        until SalesInvoiceLine.Next() = 0;
+                    end;
+
+                    SalesInvoiceLine.Reset();
+                    SalesInvoiceLine.SetRange("Document No.", "No.");
+                    SalesInvoiceLine.SetRange(Type, SalesInvoiceLine.Type::Item);
+                    SalesInvoiceLine.SetFilter("Shipment No.", '<>%1', '');
+                    if SalesInvoiceLine.FindSet() then begin
+                        repeat
+                            RecSalesShipmentHeader.Reset();
+                            RecSalesShipmentHeader.SetRange("No.", SalesInvoiceLine."Shipment No.");
+                            if RecSalesShipmentHeader.FindFirst() then begin
+                                if TempNo mod 5 = 0 then begin
+                                    OrderNo += RecSalesShipmentHeader."Order No." + '<br>';
+                                end else begin
+                                    OrderNo += RecSalesShipmentHeader."Order No." + '  ';
+                                end;
+                                TempNo := TempNo + 1;
+                                if TempNo > 10 then
+                                    break;
+                            end;
+                        until SalesInvoiceLine.Next() = 0;
+                    end;
+
+                    if "uuid TTM" <> '' then begin
+                        QRCodeText := GenerateQRCode("uuid TTM");
+                    end;
+                    ExchangeRate := Round(1 / "Currency Factor", 0.0001);
+                    CurrencyInformation := 'EX-RATE: 1 ' + "Currency Code" + ' = RM ' + Format(ExchangeRate);
+                    CALCFIELDS("Work Description");
+                    "Work Description".CreateInStream(WorkDescriptionInstream, TEXTENCODING::UTF8);
+                    ShowWorkDescription := TypeHelper.ReadAsTextWithSeparator(WorkDescriptionInstream, TypeHelper.LFSeparator());
+
+
                 end;
 
-                if "uuid TTM" <> '' then begin
-                    QRCodeText := GenerateQRCode("uuid TTM");
+                trigger OnPostDataItem()
+                begin
+                    Clear(WorkDescriptionInstream);
                 end;
-                ExchangeRate := Round(1 / "Currency Factor", 0.0001);
-                CurrencyInformation := 'EX-RATE: 1 ' + "Currency Code" + ' = RM ' + Format(ExchangeRate);
-                CALCFIELDS("Work Description");
-                "Work Description".CreateInStream(WorkDescriptionInstream, TEXTENCODING::UTF8);
-                ShowWorkDescription := TypeHelper.ReadAsTextWithSeparator(WorkDescriptionInstream, TypeHelper.LFSeparator());
-
-
-            end;
-
-            trigger OnPostDataItem()
+            }
+            trigger OnPreDataItem()
             begin
-                Clear(WorkDescriptionInstream);
+                SetRange(Number, 1, 2);
             end;
         }
     }

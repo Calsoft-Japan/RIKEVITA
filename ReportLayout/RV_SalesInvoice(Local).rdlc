@@ -2076,7 +2076,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>=Cstr(Choose(10, Split(Cstr(ReportItems!HeaderInfo.Value), Chr(177))))</Value>
+                      <Value>=First(Fields!CerfiticateNo.Value, "DataSet_Result")</Value>
                       <Style>
                         <FontSize>8pt</FontSize>
                       </Style>

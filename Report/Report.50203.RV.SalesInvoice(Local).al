@@ -74,7 +74,7 @@ report 50203 "RV Sales Invoice(Local)"
             column(SailingOnOrAbout; Format("RV_SAILING ON OR ABOUT", 0, '<Day,2>-<Month text,3>-<Year,2>'))
             {
             }
-            column(Terms; "Payment Method Code")
+            column(Terms; "Payment Terms Code")
             {
             }
             dataitem(SalesLine; "Sales Line")
@@ -134,13 +134,13 @@ report 50203 "RV Sales Invoice(Local)"
             column(Ship_to_Country_Region_Code; "Ship-to Country/Region Code")
             {
             }
-            column(RIKEVITASetup1; 'Name: ' + CompanyInfo."Name" + ' ' + RIKEVITASetup."ID No.")
+            column(RIKEVITASetup1; 'Name: ' + CompanyInfo."Name" + '. ID No. ' + RIKEVITASetup."ID No.")
             {
             }
-            column(RIKEVITASetup2; 'Bank: ' + RIKEVITASetup."MYR Bank Name" + ' ' + RIKEVITASetup."MYR Bank Branch No." + ' ' + RIKEVITASetup."MYR Bank Account No." + '(MYR)')
+            column(RIKEVITASetup2; 'Bank: ' + RIKEVITASetup."MYR Bank Name" + '. A/C No: ' + RIKEVITASetup."MYR Bank Account No." + '(MYR)')
             {
             }
-            column(RIKEVITASetup3; 'Bank: ' + RIKEVITASetup."USD Bank Name" + ' ' + RIKEVITASetup."USD Bank Branch No." + ' ' + RIKEVITASetup."USD Bank Account No." + '(USD)')
+            column(RIKEVITASetup3; 'Bank: ' + RIKEVITASetup."USD Bank Name" + '. A/C No: ' + RIKEVITASetup."USD Bank Account No." + '(USD)')
             {
             }
             column(QRCodeText; QRCodeText)
@@ -170,6 +170,19 @@ report 50203 "RV Sales Invoice(Local)"
                     ISODocumentNo := ISODoc."ISO Document No.";
                     ISODocVersion := ISODoc."ISO Doc. Version No.";
                 end;
+
+                SalesLine.Reset();
+                SalesLine.SetRange("Document No.", "No.");
+                SalesLine.SetRange(Type, SalesLine.Type::Item);
+                if SalesLine.FindSet() then begin
+                    repeat
+                        RecItem.Get(SalesLine."No.");
+                        if RecItem."RV_Print RSPO No." then begin
+                            CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
+                        end;
+                    until SalesLine.Next() = 0;
+                end;
+
                 SalesLine.Reset();
                 SalesLine.SetRange("Document No.", "No.");
                 SalesLine.SetRange(Type, SalesLine.Type::Item);
