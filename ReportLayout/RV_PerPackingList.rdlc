@@ -706,7 +706,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                                                     <Value>=Fields!No_of_Packages.Value</Value>
                                                     <Style>
                                                       <FontSize>8pt</FontSize>
-                                                      <Format>=</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -744,7 +743,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                                                 </Style>
                                               </Paragraph>
                                             </Paragraphs>
-                                            <rd:DefaultName>No_of_Packages</rd:DefaultName>
+                                            <rd:DefaultName>No_of_Packages2</rd:DefaultName>
                                             <Top>0.15278in</Top>
                                             <Height>11pt</Height>
                                             <Width>1in</Width>
@@ -788,7 +787,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                                                     <Value>=Fields!Contents_Per_Package.Value</Value>
                                                     <Style>
                                                       <FontSize>8pt</FontSize>
-                                                      <Format>=Fields!Contents_Per_PackageFormat.Value</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -870,7 +868,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                                                     <Value>=Fields!Net_Weight.Value</Value>
                                                     <Style>
                                                       <FontSize>8pt</FontSize>
-                                                      <Format>=Fields!Net_WeightFormat.Value</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -952,7 +949,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                                                     <Value>=Fields!Gross_Weight.Value</Value>
                                                     <Style>
                                                       <FontSize>8pt</FontSize>
-                                                      <Format>=Fields!Gross_WeightFormat.Value</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -1066,7 +1062,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                                                     <Value>=Fields!Measurement.Value</Value>
                                                     <Style>
                                                       <FontSize>8pt</FontSize>
-                                                      <Format>=Fields!MeasurementFormat.Value</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -1965,7 +1960,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                                                     <Value>=Sum(Fields!Gross_Weight.Value)</Value>
                                                     <Style>
                                                       <FontSize>8pt</FontSize>
-                                                      <Format>=Fields!Gross_WeightFormat.Value</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -2054,7 +2048,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                                                     <Value>=Sum(Fields!Measurement.Value)</Value>
                                                     <Style>
                                                       <FontSize>8pt</FontSize>
-                                                      <Format>=Fields!MeasurementFormat.Value</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -2081,7 +2074,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!Measurement_UOM.Value</Value>
+                                                    <Value>=Fields!Contents_UOM.Value</Value>
                                                     <Style>
                                                       <FontSize>8pt</FontSize>
                                                     </Style>
