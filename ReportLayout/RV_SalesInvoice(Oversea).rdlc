@@ -2649,7 +2649,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!TotalFreightCharges.Value</Value>
+                                                    <Value>=Sum(Fields!TotalFreightCharges.Value)</Value>
                                                     <Style>
                                                       <FontSize>8pt</FontSize>
                                                       <Format>=Fields!TotalFreightChargesFormat.Value</Format>
@@ -2683,7 +2683,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                                     </TablixCells>
                                   </TablixRow>
                                   <TablixRow>
-                                    <Height>0.28646in</Height>
+                                    <Height>0.22396in</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -3322,7 +3322,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               </TablixRowHierarchy>
                               <DataSetName>DataSet_Result</DataSetName>
                               <Top>0.0191in</Top>
-                              <Height>1.78646in</Height>
+                              <Height>1.72396in</Height>
                               <Width>7.04971in</Width>
                               <Style>
                                 <Border>
@@ -3357,6 +3357,9 @@ Cstr(Fields!QRCodeText.Value)</Value>
                       <GroupExpression>=Fields!Sales_Header_No.Value</GroupExpression>
                       <GroupExpression>=Fields!Number.Value</GroupExpression>
                     </GroupExpressions>
+                    <PageBreak>
+                      <BreakLocation>Between</BreakLocation>
+                    </PageBreak>
                   </Group>
                   <SortExpressions>
                     <SortExpression>

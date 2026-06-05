@@ -145,6 +145,7 @@ report 50205 "RV Sales Invoice(Oversea)"
                         SalesOrderNo := '';
                         CustomerPO := '';
                         FOBAmount := 0;
+                        TotalFreightCharges := 0;
                         RecItem.Get("No.");
                         if RecItem.Type = RecItem.Type::Inventory then begin
                             RecSalesShipmentHeader.Reset();
@@ -169,7 +170,7 @@ report 50205 "RV Sales Invoice(Oversea)"
                         end;
 
                         if "No." = RIKEVITASetup."Freight Charge Item No" then begin
-                            TotalFreightCharges := TotalFreightCharges + "Line Amount";
+                            TotalFreightCharges := "Line Amount";
                         end;
                         RecItemReference.Reset();
                         RecItemReference.SetRange("Item No.", "No.");

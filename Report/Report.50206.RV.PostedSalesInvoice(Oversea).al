@@ -122,6 +122,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                     }
                     column(Unit_Price; UnitPrice)
                     {
+                        DecimalPlaces = 0 : 5;
                     }
                     column(Line_Discount_Amount; "Line Discount Amount")
                     {
@@ -144,6 +145,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                         SalesOrderNo := '';
                         CustomerPO := '';
                         FOBAmount := 0;
+                        TotalFreightCharges := 0;
                         RecItem.Get("No.");
                         if RecItem.Type = RecItem.Type::Inventory then begin
                             RecSalesShipmentHeader.Reset();
@@ -160,8 +162,8 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                             if "RV_Charge Type" = "RV_Charge Type"::FOB then begin
                                 FOBAmount := "RV_Other Charge";
                             end;
-                            UnitPrice := "Line Amount" + FOBAmount;
-                            LineAmount := ("Line Amount" + FOBAmount) / Quantity;
+                            UnitPrice := ("Line Amount" + FOBAmount) / Quantity;
+                            LineAmount := "Line Amount" + FOBAmount;
                         end else begin
                             UnitPrice := "Unit Price";
                             LineAmount := Amount;
