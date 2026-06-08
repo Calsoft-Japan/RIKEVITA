@@ -7,7 +7,7 @@ tableextension 50110 "RV Employee Ledger Entry Ext" extends "Employee Ledger Ent
 
     keys
     {
-        key(keysort; "Employee No.", "Posting Date", "Applies-to Doc. No.", "Currency Code")
+        key(keysort1; "Employee No.", "Posting Date", "Applies-to Doc. No.", "Currency Code")
         { }
     }
 }
