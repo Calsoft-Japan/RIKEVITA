@@ -31,6 +31,12 @@ pageextension 50103 "RV Purchase Invoice Ext" extends "Purchase Invoice"
                     ApplicationArea = All;
                     Description = 'FDD003';
                 }
+
+                field("RV_Contract No."; Rec."RV_Contract No.")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD003';
+                }
             }
 
         }

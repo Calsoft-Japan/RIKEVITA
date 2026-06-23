@@ -31,6 +31,11 @@ pageextension 50101 "RV Purchase Order Ext" extends "Purchase Order"
                     ApplicationArea = All;
                     Description = 'FDD003';
                 }
+                field("RV_Contract No."; Rec."RV_Contract No.")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD003';
+                }
             }
 
         }
