@@ -83,6 +83,14 @@ table 50103 "RV Vendor ISO Certificate Line"
             NotBlank = true;
             DataClassification = SystemMetadata;
         }
+
+        field(10; "Item No."; Code[20])
+        {
+            Caption = 'Item No.';
+            NotBlank = false;
+            InitValue = '';
+            TableRelation = Item."No.";
+        }
     }
 
     keys

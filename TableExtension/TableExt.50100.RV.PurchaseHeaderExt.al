@@ -36,7 +36,7 @@ tableextension 50100 "RV Purchase Header Ext" extends "Purchase Header"
                 checkRVContractDate();
             end;
         }
-        field(50104; "RV_Contract No."; Integer)
+        field(50104; "RV_Contract No."; Text[100])
         {
             Caption = 'Contract No.';
             DataClassification = ToBeClassified;

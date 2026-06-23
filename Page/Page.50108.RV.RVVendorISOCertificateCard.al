@@ -39,6 +39,11 @@ page 50108 "RV Vendor ISO Certificate Card"
                     //Editable = false;
                     ToolTip = 'Specifies the vendor name, automatically filled from the Vendor No.';
                 }
+
+                field("Item No."; Rec."Item No.")
+                {
+                    ApplicationArea = All;
+                }
                 field("ISO Certificate"; Rec."ISO Certificate")
                 {
                     ApplicationArea = All;
@@ -160,10 +165,16 @@ page 50108 "RV Vendor ISO Certificate Card"
     end;
 
     trigger OnQueryClosePage(CloseAction: Action): Boolean
+    var
+        CertCode: Record "RV ISO Certificate Code";
     begin
         if (Rec."Vendor No." = '') or (Rec."ISO Certificate" = '') or (Rec."Start Date" = 0D) then begin
             Error('[Vendor No.],[ISO Certificat],[Start Date] must all have value.');
         end;
+
+        if CertCode.Get(Rec."ISO Certificate") then
+            if (CertCode."Item Required") and (Rec."Item No." = '') then
+                Error('Item No. can not be empty.');
     end;
 
     // ── Variables ─────────────────────────────────────────────────────────
