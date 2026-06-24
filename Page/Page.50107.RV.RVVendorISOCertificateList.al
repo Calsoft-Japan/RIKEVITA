@@ -50,6 +50,12 @@ page 50107 "RV Vendor ISO Certificate List"
                     Editable = false;
                     ToolTip = 'Specifies the vendor name, auto-populated from the Vendor No.';
                 }
+                field("Item No."; Rec."Item No.")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Item No.';
+                    Editable = false;
+                }
                 field("ISO Certificate"; Rec."ISO Certificate")
                 {
                     ApplicationArea = All;

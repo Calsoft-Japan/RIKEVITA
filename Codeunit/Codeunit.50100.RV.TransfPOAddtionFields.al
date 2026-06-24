@@ -16,6 +16,7 @@ codeunit 50100 "RV Transf PO Addtion Fields "
                 PurInvHeader."RV_ETD" := PurOrdHeader."RV_ETD";
                 PurInvHeader."RV_Contract Month" := PurOrdHeader."RV_Contract Month";
                 PurInvHeader."RV_Contract Year" := PurOrdHeader."RV_Contract Year";
+                PurInvHeader."RV_Contract No." := PurOrdHeader."RV_Contract No.";
                 PurInvHeader.Modify();
             end;
     end;

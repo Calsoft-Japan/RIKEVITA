@@ -17,6 +17,10 @@ table 50102 "RV ISO Certificate Code"
         {
             Caption = 'Description';
         }
+        field(3; "Item Required"; Boolean)
+        {
+            Caption = 'Item Required';
+        }
     }
     keys
     {

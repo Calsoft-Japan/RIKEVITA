@@ -26,5 +26,10 @@ tableextension 50101 "RV Purchase Invoice Ext" extends "Purch. Inv. Header"
             Caption = 'Contract Year';
             DataClassification = ToBeClassified;
         }
+        field(50104; "RV_Contract No."; Text[100])
+        {
+            Caption = 'Contract No.';
+            DataClassification = ToBeClassified;
+        }
     }
 }

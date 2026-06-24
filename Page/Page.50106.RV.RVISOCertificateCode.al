@@ -28,6 +28,11 @@ page 50106 "RV ISO Certificate Code"
                     ApplicationArea = All;
                     ToolTip = 'Specifies the description of the ISO certificate code.';
                 }
+                field("Item Required"; Rec."Item Required")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies if the item needed.';
+                }
             }
         }
     }
