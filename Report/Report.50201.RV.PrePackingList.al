@@ -54,7 +54,10 @@ report 50201 "RV Pre Packing List Report"
                 column(InvoiceNo; InvoiceNo)
                 {
                 }
-                column(PackingListNo; PackingListNo)
+                column(OrderNo; OrderNo)
+                {
+                }
+                column(PackingListNo; "No.")
                 {
                 }
                 column(ConsigneeName; "RV_Consignee Name")
@@ -167,12 +170,14 @@ report 50201 "RV Pre Packing List Report"
                         chr10: Char;
                         TempNo: Integer;
                         oldContainerNo: Text;
+                        TempOrderNo: Integer;
                     begin
                         chr10 := 10;
                         LotNoNumber := 0;
                         Templine.Reset();
                         Templine.DeleteAll();
                         TempNo := 1;
+                        TempOrderNo := 1;
                         LotNo1 := '';
                         LotNo2 := '';
                         CerfiticateNo := '';
@@ -265,35 +270,29 @@ report 50201 "RV Pre Packing List Report"
                             end;
 
                         end;
+                        if TempOrderNo < 10 then begin
+                            if TempOrderNo mod 5 = 0 then begin
+                                OrderNo += "Sales Order No." + '<br>';
+                            end else begin
+                                OrderNo += "Sales Order No." + '  ';
+                            end;
+                            TempOrderNo := TempOrderNo + 1;
+                        end;
                     end;
                 }
 
                 trigger OnAfterGetRecord()
                 var
                     ISODoc: Record "RV ISO Document";
-                    WarehouseShipmentLine: Record "Warehouse Shipment Line";
-                    SalesInvoiceHeader: Record "Sales Invoice Header";
                 begin
+                    OrderNo := '';
                     ISODoc.Reset();
                     ISODoc.SetRange("Report Code", 'PACKING LIST');
                     if ISODoc.FindFirst() then begin
                         ISODocumentNo := ISODoc."ISO Document No.";
                         ISODocVersion := ISODoc."ISO Doc. Version No.";
                     end;
-                    /*
-                    WarehouseShipmentLine.Reset();
-                    WarehouseShipmentLine.SetRange("No.", WarehouseShipmentHeader."No.");
-                    if WarehouseShipmentLine.FindFirst() then begin
-                        SalesInvoiceHeader.Reset();
-                        SalesInvoiceHeader.SetRange("Order No.", WarehouseShipmentLine."Source No.");
-                        if SalesInvoiceHeader.FindFirst() then begin
 
-                            FromValue := SalesInvoiceHeader."RV_Country of Origin";
-                            ToValue := SalesInvoiceHeader."Ship-to Name";
-                            SailingOnOrAbout := Format(SalesInvoiceHeader."RV_SAILING ON OR ABOUT");
-                        end;
-                    end;
-*/
                 end;
             }
             trigger OnPreDataItem()
@@ -342,6 +341,7 @@ report 50201 "RV Pre Packing List Report"
         Templine: Record "Tracking Specification" temporary;
         EntryNo: Integer;
         CerfiticateNo: Text;
+        OrderNo: Text;
 
     trigger OnPreReport()
     begin

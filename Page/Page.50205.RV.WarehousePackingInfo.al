@@ -167,7 +167,7 @@ page 50205 "Warehouse Packing Info"
         TempQtyPerUOM: Decimal;
         TempUOM: Code[10];
 
-    local procedure InsertPackingInfo()
+    procedure InsertPackingInfo()
     var
         PackingInfo: Record "RV Warehouse Packing Info.";
     begin
@@ -176,7 +176,7 @@ page 50205 "Warehouse Packing Info"
         PackingInfo."Sales Order No." := TempSourceNo;
         PackingInfo."SO Line No." := TempSourceLineNo;
         PackingInfo."Item No." := TempItemNo;
-        PackingInfo."No. of Packages" := TempQtyToShip * TempQtyPerUOM;
+        PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
         PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
         PackingInfo."Contents UOM" := TempUOM;
         PackingInfo."Net Weight" := TempQtyToShip;
