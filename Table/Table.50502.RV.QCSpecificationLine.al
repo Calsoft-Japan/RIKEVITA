@@ -53,6 +53,19 @@ table 50502 "RV QC Specification Line"
         {
             Caption = 'Target Value ib Base UM';
         }
+        field(5; "Min. Value"; Text[100])
+        {
+            Caption = 'Min. Value';
+        }
+        field(6; "Max. Value"; Text[100])
+        {
+            Caption = 'Max. Value';
+        }
+        field(7; "Value Table Name"; Text[100])
+        {
+            Caption = 'Value Table Name';
+            TableRelation = "RV QC Value Table";
+        }
     }
     keys
     {
