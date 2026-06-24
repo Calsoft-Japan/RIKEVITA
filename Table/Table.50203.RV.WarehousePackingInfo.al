@@ -45,6 +45,13 @@ table 50203 "RV Warehouse Packing Info."
             Caption = 'No. of Packages';
             Description = 'FDD019';
             DecimalPlaces = 0 : 5;
+            trigger OnValidate()
+            var
+                Item: Record Item;
+            begin
+                Item.Get(Rec."Item No.");
+                Rec."Gross Weight" := Rec."No. of Packages" * Item."Gross Weight";
+            end;
         }
         field(8; "Contents Per Package"; Decimal)
         {
