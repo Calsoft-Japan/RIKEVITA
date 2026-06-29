@@ -57,7 +57,9 @@ table 50601 "RV Prod. Result Journal Line"
                     Error(ErrProdNoBlank, "Output Item No.");
                 if "Output Item No." = '' then begin
                     "Prod. Order Line No." := 0;
+                    "output item description" := '';
                     UOM := '';
+                    "location code" := '';
                 end else begin
                     ProdOrderLine.SetFilterByReleasedOrderNo(Rec."Prod. Order No.");
                     ProdOrderLine.SetRange("Item No.", Rec."Output Item No.");
@@ -65,6 +67,7 @@ table 50601 "RV Prod. Result Journal Line"
                         Error(ErrOutputItemNoNotExist, "Output Item No.", Rec."Prod. Order No.");
                     "Prod. Order Line No." := ProdOrderLine."Line No.";
                     "Routing No." := ProdOrderLine."Routing No.";
+                    "location code" := ProdOrderLine."Location Code";
 
                     if rec.uom = '' then
                         case "Data Type" of
@@ -72,6 +75,7 @@ table 50601 "RV Prod. Result Journal Line"
                             "RV Prod. Results Data Type"::"Adjust Output":
                                 begin
                                     item.get("Output Item No.");
+                                    "Output Item Description" := item."Description";
                                     Validate(rec."UOM", ProdOrderLine."Unit of Measure Code");
                                 end;
                         end;
@@ -169,6 +173,9 @@ table 50601 "RV Prod. Result Journal Line"
                         if item.Get(Rec."Item No.") then
                             Validate(rec."UOM", item."Base Unit of Measure");
                     end;
+
+                    if item.Get(Rec."Item No.") then
+                        rec."Item Description" := item."Description";
                 end;
             end;
         }
@@ -201,10 +208,6 @@ table 50601 "RV Prod. Result Journal Line"
         {
             Caption = 'Lot No.';
         }
-        field(14; "Posting Date"; Date)
-        {
-            Caption = 'Posting Date';
-        }
         field(15; "Manufacturing Date"; Date)
         {
             Caption = 'Manufacturing Date';
@@ -216,12 +219,6 @@ table 50601 "RV Prod. Result Journal Line"
         field(17; "Status"; Enum "RV Prod. Results Status")
         {
             Caption = 'Status';
-
-            trigger OnValidate()
-            begin
-                if Rec.Status = Rec.Status::"Ready Post" then
-                    xRec.TestField(Status, xRec.Status::Approved);
-            end;
         }
         field(18; "Prod. Order Line No."; Integer)
         {
@@ -325,6 +322,14 @@ table 50601 "RV Prod. Result Journal Line"
         {
             Caption = 'Qty. per Unit of Measure';
             DecimalPlaces = 0 : 5;
+        }
+        field(26; "Output Item Description"; Text[100])
+        {
+            Caption = 'Output Item Description';
+        }
+        field(27; "Item Description"; Text[100])
+        {
+            Caption = 'Item Description';
         }
     }
     keys

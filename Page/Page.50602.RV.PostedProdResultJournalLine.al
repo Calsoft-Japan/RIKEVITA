@@ -32,8 +32,13 @@ page 50602 "RV Pst. Prod. Resul Jnl Line"
                 }
                 field("Output Item No."; Rec."Output Item No.")
                 {
-
+                    ToolTip = 'Specifies the value of the Output Item No. field.', Comment = '%';
                 }
+                field("Output Item Description"; Rec."Output Item Description")
+                {
+                    ToolTip = 'Specifies the value of the Output Item Description field.', Comment = '%';
+                }
+
                 field("Operation No."; Rec."Operation No.")
                 {
                     ToolTip = 'Specifies the value of the Operation No. field.', Comment = '%';
@@ -46,6 +51,10 @@ page 50602 "RV Pst. Prod. Resul Jnl Line"
                 {
                     ToolTip = 'Specifies the value of the Item No. field.', Comment = '%';
                 }
+                field("Item Description"; Rec."Item Description")
+                {
+                    ToolTip = 'Specifies the value of the Item Description field.', Comment = '%';
+                }
                 field(Quantity; Rec.Quantity)
                 {
                     ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
@@ -53,10 +62,6 @@ page 50602 "RV Pst. Prod. Resul Jnl Line"
                 field(UOM; Rec.UOM)
                 {
                     ToolTip = 'Specifies the value of the UOM field.', Comment = '%';
-                }
-                field("Posting Date"; Rec."Posting Date")
-                {
-                    ToolTip = 'Specifies the value of the Posting Date field.', Comment = '%';
                 }
                 field("Lot No."; Rec."Lot No.")
                 {

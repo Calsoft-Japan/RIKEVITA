@@ -206,5 +206,11 @@ permissionset 50100 GeneratedPermission
         report "RV Aged Accounts Receivable" = X,
         report "RV Posted Sales Invoice(Local)" = X,
         codeunit "RV ILE Item Trace Mgt" = X,
-        query "RV Query Item Tracking Hist" = X;
+        query "RV Query Item Tracking Hist" = X,
+        tabledata "RV QC Spec. List Value" = RIMD,
+        table "RV QC Spec. List Value" = X,
+        report "RV Aged Accounts Payable Basic" = X,
+        report "RV Payment Voucher With Check" = X,
+        report "RV PostedSalesInvoice(Oversea)" = X,
+        report "RV Sales Invoice(Oversea)" = X;
 }

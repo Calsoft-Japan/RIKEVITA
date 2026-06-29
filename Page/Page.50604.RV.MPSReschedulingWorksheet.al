@@ -95,6 +95,19 @@ page 50604 "RV MPS Rescheduling Worksheet"
                 field("Planning Status"; Rec."Planning Status")
                 {
                 }
+                field("Sales Order No."; Rec."Sales Order No.")
+                {
+                    Editable = false;
+                }
+                field("Sales Order Line No."; Rec."Sales Order Line No.")
+                {
+                    Editable = false;
+                    visible = false;
+                }
+                field("FG Prod. Order No."; Rec."FG Prod. Order No.")
+                {
+                    Editable = false;
+                }
                 field(Status; Rec.Status)
                 {
                     Editable = false;

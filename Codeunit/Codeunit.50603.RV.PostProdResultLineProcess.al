@@ -180,12 +180,17 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         LotNoInfo: Record "Lot No. Information";
         Item: Record Item;
         ExpireDate: Date;
+        PostingDate: Date;
     begin
         ItemJnlLine.Init();
         ItemJnlLine."Journal Template Name" := ToTemplateName;
         ItemJnlLine."Journal Batch Name" := ToBatchName;
         ItemJnlLine."Line No." := NextLineNo;
-        ItemJnlLine.Validate("Posting Date", WorkDate());
+        if ProdResultJournalLine."Manufacturing Date" <> 0D then
+            PostingDate := ProdResultJournalLine."Manufacturing Date"
+        else
+            PostingDate := WorkDate();
+        ItemJnlLine.Validate("Posting Date", PostingDate);
         ItemJnlLine.Validate("Entry Type", ItemJnlLine."Entry Type"::Output);
         ItemJnlLine.Validate("Order Type", ItemJnlLine."Order Type"::Production);
         ItemJnlLine.Validate("Order No.", ProdOrderLine."Prod. Order No.");
@@ -244,8 +249,8 @@ codeunit 50603 "RV Post Prod Result Line Proc."
             ItemJnlLine."Variant Code",
             ItemJnlLine."Location Code",
             '',
-            WorkDate(),
-            WorkDate(),
+            PostingDate,
+            PostingDate,
             0,
             Enum::"Reservation Status"::Prospect
             );
@@ -255,10 +260,7 @@ codeunit 50603 "RV Post Prod Result Line Proc."
                 LotNoInfo."Item No." := ItemJnlLine."Item No.";
                 LotNoInfo."Variant Code" := ItemJnlLine."Variant Code";
                 LotNoInfo."Lot No." := ProdResultJournalLine."Lot No.";
-                if ProdResultJournalLine."Manufacturing Date" = 0D then
-                    LotNoInfo."RV_Manufacture Date" := ProdResultJournalLine."Posting Date"
-                else
-                    LotNoInfo."RV_Manufacture Date" := ProdResultJournalLine."Manufacturing Date";
+                LotNoInfo."RV_Manufacture Date" := PostingDate;
                 LotNoInfo.Insert();
             end;
         end;
@@ -268,12 +270,16 @@ codeunit 50603 "RV Post Prod Result Line Proc."
     var
         CreateReservEntry: Codeunit "Create Reserv. Entry";
         TempReservEntry: Record "Reservation Entry" temporary;
+        PostingDate: Date;
     begin
         ItemJnlLine.Init();
         ItemJnlLine."Journal Template Name" := ToTemplateName;
         ItemJnlLine."Journal Batch Name" := ToBatchName;
         ItemJnlLine."Line No." := NextLineNo;
-        ItemJnlLine.Validate("Posting Date", WorkDate());
+        PostingDate := ProdResultJournalLine."Manufacturing Date";
+        if PostingDate = 0D then
+            PostingDate := WorkDate();
+        ItemJnlLine.Validate("Posting Date", PostingDate);
         ItemJnlLine.Validate("Entry Type", ItemJnlLine."Entry Type"::Consumption);
         ItemJnlLine.Validate("Order Type", ItemJnlLine."Order Type"::Production);
         ItemJnlLine.Validate("Order No.", ProdResultJournalLine."Prod. Order No.");
@@ -325,8 +331,8 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         ItemJnlLine."Variant Code",
         ItemJnlLine."Location Code",
         '',
-        WorkDate(),
-        WorkDate(),
+        PostingDate,
+        PostingDate,
         0,
         Enum::"Reservation Status"::Surplus
         );

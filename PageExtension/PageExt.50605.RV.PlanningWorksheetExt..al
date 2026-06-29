@@ -29,11 +29,11 @@ pageextension 50605 "RV Planning Worksheet" extends "Planning Worksheet"
                 RVBOMCheck: Codeunit "RV Check BOM Access ";
                 Item: Record Item;
             begin
-                if Rec."Production BOM No." <> '' then
-                    RVBOMCheck.CheckBOMAccess(Rec."Production BOM No.")
-                else
-                    if Item.Get(Rec."No.") then
-                        RVBOMCheck.CheckBOMAccess(Item."Production BOM No.");
+                // if Rec."Production BOM No." <> '' then
+                //     RVBOMCheck.CheckBOMAccess(Rec."Production BOM No.")
+                // else
+                //     if Item.Get(Rec."No.") then
+                //         RVBOMCheck.CheckBOMAccess(Item."Production BOM No.");
             end;
         }
     }

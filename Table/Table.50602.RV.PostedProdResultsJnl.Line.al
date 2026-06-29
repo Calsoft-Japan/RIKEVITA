@@ -79,10 +79,6 @@ table 50602 "RV Pst. Prod. Res. Jnl. Line"
         {
             Caption = 'Lot No.';
         }
-        field(14; "Posting Date"; Date)
-        {
-            Caption = 'Posting Date';
-        }
         field(15; "Manufacturing Date"; Date)
         {
             Caption = 'Manufacturing Date';
@@ -107,6 +103,57 @@ table 50602 "RV Pst. Prod. Res. Jnl. Line"
         field(20; "Prod. Order Comp. Line No."; Integer)
         {
             Caption = 'Prod. Order Comp. Line No.';
+        }
+        field(22; "Location Code"; Code[20])
+        {
+            Caption = 'Location Code';
+            TableRelation = "Location";
+            trigger OnValidate()
+            begin
+                if rec."Location Code" <> xrec."Location Code" then
+                    rec."Bin Code" := '';
+            end;
+        }
+        field(23; "Bin Code"; Code[20])
+        {
+            Caption = 'Bin Code';
+            TableRelation = if ("Data Type" = filter("Planned Output" | "Adjust Output"),
+                                Quantity = filter(>= 0)) Bin.Code
+                                where("Location Code" = field("Location Code"),
+                                "Item Filter" = field("Item No."))
+            else
+            if ("Data Type" = filter("Planned Output" | "Adjust Output"),
+                              Quantity = filter(< 0)) "Bin Content"."Bin Code"
+                              where("Location Code" = field("Location Code"),
+                              "Item No." = field("Item No."))
+            else
+            if ("Data Type" = filter("Planned Consumption" | "Adjust Consumption" | "Recycle Consumption"),
+                              Quantity = filter(> 0)) "Bin Content"."Bin Code"
+                              where("Location Code" = field("Location Code"),
+                              "Item No." = field("Item No."))
+            else
+            if ("Data Type" = filter("Planned Consumption" | "Adjust Consumption" | "Recycle Consumption"),
+                              Quantity = filter(<= 0)) Bin.Code where("Location Code" = field("Location Code"),
+                              "Item Filter" = field("Item No."));
+        }
+        field(24; "Variant Code"; Code[10])
+        {
+            Caption = 'Variant Code';
+            ToolTip = 'Specifies the variant of the item on the line.';
+            TableRelation = "Item Variant".Code where("Item No." = field("Item No."));
+        }
+        field(25; "Qty. per Unit of Measure"; decimal)
+        {
+            Caption = 'Qty. per Unit of Measure';
+            DecimalPlaces = 0 : 5;
+        }
+        field(26; "Output Item Description"; Text[100])
+        {
+            Caption = 'Output Item Description';
+        }
+        field(27; "Item Description"; Text[100])
+        {
+            Caption = 'Item Description';
         }
     }
 

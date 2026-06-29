@@ -93,6 +93,7 @@ report 50600 "RV Calc. Consumption"
     var
         ProdOrderComp: Record "Prod. Order Component";
         NeededQty: Decimal;
+        Item: Record Item;
     begin
         ProdOrderComp.Reset();
         ProdOrderComp.SetRange(Status, ProdOrderLine.Status);
@@ -113,10 +114,11 @@ report 50600 "RV Calc. Consumption"
                         RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Adjust Consumption";
                     RVProdResultJnlLine."Prod. Order No." := ProdOrderLine."Prod. Order No.";
                     RVProdResultJnlLine."Item No." := ProdOrderComp."Item No.";
-
+                    item.Get(RVProdResultJnlLine."Item No.");
+                    RVProdResultJnlLine."Item Description" := item.Description;
                     RVProdResultJnlLine.Quantity := NeededQty;
                     RVProdResultJnlLine.UOM := ProdOrderComp."Unit of Measure Code";
-                    RVProdResultJnlLine."Posting Date" := WorkDate();
+                    RVProdResultJnlLine."Manufacturing Date" := WorkDate();
                     RVProdResultJnlLine."Prod. Order Line No." := ProdOrderComp."Prod. Order Line No.";
                     RVProdResultJnlLine."Prod. Order Comp. Line No." := ProdOrderComp."Line No.";
                     RVProdResultJnlLine."Location Code" := ProdOrderComp."Location Code";
@@ -131,6 +133,7 @@ report 50600 "RV Calc. Consumption"
     procedure CreateOutputJnlLine()
     var
         ProdOrderRtngLine: Record "Prod. Order Routing Line";
+        Item: Record Item;
     begin
         ProdOrderRtngLine.Reset();
         ProdOrderRtngLine.SetRange("Prod. Order No.", ProdOrderLine."Prod. Order No.");
@@ -146,6 +149,8 @@ report 50600 "RV Calc. Consumption"
                 RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Planned Output";
                 RVProdResultJnlLine."Prod. Order No." := ProdOrderLine."Prod. Order No.";
                 RVProdResultJnlLine."Output Item No." := ProdOrderLine."Item No.";
+                Item.Get(RVProdResultJnlLine."Output Item No.");
+                RVProdResultJnlLine."Output Item Description" := Item.Description;
                 RVProdResultJnlLine."Operation No." := ProdOrderRtngLine."Operation No.";
                 RVProdResultJnlLine."Work Center No." := ProdOrderRtngLine."Work Center No.";
 
@@ -155,7 +160,7 @@ report 50600 "RV Calc. Consumption"
                     RVProdResultJnlLine.Quantity := ProdOrderLine."Remaining Quantity";
 
                 RVProdResultJnlLine.UOM := ProdOrderLine."Unit of Measure Code";
-                RVProdResultJnlLine."Posting Date" := WorkDate();
+                RVProdResultJnlLine.validate("Manufacturing Date", WorkDate());
                 RVProdResultJnlLine."Prod. Order Line No." := ProdOrderLine."Line No.";
                 RVProdResultJnlLine."Routing No." := ProdOrderLine."Routing No.";
                 RVProdResultJnlLine."Location Code" := ProdOrderLine."Location Code";
@@ -172,9 +177,11 @@ report 50600 "RV Calc. Consumption"
             RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Planned Output";
             RVProdResultJnlLine."Prod. Order No." := ProdOrderLine."Prod. Order No.";
             RVProdResultJnlLine."Output Item No." := ProdOrderLine."Item No.";
+            Item.Get(RVProdResultJnlLine."Output Item No.");
+            RVProdResultJnlLine."Output Item Description" := Item.Description;
             RVProdResultJnlLine.Quantity := ProdOrderLine."Remaining Quantity";
             RVProdResultJnlLine.UOM := ProdOrderLine."Unit of Measure Code";
-            RVProdResultJnlLine."Posting Date" := WorkDate();
+            RVProdResultJnlLine.validate("Manufacturing Date", WorkDate());
             RVProdResultJnlLine."Prod. Order Line No." := ProdOrderLine."Line No.";
             RVProdResultJnlLine."Routing No." := ProdOrderLine."Routing No.";
             RVProdResultJnlLine."Location Code" := ProdOrderLine."Location Code";

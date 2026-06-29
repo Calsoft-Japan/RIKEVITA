@@ -6,10 +6,7 @@ enum 50601 "RV Prod. Results Status"
 {
     Extensible = true;
     Caption = 'RV Prod. Results Status';
-    value(0; Preparing) { Caption = 'Preparing'; }
-    value(1; "Pending Approve") { Caption = 'Pending Approve'; }
-    value(2; Approved) { Caption = 'Approved'; }
-    value(3; Rejected) { Caption = 'Rejected'; }
-    value(4; "Ready Post") { Caption = 'Ready Post'; }
-    value(5; "Post Error") { Caption = 'Post Error'; }
+
+    value(0; "Ready Post") { Caption = 'Ready Post'; }
+    value(1; "Post Error") { Caption = 'Post Error'; }
 }

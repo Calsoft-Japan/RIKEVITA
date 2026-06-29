@@ -126,6 +126,18 @@ table 50604 "RV MPS Rescheduling Line"
         {
             Caption = 'Error Message';
         }
+        field(29; "Sales Order No."; text[200])
+        {
+            Caption = 'Sales Order No.';
+        }
+        field(30; "Sales Order Line No."; Integer)
+        {
+            Caption = 'Sales Order Line No.';
+        }
+        field(31; "FG Prod. Order No."; Code[20])
+        {
+            Caption = 'FG Prod. Order No.';
+        }
     }
 
     keys

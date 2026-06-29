@@ -6,6 +6,9 @@ codeunit 50602 "RV Post Prod Result Line Batch"
 {
     trigger OnRun()
     begin
+        if not Confirm(StrSubstNo(ConfirmMsg, GbatchName), false) then
+            exit;
+
         //run process group by each production order no. and production order line no. 
         QueryProdResultLine.SetRange(Status, QueryProdResultLine.Status::"Ready Post");
         if GbatchName <> '' then
@@ -23,6 +26,8 @@ codeunit 50602 "RV Post Prod Result Line Batch"
                 RVPostProdResultLine.ModifyAll(Status, RVPostProdResultLine.Status::"Post Error");
             end;
         end;
+
+        message(PostedMsg, GbatchName);
     end;
 
     var
@@ -30,6 +35,8 @@ codeunit 50602 "RV Post Prod Result Line Batch"
         CURVPostProdResultLine: Codeunit "RV Post Prod Result Line Proc.";
         RVPostProdResultLine: Record "RV Prod. Result Journal Line";
         GbatchName: Code[20];
+        ConfirmMsg: Label 'Are you sure you want to post the production result journal lines in batch %1?';
+        PostedMsg: Label 'Production result journal lines in batch %1 have been posted.';
 
     procedure SetBatchName(parBatchName: Code[20])
     begin
