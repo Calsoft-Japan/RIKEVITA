@@ -40,6 +40,25 @@ page 50205 "Warehouse Packing Info"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("Lot No."; Rec."Lot No.")
+                {
+                    Caption = 'Lot No.';
+                    Description = 'FDD019';
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Container No"; Rec."Container No")
+                {
+                    Caption = 'Container No';
+                    Description = 'FDD019';
+                    ApplicationArea = All;
+                }
+                field(Quantity; Rec.Quantity)
+                {
+                    Caption = 'Quantity';
+                    Description = 'FDD019';
+                    ApplicationArea = All;
+                }
                 field("Case No."; Rec."Case No.")
                 {
                     Caption = 'Case No.';
@@ -94,6 +113,19 @@ page 50205 "Warehouse Packing Info"
                     Description = 'FDD019';
                     ApplicationArea = All;
                 }
+                field("Lot Quantity"; Rec."Lot Quantity")
+                {
+                    Caption = 'Lot Quantity';
+                    Description = 'FDD019';
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field(Comment; Rec.Comment)
+                {
+                    Caption = 'Comment';
+                    Description = 'FDD019';
+                    ApplicationArea = All;
+                }
             }
 
         }
@@ -139,7 +171,7 @@ page 50205 "Warehouse Packing Info"
                             if (WshpLine."Source No." <> TempSourceNo) or (WshpLine."Source Line No." <> TempSourceLineNo) then begin
 
                                 if TempSourceNo <> '' then begin
-                                    InsertPackingInfo();
+                                    InsertPackingInfo(WhseShpgHeader, WshpLine);
                                 end;
                                 TempSourceNo := WshpLine."Source No.";
                                 TempSourceLineNo := WshpLine."Source Line No.";
@@ -153,7 +185,94 @@ page 50205 "Warehouse Packing Info"
 
                         until WshpLine.Next() = 0;
                         if TempSourceNo <> '' then
-                            InsertPackingInfo();
+                            InsertPackingInfo(WhseShpgHeader, WshpLine);
+                    end;
+                end;
+            }
+            action(SplitLineInfo)
+            {
+                Caption = 'Split Line';
+                Image = Refresh;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedIsBig = true;
+                trigger OnAction()
+                var
+                    PackingInfo: Record "RV Warehouse Packing Info.";
+                    TempPackingInfo: Record "RV Warehouse Packing Info.";
+                    InsertPackingInfo: Record "RV Warehouse Packing Info.";
+                    TempCalPackingInfo: Record "RV Warehouse Packing Info." temporary;
+                    SumQuantity: Decimal;
+                    MaxLineNo: Integer;
+                begin
+                    TempSourceNo := '';
+                    TempSourceLineNo := 0;
+                    TempItemNo := '';
+                    PackingInfo.Reset();
+                    PackingInfo.SetRange("Warehouse Shipment No.", Rec."Warehouse Shipment No.");
+                    PackingInfo.SetCurrentKey("Line No.");
+                    PackingInfo.SetAscending("Line No.", false);
+                    if PackingInfo.FindSet() then begin
+                        MaxLineNo := PackingInfo."Line No.";
+                        repeat
+                            SumQuantity := 0;
+
+                            TempCalPackingInfo.Reset();
+                            TempCalPackingInfo.SetRange("Warehouse Shipment No.", Rec."Warehouse Shipment No.");
+                            TempCalPackingInfo.SetRange("Sales Order No.", PackingInfo."Sales Order No.");
+                            TempCalPackingInfo.SetRange("SO Line No.", PackingInfo."SO Line No.");
+                            TempCalPackingInfo.SetRange("Item No.", PackingInfo."Item No.");
+                            TempCalPackingInfo.SetRange("Lot No.", PackingInfo."Lot No.");
+                            if not TempCalPackingInfo.FindFirst() then begin
+                                if PackingInfo.Quantity <> PackingInfo."Lot Quantity" then begin
+
+                                    TempPackingInfo.Reset();
+                                    TempPackingInfo.SetRange("Warehouse Shipment No.", Rec."Warehouse Shipment No.");
+                                    TempPackingInfo.SetRange("Sales Order No.", PackingInfo."Sales Order No.");
+                                    TempPackingInfo.SetRange("SO Line No.", PackingInfo."SO Line No.");
+                                    TempPackingInfo.SetRange("Item No.", PackingInfo."Item No.");
+                                    TempPackingInfo.SetRange("Lot No.", PackingInfo."Lot No.");
+                                    if TempPackingInfo.FindSet() then;
+
+                                    if TempPackingInfo.CalcSums(Quantity) then begin
+                                        SumQuantity := TempPackingInfo.Quantity;
+                                    end;
+
+
+                                    if SumQuantity <> PackingInfo."Lot Quantity" then begin
+                                        if PackingInfo."Lot Quantity" - SumQuantity > 0 then begin
+                                            MaxLineNo += 10000;
+                                            InsertPackingInfo.Init();
+                                            InsertPackingInfo."Warehouse Shipment No." := PackingInfo."Warehouse Shipment No.";
+                                            InsertPackingInfo."Sales Order No." := PackingInfo."Sales Order No.";
+                                            InsertPackingInfo."SO Line No." := PackingInfo."SO Line No.";
+                                            InsertPackingInfo."Item No." := PackingInfo."Item No.";
+                                            InsertPackingInfo."Lot No." := PackingInfo."Lot No.";
+                                            InsertPackingInfo.Quantity := TempPackingInfo."Lot Quantity" - SumQuantity;
+                                            InsertPackingInfo."Lot Quantity" := PackingInfo."Lot Quantity";
+                                            InsertPackingInfo.Validate("No. of Packages", PackingInfo."No. of Packages");
+                                            InsertPackingInfo."Contents Per Package" := PackingInfo."Contents Per Package";
+                                            InsertPackingInfo."Contents UOM" := PackingInfo."Contents UOM";
+                                            InsertPackingInfo."Net Weight" := PackingInfo."Net Weight";
+                                            InsertPackingInfo."Gross Weight UOM" := PackingInfo."Gross Weight UOM";
+                                            InsertPackingInfo."Line No." := MaxLineNo;
+                                            InsertPackingInfo.Insert();
+
+                                            TempCalPackingInfo.Init();
+                                            TempCalPackingInfo."Warehouse Shipment No." := PackingInfo."Warehouse Shipment No.";
+                                            TempCalPackingInfo."Sales Order No." := PackingInfo."Sales Order No.";
+                                            TempCalPackingInfo."SO Line No." := PackingInfo."SO Line No.";
+                                            TempCalPackingInfo."Item No." := PackingInfo."Item No.";
+                                            TempCalPackingInfo."Lot No." := PackingInfo."Lot No.";
+                                            TempCalPackingInfo.Insert();
+                                        end else if PackingInfo."Lot Quantity" - SumQuantity < 0 then begin
+                                            Error('There is no remaining quantity for this Lot No. to split line.');
+                                        end;
+                                    end;
+                                end;
+
+                            end;
+                        until PackingInfo.Next() = 0;
                     end;
                 end;
             }
@@ -163,25 +282,84 @@ page 50205 "Warehouse Packing Info"
         TempSourceNo: Code[20];
         TempSourceLineNo: Integer;
         TempItemNo: Code[20];
+        TempLotNo: Code[50];
         TempQtyToShip: Decimal;
         TempQtyPerUOM: Decimal;
         TempUOM: Code[10];
 
-    procedure InsertPackingInfo()
+    local procedure InsertPackingInfo(WhseShpgHeader: Record "Warehouse Shipment Header"; WshpLine: Record "Warehouse Shipment Line")
     var
         PackingInfo: Record "RV Warehouse Packing Info.";
+        ReservationEntry: Record "Reservation Entry";
+        LineNo: Integer;
     begin
-        PackingInfo.Init();
-        PackingInfo."Warehouse Shipment No." := Rec."Warehouse Shipment No.";
-        PackingInfo."Sales Order No." := TempSourceNo;
-        PackingInfo."SO Line No." := TempSourceLineNo;
-        PackingInfo."Item No." := TempItemNo;
-        PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
-        PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
-        PackingInfo."Contents UOM" := TempUOM;
-        PackingInfo."Net Weight" := TempQtyToShip;
-        PackingInfo."Gross Weight UOM" := TempUOM;
-        PackingInfo.Insert();
+        LineNo := 10000;
+        ReservationEntry.Reset();
+        ReservationEntry.SetRange("Source ID", TempSourceNo);
+        ReservationEntry.SetRange("Source Ref. No.", TempSourceLineNo);
+        ReservationEntry.SetRange("Item No.", TempItemNo);
+        //ReservationEntry.SetRange("Location Code", WhseShpgHeader."Location Code");
+        if ReservationEntry.FindSet() then begin
+            repeat
+                PackingInfo.Init();
+                PackingInfo."Warehouse Shipment No." := WhseShpgHeader."No.";
+                PackingInfo."Sales Order No." := TempSourceNo;
+                PackingInfo."SO Line No." := TempSourceLineNo;
+                PackingInfo."Item No." := TempItemNo;
+                PackingInfo."Lot No." := ReservationEntry."Lot No.";
+                PackingInfo."Container No" := ReservationEntry."RV_Container No.";
+                PackingInfo.Quantity := Abs(ReservationEntry."Quantity (Base)");
+                PackingInfo."Lot Quantity" := Abs(ReservationEntry."Quantity (Base)");
+                PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
+                PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
+                PackingInfo."Contents UOM" := TempUOM;
+                PackingInfo."Net Weight" := TempQtyToShip;
+                PackingInfo."Gross Weight UOM" := TempUOM;
+                PackingInfo."Line No." := LineNo;
+                PackingInfo.Insert();
+                LineNo += 10000;
+            until ReservationEntry.Next() = 0;
+        end;
+    end;
+
+    trigger OnQueryClosePage(CloseAction: Action): Boolean //OnClosePage()
+    var
+        PackingInfo: Record "RV Warehouse Packing Info.";
+        TempPackingInfo: Record "RV Warehouse Packing Info.";
+        SumQuantity: Decimal;
+        IfError: Boolean;
+    begin
+        IfError := false;
+        PackingInfo.Reset();
+        PackingInfo.SetRange("Warehouse Shipment No.", Rec."Warehouse Shipment No.");
+        if PackingInfo.FindSet() then begin
+            repeat
+                SumQuantity := 0;
+                if PackingInfo.Quantity <> PackingInfo."Lot Quantity" then begin
+                    TempPackingInfo.Reset();
+                    TempPackingInfo.SetRange("Warehouse Shipment No.", Rec."Warehouse Shipment No.");
+                    TempPackingInfo.SetRange("Sales Order No.", PackingInfo."Sales Order No.");
+                    TempPackingInfo.SetRange("SO Line No.", PackingInfo."SO Line No.");
+                    TempPackingInfo.SetRange("Item No.", PackingInfo."Item No.");
+                    TempPackingInfo.SetRange("Lot No.", PackingInfo."Lot No.");
+                    if TempPackingInfo.FindSet() then;
+
+                    if TempPackingInfo.CalcSums(Quantity) then begin
+                        SumQuantity := TempPackingInfo.Quantity;
+                    end;
+
+                    if SumQuantity <> PackingInfo."Lot Quantity" then begin
+                        IfError := true;
+                        break;
+                    end;
+                end;
+            until PackingInfo.Next() = 0;
+        end;
+        if IfError then begin
+            if not Confirm('Some Lots have not been fully assigned to container No.. Do you want to exit the settings?', true) then
+                exit(false);
+        end;
+        //exit(true);
     end;
 }
 

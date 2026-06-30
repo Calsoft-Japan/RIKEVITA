@@ -114,6 +114,8 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
         WhseShpgHeader: Record "Warehouse Shipment Header";
         WshpLine: Record "Warehouse Shipment Line";
         WarehousePackingInfo: Page "Warehouse Packing Info";
+
+        PackingInfo: Record "RV Warehouse Packing Info.";
     begin
         TempSourceNo := '';
         TempSourceLineNo := 0;
@@ -132,7 +134,7 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
                 if (WshpLine."Source No." <> TempSourceNo) or (WshpLine."Source Line No." <> TempSourceLineNo) then begin
 
                     if TempSourceNo <> '' then begin
-                        WarehousePackingInfo.InsertPackingInfo();
+                        InsertPackingInfo(Rec, WshpLine);
                     end;
                     TempSourceNo := WshpLine."Source No.";
                     TempSourceLineNo := WshpLine."Source Line No.";
@@ -146,9 +148,44 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
 
             until WshpLine.Next() = 0;
             if TempSourceNo <> '' then begin
-                WarehousePackingInfo.InsertPackingInfo()
+                InsertPackingInfo(Rec, WshpLine);
             end;
 
+        end;
+    end;
+
+    local procedure InsertPackingInfo(WhseShpgHeader: Record "Warehouse Shipment Header"; WshpLine: Record "Warehouse Shipment Line")
+    var
+        PackingInfo: Record "RV Warehouse Packing Info.";
+        ReservationEntry: Record "Reservation Entry";
+        LineNo: Integer;
+    begin
+        LineNo := 10000;
+        ReservationEntry.Reset();
+        ReservationEntry.SetRange("Source ID", TempSourceNo);
+        ReservationEntry.SetRange("Source Ref. No.", TempSourceLineNo);
+        ReservationEntry.SetRange("Item No.", TempItemNo);
+        //ReservationEntry.SetRange("Location Code", WhseShpgHeader."Location Code");
+        if ReservationEntry.FindSet() then begin
+            repeat
+                PackingInfo.Init();
+                PackingInfo."Warehouse Shipment No." := WhseShpgHeader."No.";
+                PackingInfo."Sales Order No." := TempSourceNo;
+                PackingInfo."SO Line No." := TempSourceLineNo;
+                PackingInfo."Item No." := TempItemNo;
+                PackingInfo."Lot No." := ReservationEntry."Lot No.";
+                PackingInfo."Container No" := ReservationEntry."RV_Container No.";
+                PackingInfo.Quantity := Abs(ReservationEntry."Quantity (Base)");
+                PackingInfo."Lot Quantity" := Abs(ReservationEntry."Quantity (Base)");
+                PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
+                PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
+                PackingInfo."Contents UOM" := TempUOM;
+                PackingInfo."Net Weight" := TempQtyToShip;
+                PackingInfo."Gross Weight UOM" := TempUOM;
+                PackingInfo."Line No." := LineNo;
+                PackingInfo.Insert();
+                LineNo += 10000;
+            until ReservationEntry.Next() = 0;
         end;
     end;
 }

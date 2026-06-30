@@ -35,12 +35,28 @@ table 50203 "RV Warehouse Packing Info."
             Description = 'FDD019';
             TableRelation = Item."No.";
         }
-        field(6; "Case No."; Text[20])
+        field(6; "Lot No."; Code[50])
+        {
+            Caption = 'Lot No.';
+            Description = 'FDD019';
+        }
+        field(7; "Container No"; Code[20])
+        {
+            Caption = 'Container No';
+            Description = 'FDD019';
+        }
+        field(8; "Quantity"; Decimal)
+        {
+            Caption = 'Quantity';
+            Description = 'FDD019';
+            DecimalPlaces = 0 : 5;
+        }
+        field(9; "Case No."; Text[20])
         {
             Caption = 'Case No.';
             Description = 'FDD019';
         }
-        field(7; "No. of Packages"; Decimal)
+        field(10; "No. of Packages"; Decimal)
         {
             Caption = 'No. of Packages';
             Description = 'FDD019';
@@ -53,52 +69,69 @@ table 50203 "RV Warehouse Packing Info."
                 Rec."Gross Weight" := Rec."No. of Packages" * Item."Gross Weight";
             end;
         }
-        field(8; "Contents Per Package"; Decimal)
+        field(11; "Contents Per Package"; Decimal)
         {
             Caption = 'Contents Per Package';
             Description = 'FDD019';
             DecimalPlaces = 0 : 5;
         }
-        field(9; "Contents UOM"; Code[10])
+        field(12; "Contents UOM"; Code[10])
         {
             Caption = 'Contents UOM';
             Description = 'FDD019';
             TableRelation = "Item Unit of Measure".Code WHERE("Item No." = FIELD("Item No."));
         }
-        field(10; "Net Weight"; Decimal)
+        field(13; "Net Weight"; Decimal)
         {
             Caption = 'Net Weight';
             Description = 'FDD019';
             DecimalPlaces = 0 : 5;
         }
-        field(11; "Gross Weight"; Decimal)
+        field(14; "Gross Weight"; Decimal)
         {
             Caption = 'Gross Weight';
             Description = 'FDD019';
             DecimalPlaces = 0 : 5;
         }
-        field(12; "Gross Weight UOM"; Code[10])
+        field(15; "Gross Weight UOM"; Code[10])
         {
             Caption = 'Gross Weight UOM';
             Description = 'FDD019';
             TableRelation = "Item Unit of Measure".Code WHERE("Item No." = FIELD("Item No."));
         }
-        field(13; "Measurement"; Decimal)
+        field(16; "Measurement"; Decimal)
         {
             Caption = 'Measurement';
             Description = 'FDD019';
             DecimalPlaces = 0 : 5;
         }
-        field(14; "Measurement UOM"; Code[10])
+        field(17; "Measurement UOM"; Code[10])
         {
             Caption = 'Measurement UOM';
             Description = 'FDD019';
             TableRelation = "Unit of Measure".Code;
         }
+        field(18; "Lot Quantity"; Decimal)
+        {
+            Caption = 'Lot Quantity';
+            Description = 'FDD019';
+            DecimalPlaces = 0 : 5;
+        }
+        field(19; "Comment"; Text[80])
+        {
+            Caption = 'Comment';
+            Description = 'FDD019';
+        }
+        field(20; "Line No."; Integer)
+        {
+            Caption = 'Line No.';
+            Description = 'FDD019';
+        }
     }
     keys
     {
-        key(PK; "Warehouse Shipment No.", "Posted Whse. Shipment No.", "Sales Order No.", "SO Line No.")
+        //key(PK; "Warehouse Shipment No.", "Posted Whse. Shipment No.", "Sales Order No.", "SO Line No.")
+        key(PK; "Sales Order No.", "SO Line No.", "Lot No.", "Line No.")
         {
             Clustered = true;
         }
