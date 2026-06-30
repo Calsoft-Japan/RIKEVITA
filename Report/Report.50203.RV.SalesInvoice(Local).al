@@ -32,6 +32,9 @@ report 50203 "RV Sales Invoice(Local)"
             column(CerfiticateNo; CerfiticateNo)
             {
             }
+            column(ReportTitle; ReportTitle)
+            {
+            }
             column(ISODocumentNo; ISODocumentNo)
             {
             }
@@ -217,6 +220,7 @@ report 50203 "RV Sales Invoice(Local)"
     var
         CompanyInfo: Record "Company Information";
         RIKEVITASetup: Record "RV RIKEVITA Setup";
+        ReportTitle: Label 'INVOICE';
         ISODocumentNo: Text;
         ISODocVersion: Text;
         Description: Text;

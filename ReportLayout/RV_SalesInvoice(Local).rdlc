@@ -2037,7 +2037,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>INVOICE</Value>
+                      <Value>=First(Fields!ReportTitle.Value, "DataSet_Result")</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontSize>18pt</FontSize>
@@ -3087,6 +3087,9 @@ gUEPuujm4radxTKiO/JaLfYuVrNZgCo1E96eV0XLLwwIX88VxHmaFCVxxISGf+d3QgvpRVs92JsAKBQo
         </Field>
         <Field Name="CerfiticateNo">
           <DataField>CerfiticateNo</DataField>
+        </Field>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
         </Field>
         <Field Name="ISODocumentNo">
           <DataField>ISODocumentNo</DataField>
