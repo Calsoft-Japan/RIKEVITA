@@ -51,11 +51,11 @@ table 50604 "RV MPS Rescheduling Line"
         {
             Caption = 'Ending Date';
         }
-        field(11; "New Starting Date"; DateTime)
+        field(11; "New Starting Date"; Date)
         {
             Caption = 'New Starting Date';
         }
-        field(12; "New Ending Date"; DateTime)
+        field(12; "New Ending Date"; Date)
         {
             Caption = 'New Ending Date';
         }

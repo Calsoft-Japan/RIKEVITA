@@ -77,6 +77,14 @@ table 50601 "RV Prod. Result Journal Line"
                                     item.get("Output Item No.");
                                     "Output Item Description" := item."Description";
                                     Validate(rec."UOM", ProdOrderLine."Unit of Measure Code");
+                                    // end;
+                                end;
+                            "RV Prod. Results Data Type"::"Planned Consumption",
+                            "RV Prod. Results Data Type"::"Adjust Consumption",
+                            "RV Prod. Results Data Type"::"Recycle Consumption":
+                                begin
+                                    item.get("Output Item No.");
+                                    "Output Item Description" := item."Description";
                                 end;
                         end;
                 end;
@@ -211,6 +219,11 @@ table 50601 "RV Prod. Result Journal Line"
         field(15; "Manufacturing Date"; Date)
         {
             Caption = 'Manufacturing Date';
+
+            trigger OnValidate()
+            begin
+                UpdateExpireDate();
+            end;
         }
         field(16; "Expire Date"; Date)
         {
@@ -342,6 +355,24 @@ table 50601 "RV Prod. Result Journal Line"
         {
         }
     }
+    procedure UpdateExpireDate()
+    var
+        Item: Record Item;
+    begin
+        if rec."Data Type" IN [rec."Data Type"::"Adjust Output", rec."Data Type"::"Planned Output"] then begin
+            Item.Get(Rec."Output Item No.");
+            if Format(Item."Expiration Calculation") <> '' then begin
+                if rec."Manufacturing Date" <> 0D then
+                    Rec."Expire Date" := CalcDate(Item."Expiration Calculation", Rec."Manufacturing Date")
+            end;
+        end else begin
+            // Item.Get(Rec."Item No.");
+            // if Format(Item."Expiration Calculation") <> '' then begin
+            //     if rec."Manufacturing Date" <> 0D then
+            //         Rec."Expire Date" := CalcDate(Item."Expiration Calculation", Rec."Manufacturing Date")
+            // end;
+        end;
+    end;
 
     var
         ProdOrderLine: Record "Prod. Order Line";

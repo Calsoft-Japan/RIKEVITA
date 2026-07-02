@@ -239,9 +239,9 @@ codeunit 50603 "RV Post Prod Result Line Proc."
             Item.get(ItemJnlLine."Item No.");
 
             ExpireDate := ProdResultJournalLine."Expire Date";
-            if ExpireDate = 0D then
-                if ProdResultJournalLine."Manufacturing Date" <> 0D then
-                    ExpireDate := CalcDate(Item."Expiration Calculation", ProdResultJournalLine."Manufacturing Date");
+            // if ExpireDate = 0D then
+            //     if ProdResultJournalLine."Manufacturing Date" <> 0D then
+            //         ExpireDate := CalcDate(Item."Expiration Calculation", ProdResultJournalLine."Manufacturing Date");
             CreateReservEntry.SetDates(0D, ExpireDate);
 
             CreateReservEntry.CreateEntry(

@@ -257,6 +257,8 @@ page 50604 "RV MPS Rescheduling Worksheet"
             TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Work Center No. 2"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
             TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Work Center No. 3"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
             TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Planning Status"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Sales Order No."), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("FG Prod. Order No."), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
             repeat
                 TempExcelBuffer.NewRow();
                 TempExcelBuffer.AddColumn(MPSReschedulingLine."Batch Name", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
@@ -278,6 +280,8 @@ page 50604 "RV MPS Rescheduling Worksheet"
                 TempExcelBuffer.AddColumn(MPSReschedulingLine."New Work Center No. 2", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
                 TempExcelBuffer.AddColumn(MPSReschedulingLine."New Work Center No. 3", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
                 TempExcelBuffer.AddColumn(MPSReschedulingLine."Planning Status", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                TempExcelBuffer.AddColumn(MPSReschedulingLine."Sales Order No.", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                TempExcelBuffer.AddColumn(MPSReschedulingLine."FG Prod. Order No.", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
             until MPSReschedulingLine.Next() = 0;
             TempExcelBuffer.CreateNewBook(SheetName);
             TempExcelBuffer.WriteSheet(SheetName, CompanyName, UserId);
@@ -366,7 +370,7 @@ page 50604 "RV MPS Rescheduling Worksheet"
                 Evaluate(MPSReschedulingLine."New Ending Date", GetValueAtCell(RowNo, 15));
                 if MPSReschedulingLine."New Starting Date" > MPSReschedulingLine."New Ending Date" then
                     Error(InvalidStartDateMsg, ImportBatchName, ImportBatchLineNo);
-                if DT2Date(MPSReschedulingLine."New Ending Date") > MPSReschedulingLine."Due Date" then
+                if MPSReschedulingLine."New Ending Date" > MPSReschedulingLine."Due Date" then
                     Error(InvalidEndDateMsg, ImportBatchName, ImportBatchLineNo);
 
                 NewWK1 := GetValueAtCell(RowNo, 16);

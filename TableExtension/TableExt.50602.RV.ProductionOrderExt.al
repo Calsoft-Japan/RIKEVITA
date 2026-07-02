@@ -24,13 +24,13 @@ tableextension 50602 "RV Production Order" extends "Production Order"
             DataClassification = ToBeClassified;
         }
 
-        field(50603; "RV_Rescheduling Starting Date"; DateTime)
+        field(50603; "RV_Rescheduling Starting Date"; date)
         {
             Caption = 'Rescheduling Starting Date';
             DataClassification = ToBeClassified;
         }
 
-        field(50604; "RV_Rescheduling Ending Date"; DateTime)
+        field(50604; "RV_Rescheduling Ending Date"; date)
         {
             Caption = 'Rescheduling Ending Date';
             DataClassification = ToBeClassified;

@@ -98,22 +98,22 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
                 end;
             until ProdOrderRoutingLine.Next() = 0;
 
-        if MPSReschedulingLine."New Ending Date" <> 0DT then begin
+        if MPSReschedulingLine."New Ending Date" <> 0D then begin
             ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
-            if ProdOrder."Ending Date" <> DT2Date(MPSReschedulingLine."New Ending Date") then begin
-                ProdOrder.Validate("Ending Date-Time", CreateDateTime(DT2Date(MPSReschedulingLine."New Ending Date"), MfgSetup."Normal Ending Time"));
+            if ProdOrder."Ending Date" <> MPSReschedulingLine."New Ending Date" then begin
+                ProdOrder.Validate("Ending Date-Time", CreateDateTime(MPSReschedulingLine."New Ending Date", MfgSetup."Normal Ending Time"));
                 ProdOrder.Validate("RV_Rescheduling Ending Date", MPSReschedulingLine."New Ending Date");
                 ProdOrder.Modify();
             end;
         end;
 
-        if MPSReschedulingLine."New Starting Date" <> 0DT then begin
+        if MPSReschedulingLine."New Starting Date" <> 0D then begin
             ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
-            if ProdOrder."Starting Date" <> DT2Date(MPSReschedulingLine."New Starting Date") then begin
+            if ProdOrder."Starting Date" <> MPSReschedulingLine."New Starting Date" then begin
                 ProdOrder.Validate("RV_Rescheduling Starting Date", MPSReschedulingLine."New Starting Date");
 
                 //Calculate the difference days = “MPS Rescheduling Line”.“New Starting Date”- “Production Header”. “Starting Date-Time”
-                DiffDays := CreateDateTime(DT2Date(MPSReschedulingLine."New Starting Date"), ProdOrder."Starting Time") - ProdOrder."Starting Date-Time";
+                DiffDays := CreateDateTime(MPSReschedulingLine."New Starting Date", ProdOrder."Starting Time") - ProdOrder."Starting Date-Time";
                 ProdOrder.Validate("Ending Date-Time", ProdOrder."Ending Date-Time" + DiffDays);
                 ProdOrder.Modify();
             end;

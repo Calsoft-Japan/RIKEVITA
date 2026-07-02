@@ -53,7 +53,8 @@ report 50600 "RV Calc. Consumption"
 
                         trigger OnValidate()
                         begin
-                            AdjustConsumption := not PlannedConsumption;
+                            if PlannedConsumption then
+                                AdjustConsumption := not PlannedConsumption;
                         end;
                     }
                     field("Adjust Consumption"; AdjustConsumption)
@@ -63,12 +64,19 @@ report 50600 "RV Calc. Consumption"
 
                         trigger OnValidate()
                         begin
-                            PlannedConsumption := not AdjustConsumption;
+                            if AdjustConsumption then
+                                PlannedConsumption := not AdjustConsumption;
                         end;
                     }
                 }
             }
         }
+        trigger OnOpenPage()
+        begin
+            PlannedOutput := true;
+            PlannedConsumption := true;
+        end;
+
         trigger OnQueryClosePage(CloseAction: Action): Boolean
         begin
             if CloseAction = CloseAction::OK then
@@ -94,6 +102,7 @@ report 50600 "RV Calc. Consumption"
         ProdOrderComp: Record "Prod. Order Component";
         NeededQty: Decimal;
         Item: Record Item;
+        ProdOrderRtngLine: Record "Prod. Order Routing Line";
     begin
         ProdOrderComp.Reset();
         ProdOrderComp.SetRange(Status, ProdOrderLine.Status);
@@ -113,6 +122,19 @@ report 50600 "RV Calc. Consumption"
                     else
                         RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Adjust Consumption";
                     RVProdResultJnlLine."Prod. Order No." := ProdOrderLine."Prod. Order No.";
+                    RVProdResultJnlLine."Output Item No." := ProdOrderLine."Item No.";
+                    RVProdResultJnlLine."Output Item Description" := ProdOrderLine.Description;
+
+                    ProdOrderRtngLine.Reset();
+                    ProdOrderRtngLine.SetRange("Prod. Order No.", ProdOrderLine."Prod. Order No.");
+                    ProdOrderRtngLine.SetRange("Routing No.", ProdOrderLine."Routing No.");
+                    ProdOrderRtngLine.SetRange(Status, ProdOrderLine.Status);
+                    ProdOrderRtngLine.SetRange("Routing Reference No.", ProdOrderLine."Routing Reference No.");
+                    if ProdOrderRtngLine.FindLast() then begin
+                        RVProdResultJnlLine."Operation No." := ProdOrderRtngLine."Operation No.";
+                        RVProdResultJnlLine."Work Center No." := ProdOrderRtngLine."Work Center No.";
+                    end;
+
                     RVProdResultJnlLine."Item No." := ProdOrderComp."Item No.";
                     item.Get(RVProdResultJnlLine."Item No.");
                     RVProdResultJnlLine."Item Description" := item.Description;
@@ -200,5 +222,11 @@ report 50600 "RV Calc. Consumption"
     procedure SetBatchName(BatchName: Code[20])
     begin
         GBatchName := BatchName;
+    end;
+
+    procedure GetLastOperationNo(): code[10]
+
+    begin
+
     end;
 }

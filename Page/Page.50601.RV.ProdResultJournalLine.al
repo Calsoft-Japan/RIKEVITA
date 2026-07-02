@@ -40,72 +40,64 @@ page 50601 "RV Prod. Result Journal Line"
                 field("Data Type"; Rec."Data Type")
                 {
                     ToolTip = 'Specifies the value of the Data Type field.', Comment = '%';
-                    Editable = CanEdit;
+                    trigger OnValidate()
+                    begin
+                        SetPageEditable();
+                    end;
                 }
                 field("Prod. Order No."; Rec."Prod. Order No.")
                 {
                     ToolTip = 'Specifies the value of the Prod. Order No. field.', Comment = '%';
-                    Editable = CanEdit;
                 }
                 field("Output Item No."; Rec."Output Item No.")
                 {
                     ToolTip = 'Specifies the value of the Output Item No. field.', Comment = '%';
-                    Editable = CanEdit;
                 }
                 field("Output Item Description"; Rec."Output Item Description")
                 {
                     ToolTip = 'Specifies the value of the Output Item Description field.', Comment = '%';
-                    Editable = CanEdit;
                 }
                 field("Operation No."; Rec."Operation No.")
                 {
                     ToolTip = 'Specifies the value of the Operation No. field.', Comment = '%';
-                    Editable = CanEdit;
                 }
                 field("Work Center No."; Rec."Work Center No.")
                 {
                     ToolTip = 'Specifies the value of the Work Center No. field.', Comment = '%';
-                    Editable = CanEdit;
                 }
                 field("Item No."; Rec."Item No.")
                 {
                     ToolTip = 'Specifies the value of the Item No. field.', Comment = '%';
-                    Editable = CanEdit;
+                    Editable = OutputCanEdit;
                 }
                 field("Item Description"; Rec."Item Description")
                 {
                     ToolTip = 'Specifies the value of the Item Description field.', Comment = '%';
-                    Editable = CanEdit;
+                    Editable = OutputCanEdit;
                 }
                 field(Quantity; Rec.Quantity)
                 {
                     ToolTip = 'Specifies the value of the Quantity field.', Comment = '%';
-                    Editable = CanEdit;
                 }
                 field("Scrap Quantity"; Rec."Scrap Quantity")
                 {
                     ToolTip = 'Specifies the value of the Scrap Quantity field.', Comment = '%';
-                    Editable = CanEdit;
                 }
                 field(UOM; Rec.UOM)
                 {
                     ToolTip = 'Specifies the value of the UOM field.', Comment = '%';
-                    Editable = CanEdit;
                 }
                 field("Location Code"; Rec."Location Code")
                 {
                     ToolTip = 'Specifies the value of the Location Code field.', Comment = '%';
-                    Editable = CanEdit;
                 }
                 field("Bin Code"; Rec."Bin Code")
                 {
                     ToolTip = 'Specifies the value of the Bin Code field.', Comment = '%';
-                    Editable = CanEdit;
                 }
                 field("Lot No."; Rec."Lot No.")
                 {
                     ToolTip = 'Specifies the value of the Lot No. field.', Comment = '%';
-                    Editable = CanEdit;
 
                     trigger OnAssistEdit()
                     var
@@ -176,29 +168,26 @@ page 50601 "RV Prod. Result Journal Line"
                             Rec."Manufacturing Date" := 0D;
                             rec."Expire Date" := 0D;
                         end else begin
-                            UpdateExpireDate();
+                            rec.UpdateExpireDate();
                         end;
                     end;
                 }
                 field("Manufacturing Date"; Rec."Manufacturing Date")
                 {
                     ToolTip = 'Specifies the value of the Manufacturing Date field.', Comment = '%';
-                    Editable = CanEdit;
-
                     trigger OnValidate()
                     begin
-                        UpdateExpireDate();
+                        rec.UpdateExpireDate();
                     end;
                 }
                 field("Expire Date"; Rec."Expire Date")
                 {
                     ToolTip = 'Specifies the value of the Expire Date field.', Comment = '%';
-                    Editable = CanEdit;
                 }
                 field(Status; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
-                    Editable = CanEdit;
+                    Editable = false;
                 }
                 field("Error Message"; Rec."Error Message")
                 {
@@ -259,15 +248,30 @@ page 50601 "RV Prod. Result Journal Line"
                     var
                         PostProdResultLineBatch: codeunit "RV Post Prod Result Line Batch";
                     begin
-                        PostProdResultLineBatch.SetBatchName(CurrentJnlBatchName);
+                        PostProdResultLineBatch.SetBatchName(CurrentJnlBatchName, true);
                         PostProdResultLineBatch.Run();
+                    end;
+                }
+                //Set to Ready to Post
+                action(ChangeToReadyToPost)
+                {
+                    Caption = 'Change to Ready Post';
+                    Image = Approval;
+
+                    trigger OnAction()
+                    var
+                        ProdResultLine: Record "RV Prod. Result Journal Line";
+                    begin
+                        ProdResultLine.CopyFilters(Rec);
+                        ProdResultLine.ModifyAll(status, ProdResultLine.Status::"Ready Post");
+                        message(ChangeStatusMsg);
                     end;
                 }
                 action(ResetToReadyToPost)
                 {
 
                     Caption = 'Reset Status';
-                    Image = Approval;
+                    Image = ResetStatus;
 
                     trigger OnAction()
                     var
@@ -297,7 +301,11 @@ page 50601 "RV Prod. Result Journal Line"
             actionref(Post_Promoted; Post)
             {
             }
-            actionref(ChangeToReadyToPost_Promoted; ResetToReadyToPost)
+            actionref(ChangeToReadyToPost_Promoted; ChangeToReadyToPost)
+            {
+
+            }
+            actionref(ResetToReadyToPost_Promoted; ResetToReadyToPost)
             {
 
             }
@@ -312,14 +320,30 @@ page 50601 "RV Prod. Result Journal Line"
             exit;
         end;
         RVProdResultsMgt.OpenJnl(CurrentJnlBatchName, Rec);
-        CanEdit := true;
+    end;
+
+    trigger onaftergetrecord()
+    begin
+        SetPageEditable();
+    end;
+
+    trigger onaftergetcurrrecord()
+    begin
+        SetPageEditable();
+    end;
+
+    procedure SetPageEditable()
+    begin
+        if rec."Data Type" IN [rec."Data Type"::"Adjust Output", rec."Data Type"::"Planned Output"] then
+            OutputCanEdit := false
+        else
+            OutputCanEdit := true;
     end;
 
     var
         CurrentJnlBatchName: Code[10];
         RVProdResultsMgt: Codeunit "RV Prod. Results Management";
         OpenedFromBatch: Boolean;
-        CanEdit: Boolean;
         Text004: Label 'Counting records...';
         FullGlobalDataSetExists: Boolean;
         TempGlobalReservEntry: Record "Reservation Entry" temporary;
@@ -377,6 +401,8 @@ page 50601 "RV Prod. Result Journal Line"
         ItemJnlBatch: Record "Item Journal Batch";
         InboundIsSet: Boolean;
         Inbound: Boolean;
+        OutputCanEdit: Boolean;
+        ChangeStatusMsg: Label 'Status changed to Ready Post';
 
     local procedure CurrentJnlBatchNameOnAfterVali()
     begin
@@ -1694,23 +1720,6 @@ page 50601 "RV Prod. Result Journal Line"
             TrackingSpecification."Expiration Date" := 0D;
             TrackingSpecification."New Expiration Date" := 0D;
             TrackingSpecification."Warranty Date" := 0D;
-        end;
-    end;
-
-    procedure UpdateExpireDate()
-    begin
-        if rec."Data Type" IN [rec."Data Type"::"Adjust Output", rec."Data Type"::"Planned Output"] then begin
-            Item.Get(Rec."Output Item No.");
-            if Format(Item."Expiration Calculation") <> '' then begin
-                if rec."Manufacturing Date" <> 0D then
-                    Rec."Expire Date" := CalcDate(Item."Expiration Calculation", Rec."Manufacturing Date")
-            end;
-        end else begin
-            Item.Get(Rec."Item No.");
-            if Format(Item."Expiration Calculation") <> '' then begin
-                if rec."Manufacturing Date" <> 0D then
-                    Rec."Expire Date" := CalcDate(Item."Expiration Calculation", Rec."Manufacturing Date")
-            end;
         end;
     end;
 }

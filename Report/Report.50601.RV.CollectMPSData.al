@@ -13,8 +13,7 @@ report 50601 "RV Collect MPS Data"
         {
             DataItemTableView = sorting(Status, "No.") where(Status = const("Firm Planned"));
             RequestFilterFields = "RV_Planning Controller",
-                                  "RV_Planning Status",
-                                  "No.";
+                                  "RV_Planning Status";
             dataitem("Prod. Order Line";
             "Prod. Order Line")
             {
@@ -111,7 +110,7 @@ report 50601 "RV Collect MPS Data"
     }
     requestpage
     {
-        SaveValues = true;
+        // SaveValues = true;
         layout
         {
             area(Content)
