@@ -46,4 +46,10 @@ table 50500 "RV QC Parameter"
             Clustered = true;
         }
     }
+    fieldgroups
+    {
+        fieldgroup(DropDown; "Parameter Name", "Type", "Value Table Type")
+        {
+        }
+    }
 }

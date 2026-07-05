@@ -66,9 +66,34 @@ table 50508 "RV QA Header"
         {
             Caption = 'QA Approved Remark';
         }
-        field(16; "COA Date"; Date)
+        field(16; "COA Credaing Date"; Date)
         {
-            Caption = 'COA Date';
+            Caption = 'COA Credaing Date';
+        }
+        field(17; "QA Checked Date"; Date)
+        {
+            Caption = 'QA Checked Date';
+        }
+        field(18; "QA Approved Date"; Date)
+        {
+            Caption = 'QA Approved Date';
+        }
+        field(19; "QA Comment"; Text[150])
+        {
+            Caption = 'QA Comment';
+        }
+        field(20; "Final Destination"; Text[50])
+        {
+            Caption = 'Final Destination';
+        }
+        field(21; "Bill-to Customer No."; Code[20])
+        {
+            Caption = 'Bill-to Customer No.';
+            TableRelation = Customer;
+        }
+        field(22; "Bill-to Customer Name"; Text[100])
+        {
+            Caption = 'Bill-to Customer Name';
         }
         field(100; "Line No."; Integer)
         {
@@ -123,6 +148,9 @@ table 50508 "RV QA Header"
         "Item Description" := '';
         "Ship-to Customer No." := '';
         "Ship-to Customer Name" := '';
+        "Bill-to Customer No." := '';
+        "Bill-to Customer Name" := '';
+        "Final Destination" := '';
         "Ship-to Code" := '';
         Mark := '';
         "QA Status" := "QA Status"::Analyzing;
@@ -162,16 +190,11 @@ table 50508 "RV QA Header"
         UserSetup: Record "User Setup";
         TextCheckErr: Label 'You don''t have permission to Check!';
     begin
-
-
         if UserSetup.Get(UserId) then begin
             if not UserSetup."RV_Allow QA Check" then
                 Error(TextCheckErr);
         end else
             Error(TextCheckErr);
-
-        if "QA Approved By" <> '' then
-            Error('You cannot check because it has been approved.');
     end;
 
     procedure IsQAApproveAllowed()
@@ -200,8 +223,23 @@ table 50508 "RV QA Header"
         end else
             Error(TextRejectErr);
 
-        if "QA Approved By" = '' then
-            Error('You can not Reject, because you need approval.');
+        if "QA Checked By" = '' then
+            Error('You need to Check before Reject.');
+    end;
+
+    procedure IsQAReverseAllowed()
+    var
+        UserSetup: Record "User Setup";
+        TextReverseErr: Label 'You don''t have permission to Reverse!';
+    begin
+        if UserSetup.Get(UserId) then begin
+            if not UserSetup."RV_Allow QA Reverse" then
+                Error(TextReverseErr);
+        end else
+            Error(TextReverseErr);
+
+        if "QA Status" in ["QA Status"::Analyzing, "QA Status"::Checked] then
+            Error('You can not Reverse, because you need approval or Reject.');
     end;
 
     procedure CheckRemark_Input()
@@ -226,6 +264,7 @@ table 50508 "RV QA Header"
             "QA Status" := Rec."QA Status"::Checked;
             "QA Checked Remark" := RemarkText[1];// set Remark
             "QA Checked By" := UserId;
+            rec."QA Checked Date" := Today;
             Modify();
 
             QAShipmentLotNo.Reset();
@@ -260,6 +299,7 @@ table 50508 "RV QA Header"
             Rec."QA Status" := Rec."QA Status"::Approved;
             Rec."QA Approved Remark" := RemarkText[1];// set Remark
             rec."QA Approved By" := UserId;
+            rec."QA Approved Date" := Today;
             Modify();
 
             QAShipmentLotNo.Reset();
@@ -314,9 +354,11 @@ table 50508 "RV QA Header"
         SalesShipmentHeader: Record "Sales Shipment Header";
         SalesShipmentLine: Record "Sales Shipment Line";
         PostedWhShipLine: Record "Posted Whse. Shipment Line";
+        PostedWhShipHeader: Record "Posted Whse. Shipment Header";
 
         SalesHeader: Record "Sales Header";
         WhShipline: Record "Warehouse Shipment line";
+        WhShipHeader: Record "Warehouse Shipment Header";
         ReservEntry: Record "Reservation Entry";
         //TrackingSpec: Record "Tracking Specification";
         QAShipmentLotNo: Record "RV QA Shipment Lot No.";
@@ -342,7 +384,12 @@ table 50508 "RV QA Header"
                     Rec."Ship-to Customer No." := SalesShipmentHeader."Sell-to Customer No.";
                     Rec."Ship-to Customer name" := SalesShipmentHeader."Sell-to Customer name";
                     Rec."Ship-to Code" := SalesShipmentHeader."Ship-to Code";
+                    Rec."Bill-to Customer No." := SalesShipmentHeader."Bill-to Customer No.";
+                    Rec."Bill-to Customer name" := SalesShipmentHeader."Bill-to name";
                 end;
+
+                if PostedWhShipHeader.Get(Rec."Order No.") then
+                    Rec."Final Destination" := PostedWhShipHeader."RV_Final Destination";
 
                 SalesShipmentLine.Reset();
                 SalesShipmentLine.SetRange("Document No.", SalesShipmentHeader."No.");
@@ -394,7 +441,12 @@ table 50508 "RV QA Header"
                     Rec."Ship-to Customer No." := SalesHeader."Sell-to Customer No.";
                     Rec."Ship-to Customer name" := SalesHeader."Sell-to Customer name";
                     Rec."Ship-to Code" := SalesHeader."Ship-to Code";
+                    Rec."Bill-to Customer No." := SalesHeader."Bill-to Customer No.";
+                    Rec."Bill-to Customer name" := SalesHeader."Bill-to name";
                 end;
+
+                if WhShipHeader.Get(Rec."Order No.") then
+                    Rec."Final Destination" := WhShipHeader."RV_Final Destination";
 
                 Clear(COALotLineNo);
                 SalesLine.Reset();
@@ -504,7 +556,6 @@ table 50508 "RV QA Header"
                         if QAShipmentLotNo.Insert() then;
                     until TempQAShipmentLotNo.Next() = 0;
             end;
-
         end;
     end;
 }

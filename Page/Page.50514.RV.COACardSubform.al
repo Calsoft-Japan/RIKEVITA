@@ -118,7 +118,24 @@ page 50514 "RV COA Card Subform"
                 {
                     ApplicationArea = All;
                 }
+                field("Bill-to Customer No."; Rec."Bill-to Customer No.")
+                {
+                    ApplicationArea = All;
+                }
+                field("Bill-to Customer Name"; Rec."Bill-to Customer Name")
+                {
+                    ApplicationArea = All;
+                }
+                field("Final Destination"; Rec."Final Destination")
+                {
+                    ApplicationArea = All;
+                }
                 field("Mark"; Rec."Mark")
+                {
+                    ApplicationArea = All;
+                    MultiLine = true;
+                }
+                field("QA Comment"; Rec."QA Comment")
                 {
                     ApplicationArea = All;
                     MultiLine = true;
@@ -139,6 +156,11 @@ page 50514 "RV COA Card Subform"
                     Editable = false;
                     MultiLine = true;
                 }
+                field("QA Checked Date"; Rec."QA Checked Date")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("QA Approved By"; Rec."QA Approved By")
                 {
                     ApplicationArea = All;
@@ -150,7 +172,12 @@ page 50514 "RV COA Card Subform"
                     Editable = false;
                     MultiLine = true;
                 }
-                field("COA Date"; Rec."COA Date")
+                field("QA Approved Date"; Rec."QA Approved Date")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("COA Credaing Date"; Rec."COA Credaing Date")
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -351,6 +378,26 @@ page 50514 "RV COA Card Subform"
         QAShipmentLotNo.SetRange("COA No.", Rec."COA No.");
         QAShipmentLotNo.ModifyAll("QA Status", Rec."QA Status"::Rejected);
 
+    end;
+
+    procedure COAReverse_Action()
+    var
+        QAShipmentLotNo: Record "RV QA Shipment Lot No.";
+    begin
+        //IsQAReverseAllowed
+        Rec.IsQAReverseAllowed();
+        //Enable
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable);
+
+        Clear(Rec."QA Approved By");
+        Clear(Rec."QA Approved Date");
+        Clear(Rec."QA Approved Remark");
+        Rec."QA Status" := Rec."QA Status"::Checked;
+        Rec.Modify();
+
+        QAShipmentLotNo.Reset();
+        QAShipmentLotNo.SetRange("COA No.", Rec."COA No.");
+        QAShipmentLotNo.ModifyAll("QA Status", Rec."QA Status"::Checked);
     end;
 
     procedure COAPrint_Action()

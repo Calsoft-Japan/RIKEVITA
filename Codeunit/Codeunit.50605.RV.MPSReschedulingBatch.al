@@ -23,6 +23,7 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
         oldWaitTime: Decimal;
         oldMoveTime: Decimal;
         RoutingCount: Integer;
+        OldDueDate: Date;
     begin
         MfgSetup.get();
         ProdOrderRoutingLine.Reset();
@@ -97,12 +98,16 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
                         ProdOrderRoutingLine.FindLast();
                 end;
             until ProdOrderRoutingLine.Next() = 0;
-
         if MPSReschedulingLine."New Ending Date" <> 0D then begin
             ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
+            IF MPSReschedulingLine."New Ending Date" > ProdOrder."Due Date" then
+                error(Text006, ProdOrder."No.");
+            //ProdOrder.Validate("Starting Date-Time", CreateDateTime(MPSReschedulingLine."New Starting Date", MfgSetup."Normal Starting Time"));
             if ProdOrder."Ending Date" <> MPSReschedulingLine."New Ending Date" then begin
-                ProdOrder.Validate("Ending Date-Time", CreateDateTime(MPSReschedulingLine."New Ending Date", MfgSetup."Normal Ending Time"));
                 ProdOrder.Validate("RV_Rescheduling Ending Date", MPSReschedulingLine."New Ending Date");
+                //just update when the new starting date is not null
+                IF MPSReschedulingLine."New Starting Date" <> 0D then
+                    ProdOrder.Validate("Ending Date-Time", CreateDateTime(MPSReschedulingLine."New Ending Date", MfgSetup."Normal Ending Time"));
                 ProdOrder.Modify();
             end;
         end;
@@ -110,11 +115,15 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
         if MPSReschedulingLine."New Starting Date" <> 0D then begin
             ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
             if ProdOrder."Starting Date" <> MPSReschedulingLine."New Starting Date" then begin
+                OldDueDate := ProdOrder."Due Date";
                 ProdOrder.Validate("RV_Rescheduling Starting Date", MPSReschedulingLine."New Starting Date");
-
+                ProdOrder.Validate("Manual Scheduling", true);
                 //Calculate the difference days = “MPS Rescheduling Line”.“New Starting Date”- “Production Header”. “Starting Date-Time”
-                DiffDays := CreateDateTime(MPSReschedulingLine."New Starting Date", ProdOrder."Starting Time") - ProdOrder."Starting Date-Time";
-                ProdOrder.Validate("Ending Date-Time", ProdOrder."Ending Date-Time" + DiffDays);
+                //DiffDays := CreateDateTime(MPSReschedulingLine."New Starting Date", ProdOrder."Starting Time") - ProdOrder."Starting Date-Time";
+                //ProdOrder.Validate("Ending Date-Time", ProdOrder."Ending Date-Time" + DiffDays);
+                ProdOrder.Validate("Starting Date", MPSReschedulingLine."New Starting Date");
+                IF prodorder."Due Date" > OldDueDate then
+                    error(Text007, ProdOrder."No.");
                 ProdOrder.Modify();
             end;
         end;
@@ -149,6 +158,8 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
         MPSReschedulingLine: Record "RV MPS Rescheduling Line";
         Text004: Label 'DEFAULT';
         Text005: Label 'Default Journal';
+        Text006: Label 'The new ending date cannot be later than the due date for the production order %1.';
+        text007: Label 'The due date will be late for the new starting date for production order %1.';
         MfgSetup: Record "Manufacturing Setup";
         ErrNotHaveRouting: Label 'Not found the production order routing line.';
 }

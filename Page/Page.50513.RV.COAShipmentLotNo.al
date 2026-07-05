@@ -107,21 +107,11 @@ page 50513 "RV COA ShipmentLotNo"
                 UpdatePropagation = Both;
                 Editable = SubExterQCResultEditable;
             }
-            part(SubInyResult; "RV COA Iny. Result Subform")
-            {
-                Caption = 'Inventory processing';
-                ApplicationArea = All;
-                SubPageLink = "COA No." = field("COA No."), "COA Lot Line No." = field("COA Lot Line No.");
-                UpdatePropagation = Both;
-                Editable = SubInyResultEditable;
-            }
         }
-
     }
 
     actions
     {
-
         area(processing)
         {
             action("UpdateQALine")
@@ -170,6 +160,17 @@ page 50513 "RV COA ShipmentLotNo"
                     CurrPage.SubCOACard.Page.COAReject_Action();
                 end;
             }
+            action(COAReverse)
+            {
+                Caption = 'COA Reverse';
+                ApplicationArea = All;
+                Image = Approval;
+                Enabled = QAReverseEnable;
+                trigger OnAction()
+                begin
+                    CurrPage.SubCOACard.Page.COAReverse_Action();
+                end;
+            }
             action(COAPrint)
             {
                 Caption = 'COA Print';
@@ -198,6 +199,9 @@ page 50513 "RV COA ShipmentLotNo"
                 actionref("COAReject_Promoted"; "COAReject")
                 {
                 }
+                actionref("COAReverse_Promoted"; "COAReverse")
+                {
+                }
                 actionref("COAPrint_Promoted"; "COAPrint")
                 {
                 }
@@ -208,14 +212,14 @@ page 50513 "RV COA ShipmentLotNo"
     trigger OnAfterGetCurrRecord()
     begin
         //SetQAEnable
-        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable,
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable, QAReverseEnable,
             SubCOACardEditable, SubExterQCResultEditable, SubInyResultEditable);
     end;
 
     trigger OnAfterGetRecord()
     begin
         //SetQAEnable
-        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable,
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable, QAReverseEnable,
             SubCOACardEditable, SubExterQCResultEditable, SubInyResultEditable);
     end;
 
@@ -241,7 +245,7 @@ page 50513 "RV COA ShipmentLotNo"
         end;
 
         //SetQAEnable
-        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable,
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable, QAReverseEnable,
             SubCOACardEditable, SubExterQCResultEditable, SubInyResultEditable);
     end;
 
@@ -249,7 +253,7 @@ page 50513 "RV COA ShipmentLotNo"
     begin
         CurrentCOANo := Rec."COA No.";
         //SetQAEnable
-        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable,
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable, QAReverseEnable,
             SubCOACardEditable, SubExterQCResultEditable, SubInyResultEditable);
     end;
 
@@ -270,6 +274,7 @@ page 50513 "RV COA ShipmentLotNo"
         QACheckEnable: Boolean;
         QAApproveEnable: Boolean;
         QARejectEnable: Boolean;
+        QAReverseEnable: Boolean;
 
 
         //ShipmentLotNoEditable: Boolean;

@@ -212,5 +212,11 @@ permissionset 50100 GeneratedPermission
         report "RV Aged Accounts Payable Basic" = X,
         report "RV Payment Voucher With Check" = X,
         report "RV PostedSalesInvoice(Oversea)" = X,
-        report "RV Sales Invoice(Oversea)" = X;
+        report "RV Sales Invoice(Oversea)" = X,
+        tabledata "RM Delivery Scheduling Line" = RIMD,
+        tabledata "RM Delivery Scheduling Name" = RIMD,
+        table "RM Delivery Scheduling Line" = X,
+        table "RM Delivery Scheduling Name" = X,
+        page "RV Delivery Scheduling Lines" = X,
+        page "RV.RMDeliveryScheduling" = X;
 }

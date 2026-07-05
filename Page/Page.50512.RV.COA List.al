@@ -29,7 +29,7 @@ page 50512 "RV COA List"
                         CurrPage.Update(false);
                     end;
                 }
-                field("COA Date"; Rec."COA Date")
+                field("COA Credaing Date"; Rec."COA Credaing Date")
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -50,6 +50,11 @@ page 50512 "RV COA List"
                     Editable = false;
                 }
                 field("Item Description"; Rec."Item Description")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Final Destination"; Rec."Final Destination")
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -212,7 +217,7 @@ page 50512 "RV COA List"
         QAHeader.Init();
         QAHeader."COA No." := NoSeriesMgt.GetNextNo(RIKEVITASetup."COA No. Nos.", WorkDate(), true);
         QAHeader."Ref. Order Type QA" := QAHeader."Ref. Order Type QA"::"Posted Whse. Shipment";
-        QAHeader."COA Date" := WorkDate();
+        QAHeader."COA Credaing Date" := WorkDate();
         QAHeader.Insert();
 
         QAShipmentLotNo.FilterGroup := 2;

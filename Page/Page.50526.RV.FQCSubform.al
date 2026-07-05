@@ -11,7 +11,7 @@ page 50526 "RV FQC Subform"
     SourceTableView = where("QC Type" = filter(FQC));
     AutoSplitKey = true;
     DelayedInsert = true;
-
+    InsertAllowed = false;
     layout
     {
         area(Content)
@@ -33,6 +33,11 @@ page 50526 "RV FQC Subform"
                 {
                     ApplicationArea = All;
                     Visible = false;
+                }
+                field("QC Specification Name"; Rec."QC Specification Name")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
                 }
                 field("QC Parameter Name"; Rec."QC Parameter Name")
                 {

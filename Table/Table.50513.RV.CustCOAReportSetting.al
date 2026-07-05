@@ -36,6 +36,14 @@ table 50513 "RV Cust. COA Report Setting"
         {
             Caption = 'Date Calculation';
         }
+        field(7; "Display COA Date"; Enum "RV Display COA Date")
+        {
+            Caption = 'Display COA Date';
+        }
+        field(8; "Expire Date"; Boolean)
+        {
+            Caption = 'Expire Date';
+        }
     }
     keys
     {

@@ -84,7 +84,7 @@ table 50509 "RV QA Shipment Lot No."
     end;
 
     procedure SetQAEnable(var UpdateQALineEnable: Boolean; var QACheckEnable: Boolean;
-                        var QAApproveEnable: Boolean; var QARejectEnable: Boolean;
+                        var QAApproveEnable: Boolean; var QARejectEnable: Boolean; var QAReverseEnable: Boolean;
                         var SubCOACardEditable: Boolean;
                         var SubExterQCResultEditable: Boolean;
                          var SubInyResultEditable: Boolean)
@@ -100,6 +100,7 @@ table 50509 "RV QA Shipment Lot No."
                     QACheckEnable := true;
                     QAApproveEnable := false;
                     QARejectEnable := false;
+                    QAReverseEnable := false;
 
 
                     SubCOACardEditable := true;
@@ -113,12 +114,12 @@ table 50509 "RV QA Shipment Lot No."
                     QACheckEnable := false;
                     QAApproveEnable := true;
                     QARejectEnable := true;
+                    QAReverseEnable := false;
 
+                    SubCOACardEditable := true;
 
-                    SubCOACardEditable := false;
-
-                    SubExterQCResultEditable := false;
-                    SubInyResultEditable := false;
+                    SubExterQCResultEditable := true;
+                    SubInyResultEditable := true;
                 end;
             (QAHeader."QA Status"::Approved):
                 begin
@@ -126,7 +127,7 @@ table 50509 "RV QA Shipment Lot No."
                     QACheckEnable := false;
                     QAApproveEnable := false;
                     QARejectEnable := false;
-
+                    QAReverseEnable := true;
 
                     SubCOACardEditable := false;
 
@@ -139,7 +140,7 @@ table 50509 "RV QA Shipment Lot No."
                     QACheckEnable := false;
                     QAApproveEnable := false;
                     QARejectEnable := false;
-
+                    QAReverseEnable := true;
 
                     SubCOACardEditable := false;
 

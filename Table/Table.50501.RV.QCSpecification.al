@@ -27,7 +27,18 @@ table 50501 "RV QC Specification"
             Clustered = true;
         }
     }
-
-
-
+    trigger OnDelete()
+    var
+        QCSpecificationLine: Record "RV QC Specification Line";
+        SpecValueSetting: Record "RV Specification Value Setting";
+    begin
+        //clear QCSpecificationLine
+        QCSpecificationLine.Reset();
+        QCSpecificationLine.SetRange("QC Specification Name", "QC Specification Name");
+        QCSpecificationLine.DeleteAll();
+        //clear SpecValueSetting
+        SpecValueSetting.Reset();
+        SpecValueSetting.SetRange("QC Specification Name", "QC Specification Name");
+        SpecValueSetting.DeleteAll();
+    end;
 }

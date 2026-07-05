@@ -62,11 +62,11 @@ table 50506 "RV QC Line"
         {
             Caption = 'QC Result';
             TableRelation =
-            if ("Value Table Type" = const("List")) "RV QC List Value"."List Value" where("Value Table Name" = field("Value Table Name"))
+            if ("Value Table Type" = const("List")) "RV Specification Value Setting"."List Value" where("QC Specification Name" = field("QC Specification Name"), "QC Parameter Name" = field("QC Parameter Name"), "Value Table Name" = field("Value Table Name"))
             else
-            if ("Value Table Type" = const("Single")) "RV QC List Value"."List Value" where("Value Table Name" = field("Value Table Name"))
+            if ("Value Table Type" = const("Single")) "RV Specification Value Setting"."List Value" where("QC Specification Name" = field("QC Specification Name"), "QC Parameter Name" = field("QC Parameter Name"), "Value Table Name" = field("Value Table Name"))
             else
-            if ("Value Table Type" = const("Table")) "RV QC List Value"."List Value" where("Value Table Name" = field("Value Table Name"));
+            if ("Value Table Type" = const("Table")) "RV Specification Value Setting"."List Value" where("QC Specification Name" = field("QC Specification Name"), "QC Parameter Name" = field("QC Parameter Name"), "Value Table Name" = field("Value Table Name"));
 
             trigger OnValidate()
             begin
@@ -87,6 +87,11 @@ table 50506 "RV QC Line"
         field(11; "Type"; Enum "RV Type")
         {
             Caption = 'Type';
+        }
+        field(12; "QC Specification Name"; Code[20])
+        {
+            Caption = 'QC Specification Name';
+            TableRelation = "RV QC Specification";
         }
         field(100; "Value Table Name"; Code[100])
         {
@@ -118,10 +123,8 @@ table 50506 "RV QC Line"
     var
         TempDecimal: Record "RV TempTextDecimal" temporary;// Temp
         Temptext: Record "RV TempTextDecimal" temporary;// Temp
-        //QCSpecificationLine: Record "RV QC Specification Line";
-        QCValueTable: Record "RV QC Value Table";
-        QCListValue: Record "RV QC List Value";
-        QCParameter: Record "RV QC Parameter";
+        QCSpecLine: Record "RV QC Specification Line";
+        SpecValueSetting: Record "RV Specification Value Setting";
 
         TempMaxValue: Decimal;
         TempMinValue: Decimal;
@@ -137,127 +140,126 @@ table 50506 "RV QC Line"
         Clear(TempMaxValue);
         Clear(TempMinValue);
 
-        if QCParameter.Get("QC Parameter Name") then begin
-            QCValueTable.Reset();
-            QCValueTable.SetRange("Value Table Name", QCParameter."Value Table Name");
-            if QCValueTable.FindFirst() then begin
+        //if QCParameter.Get("QC Parameter Name") then begin
+        //QCValueTable.Reset();
+        //QCValueTable.SetRange("Value Table Name", QCParameter."Value Table Name");
+        if QCSpecLine.Get("QC Specification Name", "QC Parameter Name") then begin
 
-                CASE QCValueTable.Type OF
-                    (QCValueTable.Type::Alphanumeric):
-                        begin
-                            CASE QCValueTable."Value Table Type" OF
-                                (QCValueTable."Value Table Type"::Range):
-                                    begin
+            CASE QCSpecLine.Type OF
+                (QCSpecLine.Type::Alphanumeric):
+                    begin
+                        CASE QCSpecLine."Value Table Type" OF
+                            (QCSpecLine."Value Table Type"::Range):
+                                begin
 
-                                        //ValidateAlphanumeric
-                                        ValidateAlphanumeric("QC Result");
+                                    //ValidateAlphanumeric
+                                    ValidateAlphanumeric("QC Result");
 
-                                        Temptext.Reset();
+                                    Temptext.Reset();
 
-                                        Temptext.Init();
-                                        Temptext."Value Text" := "QC Result";
-                                        Temptext.Insert();
+                                    Temptext.Init();
+                                    Temptext."Value Text" := "QC Result";
+                                    Temptext.Insert();
 
-                                        if (QCValueTable."Minimum Value" <> '') and (QCValueTable."Maximum Value" <> '') then begin
-                                            Temptext.SetRange("Value Text", QCValueTable."Minimum Value", QCValueTable."Maximum Value");
-                                        end
-                                        else if (QCValueTable."Minimum Value" <> '') then begin
-                                            Temptext.SetFilter("Value Text", '%1..', QCValueTable."Minimum Value");
-                                        end
-                                        else if (QCValueTable."Maximum Value" <> '') then begin
-                                            Temptext.SetFilter("Value Text", '..%1', QCValueTable."Maximum Value");
-                                        end;
-
-                                        //Error('QC Result cannot be checked because QC Specification Line do not exist.');
-
-                                        if not Temptext.IsEmpty() then
-                                            "Check Status" := "Check Status"::PASSED
-                                        else
-                                            "Check Status" := "Check Status"::FAILED;
+                                    if (QCSpecLine."Minimum Value" <> '') and (QCSpecLine."Maximum Value" <> '') then begin
+                                        Temptext.SetRange("Value Text", QCSpecLine."Minimum Value", QCSpecLine."Maximum Value");
+                                    end
+                                    else if (QCSpecLine."Minimum Value" <> '') then begin
+                                        Temptext.SetFilter("Value Text", '%1..', QCSpecLine."Minimum Value");
+                                    end
+                                    else if (QCSpecLine."Maximum Value" <> '') then begin
+                                        Temptext.SetFilter("Value Text", '..%1', QCSpecLine."Maximum Value");
                                     end;
-                                (QCValueTable."Value Table Type"::Single):
-                                    begin
-                                        //None
+
+                                    //Error('QC Result cannot be checked because QC Specification Line do not exist.');
+
+                                    if not Temptext.IsEmpty() then
+                                        "Check Status" := "Check Status"::PASSED
+                                    else
+                                        "Check Status" := "Check Status"::FAILED;
+                                end;
+                            (QCSpecLine."Value Table Type"::Single):
+                                begin
+                                    //None
+                                end;
+                            (QCSpecLine."Value Table Type"::Table):
+                                begin
+                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Result") then
+                                        "Check Status" := SpecValueSetting."Check Status"
+                                    else
+                                        "Check Status" := "Check Status"::Init;
+                                end;
+                            (QCSpecLine."Value Table Type"::List):
+                                begin
+                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Result") then
+                                        "Check Status" := SpecValueSetting."Check Status"
+                                    else
+                                        "Check Status" := "Check Status"::Init;
+                                end;
+                        END;
+
+                    end;
+                (QCSpecLine.Type::Numeric):
+                    begin
+                        CASE QCSpecLine."Value Table Type" OF
+                            (QCSpecLine."Value Table Type"::Range):
+                                begin
+
+                                    //ValidateNumeric
+                                    ValidateNumeric("QC Result");
+
+                                    TempDecimal.Reset();
+
+                                    TempDecimal.Init();
+                                    TempDecimal."Value Text" := 'Temp';
+                                    if Evaluate(TempDecimal."Value Decimal", "QC Result") then
+                                        TempDecimal.Insert()
+                                    else
+                                        Error('Please enter a Numeric.');
+
+                                    if Evaluate(TempMinValue, QCSpecLine."Minimum Value") then;
+                                    if Evaluate(TempMaxValue, QCSpecLine."Maximum Value") then;
+
+                                    if (QCSpecLine."Minimum Value" <> '') and (QCSpecLine."Maximum Value" <> '') then begin
+                                        TempDecimal.SetRange("Value Decimal", TempMinValue, TempMaxValue);
+                                    end
+                                    else if (QCSpecLine."Minimum Value" <> '') then begin
+                                        TempDecimal.SetFilter("Value Decimal", '%1..', TempMinValue);
+                                    end
+                                    else if (QCSpecLine."Maximum Value" <> '') then begin
+                                        TempDecimal.SetFilter("Value Decimal", '..%1', TempMaxValue);
                                     end;
-                                (QCValueTable."Value Table Type"::Table):
-                                    begin
-                                        if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
-                                            "Check Status" := QCListValue."Check Status"
-                                        else
-                                            "Check Status" := "Check Status"::Init;
-                                    end;
-                                (QCValueTable."Value Table Type"::List):
-                                    begin
-                                        if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
-                                            "Check Status" := QCListValue."Check Status"
-                                        else
-                                            "Check Status" := "Check Status"::Init;
-                                    end;
-                            END;
 
-                        end;
-                    (QCValueTable.Type::Numeric):
-                        begin
-                            CASE QCValueTable."Value Table Type" OF
-                                (QCValueTable."Value Table Type"::Range):
-                                    begin
+                                    if not TempDecimal.IsEmpty() then
+                                        "Check Status" := "Check Status"::PASSED
+                                    else
+                                        "Check Status" := "Check Status"::FAILED;
 
-                                        //ValidateNumeric
-                                        ValidateNumeric("QC Result");
+                                end;
+                            (QCSpecLine."Value Table Type"::Single):
+                                begin
+                                    //None
+                                end;
+                            (QCSpecLine."Value Table Type"::Table):
+                                begin
+                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Result") then
+                                        "Check Status" := SpecValueSetting."Check Status"
+                                    else
+                                        "Check Status" := "Check Status"::Init;
+                                end;
+                            (QCSpecLine."Value Table Type"::List):
+                                begin
+                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Result") then
+                                        "Check Status" := SpecValueSetting."Check Status"
+                                    else
+                                        "Check Status" := "Check Status"::Init;
+                                end;
+                        END;
 
-                                        TempDecimal.Reset();
-
-                                        TempDecimal.Init();
-                                        TempDecimal."Value Text" := 'Temp';
-                                        if Evaluate(TempDecimal."Value Decimal", "QC Result") then
-                                            TempDecimal.Insert()
-                                        else
-                                            Error('Please enter a Numeric.');
-
-                                        if Evaluate(TempMinValue, QCValueTable."Minimum Value") then;
-                                        if Evaluate(TempMaxValue, QCValueTable."Maximum Value") then;
-
-                                        if (QCValueTable."Minimum Value" <> '') and (QCValueTable."Maximum Value" <> '') then begin
-                                            TempDecimal.SetRange("Value Decimal", TempMinValue, TempMaxValue);
-                                        end
-                                        else if (QCValueTable."Minimum Value" <> '') then begin
-                                            TempDecimal.SetFilter("Value Decimal", '%1..', TempMinValue);
-                                        end
-                                        else if (QCValueTable."Maximum Value" <> '') then begin
-                                            TempDecimal.SetFilter("Value Decimal", '..%1', TempMaxValue);
-                                        end;
-
-                                        if not TempDecimal.IsEmpty() then
-                                            "Check Status" := "Check Status"::PASSED
-                                        else
-                                            "Check Status" := "Check Status"::FAILED;
-
-                                    end;
-                                (QCValueTable."Value Table Type"::Single):
-                                    begin
-                                        //None
-                                    end;
-                                (QCValueTable."Value Table Type"::Table):
-                                    begin
-                                        if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
-                                            "Check Status" := QCListValue."Check Status"
-                                        else
-                                            "Check Status" := "Check Status"::Init;
-                                    end;
-                                (QCValueTable."Value Table Type"::List):
-                                    begin
-                                        if QCListValue.Get(QCValueTable."Value Table Name", "QC Result") then
-                                            "Check Status" := QCListValue."Check Status"
-                                        else
-                                            "Check Status" := "Check Status"::Init;
-                                    end;
-                            END;
-
-                        end;
-
-                END;
-            end;
+                    end;
+            END;
         end;
+        //end;
     end;
 
     procedure ValidateAlphanumeric(InputValue: Text)

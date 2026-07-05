@@ -55,8 +55,11 @@ table 50505 "RV QC Header"
                         "Order No." := Purchaseline."Document No.";
                         "Line No." := Purchaseline."Line No.";
                         "Item No." := Purchaseline."No.";
+                        "Item Description" := Purchaseline.Description;
+                        "Vendor No." := Purchaseline."Buy-from Vendor No.";
                         PurchaseHeader.get(Purchaseline."Document Type"::Order, Purchaseline."Document No.");
-                        "Customer No." := PurchRcptHeader."Sell-to Customer No.";
+                        "Vendor Name" := PurchaseHeader."Buy-from Vendor Name";
+                        "Customer No." := PurchaseHeader."Sell-to Customer No.";
                         "Ship-to Code" := PurchaseHeader."Ship-to Code";
                         "Ship-to Country" := PurchaseHeader."Ship-to Country/Region Code";
                         Modify();
@@ -68,8 +71,10 @@ table 50505 "RV QC Header"
                         "Order No." := PurchRcptLine."Document No.";
                         "Line No." := PurchRcptLine."Line No.";
                         "Item No." := PurchRcptLine."No.";
-
+                        "Item Description" := PurchRcptLine.Description;
+                        "Vendor No." := PurchRcptLine."Buy-from Vendor No.";
                         PurchRcptHeader.get(PurchRcptLine."Document No.");
+                        "Vendor Name" := PurchRcptHeader."Buy-from Vendor Name";
                         "Customer No." := PurchRcptHeader."Sell-to Customer No.";
                         "Ship-to Code" := PurchRcptHeader."Ship-to Code";
                         "Ship-to Country" := PurchRcptHeader."Ship-to Country/Region Code";
@@ -92,12 +97,10 @@ table 50505 "RV QC Header"
                         "Order No." := ProdOrderLine."Prod. Order No.";
                         "Line No." := ProdOrderLine."Line No.";
                         "Item No." := ProdOrderLine."Item No.";
+                        "Item Description" := ProdOrderLine.Description;
                         "Tan No." := ProdOrderLine."Location Code";
                         "Bin Code" := ProdOrderLine."Bin Code";
-                        //"Customer No." := ProdOrderLine."Buy-from Vendor No.";
                         ProductionOrder.get(ProductionOrder.Status::Released, ProdOrderLine."Prod. Order No.");
-                        //"Ship-to Code" := ProdOrderLine."Ship-to Code";
-                        //"Ship-to Country" := PurchRcptHeader."Ship-to Country/Region Code";
                         Modify();
                     end;
                 end;
@@ -113,6 +116,45 @@ table 50505 "RV QC Header"
         field(5; "Lot No."; Code[20])
         {
             Caption = 'Lot No.';
+            trigger OnLookup()
+            var
+                RefOrderType: Enum "RV Ref. Order Type";
+                Purchaseline: Record "Purchase line";
+                PurchRcptLine: Record "Purch. Rcpt. Line";
+                ItemLedgerEntry: Record "Item Ledger Entry";
+                ProdOrderLine: Record "Prod. Order Line";
+            begin
+
+                if "Ref. Order Type" = RefOrderType::"Purchase Order" then begin
+                    //nothing
+                end else if "Ref. Order Type" = RefOrderType::"Posted Purchase Receipt" then begin
+                    PurchRcptLine.get("Order No.", "Line No.");
+                    ItemLedgerEntry.Reset();
+                    ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Purchase Receipt");
+                    ItemLedgerEntry.SetRange("Document No.", PurchRcptLine."Document No.");
+                    ItemLedgerEntry.SetRange("Document Line No.", PurchRcptLine."Line No.");
+
+                    if (Page.RunModal(Page::"Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
+                        Validate("Lot No.", ItemLedgerEntry."Lot No.");
+                    end;
+
+                end else if "Ref. Order Type" = RefOrderType::"Production Order" then begin
+
+                    ItemLedgerEntry.Reset();
+                    ItemLedgerEntry.SetRange("Order Type", ItemLedgerEntry."Order Type"::Production);
+                    ItemLedgerEntry.SetRange("Order No.", "Order No.");
+
+                    if (Page.RunModal(Page::"Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
+                        Validate("Lot No.", ItemLedgerEntry."Lot No.");
+                    end;
+                end;
+            end;
+
+            trigger OnValidate()
+            begin
+                if "Lot No." <> '' then
+                    CheckDuplicate();
+            end;
         }
         field(6; "Item No."; Code[20])
         {
@@ -162,6 +204,18 @@ table 50505 "RV QC Header"
             Caption = 'Bin Code';
             TableRelation = Bin.Code where("Location Code" = field("Tan No."));
         }
+        field(17; "Item Description"; Text[150])
+        {
+            Caption = 'Item Description';
+        }
+        field(18; "Vendor No."; Code[20])
+        {
+            Caption = 'Vendor No.';
+        }
+        field(19; "Vendor Name"; Text[100])
+        {
+            Caption = 'Vendor Name';
+        }
         field(100; "Line No."; Integer)
         {
             Caption = 'Line No.';
@@ -186,7 +240,6 @@ table 50505 "RV QC Header"
             Clustered = true;
         }
     }
-
 
     trigger OnInsert()
     var
@@ -225,8 +278,6 @@ table 50505 "RV QC Header"
         DocumentAttachment: Record "Document Attachment";
         QCline: Record "RV QC line";
         QCInyResultLine: Record "RV QC Iny. Result Line";
-
-
     begin
         DocumentAttachment.SetRange("Table ID", Database::"RV QC Header");
         DocumentAttachment.SetRange("No.", Rec."QC No.");
@@ -257,9 +308,6 @@ table 50505 "RV QC Header"
                 Error(TextCheckErr);
         end else
             Error(TextCheckErr);
-
-        if "QC Approved By" <> '' then
-            Error('You can not check because it has been approved.');
     end;
 
     procedure IsQCApproveAllowed()
@@ -275,6 +323,21 @@ table 50505 "RV QC Header"
 
         if "QC Checked By" = '' then
             Error('You need to Check before Approve.');
+    end;
+
+    procedure IsQCReverseAllowed()
+    var
+        UserSetup: Record "User Setup";
+        TextReverseErr: Label 'You don''t have permission to Reverse!';
+    begin
+        if UserSetup.Get(UserId) then begin
+            if not UserSetup."RV_Allow QC Reverse" then
+                Error(TextReverseErr);
+        end else
+            Error(TextReverseErr);
+
+        if "QC Status" in ["QC Status"::Analyzing, "QC Status"::Checked] then
+            Error('You can not Reverse, because you need approval or Reject.')
     end;
 
     procedure CheckRemark_Input()
@@ -365,8 +428,9 @@ table 50505 "RV QC Header"
 
         QCGroup: Record "RV QC Resource Group";
         QCSpecificationLine: Record "RV QC Specification Line";
-        QCParameter: Record "RV QC Parameter";
-        QCListValue: Record "RV QC List Value";
+        //QCParameter: Record "RV QC Parameter";
+        QCListValue: Record "RV Specification Value Setting";
+        SpecValueSetting: Record "RV Specification Value Setting";
         QCStandardType: enum "RV QC Standard Type";
         LineNo: Integer;
         currSpecification: Code[20];
@@ -423,18 +487,21 @@ table 50505 "RV QC Header"
                 QCLine."Line No." := LineNo;
                 //QCParameter
                 //QCParameter.Reset();
-                QCParameter.Get(QCSpecificationLine."QC Parameter Name");
-                QCParameter.CalcFields(Type, "Value Table Type");
-                QCLine."QC Parameter Name" := QCParameter."Parameter Name";
-                QCLine.Type := QCParameter.Type;
-                QCLine."Value Table Type" := QCParameter."Value Table Type";
-                QCLine."Value Table Name" := QCParameter."Value Table Name";
+                //QCParameter.Get(QCSpecificationLine."QC Parameter Name");
+                //QCParameter.CalcFields(Type, "Value Table Type");
+                QCLine."QC Specification Name" := QCSpecificationLine."QC Specification Name";
+                QCLine."QC Parameter Name" := QCSpecificationLine."QC Parameter Name";
+                QCLine.Type := QCSpecificationLine.Type;
+                QCLine."Value Table Type" := QCSpecificationLine."Value Table Type";
+                QCLine."Value Table Name" := QCSpecificationLine."Value Table Name";
                 if QCLine."Value Table Type" = QCLine."Value Table Type"::Single then begin
-                    QCListValue.Reset();
-                    QCListValue.SetRange("Value Table Name", QCParameter."Value Table Name");
-                    if QCListValue.FindFirst() then begin
-                        QCLine."QC Result" := QCListValue."List Value";
-                        QCLine."Check Status" := QCListValue."Check Status";
+                    SpecValueSetting.Reset();
+                    SpecValueSetting.SetRange("QC Specification Name", QCLine."QC Specification Name");
+                    SpecValueSetting.SetRange("QC Parameter Name", QCLine."QC Parameter Name");
+                    SpecValueSetting.SetRange("Value Table Name", QCLine."Value Table Name");
+                    if SpecValueSetting.FindFirst() then begin
+                        QCLine."QC Result" := SpecValueSetting."List Value";
+                        QCLine."Check Status" := SpecValueSetting."Check Status";
                     end;
                     //end;
                 end;
@@ -443,7 +510,7 @@ table 50505 "RV QC Header"
     end;
 
 
-    procedure SetQCEnable(var CreateQCLineEnable: Boolean; var QCCheckEnable: Boolean; var QCApproveEnable: Boolean;
+    procedure SetQCEnable(var CreateQCLineEnable: Boolean; var QCCheckEnable: Boolean; var QCApproveEnable: Boolean; var QCReverseEnable: Boolean;
                             var SubQCLineEnable: Boolean; var SubInventoryResultEnable: Boolean; var QCCardEnable: Boolean)
     begin
 
@@ -454,6 +521,7 @@ table 50505 "RV QC Header"
                     CreateQCLineEnable := true;
                     QCCheckEnable := true;
                     QCApproveEnable := false;
+                    QCReverseEnable := false;
 
                     SubQCLineEnable := true;
                     SubInventoryResultEnable := true;
@@ -464,16 +532,18 @@ table 50505 "RV QC Header"
                     CreateQCLineEnable := false;
                     QCCheckEnable := false;
                     QCApproveEnable := true;
+                    QCReverseEnable := false;
 
-                    SubQCLineEnable := false;
-                    SubInventoryResultEnable := false;
-                    QCCardEnable := false;
+                    SubQCLineEnable := true;
+                    SubInventoryResultEnable := true;
+                    QCCardEnable := true;
                 end;
             (Rec."QC Status"::Approved):
                 begin
                     CreateQCLineEnable := false;
                     QCCheckEnable := false;
                     QCApproveEnable := false;
+                    QCReverseEnable := true;
 
                     SubQCLineEnable := false;
                     SubInventoryResultEnable := false;
@@ -484,6 +554,7 @@ table 50505 "RV QC Header"
                     CreateQCLineEnable := false;
                     QCCheckEnable := false;
                     QCApproveEnable := false;
+                    QCReverseEnable := true;
 
                     SubQCLineEnable := false;
                     SubInventoryResultEnable := false;
@@ -491,5 +562,50 @@ table 50505 "RV QC Header"
                 end;
         END;
 
+    end;
+
+    local procedure CheckDuplicate()
+    var
+        QCHeader: Record "RV QC Header";
+    begin
+        QCHeader.Reset();
+        QCHeader.SetRange("Item No.", Rec."Item No.");
+        QCHeader.SetRange("Lot No.", Rec."Lot No.");
+
+        if Rec."QC No." <> '' then
+            QCHeader.SetFilter("QC No.", '<>%1', Rec."QC No.");
+
+        if not QCHeader.IsEmpty() then
+            Error('The combination of Item %1 and Lot %2 already exists; duplicates are not allowed.', "Item No.", "Lot No.");
+    end;
+
+    procedure CheckFail(): Boolean
+    var
+        QCline: Record "RV QC line";
+        ConfirmCheckFail: Label 'QC results has failed case, Do you continue to QC Check?';
+    begin
+        QCline.Reset();
+        QCline.SetRange("QC No.", Rec."QC No.");
+        QCline.SetRange("QC Type", Rec."QC Type");
+        QCline.SetRange("Check Status", QCline."Check Status"::FAILED);
+        if not QCline.IsEmpty() then begin
+            if CONFIRM(ConfirmCheckFail) then
+                EXIT(true)
+            else
+                EXIT(false);
+        end;
+    end;
+
+    procedure CheckInit()
+    var
+        QCline: Record "RV QC line";
+        ErrorCheckInit: Label 'QC results has Init data, You can''t continue to QC Check!';
+    begin
+        QCline.Reset();
+        QCline.SetRange("QC No.", Rec."QC No.");
+        QCline.SetRange("QC Type", Rec."QC Type");
+        QCline.SetRange("Check Status", QCline."Check Status"::Init);
+        if not QCline.IsEmpty() then
+            Error(ErrorCheckInit);
     end;
 }

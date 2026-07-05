@@ -55,6 +55,11 @@ page 50521 "RV PQC Card"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("Item Description"; Rec."Item Description")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("Lot No."; Rec."Lot No.")
                 {
                     ApplicationArea = All;
@@ -173,11 +178,18 @@ page 50521 "RV PQC Card"
                     //IsQCCheckAllowed
                     Rec.IsQCCheckAllowed();
 
+                    //CheckFail
+                    if not Rec.CheckFail() then
+                        exit;
+
+                    //CheckInit
+                    Rec.CheckInit();
+
                     //CheckRemark_Input
                     Rec.CheckRemark_Input();
 
                     //Enable
-                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
                 end;
             }
             action("QC Approve")
@@ -192,11 +204,35 @@ page 50521 "RV PQC Card"
                     //IsQCApproveAllowed
                     Rec.IsQCApproveAllowed();
 
+                    //CheckFail
+                    if not Rec.CheckFail() then
+                        exit;
+
+                    //CheckInit
+                    Rec.CheckInit();
+
                     //ApprovedRemark_Input
                     Rec.ApprovedRemark_Input();
 
                     //Enable
-                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+                end;
+            }
+            action("QC Reverse")
+            {
+                Caption = 'QC Reverse';
+                ApplicationArea = All;
+                Image = Approval;
+                Enabled = QCReverseEnable;
+                trigger OnAction()
+                begin
+                    //IsQCReverseAllowed
+                    Rec.IsQCReverseAllowed();
+
+                    Rec."QC Status" := Rec."QC Status"::Checked;
+                    Rec.Modify();
+                    //Enable
+                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
                 end;
             }
         }
@@ -214,6 +250,9 @@ page 50521 "RV PQC Card"
                 actionref("QC Approve_Promoted"; "QC Approve")
                 {
                 }
+                actionref("QC Reverse_Promoted"; "QC Reverse")
+                {
+                }
             }
         }
     }
@@ -229,12 +268,12 @@ page 50521 "RV PQC Card"
 
     trigger OnOpenPage()
     begin
-        Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+        Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
     end;
 
     trigger OnAfterGetCurrRecord()
     begin
-        Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+        Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
     end;
 
     var
@@ -244,6 +283,7 @@ page 50521 "RV PQC Card"
         CreateQCLineEnable: Boolean;
         QCCheckEnable: Boolean;
         QCApproveEnable: Boolean;
+        QCReverseEnable: Boolean;
         SubQCLineEnable: Boolean;
         SubInventoryResultEnable: Boolean;
 }

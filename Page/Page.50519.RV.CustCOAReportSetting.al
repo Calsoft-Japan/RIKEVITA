@@ -24,6 +24,10 @@ page 50519 "RV CustCOAReportSetting"
                 {
                     ApplicationArea = All;
                 }
+                field("Display COA Date"; Rec."Display COA Date")
+                {
+                    ApplicationArea = All;
+                }
                 field("Display Quantity Per Lot."; Rec."Display Quantity Per Lot.")
                 {
                     ApplicationArea = All;
@@ -37,6 +41,10 @@ page 50519 "RV CustCOAReportSetting"
                     ApplicationArea = All;
                 }
                 field("Date Calculation"; Rec."Date Calculation")
+                {
+                    ApplicationArea = All;
+                }
+                field("Expire Date"; Rec."Expire Date")
                 {
                     ApplicationArea = All;
                 }

@@ -94,12 +94,14 @@ report 50601 "RV Collect MPS Data"
                 if (StartingDate <> 0D)
                And (EndingDate <> 0D) then begin
                     SetFilter("Starting Date", '%1..', StartingDate);
-                    setFilter("Ending Date", '..%1', EndingDate);
+                    //setFilter("Ending Date", '..%1', EndingDate);
+                    setFilter("Starting Date", '..%1', EndingDate);
                 end else
                     if (StartingDate <> 0D) then
                         SetFilter("Starting Date", '%1..', StartingDate)
                     else if (EndingDate <> 0D) then
-                        setFilter("Ending Date", '..%1', EndingDate);
+                        //setFilter("Ending Date", '..%1', EndingDate);
+                        setFilter("Starting Date", '..%1', EndingDate);
 
                 MPSReschedulingLine.Reset();
                 MPSReschedulingLine.SetRange("Batch Name", GBatch);
@@ -120,12 +122,12 @@ report 50601 "RV Collect MPS Data"
                     Caption = 'General';
                     field(StartingDate; StartingDate)
                     {
-                        Caption = 'Starting After';
+                        Caption = 'Production Starting Date From';
                         ApplicationArea = All;
                     }
                     field(EndingDate; EndingDate)
                     {
-                        Caption = 'Ending Before';
+                        Caption = 'Production Starting Date To';
                         ApplicationArea = All;
                     }
 
