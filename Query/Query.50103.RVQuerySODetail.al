@@ -27,6 +27,8 @@ query 50103 "RV Query SO Detail"
             {
                 DataItemLink = "Document No." = SalesHeader."No.", "Document Type" = SalesHeader."Document Type";
 
+                column(SO_Line_No_; "Line No.")
+                { }
                 column(Item_No_; "No.")
                 { }
 

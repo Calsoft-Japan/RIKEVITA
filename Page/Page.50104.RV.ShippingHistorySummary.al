@@ -256,7 +256,7 @@ page 50104 "RV Shipping History Summary"
                 end;
             end;
         end;
-        QrySOShipSum.Close();
+        QrySOShptDtl.Close();
         NoOfPostedShipments := DistPstShpts.Count;
         if PstWhsNoFilter <> '' then
             PstWhsNoFilter := PstWhsNoFilter.Remove(StrLen(PstWhsNoFilter));
