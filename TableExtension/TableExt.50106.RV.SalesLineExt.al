@@ -84,5 +84,13 @@ tableextension 50106 "RV Sales Line Ext." extends "Sales Line"
             Description = 'FDD012';
             DataClassification = ToBeClassified;
         }
+
+        field(50104; "External Document No."; Code[35])
+        {
+            Caption = 'External Document No.';
+            Description = 'FDD005';
+            //FieldClass = FlowField;
+            //CalcFormula = lookup("Sales Header"."External Document No." where("Document Type" = field("Document Type"), "No." = field("Document No.")));
+        }
     }
 }

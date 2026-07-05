@@ -42,17 +42,21 @@ page 50105 "RV Item Tracking Hst. - Sales"
                         ItemLedgerEntriesPage: Page "Item Ledger Entries"; // Page 38
                         ItemEntryNoList: Text;
                     begin
-                        ItemRelation.Reset();
+                        /* ItemRelation.Reset();
                         ItemRelation.SetRange("Source Type", Database::"Sales Shipment Line");
-                        ItemRelation.SetRange("Order No.", Rec."Sales Order No.");
-                        ItemRelation.SetRange("Order Line No.", Rec."Sales Order Line No.");
+                        //ItemRelation.SetRange("Order No.", Rec."Sales Order No.");
+                        //ItemRelation.SetRange("Order Line No.", Rec."Sales Order Line No.");
+                        if SONoFilter <> '' then
+                            ItemRelation.SetFilter("Order No.", SONoFilter);
+
+
                         if ItemRelation.FindSet() then begin
                             repeat
                                 ItemEntryNoList += Format(ItemRelation."Item Entry No.") + '|';
                             until ItemRelation.Next() = 0;
 
                             ItemEntryNoList := DelStr(ItemEntryNoList, StrLen(ItemEntryNoList), 1);
-                        end;
+                        end; */
 
 
                         /* ItemLedgerEntry.Reset();
@@ -65,7 +69,13 @@ page 50105 "RV Item Tracking Hst. - Sales"
                         ItemLedgerEntry.SetRange("RV_Container No.", RV_Container_No); */
                         //ItemLedgerEntry.SetRange("Entry No.", CurEntryNo);
 
-                        ItemLedgerEntry.SetFilter("Entry No.", ItemEntryNoList);
+                        //ItemLedgerEntry.SetFilter("Entry No.", ItemEntryNoList);
+                        ItemLedgerEntry.SetRange("External Document No.", Rec."External Document No.");
+                        ItemLedgerEntry.SetRange("Source Type", ItemLedgerEntry."Source Type"::Customer);
+                        ItemLedgerEntry.SetRange("Source No.", Rec."Sell-to Customer No.");
+                        ItemLedgerEntry.SetRange("Item No.", Rec."Item No.");
+                        ItemLedgerEntry.SetRange("Lot No.", Rec."Lot No.");
+                        ItemLedgerEntry.SetRange("RV_Container No.", Rec."Container No.");
                         ItemLedgerEntriesPage.SetTableView(ItemLedgerEntry);
                         ItemLedgerEntriesPage.RunModal();
                     end;
@@ -90,6 +100,7 @@ page 50105 "RV Item Tracking Hst. - Sales"
         CurShipNo: Text;
         CurShipLineNo: Integer;
         ILE: Record "Item Ledger Entry";
+    //SONoFilter: Text;
 
     trigger OnAfterGetRecord()
     var
@@ -111,6 +122,64 @@ page 50105 "RV Item Tracking Hst. - Sales"
 
         if ItmLedgerEntry.Get(CurEntryNo) then begin
             RV_Container_No := ItmLedgerEntry."RV_Container No.";
+        end; */
+    end;
+
+
+    procedure setGlobalSOFiler()
+    var
+        SOHeader: Record "Sales Header";
+        SOLines: Record "Sales Line";
+        //QrySOShptDtl: Query "RV Query SO Detail";
+
+        DistSONoList: List of [Text];
+        ExtDocNo: Text;
+    begin
+        /* Clear(SONoFilter);
+        Clear(DistSONoList);
+
+        QrySOShptDtl.SetRange(ExternalDocumentNo, Rec."External Document No.");
+        QrySOShptDtl.SetRange(SelltoCustomerNo, Rec."Sell-to Customer No.");
+        QrySOShptDtl.SetRange(Item_No_, Rec."Item No.");
+        QrySOShptDtl.Open();
+        while QrySOShptDtl.Read() do begin
+            if QrySOShptDtl.SO_No_ <> '' then begin
+                if not DistSONoList.Contains(QrySOShptDtl.SO_No_) then begin
+                    DistSONoList.Add(QrySOShptDtl.SO_No_);
+                    SONoFilter := SONoFilter + QrySOShptDtl.SO_No_ + '|';
+                end;
+            end;
+        end;
+        if SONoFilter <> '' then
+            SONoFilter := SONoFilter.Remove(StrLen(SONoFilter)); */
+
+        /* if SOHeader.Get("Sales Document Type"::Order, Rec."Sales Order No.") then begin
+            ExtDocNo := SOHeader."External Document No.";
+
+            SOLines.Reset();
+            SOLines.SetRange("Document Type", SOHeader."Document Type");
+            SOLines.SetRange("Document No.", SOHeader."No.");
+            SOLines.SetRange("Line No.", Rec."Sales Order Line No.");
+            if SOLines.FindSet() then begin
+                //repeat
+                QrySOShptDtl.SetRange(ExternalDocumentNo, ExtDocNo);
+                QrySOShptDtl.SetRange(SelltoCustomerNo, SOLines."Sell-to Customer No.");
+                QrySOShptDtl.SetRange(Item_No_, SOLines."No.");
+                QrySOShptDtl.Open();
+                while QrySOShptDtl.Read() do begin
+                    if QrySOShptDtl.SO_No_ <> '' then begin
+                        if not DistSONoList.Contains(QrySOShptDtl.SO_No_) then begin
+                            DistSONoList.Add(QrySOShptDtl.SO_No_);
+                            SONoFilter := SONoFilter + QrySOShptDtl.SO_No_ + '|';
+                        end;
+                    end;
+                end;
+                QrySOShptDtl.Close();
+                //until SOLines.Next() = 0;
+
+                if SONoFilter <> '' then
+                    SONoFilter := SONoFilter.Remove(StrLen(SONoFilter));
+            end;
         end; */
     end;
 

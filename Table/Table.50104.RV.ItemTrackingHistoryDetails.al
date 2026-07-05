@@ -29,12 +29,27 @@ table 50104 "RV Item Tracking History Dtl."
         {
             Caption = 'Qty';
         }
+        field(6; "Item No."; Code[20])
+        {
+            Caption = 'Item No.';
+        }
+        field(7; "External Document No."; Code[35])
+        {
+            Caption = 'External Document No.';
+        }
+        field(8; "Sell-to Customer No."; Code[20])
+        {
+            Caption = 'Sell-to Customer No.';
+        }
     }
     keys
     {
-        key(PK; "Sales Order No.", "Sales Order Line No.", "Lot No.", "Container No.")
+        key(PK; "External Document No.", "Sell-to Customer No.", "Item No.", "Lot No.", "Container No.")
         {
             Clustered = true;
+        }
+        key(PKey1; "Sales Order No.", "Sales Order Line No.", "Lot No.", "Container No.")
+        {
         }
     }
 }

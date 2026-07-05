@@ -154,8 +154,12 @@ codeunit 50101 "RV TransferWarehouseShipment"
         ItemTrackHist.LockTable();
 
         ItemTrackHist.Reset();
-        ItemTrackHist.SetRange("Sales Order No.", xSalesLine."Document No.");
-        ItemTrackHist.SetRange("Sales Order Line No.", xSalesLine."Line No.");
+        //ItemTrackHist.SetRange("Sales Order No.", xSalesLine."Document No.");
+        //ItemTrackHist.SetRange("Sales Order Line No.", xSalesLine."Line No.");
+
+        ItemTrackHist.SetRange("External Document No.", xSalesLine."External Document No.");
+        ItemTrackHist.SetRange("Sell-to Customer No.", xSalesLine."Sell-to Customer No.");
+        ItemTrackHist.SetRange("Item No.", xSalesLine."No.");
         ItemTrackHist.SetRange("Lot No.", ItemEntryRelation."Lot No.");
         ItemTrackHist.SetRange("Container No.", ILE."RV_Container No.");
         if ItemTrackHist.FindFirst() then begin
@@ -164,11 +168,15 @@ codeunit 50101 "RV TransferWarehouseShipment"
         end else begin
             Clear(ItemTrackHist);
             ItemTrackHist.Init();
-            ItemTrackHist."Sales Order No." := xSalesLine."Document No.";
-            ItemTrackHist."Sales Order Line No." := xSalesLine."Line No.";
+            //ItemTrackHist."Sales Order No." := xSalesLine."Document No.";
+            //ItemTrackHist."Sales Order Line No." := xSalesLine."Line No.";
             ItemTrackHist."Lot No." := ItemEntryRelation."Lot No.";
             ItemTrackHist."Container No." := ILE."RV_Container No.";
             ItemTrackHist.Qty := ILE.Quantity / ILE."Qty. per Unit of Measure";
+
+            ItemTrackHist."External Document No." := xSalesLine."External Document No.";
+            ItemTrackHist."Sell-to Customer No." := xSalesLine."Sell-to Customer No.";
+            ItemTrackHist."Item No." := xSalesLine."No.";
             ItemTrackHist.Insert();
         end;
     end;
@@ -178,9 +186,9 @@ codeunit 50101 "RV TransferWarehouseShipment"
     var
         ItemTrackHist: Record "RV Item Tracking History Dtl.";
     begin
-        ItemTrackHist.Reset();
+        /* ItemTrackHist.Reset();
         ItemTrackHist.SetRange("Sales Order No.", SalesHeader."No.");
-        ItemTrackHist.DeleteAll();
+        ItemTrackHist.DeleteAll(); */
     end;
 
     //FDD005 Item Tracking History Details

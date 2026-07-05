@@ -44,6 +44,21 @@ table 50203 "RV Warehouse Packing Info."
         {
             Caption = 'Container No';
             Description = 'FDD019';
+            trigger OnValidate()
+            var
+                WarehousePackingInfo: Record "RV Warehouse Packing Info.";
+            begin
+                WarehousePackingInfo.Reset();
+                WarehousePackingInfo.SetRange("Warehouse Shipment No.", Rec."Warehouse Shipment No.");
+                WarehousePackingInfo.SetRange("Sales Order No.", Rec."Sales Order No.");
+                WarehousePackingInfo.SetRange("SO Line No.", Rec."SO Line No.");
+                WarehousePackingInfo.SetRange("Item No.", Rec."Item No.");
+                WarehousePackingInfo.SetRange("Lot No.", Rec."Lot No.");
+                WarehousePackingInfo.SetRange("Container No", Rec."Container No");
+                if WarehousePackingInfo.FindFirst() then begin
+                    Error('For the same shipment Line, the same Lot No. and Container No. should be consolidated into a single packaging line.');
+                end;
+            end;
         }
         field(8; "Quantity"; Decimal)
         {
