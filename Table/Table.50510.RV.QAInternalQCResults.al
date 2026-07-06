@@ -27,9 +27,9 @@ table 50510 "RV QA Internal QC Results"
             Caption = 'QC Parameter Name';
             TableRelation = "RV QC Parameter";
         }
-        field(5; "QC Result"; Text[50])
+        field(5; "QC Value"; Text[50])
         {
-            Caption = 'QC Result';
+            Caption = 'QC Value';
         }
         field(6; "QC Type"; Enum "RV QC Type")
         {

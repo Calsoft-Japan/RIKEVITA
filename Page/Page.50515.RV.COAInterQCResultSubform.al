@@ -43,7 +43,7 @@ page 50515 "RV COA InterQCResult Subform"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("QC Result"; Rec."QC Result")
+                field("QC Value"; Rec."QC Value")
                 {
                     ApplicationArea = All;
                     Editable = false;

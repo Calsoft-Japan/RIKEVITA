@@ -177,7 +177,7 @@ page 50514 "RV COA Card Subform"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("COA Credaing Date"; Rec."COA Credaing Date")
+                field("COA Created Date"; Rec."COA Created Date")
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -252,7 +252,7 @@ page 50514 "RV COA Card Subform"
                             QAInternalQCResults."COA Lot Line No." := QAShipmentLotNo."COA Lot Line No.";
                             QAInternalQCResults."QC Internal Spec. Line No." := FQCLine."Line No.";
                             QAInternalQCResults."QC Parameter Name" := FQCLine."QC Parameter Name";
-                            QAInternalQCResults."QC Result" := FQCLine."QC Result";
+                            QAInternalQCResults."QC Value" := FQCLine."QC Value";
                             QAInternalQCResults."QC Type" := QAInternalQCResults."QC Type"::FQC;
                             QAInternalQCResults."Check Status" := FQCLine."Check Status";
                             QAInternalQCResults."QC Checked Remark" := FQCHeader."QC Checked Remark";
