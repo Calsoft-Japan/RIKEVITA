@@ -69,7 +69,7 @@ page 50525 "RV FQC Card"
                     ApplicationArea = All;
                     Editable = QCCardEnable;
                 }
-                field("Tan No."; Rec."Tan No.")
+                field("Location Code"; Rec."Location Code")
                 {
                     ApplicationArea = All;
                     Editable = QCCardEnable;
@@ -178,7 +178,7 @@ page 50525 "RV FQC Card"
                     Rec.IsQCCheckAllowed();
 
                     //CheckFail
-                    if not Rec.CheckFail() then
+                    if Rec.CheckFail() then
                         exit;
 
                     //CheckInit
@@ -204,7 +204,7 @@ page 50525 "RV FQC Card"
                     Rec.IsQCApproveAllowed();
 
                     //CheckFail
-                    if not Rec.CheckFail() then
+                    if Rec.CheckFail() then
                         exit;
 
                     //CheckInit

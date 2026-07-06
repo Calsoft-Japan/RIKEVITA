@@ -199,7 +199,7 @@ page 50509 "RV IQC Card"
                     Rec.IsQCCheckAllowed();
 
                     //CheckFail
-                    if not Rec.CheckFail() then
+                    if Rec.CheckFail() then
                         exit;
 
                     //CheckInit
@@ -223,7 +223,7 @@ page 50509 "RV IQC Card"
                     Rec.IsQCApproveAllowed();
 
                     //CheckFail
-                    if not Rec.CheckFail() then
+                    if Rec.CheckFail() then
                         exit;
 
                     //CheckInit

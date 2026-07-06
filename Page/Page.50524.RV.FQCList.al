@@ -85,7 +85,7 @@ page 50524 "RV FQC List"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("Tan No."; Rec."Tan No.")
+                field("Location Code"; Rec."Location Code")
                 {
                     ApplicationArea = All;
                     Editable = false;

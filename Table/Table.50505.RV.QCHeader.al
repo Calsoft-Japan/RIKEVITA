@@ -98,7 +98,7 @@ table 50505 "RV QC Header"
                         "Line No." := ProdOrderLine."Line No.";
                         "Item No." := ProdOrderLine."Item No.";
                         "Item Description" := ProdOrderLine.Description;
-                        "Tan No." := ProdOrderLine."Location Code";
+                        "Location Code" := ProdOrderLine."Location Code";
                         "Bin Code" := ProdOrderLine."Bin Code";
                         ProductionOrder.get(ProductionOrder.Status::Released, ProdOrderLine."Prod. Order No.");
                         Modify();
@@ -133,6 +133,7 @@ table 50505 "RV QC Header"
                     ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Purchase Receipt");
                     ItemLedgerEntry.SetRange("Document No.", PurchRcptLine."Document No.");
                     ItemLedgerEntry.SetRange("Document Line No.", PurchRcptLine."Line No.");
+                    itemledgerentry.SetRange(Correction, false);
 
                     if (Page.RunModal(Page::"Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
                         Validate("Lot No.", ItemLedgerEntry."Lot No.");
@@ -143,6 +144,8 @@ table 50505 "RV QC Header"
                     ItemLedgerEntry.Reset();
                     ItemLedgerEntry.SetRange("Order Type", ItemLedgerEntry."Order Type"::Production);
                     ItemLedgerEntry.SetRange("Order No.", "Order No.");
+                    ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::Output);
+                    ItemLedgerEntry.SetFilter("Quantity", '>0');
 
                     if (Page.RunModal(Page::"Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
                         Validate("Lot No.", ItemLedgerEntry."Lot No.");
@@ -194,15 +197,15 @@ table 50505 "RV QC Header"
         {
             Caption = 'Manufacturing Date';
         }
-        field(15; "Tan No."; Code[10])
+        field(15; "Location Code"; Code[10])
         {
-            Caption = 'Tan No.';
+            Caption = 'Location Code';
             TableRelation = Location;
         }
         field(16; "Bin Code"; Code[20])
         {
             Caption = 'Bin Code';
-            TableRelation = Bin.Code where("Location Code" = field("Tan No."));
+            TableRelation = Bin.Code where("Location Code" = field("Location Code"));
         }
         field(17; "Item Description"; Text[150])
         {
@@ -352,7 +355,7 @@ table 50505 "RV QC Header"
         RemarkText[1] := Rec."QC Checked Remark";// Remark
         RemarkText[2] := 'QC Check Remark'; //Caption       
 
-        RVQCRemarkInput.Caption := 'QA Remark Input';
+        RVQCRemarkInput.Caption := 'QC Check Remark';
         RVQCRemarkInput.SetParameter(RemarkText);
 
         IF RVQCRemarkInput.RUNMODAL = ACTION::OK then begin
@@ -377,7 +380,7 @@ table 50505 "RV QC Header"
         RemarkText[1] := Rec."QC Approved Remark";// MarkText
         RemarkText[2] := 'QC Approved Remark'; //Caption       
 
-        RVQCRemarkInput.Caption := 'QA Remark Input';
+        RVQCRemarkInput.Caption := 'QC Approved Remark';
         RVQCRemarkInput.SetParameter(RemarkText);
 
         IF RVQCRemarkInput.RUNMODAL = ACTION::OK then begin
@@ -395,7 +398,7 @@ table 50505 "RV QC Header"
         "Order No." := '';
         "Item No." := '';
         "Lot No." := '';
-        "Tan No." := '';
+        "Location Code" := '';
         "Bin Code" := '';
         "QC Date" := 0D;
 
@@ -576,13 +579,13 @@ table 50505 "RV QC Header"
             QCHeader.SetFilter("QC No.", '<>%1', Rec."QC No.");
 
         if not QCHeader.IsEmpty() then
-            Error('The combination of Item %1 and Lot %2 already exists; duplicates are not allowed.', "Item No.", "Lot No.");
+            Error('Item %1 and Lot No. %2 have already been inspected; please confirm.', "Item No.", "Lot No.");
     end;
 
     procedure CheckFail(): Boolean
     var
         QCline: Record "RV QC line";
-        ConfirmCheckFail: Label 'QC results has failed case, Do you continue to QC Check?';
+        ConfirmCheckFail: Label 'QC results has failed case, Do you continue?';
     begin
         QCline.Reset();
         QCline.SetRange("QC No.", Rec."QC No.");
@@ -590,20 +593,23 @@ table 50505 "RV QC Header"
         QCline.SetRange("Check Status", QCline."Check Status"::FAILED);
         if not QCline.IsEmpty() then begin
             if CONFIRM(ConfirmCheckFail) then
-                EXIT(true)
+                EXIT(false)
             else
-                EXIT(false);
-        end;
+                EXIT(true);
+        end else
+            EXIT(false);
     end;
 
     procedure CheckInit()
     var
         QCline: Record "RV QC line";
-        ErrorCheckInit: Label 'QC results has Init data, You can''t continue to QC Check!';
+        ErrorCheckInit: Label 'QC results has Init data, please check and correct before continuing.';
     begin
         QCline.Reset();
         QCline.SetRange("QC No.", Rec."QC No.");
         QCline.SetRange("QC Type", Rec."QC Type");
+        IF QCLine.IsEmpty then
+            error('QC results has no data, please enter QC line before continuing.');
         QCline.SetRange("Check Status", QCline."Check Status"::Init);
         if not QCline.IsEmpty() then
             Error(ErrorCheckInit);

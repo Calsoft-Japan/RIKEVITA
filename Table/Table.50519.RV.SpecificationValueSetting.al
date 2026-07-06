@@ -19,7 +19,7 @@ table 50519 "RV Specification Value Setting"
             Caption = 'QC Parameter Name';
             TableRelation = "RV QC Parameter";
         }
-        field(30; "Value Table Name"; Code[20])
+        field(30; "Value Table Name"; Code[100])
         {
             Caption = 'Value Table Name';
         }
