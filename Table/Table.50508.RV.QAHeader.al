@@ -66,9 +66,9 @@ table 50508 "RV QA Header"
         {
             Caption = 'QA Approved Remark';
         }
-        field(16; "COA Credaing Date"; Date)
+        field(16; "COA Created Date"; Date)
         {
-            Caption = 'COA Credaing Date';
+            Caption = 'COA Created Date';
         }
         field(17; "QA Checked Date"; Date)
         {

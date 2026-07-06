@@ -197,6 +197,7 @@ table 50505 "RV QC Header"
         {
             Caption = 'Manufacturing Date';
         }
+
         field(15; "Location Code"; Code[10])
         {
             Caption = 'Location Code';
@@ -219,6 +220,10 @@ table 50505 "RV QC Header"
         {
             Caption = 'Vendor Name';
         }
+        field(20; "Expiration Date"; Date)
+        {
+            Caption = 'Expiration Date';
+        }
         field(100; "Line No."; Integer)
         {
             Caption = 'Line No.';
@@ -234,6 +239,10 @@ table 50505 "RV QC Header"
         field(103; "Ship-to Country"; Code[10])
         {
             Caption = 'Ship-to Country';
+        }
+        field(104; "QC Comment"; Text[250])
+        {
+            Caption = 'QC Comment';
         }
     }
     keys
@@ -503,7 +512,7 @@ table 50505 "RV QC Header"
                     SpecValueSetting.SetRange("QC Parameter Name", QCLine."QC Parameter Name");
                     SpecValueSetting.SetRange("Value Table Name", QCLine."Value Table Name");
                     if SpecValueSetting.FindFirst() then begin
-                        QCLine."QC Result" := SpecValueSetting."List Value";
+                        QCLine."QC Value" := SpecValueSetting."List Value";
                         QCLine."Check Status" := SpecValueSetting."Check Status";
                     end;
                     //end;

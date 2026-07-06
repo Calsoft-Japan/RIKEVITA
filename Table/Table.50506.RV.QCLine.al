@@ -35,7 +35,7 @@ table 50506 "RV QC Line"
                 Clear(Type);
                 Clear("Value Table Type");
                 Clear("Value Table Name");
-                Clear("QC Result");
+                Clear("QC Value");
                 Clear("Check Status");
 
                 if QCParameter.Get("QC Parameter Name") then begin
@@ -48,7 +48,7 @@ table 50506 "RV QC Line"
                         QCListValue.Reset();
                         QCListValue.SetRange("Value Table Name", QCParameter."Value Table Name");
                         if QCListValue.FindFirst() then begin
-                            "QC Result" := QCListValue."List Value";
+                            "QC Value" := QCListValue."List Value";
                             "Check Status" := QCListValue."Check Status";
                         end;
                     end;
@@ -58,9 +58,9 @@ table 50506 "RV QC Line"
                 end;
             end;
         }
-        field(5; "QC Result"; Text[50])
+        field(5; "QC Value"; Text[50])
         {
-            Caption = 'QC Result';
+            Caption = 'QC Value';
             TableRelation =
             if ("Value Table Type" = const("List")) "RV Specification Value Setting"."List Value" where("QC Specification Name" = field("QC Specification Name"), "QC Parameter Name" = field("QC Parameter Name"), "Value Table Name" = field("Value Table Name"))
             else
@@ -70,15 +70,24 @@ table 50506 "RV QC Line"
 
             trigger OnValidate()
             begin
-                if "QC Result" = '' then
+                if "QC Value" = '' then
                     "Check Status" := "Check Status"::Init
                 else
                     CheckQCResultRange();
             end;
         }
+
         field(6; "Check Status"; Enum "RV Check Status")
         {
             Caption = 'Check Status';
+        }
+        field(7; "Minimum Value"; Text[50])
+        {
+            Caption = 'Minimum Value';
+        }
+        field(8; "Maximum Value"; Text[50])
+        {
+            Caption = 'Maximum Value';
         }
         field(10; "Value Table Type"; Enum "RV Value Table Type")
         {
@@ -97,6 +106,19 @@ table 50506 "RV QC Line"
         {
             Caption = 'Value Table Name';
             NotBlank = true;
+        }
+        field(20; "QC Result 1"; Text[50])
+        {
+            Caption = 'QC Result 1';
+
+        }
+        field(21; "QC Result 2"; Text[50])
+        {
+            Caption = 'QC Result 2';
+        }
+        field(22; Comment; Text[250])
+        {
+            Caption = 'Comment';
         }
     }
     keys
@@ -153,12 +175,12 @@ table 50506 "RV QC Line"
                                 begin
 
                                     //ValidateAlphanumeric
-                                    ValidateAlphanumeric("QC Result");
+                                    ValidateAlphanumeric("QC Value");
 
                                     Temptext.Reset();
 
                                     Temptext.Init();
-                                    Temptext."Value Text" := "QC Result";
+                                    Temptext."Value Text" := "QC Value";
                                     Temptext.Insert();
 
                                     if (QCSpecLine."Minimum Value" <> '') and (QCSpecLine."Maximum Value" <> '') then begin
@@ -184,14 +206,14 @@ table 50506 "RV QC Line"
                                 end;
                             (QCSpecLine."Value Table Type"::Table):
                                 begin
-                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Result") then
+                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Value") then
                                         "Check Status" := SpecValueSetting."Check Status"
                                     else
                                         "Check Status" := "Check Status"::Init;
                                 end;
                             (QCSpecLine."Value Table Type"::List):
                                 begin
-                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Result") then
+                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Value") then
                                         "Check Status" := SpecValueSetting."Check Status"
                                     else
                                         "Check Status" := "Check Status"::Init;
@@ -206,13 +228,13 @@ table 50506 "RV QC Line"
                                 begin
 
                                     //ValidateNumeric
-                                    ValidateNumeric("QC Result");
+                                    ValidateNumeric("QC Value");
 
                                     TempDecimal.Reset();
 
                                     TempDecimal.Init();
                                     TempDecimal."Value Text" := 'Temp';
-                                    if Evaluate(TempDecimal."Value Decimal", "QC Result") then
+                                    if Evaluate(TempDecimal."Value Decimal", "QC Value") then
                                         TempDecimal.Insert()
                                     else
                                         Error('Please enter a Numeric.');
@@ -242,14 +264,14 @@ table 50506 "RV QC Line"
                                 end;
                             (QCSpecLine."Value Table Type"::Table):
                                 begin
-                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Result") then
+                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Value") then
                                         "Check Status" := SpecValueSetting."Check Status"
                                     else
                                         "Check Status" := "Check Status"::Init;
                                 end;
                             (QCSpecLine."Value Table Type"::List):
                                 begin
-                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Result") then
+                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Value") then
                                         "Check Status" := SpecValueSetting."Check Status"
                                     else
                                         "Check Status" := "Check Status"::Init;

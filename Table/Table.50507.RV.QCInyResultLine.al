@@ -35,7 +35,7 @@ table 50507 "RV QC Iny. Result Line"
         {
             Caption = 'Classification';
         }
-        field(7; "Comment"; Text[150])
+        field(7; "Comment"; Text[250])
         {
             Caption = 'Comment';
         }
