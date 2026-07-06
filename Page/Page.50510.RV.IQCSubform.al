@@ -57,7 +57,7 @@ page 50510 "RV IQC Subform"
                     ApplicationArea = All;
                     Editable = ValueTableTypeEnable;
                 }
-                field("QC Result"; Rec."QC Result")
+                field("QC Result"; Rec."QC Value")
                 {
                     ApplicationArea = All;
 
