@@ -93,9 +93,8 @@ report 50601 "RV Collect MPS Data"
             begin
                 if (StartingDate <> 0D)
                And (EndingDate <> 0D) then begin
-                    SetFilter("Starting Date", '%1..', StartingDate);
+                    Setrange("Starting Date", StartingDate, EndingDate);
                     //setFilter("Ending Date", '..%1', EndingDate);
-                    setFilter("Starting Date", '..%1', EndingDate);
                 end else
                     if (StartingDate <> 0D) then
                         SetFilter("Starting Date", '%1..', StartingDate)
@@ -155,7 +154,9 @@ report 50601 "RV Collect MPS Data"
 
     trigger OnPostReport()
     begin
-        Message(MsgProcessFinish);
+        //
+        IF LastLineNo = 0 then
+            Message(NorecordMsg);
     end;
 
     var
@@ -167,7 +168,7 @@ report 50601 "RV Collect MPS Data"
         EndingDate: Date;
         ErrDateBlank: label 'Both Starting Date and Ending Date cannot be blank.';
         ErrStartDateAfterEndDate: label 'Starting Date cannot be later than Ending Date.';
-        MsgProcessFinish: label 'MPS data collection is completed.';
+        NorecordMsg: label 'No MPS data collected.';
         TemSalesOrder: Record "Sales Header" temporary;
         TempProdOrderLine: Record "Prod. Order Line" temporary;
         LevelNo: Integer;
