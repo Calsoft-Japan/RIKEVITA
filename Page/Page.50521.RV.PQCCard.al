@@ -90,6 +90,12 @@ page 50521 "RV PQC Card"
                     ApplicationArea = All;
                     Editable = QCCardEnable;
                 }
+                field("QC Comment"; Rec."QC Comment")
+                {
+                    ApplicationArea = All;
+                    Editable = QCCardEnable;
+                    MultiLine = true;
+                }
                 field("QC Status"; Rec."QC Status")
                 {
                     ApplicationArea = All;
@@ -106,6 +112,11 @@ page 50521 "RV PQC Card"
                     MultiLine = true;
                     Editable = false;
                 }
+                field("QC Checked Date"; Rec."QC Checked Date")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("QC Approved By"; Rec."QC Approved By")
                 {
                     ApplicationArea = All;
@@ -115,6 +126,11 @@ page 50521 "RV PQC Card"
                 {
                     ApplicationArea = All;
                     MultiLine = true;
+                    Editable = false;
+                }
+                field("QC Approved Date"; Rec."QC Approved Date")
+                {
+                    ApplicationArea = All;
                     Editable = false;
                 }
             }

@@ -57,15 +57,36 @@ page 50510 "RV IQC Subform"
                     ApplicationArea = All;
                     Editable = ValueTableTypeEnable;
                 }
-                field("QC Result"; Rec."QC Value")
+                field("QC Value"; Rec."QC Value")
                 {
                     ApplicationArea = All;
-
                 }
                 field("Check Status"; Rec."Check Status")
                 {
                     ApplicationArea = All;
                     Editable = false;
+                }
+                field("Minimum Value"; Rec."Minimum Value")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Maximum Value"; Rec."Maximum Value")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("QC Result 1"; Rec."QC Result 1")
+                {
+                    ApplicationArea = All;
+                }
+                field("QC Result 2"; Rec."QC Result 2")
+                {
+                    ApplicationArea = All;
+                }
+                field("Comment"; Rec."Comment")
+                {
+                    ApplicationArea = All;
                 }
             }
         }

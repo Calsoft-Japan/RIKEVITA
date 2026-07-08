@@ -9,7 +9,6 @@ page 50536 "RV Specification Value Setting"
     UsageCategory = Lists;
     Caption = 'Specification Value Setting';
     SourceTable = "RV Specification Value Setting";
-    //Editable = false;
     layout
     {
         area(Content)

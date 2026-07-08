@@ -135,8 +135,9 @@ table 50505 "RV QC Header"
                     ItemLedgerEntry.SetRange("Document Line No.", PurchRcptLine."Line No.");
                     itemledgerentry.SetRange(Correction, false);
 
-                    if (Page.RunModal(Page::"Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
+                    if (Page.RunModal(Page::"RV Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
                         Validate("Lot No.", ItemLedgerEntry."Lot No.");
+                        "Expiration Date" := ItemLedgerEntry."Expiration Date";
                     end;
 
                 end else if "Ref. Order Type" = RefOrderType::"Production Order" then begin
@@ -147,16 +148,47 @@ table 50505 "RV QC Header"
                     ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::Output);
                     ItemLedgerEntry.SetFilter("Quantity", '>0');
 
-                    if (Page.RunModal(Page::"Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
+                    if (Page.RunModal(Page::"RV Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
                         Validate("Lot No.", ItemLedgerEntry."Lot No.");
                     end;
                 end;
             end;
 
             trigger OnValidate()
+            var
+                LotNoInformation: Record "Lot No. Information";
+                ItemLedgerEntry: Record "Item Ledger Entry";
             begin
+
                 if "Lot No." <> '' then
                     CheckDuplicate();
+
+                if "Lot No." <> '' then begin
+                    if "Ref. Order Type" in ["Ref. Order Type"::"Purchase Order", "Ref. Order Type"::"Posted Purchase Receipt"] then begin
+                        //LotNoInformation
+                        LotNoInformation.Reset();
+                        LotNoInformation.SetRange("Item No.", "Item No.");
+                        LotNoInformation.SetRange("Lot No.", "Lot No.");
+                        if not LotNoInformation.FindFirst() then
+                            LotNoInformation.Init();
+                        "RM Manufacture Date" := LotNoInformation."RV_Manufacture Date";
+                    end;
+
+                    if "Ref. Order Type" = "Ref. Order Type"::"Posted Purchase Receipt" then begin
+                        //ItemLedgerEntry
+                        ItemLedgerEntry.Reset();
+                        ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Purchase Receipt");
+                        ItemLedgerEntry.SetRange("Document No.", "Order No.");
+                        ItemLedgerEntry.SetRange("Document Line No.", "Line No.");
+                        itemledgerentry.SetRange(Correction, false);
+                        if not itemledgerentry.FindFirst() then
+                            itemledgerentry.Init();
+                        "Expiration Date" := itemledgerentry."Expiration Date";
+                    end;
+
+                end else begin
+                    Clear("RM Manufacture Date");
+                end;
             end;
         }
         field(6; "Item No."; Code[20])
@@ -172,7 +204,6 @@ table 50505 "RV QC Header"
         {
             Caption = 'QC Standard Type';
         }
-
         field(9; "QC Status"; Enum "RV QC Status")
         {
             Caption = 'QC Status';
@@ -197,7 +228,6 @@ table 50505 "RV QC Header"
         {
             Caption = 'Manufacturing Date';
         }
-
         field(15; "Location Code"; Code[10])
         {
             Caption = 'Location Code';
@@ -223,6 +253,18 @@ table 50505 "RV QC Header"
         field(20; "Expiration Date"; Date)
         {
             Caption = 'Expiration Date';
+        }
+        field(21; "RM Manufacture Date"; Date)
+        {
+            Caption = 'RM Manufacture Date';
+        }
+        field(22; "QC Checked Date"; Date)
+        {
+            Caption = 'QC Checked Date';
+        }
+        field(23; "QC Approved Date"; Date)
+        {
+            Caption = 'QC Approved Date';
         }
         field(100; "Line No."; Integer)
         {
@@ -373,6 +415,7 @@ table 50505 "RV QC Header"
             "QC Status" := Rec."QC Status"::Checked;
             "QC Checked Remark" := RemarkText[1];// set Remark
             "QC Checked By" := UserId;
+            "QC Checked Date" := WorkDate();
             Modify();
         end;
     end;
@@ -398,6 +441,7 @@ table 50505 "RV QC Header"
             Rec."QC Status" := Rec."QC Status"::Approved;
             Rec."QC Approved Remark" := RemarkText[1];// set Remark
             rec."QC Approved By" := UserId;
+            "QC Approved Date" := WorkDate();
             Modify();
         end;
     end;
@@ -409,7 +453,8 @@ table 50505 "RV QC Header"
         "Lot No." := '';
         "Location Code" := '';
         "Bin Code" := '';
-        "QC Date" := 0D;
+        Clear("RM Manufacture Date");
+        Clear("Expiration Date");
 
         "QC Standard Type" := "QC Standard Type"::Internal;
         "QC Status" := "QC Status"::Analyzing;
@@ -497,10 +542,6 @@ table 50505 "RV QC Header"
                 QCLine."QC Type" := "QC Type";
                 QCLine."QC No." := "QC No.";
                 QCLine."Line No." := LineNo;
-                //QCParameter
-                //QCParameter.Reset();
-                //QCParameter.Get(QCSpecificationLine."QC Parameter Name");
-                //QCParameter.CalcFields(Type, "Value Table Type");
                 QCLine."QC Specification Name" := QCSpecificationLine."QC Specification Name";
                 QCLine."QC Parameter Name" := QCSpecificationLine."QC Parameter Name";
                 QCLine.Type := QCSpecificationLine.Type;
@@ -515,7 +556,9 @@ table 50505 "RV QC Header"
                         QCLine."QC Value" := SpecValueSetting."List Value";
                         QCLine."Check Status" := SpecValueSetting."Check Status";
                     end;
-                    //end;
+                end else if QCLine."Value Table Type" = QCLine."Value Table Type"::Range then begin
+                    QCLine."Minimum Value" := QCSpecificationLine."Minimum Value";
+                    QCLine."Maximum Value" := QCSpecificationLine."Maximum Value";
                 end;
                 QCLine.Insert();
             until QCSpecificationLine.Next() = 0;

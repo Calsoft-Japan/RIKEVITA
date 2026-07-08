@@ -66,6 +66,16 @@ page 50509 "RV IQC Card"
                     ApplicationArea = All;
                     Editable = QCCardEnable;
                 }
+                field("RM Manufacture Date"; Rec."RM Manufacture Date")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Expiration Date"; Rec."Expiration Date")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("QC Date"; Rec."QC Date")
                 {
                     ApplicationArea = All;
@@ -91,6 +101,12 @@ page 50509 "RV IQC Card"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("QC Comment"; Rec."QC Comment")
+                {
+                    ApplicationArea = All;
+                    Editable = QCCardEnable;
+                    MultiLine = true;
+                }
                 field("QC Checked By"; Rec."QC Checked By")
                 {
                     ApplicationArea = All;
@@ -102,6 +118,11 @@ page 50509 "RV IQC Card"
                     MultiLine = true;
                     Editable = false;
                 }
+                field("QC Checked Date"; Rec."QC Checked Date")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("QC Approved By"; Rec."QC Approved By")
                 {
                     ApplicationArea = All;
@@ -111,6 +132,11 @@ page 50509 "RV IQC Card"
                 {
                     ApplicationArea = All;
                     MultiLine = true;
+                    Editable = false;
+                }
+                field("QC Approved Date"; Rec."QC Approved Date")
+                {
+                    ApplicationArea = All;
                     Editable = false;
                 }
                 field("Line No."; Rec."Line No.")
