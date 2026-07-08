@@ -88,15 +88,18 @@ page 50405 "RV.RM Delivery Scheduling"
                             if (ItemNo <> prodOrderComponent."Item No.") OR (SITECODE <> prodOrderComponent."Shortcut Dimension 2 Code") then begin
                                 ItemNo := prodOrderComponent."Item No.";
                                 SITECODE := prodOrderComponent."Shortcut Dimension 2 Code";
-                                InitDeliverySchedulingLine(prodOrderComponent, DeliverySchedulingLine);
-                                ProdOrderComponent1.setrange("Item No.", ItemNo);
-                                ProdOrderComponent1.setrange("Shortcut Dimension 2 Code", SITECODE);
-                                if ProdOrderComponent1.FindSet() THEN
-                                    repeat
-                                        updateDeliverySchedulingLine(ProdOrderComponent1, DeliverySchedulingLine);
-                                    until ProdOrderComponent1.Next() = 0;
-                                DeliverySchedulingLine.Insert();
-                                DeliverySchedulingLine."Entry No." += 1;
+                                Item.Get(prodOrderComponent."Item No.");
+                                IF Item."Replenishment System" = Item."Replenishment System"::Purchase THEN begin
+                                    InitDeliverySchedulingLine(prodOrderComponent, DeliverySchedulingLine);
+                                    ProdOrderComponent1.setrange("Item No.", ItemNo);
+                                    ProdOrderComponent1.setrange("Shortcut Dimension 2 Code", SITECODE);
+                                    if ProdOrderComponent1.FindSet() THEN
+                                        repeat
+                                            updateDeliverySchedulingLine(ProdOrderComponent1, DeliverySchedulingLine);
+                                        until ProdOrderComponent1.Next() = 0;
+                                    DeliverySchedulingLine.Insert();
+                                    DeliverySchedulingLine."Entry No." += 1;
+                                end;
                             end;
                         until prodOrderComponent.Next() = 0;
                     end;
@@ -195,5 +198,8 @@ page 50405 "RV.RM Delivery Scheduling"
         DeliverySchedulingLine."Site" := prodOrderComponent."Shortcut Dimension 2 Code";
         Item.Get(prodOrderComponent."Item No.");
         DeliverySchedulingLine."Unit of Measure" := Item."Base Unit of Measure";
+        DeliverySchedulingLine."Item Description" := Item.Description;
+        DeliverySchedulingLine.VendorNo := Item."Vendor No.";
+        //DeliverySchedulingLine.VendorName := Item."Vendor Name";
     end;
 }

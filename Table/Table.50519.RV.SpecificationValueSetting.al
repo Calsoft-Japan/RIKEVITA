@@ -42,7 +42,7 @@ table 50519 "RV Specification Value Setting"
     }
     keys
     {
-        key(PK; "QC Specification Name", "QC Parameter Name", "Value Table Name", "List Value")
+        key(PK; "QC Specification Name", "QC Parameter Name", "Value Table Name", "Value Table Type", "List Value")
         {
             Clustered = true;
         }
@@ -53,4 +53,18 @@ table 50519 "RV Specification Value Setting"
         {
         }
     }
+    trigger OnInsert()
+    var
+        ExistingRec: Record "RV Specification Value Setting";
+    begin
+        if (Rec."Value Table Type" = Rec."Value Table Type"::Single) or (Rec."Value Table Type" = Rec."Value Table Type"::table) then begin
+            ExistingRec.SetRange("QC Specification Name", Rec."QC Specification Name");
+            ExistingRec.SetRange("QC Parameter Name", Rec."QC Parameter Name");
+            ExistingRec.SetRange("Value Table Name", Rec."Value Table Name");
+            if not ExistingRec.IsEmpty() then begin
+                Error('When single and table, only one detail can be defined.');
+            end;
+        end;
+    end;
+
 }

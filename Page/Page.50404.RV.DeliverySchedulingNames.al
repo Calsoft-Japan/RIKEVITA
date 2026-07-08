@@ -5,7 +5,7 @@ page 50404 "Delivery Scheduling Names"
     ApplicationArea = All;
     Caption = 'Delivery Scheduling Names';
     PageType = List;
-    usagecategory = Lists;
+    //usagecategory = Lists;
     SourceTable = "RM Delivery Scheduling Name";
 
     layout
