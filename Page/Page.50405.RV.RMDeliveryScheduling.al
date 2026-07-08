@@ -1,10 +1,10 @@
 
-page 50405 "RV.RMDeliveryScheduling"
+page 50405 "RV.RM Delivery Scheduling"
 {
     ApplicationArea = All;
     Caption = 'Delivery Scheduling';
     PageType = Card;
-    UsageCategory = tasks;
+    //UsageCategory = tasks;
     SourceTable = "RM Delivery Scheduling Name";
 
     layout
@@ -65,11 +65,14 @@ page 50405 "RV.RMDeliveryScheduling"
                     ItemNo: Code[20];
                     SITECODE: Code[20];
                 begin
+                    Rec.TestField("Starting Date");
                     DeliverySchedulingLine.Reset();
                     DeliverySchedulingLine.SetRange("Delivery Scheduling Name", Rec.Name);
                     DeliverySchedulingLine.DeleteAll();
+                    DeliverySchedulingLine."Delivery Scheduling Name" := Rec.Name;
+                    DeliverySchedulingLine."Entry No." := 1;
                     ProdOrderComponent.Reset();
-                    prodOrderComponent.SetCurrentKey("Shortcut Dimension 1 Code", "Item No.");
+                    prodOrderComponent.SetCurrentKey("Shortcut Dimension 2 Code", "Item No.");
                     ProdOrderComponent.Setrange("Due Date",
                                                    rec."Starting Date",
                                                    CalcDate('1M', Rec."Starting Date"));
@@ -81,24 +84,21 @@ page 50405 "RV.RMDeliveryScheduling"
                         ProdOrderComponent1.SetFilter("Due Date", '%1..%2',
                                                        rec."Starting Date",
                                                        CalcDate('1M', Rec."Starting Date"));
-                        IF prodOrderComponent1.FindSet() THEN begin
-                            repeat
-                                if (ItemNo <> prodOrderComponent."Item No.") OR (SITECODE <> prodOrderComponent."Shortcut Dimension 2 Code") then begin
-                                    ItemNo := prodOrderComponent."Item No.";
-                                    SITECODE := prodOrderComponent."Shortcut Dimension 2 Code";
-                                    InitDeliverySchedulingLine(prodOrderComponent, DeliverySchedulingLine);
-                                    ProdOrderComponent1.setrange("Item No.", ItemNo);
-                                    ProdOrderComponent1.setrange("Shortcut Dimension 2 Code", SITECODE);
-                                    if ProdOrderComponent1.FindSet() THEN
-                                        repeat
-                                            updateDeliverySchedulingLine(ProdOrderComponent1, DeliverySchedulingLine);
-                                        until ProdOrderComponent1.Next() = 0;
-                                    DeliverySchedulingLine.Insert();
-                                end;
-                            until prodOrderComponent.Next() = 0;
-                            DeliverySchedulingLine."Entry No." += 1;
-                            DeliverySchedulingLine.Insert();
-                        end;
+                        repeat
+                            if (ItemNo <> prodOrderComponent."Item No.") OR (SITECODE <> prodOrderComponent."Shortcut Dimension 2 Code") then begin
+                                ItemNo := prodOrderComponent."Item No.";
+                                SITECODE := prodOrderComponent."Shortcut Dimension 2 Code";
+                                InitDeliverySchedulingLine(prodOrderComponent, DeliverySchedulingLine);
+                                ProdOrderComponent1.setrange("Item No.", ItemNo);
+                                ProdOrderComponent1.setrange("Shortcut Dimension 2 Code", SITECODE);
+                                if ProdOrderComponent1.FindSet() THEN
+                                    repeat
+                                        updateDeliverySchedulingLine(ProdOrderComponent1, DeliverySchedulingLine);
+                                    until ProdOrderComponent1.Next() = 0;
+                                DeliverySchedulingLine.Insert();
+                                DeliverySchedulingLine."Entry No." += 1;
+                            end;
+                        until prodOrderComponent.Next() = 0;
                     end;
                     currpage.DeliverySchedulingLines.page.SetDayCaption(Rec."Starting Date");
                     currPage.Update();

@@ -50,20 +50,21 @@ table 50405 "RM Delivery Scheduling Name"
     {
     }
 
-    /* trigger OnDelete()
-     var
-         ProdForecastEntry: Record "Production Forecast Entry";
-     begin
-         ProdForecastEntry.SetRange("Production Forecast Name", Name);
-         if not ProdForecastEntry.IsEmpty() then begin
-             if GuiAllowed then
-                 if not Confirm(Confirm001Qst, true, Name) then
-                     Error('');
-             ProdForecastEntry.DeleteAll();
-         end;
-     end;
- */
+    trigger OnDelete()
     var
+        DeliverySchedulingLine: Record "RM Delivery Scheduling Line";
+    begin
+        DeliverySchedulingLine.SetRange("Delivery Scheduling Name", Name);
+        if not DeliverySchedulingLine.IsEmpty() then begin
+            if GuiAllowed then
+                if not Confirm(Confirm001Qst, true, Name) then
+                    Error('');
+            DeliverySchedulingLine.DeleteAll();
+        end;
+    end;
+
+    var
+        Confirm001Qst: Label 'Are you sure you want to delete the Delivery Scheduling Name %1? All related Delivery Scheduling Lines will also be deleted.';
 
     [TryFunction]
     local procedure TrySetFilter(DateFilter: Text)
