@@ -34,8 +34,8 @@ pageextension 50215 "RV Get Shipment Lines Ext" extends "Get Shipment Lines"
         PostedWhseShipmentLine.SetRange("Posted Source No.", Rec."Document No.");
         PostedWhseShipmentLine.SetRange("Source Line No.", Rec."Line No.");
         if PostedWhseShipmentLine.FindFirst() then begin
-            WarehouseShipmentNo := PostedWhseShipmentLine."No.";
-            PostedWarehouseShipmentNo := PostedWhseShipmentLine."Whse. Shipment No.";
+            WarehouseShipmentNo := PostedWhseShipmentLine."Whse. Shipment No.";
+            PostedWarehouseShipmentNo := PostedWhseShipmentLine."No.";
         end;
     end;
 }
