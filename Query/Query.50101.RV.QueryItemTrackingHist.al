@@ -5,6 +5,22 @@ query 50101 "RV Query Item Tracking Hist"
 
     elements
     {
+        dataitem(RV_Warehouse_Packing_Info_; "RV Warehouse Packing Info.")
+        {
+            column(External_Document_No_; "External Document No.") { }
+            column(CustNo_Source_No_; "Sell-to Customer No.") { }
+            column(Item_No_; "Item No.") { }
+            column(LotNo; "Lot No.") { }
+            column(RV_Container_No_; "Container No") { }
+            column(QtyperUOM; "Qty. per Unit of Measure")
+            { }
+            column(Quantity; "Quantity")
+            {
+                Method = Sum;
+            }
+
+        }
+
         // dataitem(RVItemTrackingHistoryDtl; "Item Entry Relation")
         // {
 
@@ -17,7 +33,7 @@ query 50101 "RV Query Item Tracking Hist"
         //     {
         //     }
 
-        dataitem(Item_Ledger_Entry; "Item Ledger Entry")
+        /* dataitem(Item_Ledger_Entry; "Item Ledger Entry")
         {
             // DataItemLink = "Entry No." = RVItemTrackingHistoryDtl."Item Entry No.";
             // SqlJoinType = InnerJoin;
@@ -38,7 +54,7 @@ query 50101 "RV Query Item Tracking Hist"
             }
             column(Item_No_; "Item No.")
             { }
-        }
+        } */
 
         // }
     }
