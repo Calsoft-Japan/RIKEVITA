@@ -168,6 +168,7 @@ report 50202 "RV Packing List Report"
                         RecSalesShipmentHeader: Record "Sales Shipment Header";
                         RecPostedWhseShipmentLine: Record "Posted Whse. Shipment Line";
                         RecItemLedgerEntry: Record "Item Ledger Entry";
+                        RecWarehousePackingInfo: Record "RV Warehouse Packing Info.";
                         chr10: Char;
                         TempNo: Integer;
                         oldContainerNo: Text;
@@ -224,57 +225,37 @@ report 50202 "RV Packing List Report"
                             end;
                         end;
 
-                        RecPostedWhseShipmentLine.Reset();
-                        RecPostedWhseShipmentLine.SetRange("Source No.", "Sales Order No.");
-                        RecPostedWhseShipmentLine.SetRange("No.", PostedWhseShipmentHeader."No.");
-                        if RecPostedWhseShipmentLine.FindSet() then begin
+                        RecWarehousePackingInfo.Reset();
+                        RecWarehousePackingInfo.SetRange("Posted Whse. Shipment No.", "Posted Whse. Shipment No.");
+                        RecWarehousePackingInfo.SetRange("Sales Order No.", "Sales Order No.");
+                        RecWarehousePackingInfo.SetCurrentKey("Container No");
+                        if RecWarehousePackingInfo.FindSet() then begin
                             repeat
-                                RecItemLedgerEntry.Reset();
-                                RecItemLedgerEntry.SetRange("Document No.", RecPostedWhseShipmentLine."Posted Source No.");
-                                if RecItemLedgerEntry.FindSet() then begin
-                                    repeat
-                                        LotNoNumber := LotNoNumber + 1;
-                                        Templine.Init();
-                                        Templine."Entry No." := TempNo;
-                                        Templine."RV_Container No." := RecItemLedgerEntry."RV_Container No.";
-                                        Templine.Description := Description2;
-                                        Templine."Lot No." := RecItemLedgerEntry."Lot No.";
-                                        Templine."Quantity (Base)" := RecItemLedgerEntry.Quantity;
-                                        Templine."Location Code" := RecItem."Base Unit of Measure";
-                                        Templine.Insert();
-                                        TempNo := TempNo + 1;
-                                    until RecItemLedgerEntry.Next() = 0;
+                                RecItem.Get(RecWarehousePackingInfo."Item No.");
+                                if (RecWarehousePackingInfo."Container No" = '') and (LotNoNumber = 0) then begin
+                                    LotNo1 += '<b>' + RecWarehousePackingInfo."Container No" + '</b><br>LOT NO. :<br>';
+                                    LotNo2 += '<br><br>';
                                 end;
-                            until RecPostedWhseShipmentLine.Next() = 0;
-                            Templine.Reset();
-                            Templine.SetCurrentKey("RV_Container No.");
-                            if Templine.FindSet() then begin
-                                repeat
-                                    EntryNo := Templine."Entry No.";
-                                    if (Templine."RV_Container No." = '') and (LotNoNumber = 1) then begin
-                                        LotNo1 += '<b>' + Templine."RV_Container No." + '</b><br>LOT NO. :<br>';
-                                        LotNo2 += '<br><br>';
+                                if oldContainerNo <> RecWarehousePackingInfo."Container No" then begin
+                                    if LotNoNumber mod 2 = 1 then begin
+                                        LotNo2 += '<br><br><br>';
                                     end;
-
-                                    if oldContainerNo <> Templine."RV_Container No." then begin
-                                        if LotNoNumber mod 2 = 1 then begin
-                                            LotNo2 += '<br><br>';
-                                        end;
-                                        LotNoNumber := 1;
-                                        LotNo1 += '<b>' + Templine."RV_Container No." + '</b><br>LOT NO. :<br>' + Templine.Description + '<br>' + Templine."Lot No." + ' - ' + Format(Round(abs(Templine."Quantity (Base)"), 0.1, '=')) + ' ' + Templine."Location Code" + '<br>';
-                                        LotNo2 += '<br><br>';
-                                        oldContainerNo := Templine."RV_Container No.";
+                                    LotNoNumber := 1;
+                                    LotNo1 += '<b>' + RecWarehousePackingInfo."Container No" + '</b><br>LOT NO. :<br>' + RecItem.Description + '<br>' + RecWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(RecWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."Base Unit of Measure" + '<br><br>';
+                                    LotNo2 += '<br><br>';
+                                    oldContainerNo := RecWarehousePackingInfo."Container No";
+                                end else begin
+                                    LotNoNumber := LotNoNumber + 1;
+                                    if LotNoNumber mod 2 = 0 then begin
+                                        LotNo2 += RecItem.Description + '<br>' + RecWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(RecWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."Base Unit of Measure" + '<br><br>';
                                     end else begin
-                                        LotNoNumber := LotNoNumber + 1;
-                                        if LotNoNumber mod 2 = 0 then begin
-                                            LotNo2 += Templine.Description + '<br>' + Templine."Lot No." + ' - ' + Format(Round(abs(Templine."Quantity (Base)"), 0.1, '=')) + ' ' + Templine."Location Code" + '<br>';
-                                        end else
-                                            LotNo1 += Templine.Description + '<br>' + Templine."Lot No." + ' - ' + Format(Round(abs(Templine."Quantity (Base)"), 0.1, '=')) + ' ' + Templine."Location Code" + '<br>';
-
+                                        LotNo1 += RecItem.Description + '<br>' + RecWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(RecWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."Base Unit of Measure" + '<br><br>';
                                     end;
-                                until Templine.Next() = 0;
-                            end;
+
+                                end;
+                            until RecWarehousePackingInfo.Next() = 0;
                         end;
+
                         if TempOrderNo < 10 then begin
                             if TempOrderNo mod 5 = 0 then begin
                                 OrderNo += "Sales Order No." + '<br>';
