@@ -206,14 +206,14 @@ table 50506 "RV QC Line"
                                 end;
                             (QCSpecLine."Value Table Type"::Table):
                                 begin
-                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Value") then
+                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "Value Table Type", "QC Value") then
                                         "Check Status" := SpecValueSetting."Check Status"
                                     else
                                         "Check Status" := "Check Status"::Init;
                                 end;
                             (QCSpecLine."Value Table Type"::List):
                                 begin
-                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Value") then
+                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "Value Table Type", "QC Value") then
                                         "Check Status" := SpecValueSetting."Check Status"
                                     else
                                         "Check Status" := "Check Status"::Init;
@@ -264,14 +264,14 @@ table 50506 "RV QC Line"
                                 end;
                             (QCSpecLine."Value Table Type"::Table):
                                 begin
-                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Value") then
+                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "Value Table Type", "QC Value") then
                                         "Check Status" := SpecValueSetting."Check Status"
                                     else
                                         "Check Status" := "Check Status"::Init;
                                 end;
                             (QCSpecLine."Value Table Type"::List):
                                 begin
-                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "QC Value") then
+                                    if SpecValueSetting.Get("QC Specification Name", "QC Parameter Name", QCSpecLine."Value Table Name", "Value Table Type", "QC Value") then
                                         "Check Status" := SpecValueSetting."Check Status"
                                     else
                                         "Check Status" := "Check Status"::Init;

@@ -102,14 +102,9 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
             ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
             IF MPSReschedulingLine."New Ending Date" > ProdOrder."Due Date" then
                 error(Text006, ProdOrder."No.");
-            //ProdOrder.Validate("Starting Date-Time", CreateDateTime(MPSReschedulingLine."New Starting Date", MfgSetup."Normal Starting Time"));
-            if ProdOrder."Ending Date" <> MPSReschedulingLine."New Ending Date" then begin
-                ProdOrder.Validate("RV_Rescheduling Ending Date", MPSReschedulingLine."New Ending Date");
-                //just update when the new starting date is not null
-                IF MPSReschedulingLine."New Starting Date" <> 0D then
-                    ProdOrder.Validate("Ending Date-Time", CreateDateTime(MPSReschedulingLine."New Ending Date", MfgSetup."Normal Ending Time"));
-                ProdOrder.Modify();
-            end;
+            ProdOrder.Validate("RV_Rescheduling Ending Date", MPSReschedulingLine."New Ending Date");
+            ProdOrder.Validate("Ending Date-Time", CreateDateTime(MPSReschedulingLine."New Ending Date", MfgSetup."Normal Ending Time"));
+            ProdOrder.Modify();
         end;
 
         if MPSReschedulingLine."New Starting Date" <> 0D then begin
@@ -118,9 +113,6 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
                 OldDueDate := ProdOrder."Due Date";
                 ProdOrder.Validate("RV_Rescheduling Starting Date", MPSReschedulingLine."New Starting Date");
                 ProdOrder.Validate("Manual Scheduling", true);
-                //Calculate the difference days = “MPS Rescheduling Line”.“New Starting Date”- “Production Header”. “Starting Date-Time”
-                //DiffDays := CreateDateTime(MPSReschedulingLine."New Starting Date", ProdOrder."Starting Time") - ProdOrder."Starting Date-Time";
-                //ProdOrder.Validate("Ending Date-Time", ProdOrder."Ending Date-Time" + DiffDays);
                 ProdOrder.Validate("Starting Date", MPSReschedulingLine."New Starting Date");
                 IF prodorder."Due Date" > OldDueDate then
                     error(Text007, ProdOrder."No.");
