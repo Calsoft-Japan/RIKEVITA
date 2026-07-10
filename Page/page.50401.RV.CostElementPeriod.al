@@ -37,6 +37,12 @@ page 50401 "Standard Cost Element Period"
                 field("End Date"; Rec."Effective End Date")
                 {
                 }
+                field("Current Period"; Rec."Current Period")
+                {
+                }
+                field("Comment"; Rec."Comment")
+                {
+                }
             }
         }
     }

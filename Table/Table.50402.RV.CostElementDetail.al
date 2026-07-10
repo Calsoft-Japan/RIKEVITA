@@ -1,6 +1,7 @@
 /// <summary>
 /// Table RV Cost Element Details (ID 50402).
 /// FDD034 2026/03/19: New. (Vani)
+/// FDD034 2026/07/10: Update. (Bobby)
 /// </summary>
 table 50402 "Standard Cost Element Details"
 {
@@ -8,34 +9,11 @@ table 50402 "Standard Cost Element Details"
 
     fields
     {
-        field(1; "Period Code"; Code[20])
+        field(1; "Period Code"; Code[50])
         {
             Caption = 'Period Code';
             TableRelation = "Standard Cost Element Period"."Code";
             Description = 'FDD034';
-        }
-        field(2; "Site"; Code[10])
-        {
-            Caption = 'Site';
-            TableRelation = "Dimension Value".code;
-            Description = 'FDD034';
-
-            trigger OnValidate()
-            var
-                RIKESetup: Record "RV RIKEVITA Setup";
-                DimValue: Record "Dimension Value";
-            begin
-                if not RIKESetup.Get() then
-                    Error('RV Setup is not configured.');
-
-                if "Site" <> '' then begin
-                    if not DimValue.Get(RIKESetup."ACC Site Analysis Code", "Site") then
-                        Error(
-                            'Site %1 is not valid for Dimension %2.',
-                            "Site",
-                            RIKESetup."ACC Site Analysis Code");
-                end;
-            end;
         }
         field(3; "Item No."; Code[20])
         {
@@ -51,32 +29,121 @@ table 50402 "Standard Cost Element Details"
             Editable = false;
             Description = 'FDD034';
         }
-        field(5; "Unit of Measure Code"; Code[10])
+        field(8; "Direct Dep. Exp."; Decimal)
         {
-            Caption = 'Unit of Measure Code';
-            FieldClass = FlowField;
-            CalcFormula = lookup(Item."Base Unit of Measure" where("No." = field("Item No.")));
-            Editable = false;
+            Caption = 'Direct Dep. Exp.';
             Description = 'FDD034';
+            DecimalPlaces = 0 : 8;
+
+            trigger OnValidate()
+            begin
+                CalculateTotalStandardCost();
+            end;
         }
-        field(6; "Cost Element Code"; Code[20])
+        field(9; "Direct Fixed Cost"; Decimal)
         {
-            Caption = 'Cost Element Code';
-            TableRelation = "RV Cost Element Category"."Code";
+            Caption = 'Direct Fixed Cost';
             Description = 'FDD034';
+            DecimalPlaces = 0 : 8;
+
+            trigger OnValidate()
+            begin
+                CalculateTotalStandardCost();
+            end;
         }
-        field(7; "Standard Cost"; Decimal)
+        field(10; "Direct Labor Cost"; Decimal)
         {
-            Caption = 'Standard Cost';
+            Caption = 'Direct Labor Cost';
             Description = 'FDD034';
-            DecimalPlaces = 0 : 9;
+            DecimalPlaces = 0 : 8;
+
+            trigger OnValidate()
+            begin
+                CalculateTotalStandardCost();
+            end;
+        }
+        field(11; "Electricity Fee"; Decimal)
+        {
+            Caption = 'Electricity Fee';
+            Description = 'FDD034';
+            DecimalPlaces = 0 : 8;
+
+            trigger OnValidate()
+            begin
+                CalculateTotalStandardCost();
+            end;
+        }
+        field(12; "Gas Fee"; Decimal)
+        {
+            Caption = 'Gas Fee';
+            Description = 'FDD034';
+            DecimalPlaces = 0 : 8;
+
+            trigger OnValidate()
+            begin
+                CalculateTotalStandardCost();
+            end;
+        }
+        field(13; "Indirect Cost"; Decimal)
+        {
+            Caption = 'Indirect Cost';
+            Description = 'FDD034';
+            DecimalPlaces = 0 : 8;
+
+            trigger OnValidate()
+            begin
+                CalculateTotalStandardCost();
+            end;
+        }
+        field(14; "Raw Material Cost"; Decimal)
+        {
+            Caption = 'Raw Material Cost';
+            Description = 'FDD034';
+            DecimalPlaces = 0 : 8;
+
+            trigger OnValidate()
+            begin
+                CalculateTotalStandardCost();
+            end;
+        }
+        field(15; "Package Material Cost"; Decimal)
+        {
+            Caption = 'Package Material Cost';
+            Description = 'FDD034';
+            DecimalPlaces = 0 : 8;
+
+            trigger OnValidate()
+            begin
+                CalculateTotalStandardCost();
+            end;
+        }
+        field(16; "Water"; Decimal)
+        {
+            Caption = 'Water';
+            Description = 'FDD034';
+            DecimalPlaces = 0 : 8;
+
+            trigger OnValidate()
+            begin
+                CalculateTotalStandardCost();
+            end;
+        }
+        field(17; "Total Standard Cost"; Decimal)
+        {
+            Caption = 'Total Standard Cost';
+            Description = 'FDD034';
+            DecimalPlaces = 0 : 8;
         }
     }
 
     keys
     {
-        // Primary key: combination of "Period Code", "Site", "Item No." and "Cost Element Code"
-        key(PK; "Period Code", "Site", "Item No.", "Cost Element Code") { Clustered = true; }
-        key(SortKey; "Period Code", "Site", "Item No.") { }
+        // Primary key: combination of "Period Code" and "Item No."
+        key(PK; "Period Code", "Item No.") { Clustered = true; }
     }
+
+    local procedure CalculateTotalStandardCost()
+    begin
+        Rec."Total Standard Cost" := Rec."Direct Dep. Exp." + Rec."Direct Fixed Cost" + Rec."Direct Labor Cost" + Rec."Electricity Fee" + Rec."Gas Fee" + Rec."Indirect Cost" + Rec."Raw Material Cost" + Rec."Package Material Cost" + Rec."Water";
+    end;
 }

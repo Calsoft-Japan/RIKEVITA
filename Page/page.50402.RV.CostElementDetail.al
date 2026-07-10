@@ -8,7 +8,7 @@ page 50402 "Standard Cost Element Details"
     SourceTable = "Standard Cost Element Details";
     ApplicationArea = All;
     UsageCategory = Lists;
-    SourceTableView = sorting("Period Code", "Site", "Item No.");
+    SourceTableView = sorting("Period Code", "Item No.");
 
     layout
     {
@@ -19,11 +19,6 @@ page 50402 "Standard Cost Element Details"
                 field("Period Code"; Rec."Period Code")
                 {
                     TableRelation = "Standard Cost Element Period";
-                }
-                field("Site"; Rec."Site")
-                {
-                    ApplicationArea = All;
-                    ToolTip = 'Site(ACC_SITE)';
                 }
                 field("Item No."; Rec."Item No.")
                 {
@@ -36,22 +31,55 @@ page 50402 "Standard Cost Element Details"
                     ToolTip = 'Item Description(FlowField).';
                     Editable = false;
                 }
-                field("Unit of Measure Code"; Rec."Unit of Measure Code")
+                field("Direct Dep. Exp."; Rec."Direct Dep. Exp.")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Unit of Measure Code(FlowField).';
-                    Editable = false;
+                    ToolTip = 'Direct Dep. Exp.';
                 }
-                field("Cost Element Code"; Rec."Cost Element Code")
+                field("Direct Fixed Cost"; Rec."Direct Fixed Cost")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Cost Element Code';
+                    ToolTip = 'Direct Fixed Cost.';
                 }
-                field("Standard Cost"; Rec."Standard Cost")
+                field("Direct Labor Cost"; Rec."Direct Labor Cost")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Standard Cost for the selected Cost Element';
-                    DecimalPlaces = 0 : 9;
+                    ToolTip = 'Direct Labor Cost';
+                }
+                field("Electricity Fee"; Rec."Electricity Fee")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Electricity Fee';
+                }
+                field("Gas Fee"; Rec."Gas Fee")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Gas Fee';
+                }
+                field("Indirect Cost"; Rec."Indirect Cost")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Indirect Cost';
+                }
+                field("Raw Material Cost"; Rec."Raw Material Cost")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Raw Material Cost';
+                }
+                field("Package Material Cost"; Rec."Package Material Cost")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Package Material Cost';
+                }
+                field("Water"; Rec."Water")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Water';
+                }
+                field("Total Standard Cost"; Rec."Total Standard Cost")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Total Standard Cost';
                 }
             }
         }
