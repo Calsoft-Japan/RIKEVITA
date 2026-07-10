@@ -9,6 +9,14 @@ pageextension 50200 "RV Item Card Ext" extends "Item Card"
 {
     layout
     {
+        addafter(Description)
+        {
+            field(RV_Grade; Rec.RV_Grade)
+            {
+                Caption = 'Grade';
+                ApplicationArea = all;
+            }
+        }
         addafter("Expiration Calculation")
         {
             field("Expiration Base Date (RM)"; Rec."RV_Expiration Base Date (RM)")
