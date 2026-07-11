@@ -157,10 +157,12 @@ table 50103 "RV Vendor ISO Certificate Line"
             IsoCertRec.Reset();
             IsoCertRec.SetRange("Vendor No.", "Vendor No.");
             IsoCertRec.SetRange("ISO Certificate", "ISO Certificate");
-            IsoCertRec.SetRange(Status, Status);
+            //IsoCertRec.SetRange(Status, Status);
             IsoCertRec.SetRange("Start Date", "Start Date");
+            IsoCertRec.SetRange("End Date", "End Date");
+            IsoCertRec.SetRange("Item No.", Rec."Item No.");
             if not IsoCertRec.IsEmpty() then
-                Error('There are duplicate record for combination %1, %2, %3, %4', "Vendor No.", Format("ISO Certificate"), Format(Status), "Start Date");
+                Error('There are duplicate record for combination %1, %2, %3, %4, %5', "Vendor No.", Format("ISO Certificate"), "Item No.", "Start Date", "End Date");//, Format(Status)
         end;
     end;
 
