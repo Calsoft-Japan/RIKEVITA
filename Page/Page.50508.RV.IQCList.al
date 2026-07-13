@@ -50,6 +50,21 @@ page 50508 "RV IQC List"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("Item Description"; Rec."Item Description")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Vendor No."; Rec."Vendor No.")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Vendor Name"; Rec."Vendor Name")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("QC Date"; Rec."QC Date")
                 {
                     ApplicationArea = All;

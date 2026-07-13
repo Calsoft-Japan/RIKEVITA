@@ -59,10 +59,14 @@ table 50510 "RV QA Internal QC Results"
         {
             Caption = 'QC Approved Remark';
         }
+        field(13; "COA Lot No."; Code[30])
+        {
+            Caption = 'COA Lot No.';
+        }
     }
     keys
     {
-        key(PK; "COA No.", "COA Lot Line No.", "QC Internal Spec. Line No.")
+        key(PK; "COA No.", "COA Lot No.", "QC Internal Spec. Line No.")
         {
             Clustered = true;
         }

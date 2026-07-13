@@ -95,7 +95,7 @@ page 50513 "RV COA ShipmentLotNo"
             {
                 Caption = 'Interal Specification';
                 ApplicationArea = All;
-                SubPageLink = "COA No." = field("COA No."), "COA Lot Line No." = field("COA Lot Line No.");
+                SubPageLink = "COA No." = field("COA No."), "COA Lot No." = field("Lot No.");
                 UpdatePropagation = Both;
                 Editable = false;
             }
@@ -103,7 +103,7 @@ page 50513 "RV COA ShipmentLotNo"
             {
                 Caption = 'External Specification';
                 ApplicationArea = All;
-                SubPageLink = "COA No." = field("COA No."), "COA Lot Line No." = field("COA Lot Line No.");
+                SubPageLink = "COA No." = field("COA No."), "COA Lot No." = field("Lot No.");
                 UpdatePropagation = Both;
                 Editable = SubExterQCResultEditable;
             }

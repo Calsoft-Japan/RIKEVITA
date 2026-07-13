@@ -23,7 +23,7 @@ page 50516 "RV COA ExterQCResult Subform"
                     Editable = false;
                     Visible = false;
                 }
-                field("COA Lot Line No."; Rec."COA Lot Line No.")
+                field("COA Lot No."; Rec."COA Lot No.")
                 {
                     ApplicationArea = All;
                     Editable = false;

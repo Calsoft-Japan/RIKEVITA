@@ -241,7 +241,7 @@ page 50514 "RV COA Card Subform"
                         //create internal QC line based on the FQC Line
                         QAInternalQCResults.Reset();
                         QAInternalQCResults.SetRange("COA No.", Rec."COA No.");
-                        QAInternalQCResults.SetRange("COA Lot Line No.", QAShipmentLotNo."COA Lot Line No.");
+                        QAInternalQCResults.SetRange("COA Lot No.", QAShipmentLotNo."Lot No.");
                         if QAInternalQCResults.FindSet() then
                             repeat
                                 QAInternalQCResults.Delete();
@@ -249,7 +249,7 @@ page 50514 "RV COA Card Subform"
                         repeat
                             QAInternalQCResults.Init();
                             QAInternalQCResults."COA No." := Rec."COA No.";
-                            QAInternalQCResults."COA Lot Line No." := QAShipmentLotNo."COA Lot Line No.";
+                            QAInternalQCResults."COA Lot No." := QAShipmentLotNo."Lot No.";
                             QAInternalQCResults."QC Internal Spec. Line No." := FQCLine."Line No.";
                             QAInternalQCResults."QC Parameter Name" := FQCLine."QC Parameter Name";
                             QAInternalQCResults."QC Value" := FQCLine."QC Value";
@@ -313,7 +313,8 @@ page 50514 "RV COA Card Subform"
                 if QCSpecificationLine.findset then begin
                     QAExternalQCResults.Reset();
                     QAExternalQCResults.SetRange("COA No.", Rec."COA No.");
-                    QAExternalQCResults.SetRange("COA Lot Line No.", QAShipmentLotNo."COA Lot Line No.");
+                    QAExternalQCResults.SetRange("COA Lot No.", QAShipmentLotNo."Lot No.");
+
                     if QAExternalQCResults.FindSet() then begin
                         if Confirm('External QC results already exist. Do you want to overwrite them?', true) then begin
                             repeat
@@ -327,7 +328,7 @@ page 50514 "RV COA Card Subform"
                         QAExternalQCResults.Init();
 
                         QAExternalQCResults."COA No." := Rec."COA No.";
-                        QAExternalQCResults."COA Lot Line No." := QAShipmentLotNo."COA Lot Line No.";
+                        QAExternalQCResults."COA Lot No." := QAShipmentLotNo."Lot No.";
                         QAExternalQCResults."QC External Spec. Line No." := ExternalSpecLineNo;
                         QAExternalQCResults.Validate("QC Parameter Name", QCSpecificationLine."QC Parameter Name");
                         QAExternalQCResults.Insert();

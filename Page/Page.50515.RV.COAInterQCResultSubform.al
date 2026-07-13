@@ -26,7 +26,7 @@ page 50515 "RV COA InterQCResult Subform"
                     Editable = false;
                     Visible = false;
                 }
-                field("COA Lot Line No."; Rec."COA Lot Line No.")
+                field("COA Lot No."; Rec."COA Lot No.")
                 {
                     ApplicationArea = All;
                     Editable = false;

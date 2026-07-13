@@ -50,6 +50,11 @@ page 50524 "RV FQC List"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("Item Description"; Rec."Item Description")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("QC Date"; Rec."QC Date")
                 {
                     ApplicationArea = All;

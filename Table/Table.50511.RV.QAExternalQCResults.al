@@ -83,6 +83,10 @@ table 50511 "RV QA External QC Results"
         {
             Caption = 'Alpha. Max';
         }
+        field(13; "COA Lot No."; Code[30])
+        {
+            Caption = 'COA Lot No.';
+        }
         field(100; "Value Table Type"; Enum "RV Value Table Type")
         {
             Caption = 'Value Table Type';
@@ -98,7 +102,7 @@ table 50511 "RV QA External QC Results"
     }
     keys
     {
-        key(PK; "COA No.", "COA Lot Line No.", "QC External Spec. Line No.")
+        key(PK; "COA No.", "COA Lot No.", "QC External Spec. Line No.")
         {
             Clustered = true;
         }
