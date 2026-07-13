@@ -148,6 +148,7 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                     ApplicationArea = All;
                     Image = Excel;
                     Caption = 'Book Transfer Own Account (MayBank)';
+                    Visible = false;
                     trigger OnAction()
                     var
                         GenJnlLine: Record "Gen. Journal Line";
@@ -162,8 +163,8 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
                             Error(StrSubstNo('Journal Template and Batch does not exist. %1,%2', Rec."Journal Template Name", Rec."Journal Batch Name"));
 
                         PrefixName := 'Book Transfer Own Account (MayBank)';
-                        if GenBatch."RV_Export Type" <> GenBatch."RV_Export Type"::BookTrans then
-                            Error(StrSubstNo('%1 was not assigned with this General Journal Batch Name. Please make sure you are using the correct General Journal Batch.', PrefixName));
+                        //if GenBatch."RV_Export Type" <> GenBatch."RV_Export Type"::BookTrans then
+                        //    Error(StrSubstNo('%1 was not assigned with this General Journal Batch Name. Please make sure you are using the correct General Journal Batch.', PrefixName));
 
                         if Confirm(Text001) then
                             CUExportExcel.ExportSelectedLines(Rec, ExpType::BookTrans);

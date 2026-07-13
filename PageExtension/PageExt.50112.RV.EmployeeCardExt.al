@@ -24,6 +24,13 @@ pageextension 50112 "RV Employee Card Ext" extends "Employee Card"
                 Importance = Promoted;
                 MaskType = Concealed;
             }
+
+            field("RV_Biller Code"; Rec."RV_Biller Code")
+            {
+                Description = 'FDD017';
+                ApplicationArea = All;
+                Importance = Promoted;
+            }
         }
 
         addbefore("Bank Account No.")

@@ -19,5 +19,10 @@ tableextension 50108 "Vendor Ext" extends Vendor
                 end;
             end;
         }
+        field(50002; "RV_Biller Code"; Text[100])//Biller Code is an External Code used in Malaysian government system
+        {
+            Description = 'FDD017';
+            Caption = 'Biller Code';
+        }
     }
 }
