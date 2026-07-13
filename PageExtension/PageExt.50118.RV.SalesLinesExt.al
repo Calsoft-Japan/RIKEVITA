@@ -11,6 +11,7 @@ pageextension 50118 "RV Sales Lines Ext" extends "Sales Lines"
             field("External Document No."; Rec."External Document No.")
             {
                 Visible = ShowExtDoc;
+                ApplicationArea = All;
             }
         }
     }
