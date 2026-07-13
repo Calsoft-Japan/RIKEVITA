@@ -44,6 +44,11 @@ page 50108 "RV Vendor ISO Certificate Card"
                 {
                     ApplicationArea = All;
                 }
+                field(ItemDesc; ItemDesc)
+                {
+                    Editable = false;
+                    ApplicationArea = All;
+                }
                 field("ISO Certificate"; Rec."ISO Certificate")
                 {
                     ApplicationArea = All;
@@ -104,6 +109,9 @@ page 50108 "RV Vendor ISO Certificate Card"
                               "No." = field("Attach. Doc. No.");
             }
         }
+
+
+
     }
 
     actions
@@ -144,6 +152,8 @@ page 50108 "RV Vendor ISO Certificate Card"
     // ── Triggers ──────────────────────────────────────────────────────────
 
     trigger OnAfterGetRecord()
+    var
+        Itm: Record Item;
     begin
         // Resolve ISO Certificate description from the setup table.
         ResolveIsoCertDescription();
@@ -153,6 +163,10 @@ page 50108 "RV Vendor ISO Certificate Card"
 
         // Set bold red style for expired records.
         SetExpiredStyle();
+
+        Clear(ItemDesc);
+        if Itm.Get(Rec."Item No.") then
+            ItemDesc := Itm.Description;
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean)
@@ -186,6 +200,8 @@ page 50108 "RV Vendor ISO Certificate Card"
 
         // Cached ISO Certificate description for the current record.
         IsoCertDescription: Text[100];
+
+        ItemDesc: Text;
 
 
 

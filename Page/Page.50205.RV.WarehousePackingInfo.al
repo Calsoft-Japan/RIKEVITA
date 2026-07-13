@@ -59,6 +59,12 @@ page 50205 "Warehouse Packing Info"
                     Description = 'FDD019';
                     ApplicationArea = All;
                 }
+                field("Quantity (KG)"; Rec."Quantity (KG)")
+                {
+                    Caption = 'Quantity (KG)';
+                    Description = 'FDD005';
+                    ApplicationArea = All;
+                }
                 field("Case No."; Rec."Case No.")
                 {
                     Caption = 'Case No.';
@@ -256,6 +262,11 @@ page 50205 "Warehouse Packing Info"
                                             InsertPackingInfo."Net Weight" := PackingInfo."Net Weight";
                                             InsertPackingInfo."Gross Weight UOM" := PackingInfo."Gross Weight UOM";
                                             InsertPackingInfo."Line No." := MaxLineNo;
+
+                                            InsertPackingInfo."External Document No." := PackingInfo."External Document No.";//FDD005
+                                            InsertPackingInfo."Sell-to Customer No." := PackingInfo."Sell-to Customer No.";//FDD005
+                                            InsertPackingInfo."Qty. per Unit of Measure" := PackingInfo."Qty. per Unit of Measure";//FDD005
+                                            InsertPackingInfo."Quantity (KG)" := PackingInfo."Quantity (KG)";//FDD005
                                             InsertPackingInfo.Insert();
 
                                             TempCalPackingInfo.Init();
@@ -289,6 +300,7 @@ page 50205 "Warehouse Packing Info"
 
     local procedure InsertPackingInfo(WhseShpgHeader: Record "Warehouse Shipment Header"; WshpLine: Record "Warehouse Shipment Line")
     var
+        SOHeader: Record "Sales Header";//FDD005
         PackingInfo: Record "RV Warehouse Packing Info.";
         ReservationEntry: Record "Reservation Entry";
         LineNo: Integer;
@@ -300,6 +312,13 @@ page 50205 "Warehouse Packing Info"
         ReservationEntry.SetRange("Item No.", TempItemNo);
         //ReservationEntry.SetRange("Location Code", WhseShpgHeader."Location Code");
         if ReservationEntry.FindSet() then begin
+            //FDD005
+            SOHeader.Reset();
+            SOHeader.SetRange("Document Type", "Sales Document Type"::Order);
+            SOHeader.SetRange("No.", TempSourceNo);
+            if SOHeader.FindSet() then;
+            //FDD005
+
             repeat
                 PackingInfo.Init();
                 PackingInfo."Warehouse Shipment No." := WhseShpgHeader."No.";
@@ -316,6 +335,10 @@ page 50205 "Warehouse Packing Info"
                 PackingInfo."Net Weight" := TempQtyToShip;
                 PackingInfo."Gross Weight UOM" := TempUOM;
                 PackingInfo."Line No." := LineNo;
+                PackingInfo."External Document No." := SOHeader."External Document No.";//FDD005
+                PackingInfo."Sell-to Customer No." := SOHeader."Sell-to Customer No.";//FDD005
+                PackingInfo."Qty. per Unit of Measure" := ReservationEntry."Qty. per Unit of Measure";//FDD005
+                PackingInfo."Quantity (KG)" := ReservationEntry."Quantity (Base)";//FDD005
                 PackingInfo.Insert();
                 LineNo += 10000;
             until ReservationEntry.Next() = 0;

@@ -13,12 +13,8 @@ query 50400 "Inventory Master File"
         dataitem(StandardCostDetail; "Standard Cost Element Details")
         {
             column(Period_Code; "Period Code") { }
-            column(Site_Code; Site) { }
             column(Item_No; "Item No.") { }
             column(Item_Description; "Item Description") { }
-            column(Unit_of_Measure_Code; "Unit of Measure Code") { }
-            column(Cost_Element_Code; "Cost Element Code") { }
-            column(Standard_Cost; "Standard Cost") { }
 
             filter(Period_Filter; "Period Code") { }
             filter(Item_Filter; "Item No.") { }

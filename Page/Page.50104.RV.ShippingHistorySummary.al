@@ -43,6 +43,7 @@ page 50104 "RV Shipping History Summary"
                             SOLine.SetFilter("Document No.", SONoFilter);
 
                         SOLines_PG.SetTableView(SOLine);
+                        SOLines_PG.showExtDocNo();
                         SOLines_PG.RunModal();
                     end;
                 }
@@ -116,6 +117,7 @@ page 50104 "RV Shipping History Summary"
                     Caption = 'Quantity';
                     DecimalPlaces = 0 : 5;
                     ToolTip = 'Specifies the quantity shipped in the most recent posted warehouse shipment for this item.';
+                    Visible = false;//don't need it after discuss with customer. 2026/07/06
                 }
 
                 // ── Shipment Method ────────────────────────────────────────

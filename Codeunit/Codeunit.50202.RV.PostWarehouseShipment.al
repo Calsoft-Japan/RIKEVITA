@@ -36,15 +36,15 @@ codeunit 50202 "RV Post Warehouse Shipment"
     local procedure "Whse.-Post Shipment_OnAfterPostedWhseShptHeaderInsert"(PostedWhseShipmentHeader: Record "Posted Whse. Shipment Header"; LastShptNo: Code[20])
     var
         PackingInfo: Record "RV Warehouse Packing Info.";
-        TmpPackingInfo: Record "RV Warehouse Packing Info." temporary;
-        NewPackingInfo: Record "RV Warehouse Packing Info.";
+    //TmpPackingInfo: Record "RV Warehouse Packing Info." temporary;
+    //NewPackingInfo: Record "RV Warehouse Packing Info.";
     begin
         PackingInfo.Reset();
         PackingInfo.SetRange("Warehouse Shipment No.", PostedWhseShipmentHeader."Whse. Shipment No.");
         PackingInfo.SetRange("Posted Whse. Shipment No.", '');
         if PackingInfo.FindSet() then begin
             repeat
-                IF NOT NewPackingInfo.get(PackingInfo."Warehouse Shipment No.", PostedWhseShipmentHeader."No.", PackingInfo."Sales Order No.", PackingInfo."SO Line No.") then begin
+                /*IF NOT NewPackingInfo.get(PackingInfo."Warehouse Shipment No.", PostedWhseShipmentHeader."No.", PackingInfo."Sales Order No.", PackingInfo."SO Line No.") then begin
                     NewPackingInfo.TransferFields(PackingInfo, true);
                     NewPackingInfo."Warehouse Shipment No." := PackingInfo."Warehouse Shipment No.";
                     NewPackingInfo."Sales Order No." := PackingInfo."Sales Order No.";
@@ -53,7 +53,9 @@ codeunit 50202 "RV Post Warehouse Shipment"
                     NewPackingInfo.Insert();
                 end;
                 //PackingInfo.Rename(PackingInfo."Warehouse Shipment No.", PostedWhseShipmentHeader."No.", PackingInfo."Sales Order No.", PackingInfo."SO Line No.");
-                PackingInfo.Delete();
+                PackingInfo.Delete();*/
+                PackingInfo."Posted Whse. Shipment No." := PostedWhseShipmentHeader."No.";
+                PackingInfo.Modify();
             until PackingInfo.Next() = 0;
         end;
 

@@ -249,35 +249,35 @@ report 50106 "RV Aged Accounts Payable Basic"
                     column(VendorContactName; Vendor.Contact)
                     {
                     }
-                    column(VLEEndingDateRemAmtLCY; VendorLedgEntryEndingDate."Remaining Amt. (LCY)")
+                    column(VLEEndingDateRemAmtLCY; VenLedgerAmout(VendorLedgEntryEndingDate."Remaining Amt. (LCY)"))
                     {
                         AutoFormatType = 1;
                     }
-                    column(AgedVLE1RemAmtLCY; AgedVendorLedgEntry[1]."Remaining Amt. (LCY)")
+                    column(AgedVLE1RemAmtLCY; VenLedgerAmout(AgedVendorLedgEntry[1]."Remaining Amt. (LCY)"))
                     {
                         AutoFormatType = 1;
                     }
-                    column(AgedVendLedgEnt2RemAmtLCY; AgedVendorLedgEntry[2]."Remaining Amt. (LCY)")
+                    column(AgedVendLedgEnt2RemAmtLCY; VenLedgerAmout(AgedVendorLedgEntry[2]."Remaining Amt. (LCY)"))
                     {
                         AutoFormatType = 1;
                     }
-                    column(AgedVendLedgEnt3RemAmtLCY; AgedVendorLedgEntry[3]."Remaining Amt. (LCY)")
+                    column(AgedVendLedgEnt3RemAmtLCY; VenLedgerAmout(AgedVendorLedgEntry[3]."Remaining Amt. (LCY)"))
                     {
                         AutoFormatType = 1;
                     }
-                    column(AgedVendLedgEnt4RemAmtLCY; AgedVendorLedgEntry[4]."Remaining Amt. (LCY)")
+                    column(AgedVendLedgEnt4RemAmtLCY; VenLedgerAmout(AgedVendorLedgEntry[4]."Remaining Amt. (LCY)"))
                     {
                         AutoFormatType = 1;
                     }
-                    column(AgedVendLedgEnt5RemAmtLCY; AgedVendorLedgEntry[5]."Remaining Amt. (LCY)")
+                    column(AgedVendLedgEnt5RemAmtLCY; VenLedgerAmout(AgedVendorLedgEntry[5]."Remaining Amt. (LCY)"))
                     {
                         AutoFormatType = 1;
                     }
-                    column(AgedVendLedgEnt6RemAmtLCY; AgedVendorLedgEntry[6]."Remaining Amt. (LCY)")
+                    column(AgedVendLedgEnt6RemAmtLCY; VenLedgerAmout(AgedVendorLedgEntry[6]."Remaining Amt. (LCY)"))
                     {
                         AutoFormatType = 1;
                     }
-                    column(VendLedgEntryEndDtAmtLCY; VendorLedgEntryEndingDate."Amount (LCY)")
+                    column(VendLedgEntryEndDtAmtLCY; VenLedgerAmout(VendorLedgEntryEndingDate."Amount (LCY)"))
                     {
                         AutoFormatType = 1;
                     }
@@ -293,42 +293,42 @@ report 50106 "RV Aged Accounts Payable Basic"
                     column(VendLedgEntryEndDtPostgDt; Format(VendorLedgEntryEndingDate."Posting Date"))
                     {
                     }
-                    column(AgedVendLedgEnt6RemAmt; AgedVendorLedgEntry[6]."Remaining Amount")
+                    column(AgedVendLedgEnt6RemAmt; VenLedgerAmout(AgedVendorLedgEntry[6]."Remaining Amount"))
                     {
                         AutoFormatExpression = CurrencyCode;
                         AutoFormatType = 1;
                     }
-                    column(AgedVendLedgEnt5RemAmt; AgedVendorLedgEntry[5]."Remaining Amount")
+                    column(AgedVendLedgEnt5RemAmt; VenLedgerAmout(AgedVendorLedgEntry[5]."Remaining Amount"))
                     {
                         AutoFormatExpression = CurrencyCode;
                         AutoFormatType = 1;
                     }
-                    column(AgedVendLedgEnt4RemAmt; AgedVendorLedgEntry[4]."Remaining Amount")
+                    column(AgedVendLedgEnt4RemAmt; VenLedgerAmout(AgedVendorLedgEntry[4]."Remaining Amount"))
                     {
                         AutoFormatExpression = CurrencyCode;
                         AutoFormatType = 1;
                     }
-                    column(AgedVendLedgEnt3RemAmt; AgedVendorLedgEntry[3]."Remaining Amount")
+                    column(AgedVendLedgEnt3RemAmt; VenLedgerAmout(AgedVendorLedgEntry[3]."Remaining Amount"))
                     {
                         AutoFormatExpression = CurrencyCode;
                         AutoFormatType = 1;
                     }
-                    column(AgedVendLedgEnt2RemAmt; AgedVendorLedgEntry[2]."Remaining Amount")
+                    column(AgedVendLedgEnt2RemAmt; VenLedgerAmout(AgedVendorLedgEntry[2]."Remaining Amount"))
                     {
                         AutoFormatExpression = CurrencyCode;
                         AutoFormatType = 1;
                     }
-                    column(AgedVendLedgEnt1RemAmt; AgedVendorLedgEntry[1]."Remaining Amount")
+                    column(AgedVendLedgEnt1RemAmt; VenLedgerAmout(AgedVendorLedgEntry[1]."Remaining Amount"))
                     {
                         AutoFormatExpression = CurrencyCode;
                         AutoFormatType = 1;
                     }
-                    column(VLEEndingDateRemAmt; VendorLedgEntryEndingDate."Remaining Amount")
+                    column(VLEEndingDateRemAmt; VenLedgerAmout(VendorLedgEntryEndingDate."Remaining Amount"))
                     {
                         AutoFormatExpression = CurrencyCode;
                         AutoFormatType = 1;
                     }
-                    column(VendLedgEntryEndingDtAmt; VendorLedgEntryEndingDate.Amount)
+                    column(VendLedgEntryEndingDtAmt; VenLedgerAmout(VendorLedgEntryEndingDate.Amount))
                     {
                         AutoFormatExpression = CurrencyCode;
                         AutoFormatType = 1;
@@ -343,7 +343,10 @@ report 50106 "RV Aged Accounts Payable Basic"
                     }
 
                     column(VLEDocumentDate; Format(VendorLedgEntryEndingDate."Document Date")) { }
-                    column(VLECurExchRateAmt; CurExchRateAmt) { }
+                    column(VLECurExchRateAmt; CurExchRateAmt)
+                    {
+                        DecimalPlaces = 0 : 4;
+                    }
                     column(GLLCYCode; GLSetup."LCY Code") { }
 
                     trigger OnAfterGetRecord()
@@ -438,14 +441,14 @@ report 50106 "RV Aged Accounts Payable Basic"
                                 end;
                         end;
                         Clear(AgedVendorLedgEntry);
-                        AgedVendorLedgEntry[PeriodIndex]."Remaining Amount" := VendorLedgEntryEndingDate."Remaining Amount";
-                        AgedVendorLedgEntry[PeriodIndex]."Remaining Amt. (LCY)" := VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
-                        TotalVendorLedgEntry[PeriodIndex]."Remaining Amount" += VendorLedgEntryEndingDate."Remaining Amount";
-                        TotalVendorLedgEntry[PeriodIndex]."Remaining Amt. (LCY)" += VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
-                        GrandTotalVLERemaingAmtLCY[PeriodIndex] += VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
-                        TotalVendorLedgEntry[1].Amount += VendorLedgEntryEndingDate."Remaining Amount";
-                        TotalVendorLedgEntry[1]."Amount (LCY)" += VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
-                        GrandTotalVLEAmtLCY += VendorLedgEntryEndingDate."Remaining Amt. (LCY)";
+                        AgedVendorLedgEntry[PeriodIndex]."Remaining Amount" := VenLedgerAmout(VendorLedgEntryEndingDate."Remaining Amount");
+                        AgedVendorLedgEntry[PeriodIndex]."Remaining Amt. (LCY)" := VenLedgerAmout(VendorLedgEntryEndingDate."Remaining Amt. (LCY)");
+                        TotalVendorLedgEntry[PeriodIndex]."Remaining Amount" += VenLedgerAmout(VendorLedgEntryEndingDate."Remaining Amount");
+                        TotalVendorLedgEntry[PeriodIndex]."Remaining Amt. (LCY)" += VenLedgerAmout(VendorLedgEntryEndingDate."Remaining Amt. (LCY)");
+                        GrandTotalVLERemaingAmtLCY[PeriodIndex] += VenLedgerAmout(VendorLedgEntryEndingDate."Remaining Amt. (LCY)");
+                        TotalVendorLedgEntry[1].Amount += VenLedgerAmout(VendorLedgEntryEndingDate."Remaining Amount");
+                        TotalVendorLedgEntry[1]."Amount (LCY)" += VenLedgerAmout(VendorLedgEntryEndingDate."Remaining Amt. (LCY)");
+                        GrandTotalVLEAmtLCY += VenLedgerAmout(VendorLedgEntryEndingDate."Remaining Amt. (LCY)");
 
 
                         Clear(CurExchRateAmt);
@@ -517,6 +520,7 @@ report 50106 "RV Aged Accounts Payable Basic"
                 Clear(VBActSWIFT);
                 VendBankAct.Reset();
                 VendBankAct.SetRange("Vendor No.", Vendor."No.");
+                VendBankAct.SetRange(Code, Vendor."Preferred Bank Account Code");
                 if VendBankAct.FindSet() then begin
                     VBActNo := VendBankAct."Bank Account No.";
                     VBActName := VendBankAct.Name;
@@ -987,5 +991,15 @@ report 50106 "RV Aged Accounts Payable Basic"
             VendorLedgerEntry.SetFilter("Global Dimension 1 Code", Vendor.GetFilter("Global Dimension 1 Filter"));
         if Vendor.GetFilter("Global Dimension 2 Filter") <> '' then
             VendorLedgerEntry.SetFilter("Global Dimension 2 Code", Vendor.GetFilter("Global Dimension 2 Filter"));
+    end;
+
+    procedure VenLedgerAmout(EntryAmount: Decimal): Decimal
+    begin
+        if VendorLedgEntryEndingDate."Document Type" = VendorLedgEntryEndingDate."Document Type"::"Credit Memo" then
+            EntryAmount := Abs(EntryAmount) * -1
+        else
+            EntryAmount := Abs(EntryAmount);
+
+        exit(EntryAmount);
     end;
 }

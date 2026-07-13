@@ -35,6 +35,11 @@ tableextension 50200 "RV ITEM" extends "Item"
             Description = 'FDD020';
             InitValue = true;
         }
+        field(50205; "RV_Grade"; Text[20])
+        {
+            Caption = 'Grade';
+            Description = 'FDD027';
+        }
     }
     trigger OnBeforeModify()
     begin

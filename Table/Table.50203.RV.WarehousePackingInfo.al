@@ -142,6 +142,29 @@ table 50203 "RV Warehouse Packing Info."
             Caption = 'Line No.';
             Description = 'FDD019';
         }
+
+        field(21; "External Document No."; Code[35])
+        {
+            Caption = 'External Document No.';
+            Description = 'FDD005';
+        }
+        field(22; "Sell-to Customer No."; Code[20])
+        {
+            Caption = 'Sell-to Customer No.';
+            Description = 'FDD005';
+        }
+        field(23; "Qty. per Unit of Measure"; Decimal)
+        {
+            Caption = 'Qty. per Unit of Measure';
+            Description = 'FDD005';
+            //FieldClass = FlowField;
+            //CalcFormula = lookup("Item Unit of Measure"."Qty. per Unit of Measure" WHERE("Item No." = FIELD("Item No."), Code = field("Contents UOM")));
+        }
+        field(24; "Quantity (KG)"; Decimal)
+        {
+            Caption = 'Qty. in KG';
+            Description = 'FDD005';
+        }
     }
     keys
     {
