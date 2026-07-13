@@ -10,8 +10,8 @@ tableextension 50112 "RV Gen. Journal Batch Ext" extends "Gen. Journal Batch"
         {
             Caption = 'Export Template File';
             DataClassification = ToBeClassified;
-            OptionMembers = BookTrans,Domestic,Jompay,GIRO;
-            OptionCaption = 'Book Transfer Own Account (MayBank),Domestic Payments (MayBank),Utility Payment - Jompay (MayBank),GIRO Payments (MUFG)';
+            OptionMembers = ,Domestic,Jompay,GIRO;//BookTrans,Domestic,Jompay,GIRO;
+            OptionCaption = ' ,Domestic Payments (MayBank),Utility Payment - Jompay (MayBank),GIRO Payments (MUFG)';//Book Transfer Own Account (MayBank)
         }
     }
 }

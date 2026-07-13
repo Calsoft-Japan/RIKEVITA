@@ -27,6 +27,12 @@ pageextension 50109 "RV Vendor Card Ext" extends "Vendor Card"
                 MaskType = Concealed;
                 Editable = IDEditable;
             }
+
+            field("RV_Biller Code"; Rec."RV_Biller Code")
+            {
+                Description = 'FDD017';
+                ApplicationArea = All;
+            }
         }
     }
     actions

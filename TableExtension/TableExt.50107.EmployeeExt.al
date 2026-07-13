@@ -30,6 +30,12 @@ tableextension 50107 "RV Employee Ext" extends Employee
             TableRelation = "Vendor Bank Account".Code;
         }
 
+        field(50003; "RV_Biller Code"; Text[100])//Biller Code is an External Code used in Malaysian government system
+        {
+            Description = 'FDD017';
+            Caption = 'Biller Code';
+        }
+
         modify(Nationality)
         {
             trigger OnAfterValidate()
