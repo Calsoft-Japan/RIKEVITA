@@ -47,7 +47,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                 column(ReportTitle; ReportTitle)
                 {
                 }
-                column(PrintDate; Format(Today(), 0, '<Day,2>/<Month,2>/<Year,4>'))
+                column(PrintDate; Format(Today(), 0, '<Day,2>/<Month,2>/<Year4>'))
                 {
                 }
                 column(Sales_Header_No; "No.")
@@ -95,7 +95,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                 column(FromValue; "RV_Country of Origin")
                 {
                 }
-                column(SailingOnOrAbout; Format("RV_SAILING ON OR ABOUT", 0, '<Day,2>/<Month,2>/<Year,4>'))
+                column(SailingOnOrAbout; Format("RV_SAILING ON OR ABOUT", 0, '<Day,2>/<Month,2>/<Year4>'))
                 {
                 }
                 column(Terms; Terms)
@@ -145,8 +145,16 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                         SalesOrderNo := '';
                         CustomerPO := '';
                         FOBAmount := 0;
-                        TotalFreightCharges := 0;
+
                         RecItem.Get("No.");
+                        if "No." = RIKEVITASetup."Freight Charge Item No" then begin
+                            TotalFreightCharges += "Line Amount";
+                        end;
+
+                        if RecItem.Type = RecItem.Type::"Non-Inventory" then begin
+                            CurrReport.Skip();
+                        end;
+
                         if RecItem.Type = RecItem.Type::Inventory then begin
                             RecSalesShipmentHeader.Reset();
                             RecSalesShipmentHeader.SetRange("No.", "Shipment No.");
@@ -169,9 +177,6 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                             LineAmount := Amount;
                         end;
 
-                        if "No." = RIKEVITASetup."Freight Charge Item No" then begin
-                            TotalFreightCharges := TotalFreightCharges + "Line Amount";
-                        end;
                         RecItemReference.Reset();
                         RecItemReference.SetRange("Item No.", "No.");
                         RecItemReference.SetRange("Reference Type No.", SalesInvoiceHeader."Sell-to Customer No.");
@@ -218,12 +223,15 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                     TempNo: Integer;
                     RecItem: Record Item;
                     RecSalesShipmentHeader: Record "Sales Shipment Header";
+                    TempSalesShipmentHeader: Record "Sales Shipment Header" temporary;
                     SalesInvoiceLine: Record "Sales Invoice Line";
                     TypeHelper: Codeunit "Type Helper";
                 begin
                     CompanyInfo.Get();
                     CompanyInfo.CalcFields(Picture);
                     CerfiticateNo := '';
+                    OrderNo := '';
+                    TotalFreightCharges := 0;
                     TempNo := 1;
                     ISODoc.Reset();
                     ISODoc.SetRange("Report Code", 'OVERSEA INVOICE');
@@ -247,26 +255,25 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                             if RecItem."RV_Print RSPO No." then begin
                                 CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
                             end;
-                        until SalesInvoiceLine.Next() = 0;
-                    end;
-
-                    SalesInvoiceLine.Reset();
-                    SalesInvoiceLine.SetRange("Document No.", "No.");
-                    SalesInvoiceLine.SetRange(Type, SalesInvoiceLine.Type::Item);
-                    SalesInvoiceLine.SetFilter("Shipment No.", '<>%1', '');
-                    if SalesInvoiceLine.FindSet() then begin
-                        repeat
-                            RecSalesShipmentHeader.Reset();
-                            RecSalesShipmentHeader.SetRange("No.", SalesInvoiceLine."Shipment No.");
-                            if RecSalesShipmentHeader.FindFirst() then begin
-                                if TempNo mod 5 = 0 then begin
-                                    OrderNo += RecSalesShipmentHeader."Order No." + '<br>';
-                                end else begin
-                                    OrderNo += RecSalesShipmentHeader."Order No." + '  ';
+                            if ((TempNo < 10) and (SalesInvoiceLine."Shipment No." <> '') and (RecItem.Type = RecItem.Type::Inventory)) then begin
+                                RecSalesShipmentHeader.Reset();
+                                RecSalesShipmentHeader.SetRange("No.", SalesInvoiceLine."Shipment No.");
+                                if RecSalesShipmentHeader.FindFirst() then begin
+                                    TempSalesShipmentHeader.Reset();
+                                    TempSalesShipmentHeader.SetRange("Order No.", RecSalesShipmentHeader."Order No.");
+                                    if not TempSalesShipmentHeader.FindFirst() then begin
+                                        if TempNo mod 5 = 0 then begin
+                                            OrderNo += RecSalesShipmentHeader."Order No." + '<br>';
+                                        end else begin
+                                            OrderNo += RecSalesShipmentHeader."Order No." + '  ';
+                                        end;
+                                        TempSalesShipmentHeader.Init();
+                                        TempSalesShipmentHeader."No." := RecSalesShipmentHeader."No.";
+                                        TempSalesShipmentHeader."Order No." := RecSalesShipmentHeader."Order No.";
+                                        TempSalesShipmentHeader.Insert();
+                                        TempNo := TempNo + 1;
+                                    end;
                                 end;
-                                TempNo := TempNo + 1;
-                                if TempNo > 10 then
-                                    break;
                             end;
                         until SalesInvoiceLine.Next() = 0;
                     end;
