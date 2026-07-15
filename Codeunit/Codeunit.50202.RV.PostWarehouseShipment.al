@@ -64,6 +64,11 @@ codeunit 50202 "RV Post Warehouse Shipment"
     //FDD008
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Shipment", OnCreatePostedShptLineOnBeforePostedWhseShptLineInsert, '', false, false)]
     local procedure "Whse.-Post Shipment_OnCreatePostedShptLineOnBeforePostedWhseShptLineInsert"(var PostedWhseShptLine: Record "Posted Whse. Shipment Line"; WhseShptLine: Record "Warehouse Shipment Line")
+    var
+        SalesHeader: Record "Sales Header";//FDD007
+        SalesLine: Record "Sales Line";//FDD007
+        WhsShipment: Record "Warehouse Shipment Header";//FDD007
+        PriceCalculation: Interface "Price Calculation";//FDD007
     begin
         //FDD008
         PostedWhseShptLine."RV_B/L Date" := WhseShptLine."RV_B/L Date";
@@ -72,6 +77,30 @@ codeunit 50202 "RV Post Warehouse Shipment"
         PostedWhseShptLine.RV_ETD := WhseShptLine."RV_ETD";
         PostedWhseShptLine.RV_ETA := WhseShptLine."RV_ETA";
         //FDD008
+
+        //FDD007
+        WhsShipment.Get(WhseShptLine."No.");
+
+        PostedWhseShptLine."Shipment Date" := WhsShipment."Posting Date";
+        WhseShptLine."Shipment Date" := WhsShipment."Posting Date";
+        WhseShptLine.Modify();
+
+        SalesLine.Reset();
+        SalesLine.SetRange("Document Type", WhseShptLine."Source Subtype");
+        SalesLine.SetRange("Document No.", WhseShptLine."Source No.");
+        SalesLine.SetRange("Line No.", WhseShptLine."Source Line No.");
+        if SalesLine.FindSet(true) then begin
+            SalesHeader.Reset();
+            SalesHeader.Get(SalesLine."Document Type", SalesLine."Document No.");
+
+            SalesLine."Shipment Date" := WhsShipment."Posting Date";
+            SalesLine.GetPriceCalculationHandler("Price Type"::Sale, SalesHeader, PriceCalculation);
+
+            SalesLine.ApplyPrice(SalesLine.FieldNo("Shipment Date"), PriceCalculation);
+            SalesLine.Validate("Unit Price");
+            SalesLine.Modify();
+        end;
+        //FDD007
     end;
 
 }
