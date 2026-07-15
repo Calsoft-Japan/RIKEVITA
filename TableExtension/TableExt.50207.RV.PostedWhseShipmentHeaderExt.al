@@ -27,6 +27,25 @@ tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Ship
             DataClassification = ToBeClassified;
 
         }
+        field(50103; "RV_Country of Origin"; Code[10])
+        {
+            Caption = 'Country of Origin';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+            TableRelation = "Country/Region";
+        }
+        field(50104; "RV_VIA"; Text[50])
+        {
+            Caption = 'VIA - Port';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
+        field(50105; "RV_Final Destination"; Text[50])
+        {
+            Caption = 'Final Destination - Port';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
         field(50108; "RV_ETD"; Date)
         {
             Caption = 'ETD';
@@ -36,6 +55,25 @@ tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Ship
         field(50109; "RV_ETA"; Date)
         {
             Caption = 'ETA';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
+
+        field(50110; "RV_Ship-to Name"; Text[100])
+        {
+            Caption = 'Ship-to Name';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
+        field(50111; "RV_SAILING ON OR ABOUT"; Date)
+        {
+            Caption = 'Sailing on Board - SOB';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
+        field(50112; "RV_Shipping Type Code"; Enum "RV Shipping Type Code")
+        {
+            Caption = 'Shipping Type Code';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
         }
@@ -71,12 +109,7 @@ tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Ship
             Description = 'FDD019';
             TableRelation = "Country/Region";
         }
-        field(50206; "RV_VIA"; Text[50])
-        {
-            Caption = 'VIA';
-            Description = 'FDD019';
-            DataClassification = ToBeClassified;
-        }
+
         field(50207; "RV_Feeder Vessel"; Text[50])
         {
             Caption = 'Feeder Vessel';
@@ -87,27 +120,6 @@ tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Ship
             Caption = 'Mother Vessel';
             Description = 'FDD019';
         }
-        field(50209; "RV_Country of Origin"; Code[10])
-        {
-            Caption = 'Country of Origin';
-            Description = 'FDD008';
-            TableRelation = "Country/Region";
-        }
-        field(50210; "RV_Ship-to Name"; Text[100])
-        {
-            Caption = 'Ship-to Name';
-            Description = 'FDD008';
-        }
-        field(50211; "RV_SAILING ON OR ABOUT"; Date)
-        {
-            Caption = 'SAILING ON OR ABOUT';
-            Description = 'FDD008';
-        }
-        field(50212; "RV_Final Destination"; Text[50])
-        {
-            Caption = 'Final Destination';
-            Description = 'FDD008';
-            DataClassification = ToBeClassified;
-        }
+
     }
 }

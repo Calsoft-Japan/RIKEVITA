@@ -96,13 +96,13 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
         }
         field(50104; "RV_VIA"; Text[50])
         {
-            Caption = 'VIA';
+            Caption = 'VIA - Port';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
         }
         field(50105; "RV_Final Destination"; Text[50])
         {
-            Caption = 'Final Destination';
+            Caption = 'Final Destination - Port';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
         }
@@ -168,7 +168,13 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
         }
         field(50111; "RV_SAILING ON OR ABOUT"; Date)
         {
-            Caption = 'SAILING ON OR ABOUT';
+            Caption = 'Sailing on Board - SOB';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
+        field(50112; "RV_Shipping Type Code"; Enum "RV Shipping Type Code")
+        {
+            Caption = 'Shipping Type Code';
             Description = 'FDD008';
             DataClassification = ToBeClassified;
         }
