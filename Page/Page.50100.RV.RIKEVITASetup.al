@@ -114,6 +114,12 @@ page 50100 "RIKEVITA Setup"///
                     Description = 'FDD028';
                     ApplicationArea = All;
                 }
+
+                field("Segment Code"; Rec."Segment Code")
+                {
+                    Description = 'FDD017';
+                    ApplicationArea = All;
+                }
             }
             group(BankInformation)
             {

@@ -311,6 +311,7 @@ codeunit 50104 "RV Bank Payment to Excel"
         AppliedAmt: Decimal;
         Vend: Record Vendor;
         Empl: Record Employee;
+        VndBank: Record "Vendor Bank Account";
         EmplLedgEntry: Record "Employee Ledger Entry";
         BankAcctNo, RegNo, PassportNo, Name1, Name2, Name3, Email, Advice, NewNIRC : Text;
         CustRefNo: Integer;
@@ -318,7 +319,8 @@ codeunit 50104 "RV Bank Payment to Excel"
         PassportNo := '';
         if (GenJnlLine."Account Type" = GenJnlLine."Account Type"::Vendor) then begin
             Vend.Get(GenJnlLine."Account No.");
-            BankAcctNo := Vend."Preferred Bank Account Code";
+            if (Vend."Preferred Bank Account Code" <> '') and VndBank.Get(Vend."No.", Vend."Preferred Bank Account Code") then
+                BankAcctNo := VndBank."Bank Account No.";
             Name1 := CopyStr(Vend.Name, 1, 40);
             Name2 := CopyStr(Vend.Name, 41, 80);
             Name3 := CopyStr(Vend.Name, 81, 100);
@@ -339,7 +341,7 @@ codeunit 50104 "RV Bank Payment to Excel"
             Name2 := CopyStr(Empl.FullName(), 41, 80);
             Name3 := CopyStr(Empl.FullName(), 81, 100);
             RegNo := '';
-            Email := Empl."E-Mail";
+            Email := Empl."Company E-Mail"; //Empl."E-Mail";
             Advice := GenJnlLine.Description + GenJnlLine."RV_Description 2";
             NewNIRC := Empl."Social Security No.";
 
@@ -398,7 +400,7 @@ codeunit 50104 "RV Bank Payment to Excel"
         TempExcelBuffer.AddColumn(Name1, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(Name2, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(Name3, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn(NewNIRC, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);//New NIRC
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(RegNo, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(PassportNo, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
@@ -406,7 +408,7 @@ codeunit 50104 "RV Bank Payment to Excel"
         TempExcelBuffer.AddColumn(Email, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(Advice, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);//<Applied Invoice Description>
         TempExcelBuffer.AddColumn(Name1, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(NewNIRC, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);//New NIRC
+        TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
@@ -445,14 +447,17 @@ codeunit 50104 "RV Bank Payment to Excel"
         Empl: Record Employee;
         BillerCode: Text;
         VenInvNo: Text;
+        Ref2: Text;
     begin
         if (GenJnlLine."Account Type" = GenJnlLine."Account Type"::Vendor) then begin
             Vend.Get(GenJnlLine."Account No.");
             BillerCode := Vend."RV_Biller Code"; //Vend.Name;
+            Ref2 := Vend.Name;
         end
         else begin
             Empl.Get(GenJnlLine."Account No.");
             BillerCode := Empl."RV_Biller Code"; //Empl.FullName();
+            Ref2 := Empl.FullName();
         end;
 
         VenInvNo := GenJnlLine.Description;
@@ -502,7 +507,7 @@ codeunit 50104 "RV Bank Payment to Excel"
 
         TempExcelBuffer.AddColumn(BillerCode, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(VenInvNo, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(GenJnlLine.Description, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);//GenJnlLine."Your Reference"
+        TempExcelBuffer.AddColumn(Ref2, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);//GenJnlLine."Your Reference" GenJnlLine.Description
     end;
 
 
@@ -515,7 +520,7 @@ codeunit 50104 "RV Bank Payment to Excel"
         VnBank: Record "Vendor Bank Account";
         CompanyName: Text;
         CompanyBankAccountNo: Text;
-        BankAcctNo, Email : Text;
+        BankAcctNo, Email, SegCode : Text;
     begin
         if CompanyInfo.Get() then begin
             CompanyName := CompanyInfo.Name;
@@ -545,12 +550,15 @@ codeunit 50104 "RV Bank Payment to Excel"
                 AppliedAmt := VLE."Amount (LCY)"; // Fallback if Amount to apply isn't set manually
         end;
 
+        //SegCode := GetDimensionValueCode(GenJnlLine, 'ACC_SEGMNT');
+        SegCode := RVSetup."Segment Code";
+
         TempExcelBuffer.NewRow();
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(CompanyName, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(CompanyBankAccountNo, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn(CompanyName, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);//Format(GenJnlLine."Posting Date", 0, '<Year4><Month,2><Day,2><Closing>')
-        TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);//<Segment Code> dimension code setting to RIKEVITA Setup
+        TempExcelBuffer.AddColumn(SegCode, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);//<Segment Code> dimension code setting to RIKEVITA Setup
         TempExcelBuffer.AddColumn(BankAcctNo, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(VnBank."Bank Account No.", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(Vend.Name, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
@@ -709,6 +717,22 @@ codeunit 50104 "RV Bank Payment to Excel"
                 WriteCell(ExcelBuffer, CurrentRow, 5, GenJournalLine."Description");
                 CurrentRow += 1;
             until GenJournalLine.Next() = 0;
+    end;
+
+    local procedure GetDimensionValueCode(GenJnlLine: Record "Gen. Journal Line"; DimensionCode: Code[20]): Code[20]
+    var
+        DimensionSetEntry: Record "Dimension Set Entry";
+    begin
+        if (GenJnlLine."Dimension Set ID" = 0) or (DimensionCode = '') then
+            exit('');
+
+        DimensionSetEntry.SetRange("Dimension Set ID", GenJnlLine."Dimension Set ID");
+        DimensionSetEntry.SetRange("Dimension Code", DimensionCode);
+
+        if DimensionSetEntry.FindFirst() then
+            exit(DimensionSetEntry."Dimension Value Code");
+
+        exit('');
     end;
 
     #endregion
