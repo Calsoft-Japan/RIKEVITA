@@ -1,12 +1,12 @@
 namespace RIKEVITA.RIKEVITA;
 
-page 50404 "Delivery Scheduling Names"
+page 50404 "RV Invy. Planning Names"
 {
     ApplicationArea = All;
-    Caption = 'Delivery Scheduling Names';
+    Caption = 'Inventory Planning Name';
     PageType = List;
     //usagecategory = Lists;
-    SourceTable = "RM Delivery Scheduling Name";
+    SourceTable = "RV Invy. Planning Name";
 
     layout
     {
@@ -33,17 +33,17 @@ page 50404 "Delivery Scheduling Names"
     {
         area(processing)
         {
-            action("Update Delivery Scheduling")
+            action("Calculate Inventory Planning")
             {
                 ApplicationArea = Planning;
-                Caption = 'Update Delivery Scheduling';
-                Image = Delivery;
+                Caption = 'Calculate Inventory Planning';
+                Image = CalculateInventory;
                 ShortCutKey = 'Return';
                 ToolTip = 'Open the related delivery Scheduling.';
 
                 trigger OnAction()
                 var
-                    RMDeliveryScheduling: Page "RV.RM Delivery Scheduling";
+                    RMDeliveryScheduling: Page "RV Invy. Planning Name";
                 begin
                     RMDeliveryScheduling.SetRecord(Rec);
                     RMDeliveryScheduling.Run();

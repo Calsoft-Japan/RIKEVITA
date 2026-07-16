@@ -1,11 +1,11 @@
 
-page 50405 "RV.RM Delivery Scheduling"
+page 50405 "RV Invy. Planning Name"
 {
     ApplicationArea = All;
-    Caption = 'Delivery Scheduling';
+    Caption = 'Inventory Planning Name';
     PageType = Card;
     //UsageCategory = tasks;
-    SourceTable = "RM Delivery Scheduling Name";
+    SourceTable = "RV Invy. Planning Name";
 
     layout
     {
@@ -34,7 +34,7 @@ page 50405 "RV.RM Delivery Scheduling"
                 }
 
             }
-            Part(DeliverySchedulingLines; "RV Delivery Scheduling Lines")
+            Part(DeliverySchedulingLines; "RV Invy. Planning Lines")
             {
                 ApplicationArea = All;
                 Caption = 'Delivery Scheduling Lines';
@@ -60,7 +60,7 @@ page 50405 "RV.RM Delivery Scheduling"
                     ProdOrderComponent1: Record "Prod. Order Component";
                     Vendor: Record Vendor;
                     Item: Record Item;
-                    DeliverySchedulingLine: record "RM Delivery Scheduling Line";
+                    DeliverySchedulingLine: record "RV Invy. Planning Line";
                     EntryNo: Integer;
                     ItemNo: Code[20];
                     SITECODE: Code[20];
@@ -118,7 +118,7 @@ page 50405 "RV.RM Delivery Scheduling"
         currpage.DeliverySchedulingLines.page.SetDayCaption(Rec."Starting Date");
     end;
 
-    procedure updateDeliverySchedulingLine(prodOrderComponent: Record "Prod. Order Component"; var DeliverySchedulingLine: Record "RM Delivery Scheduling Line")
+    procedure updateDeliverySchedulingLine(prodOrderComponent: Record "Prod. Order Component"; var DeliverySchedulingLine: Record "RV Invy. Planning Line")
     var
         QtyUpdated: Boolean;
     begin
@@ -188,7 +188,7 @@ page 50405 "RV.RM Delivery Scheduling"
         end;
     end;
 
-    procedure InitDeliverySchedulingLine(prodOrderComponent: Record "Prod. Order Component"; var DeliverySchedulingLine: Record "RM Delivery Scheduling Line")
+    procedure InitDeliverySchedulingLine(prodOrderComponent: Record "Prod. Order Component"; var DeliverySchedulingLine: Record "RV Invy. Planning Line")
     var
         Item: Record Item;
     begin

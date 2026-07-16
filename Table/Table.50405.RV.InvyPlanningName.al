@@ -1,9 +1,9 @@
 // ------------------------------------------------------------------------------------------------
 // Raw Material Delivery Scheduling for prod.
 // ------------------------------------------------------------------------------------------------
-table 50405 "RM Delivery Scheduling Name"
+table 50405 "RV Invy. Planning Name"
 {
-    Caption = 'Delivery Scheduling Name';
+    Caption = 'Invy. Planning Name';
     //DrillDownPageID = "Demand Forecast Names";
     //LookupPageID = "Demand Forecast Names";
     DataCaptionFields = Name, Description;
@@ -52,7 +52,7 @@ table 50405 "RM Delivery Scheduling Name"
 
     trigger OnDelete()
     var
-        DeliverySchedulingLine: Record "RM Delivery Scheduling Line";
+        DeliverySchedulingLine: Record "RV Invy. Planning Line";
     begin
         DeliverySchedulingLine.SetRange("Delivery Scheduling Name", Name);
         if not DeliverySchedulingLine.IsEmpty() then begin

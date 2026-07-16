@@ -1,15 +1,15 @@
 namespace RIKEVITA.RIKEVITA;
 
-page 50406 "RV Delivery Scheduling Lines"
+page 50406 "RV Invy. Planning Lines"
 {
     ApplicationArea = All;
-    Caption = 'Delivery Scheduling Lines';
+    Caption = 'Inventory Planning Lines';
     DeleteAllowed = false;
     InsertAllowed = false;
     modifyAllowed = false;
     LinksAllowed = true;
     PageType = ListPart;
-    SourceTable = "RM Delivery Scheduling Line";
+    SourceTable = "RV Invy. Planning Line";
 
     layout
     {

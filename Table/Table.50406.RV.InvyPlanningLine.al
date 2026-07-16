@@ -1,6 +1,6 @@
-table 50406 "RM Delivery Scheduling Line"
+table 50406 "RV Invy. Planning Line"
 {
-    Caption = 'RM Delivery Scheduling Line';
+    Caption = 'Inventory Planning Line';
     DataClassification = ToBeClassified;
 
     fields
@@ -9,7 +9,7 @@ table 50406 "RM Delivery Scheduling Line"
         {
             Caption = 'Demand Forecast Name';
             NotBlank = true;
-            TableRelation = "RM Delivery Scheduling Name";
+            TableRelation = "RV Invy. Planning Name";
         }
         field(2; "Entry No."; Integer)
         {
