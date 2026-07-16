@@ -550,7 +550,8 @@ codeunit 50104 "RV Bank Payment to Excel"
                 AppliedAmt := VLE."Amount (LCY)"; // Fallback if Amount to apply isn't set manually
         end;
 
-        SegCode := GetDimensionValueCode(GenJnlLine, 'ACC_SEGMNT');
+        //SegCode := GetDimensionValueCode(GenJnlLine, 'ACC_SEGMNT');
+        SegCode := RVSetup."Segment Code";
 
         TempExcelBuffer.NewRow();
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
