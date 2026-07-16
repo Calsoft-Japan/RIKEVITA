@@ -14,7 +14,7 @@ query 50101 "RV Query Item Tracking Hist"
             column(RV_Container_No_; "Container No") { }
             column(QtyperUOM; "Qty. per Unit of Measure")
             { }
-            column(Quantity; "Quantity")
+            column(Quantity; "Quantity (KG)")
             {
                 Method = Sum;
             }

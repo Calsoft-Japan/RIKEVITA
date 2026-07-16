@@ -47,6 +47,12 @@ page 50205 "Warehouse Packing Info"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("External Document No."; Rec."External Document No.")
+                {
+                    Description = 'FDD005';
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("Container No"; Rec."Container No")
                 {
                     Caption = 'Container No';

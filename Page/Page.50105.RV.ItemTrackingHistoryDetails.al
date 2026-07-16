@@ -41,6 +41,8 @@ page 50105 "RV Item Tracking Hst. - Sales"
                         ItemLedgerEntry: Record "Item Ledger Entry";
                         ItemLedgerEntriesPage: Page "Item Ledger Entries"; // Page 38
                         ItemEntryNoList: Text;
+                        T_WhsPackInfo: Record "RV Warehouse Packing Info.";
+                        P_WhsPackInfo: Page "Warehouse Packing Info";
                     begin
                         /* ItemRelation.Reset();
                         ItemRelation.SetRange("Source Type", Database::"Sales Shipment Line");
@@ -70,14 +72,22 @@ page 50105 "RV Item Tracking Hst. - Sales"
                         //ItemLedgerEntry.SetRange("Entry No.", CurEntryNo);
 
                         //ItemLedgerEntry.SetFilter("Entry No.", ItemEntryNoList);
-                        ItemLedgerEntry.SetRange("External Document No.", Rec."External Document No.");
+                        /* ItemLedgerEntry.SetRange("External Document No.", Rec."External Document No.");
                         ItemLedgerEntry.SetRange("Source Type", ItemLedgerEntry."Source Type"::Customer);
                         ItemLedgerEntry.SetRange("Source No.", Rec."Sell-to Customer No.");
                         ItemLedgerEntry.SetRange("Item No.", Rec."Item No.");
                         ItemLedgerEntry.SetRange("Lot No.", Rec."Lot No.");
                         ItemLedgerEntry.SetRange("RV_Container No.", Rec."Container No.");
                         ItemLedgerEntriesPage.SetTableView(ItemLedgerEntry);
-                        ItemLedgerEntriesPage.RunModal();
+                        ItemLedgerEntriesPage.RunModal(); */
+                        T_WhsPackInfo.Reset();
+                        T_WhsPackInfo.SetRange("External Document No.", Rec."External Document No.");
+                        T_WhsPackInfo.SetRange("Sell-to Customer No.", Rec."Sell-to Customer No.");
+                        T_WhsPackInfo.SetRange("Item No.", Rec."Item No.");
+                        T_WhsPackInfo.SetRange("Lot No.", Rec."Lot No.");
+                        T_WhsPackInfo.SetRange("Container No", Rec."Container No.");
+                        P_WhsPackInfo.SetTableView(T_WhsPackInfo);
+                        P_WhsPackInfo.RunModal();
                     end;
                 }
                 field("RV_Container No."; Rec."Container No.")//RV_Container_No)
