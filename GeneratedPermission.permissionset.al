@@ -1,8 +1,7 @@
 permissionset 50100 GeneratedPermission
 {
     Assignable = true;
-    Permissions = tabledata "RM Delivery Scheduling Line" = RIMD,
-        tabledata "RM Delivery Scheduling Name" = RIMD,
+    Permissions =
         tabledata "RV Charge Calc. Header" = RIMD,
         tabledata "RV Charge Calc. Line" = RIMD,
         tabledata "RV Cost Element Category" = RIMD,
@@ -50,8 +49,6 @@ permissionset 50100 GeneratedPermission
         tabledata "RV_RSPO Ratio" = RIMD,
         tabledata "Standard Cost Element Details" = RIMD,
         tabledata "Standard Cost Element Period" = RIMD,
-        table "RM Delivery Scheduling Line" = X,
-        table "RM Delivery Scheduling Name" = X,
         table "RV Charge Calc. Header" = X,
         table "RV Charge Calc. Line" = X,
         table "RV Cost Element Category" = X,
@@ -144,7 +141,6 @@ permissionset 50100 GeneratedPermission
         codeunit "RV Transf PO Addtion Fields " = X,
         codeunit "RV TransferWarehouseShipment" = X,
         codeunit "RV User Permission Check" = X,
-        page "Delivery Scheduling Names" = X,
         page "ISO Symbol Image FactBox" = X,
         page "ISO Symbol Setting" = X,
         page "RIKEVITA Setup" = X,
@@ -161,7 +157,6 @@ permissionset 50100 GeneratedPermission
         page "RV Cost Element Category" = X,
         page "RV CustCOAReportSetting" = X,
         page "RV Customer Details - Whs." = X,
-        page "RV Delivery Scheduling Lines" = X,
         page "RV External Spec. Description" = X,
         page "RV FQC Card" = X,
         page "RV FQC Iny. Result Subform" = X,
@@ -211,7 +206,6 @@ permissionset 50100 GeneratedPermission
         page "RV Vendor ISO Certificate Card" = X,
         page "RV Vendor ISO Certificate List" = X,
         page "RV Vendor Selection" = X,
-        page "RV.RM Delivery Scheduling" = X,
         page "Standard Cost Element Details" = X,
         page "Standard Cost Element Period" = X,
         page "Warehouse Packing Info" = X,
