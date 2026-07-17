@@ -5864,6 +5864,7 @@
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
+                                    <Format>0.0000</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -6418,25 +6419,25 @@
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="textbox77">
+                        <Textbox Name="textbox82">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!VendLedgEntryEndingDtAmt.Value</Value>
+                                  <Value>=Fields!VendLedgEntryEndDtAmtLCY.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
-                                    <Format>=Fields!VendLedgEntryEndingDtAmtFormat.Value</Format>
+                                    <Format>=Fields!VendLedgEntryEndDtAmtLCYFormat.Value</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <ZIndex>132</ZIndex>
+                          <ZIndex>143</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -6500,6 +6501,7 @@
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
+                                    <Format>0.0000</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -9835,7 +9837,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -13276,12 +13277,12 @@
                                   <TablixMembers>
                                     <TablixMember>
                                       <Visibility>
-                                        <Hidden>=IIF(Fields!PrintAmountInLCY.Value and Fields!PrintDetails.Value,False,True)</Hidden>
+                                        <Hidden>=IIF(not Fields!PrintAmountInLCY.Value and Fields!PrintDetails.Value,False,True)</Hidden>
                                       </Visibility>
                                     </TablixMember>
                                     <TablixMember>
                                       <Visibility>
-                                        <Hidden>=IIF((not Fields!PrintAmountInLCY.Value) and Fields!PrintDetails.Value,False,True)</Hidden>
+                                        <Hidden>=IIF((Fields!PrintAmountInLCY.Value) and Fields!PrintDetails.Value,False,True)</Hidden>
                                       </Visibility>
                                     </TablixMember>
                                     <TablixMember>
@@ -13308,28 +13309,28 @@
                                 </TablixMember>
                                 <TablixMember>
                                   <Visibility>
-                                    <Hidden>=IIF(Fields!PrintAmountInLCY.Value and Fields!PrintDetails.Value,False,True)</Hidden>
+                                    <Hidden>=IIF(not Fields!PrintAmountInLCY.Value and Fields!PrintDetails.Value,False,True)</Hidden>
                                   </Visibility>
                                   <KeepWithGroup>Before</KeepWithGroup>
                                   <KeepTogether>true</KeepTogether>
                                 </TablixMember>
                                 <TablixMember>
                                   <Visibility>
-                                    <Hidden>=IIF((not Fields!PrintAmountInLCY.Value) and Fields!PrintDetails.Value,False,True)</Hidden>
+                                    <Hidden>=IIF((Fields!PrintAmountInLCY.Value) and Fields!PrintDetails.Value,False,True)</Hidden>
                                   </Visibility>
                                   <KeepWithGroup>Before</KeepWithGroup>
                                   <KeepTogether>true</KeepTogether>
                                 </TablixMember>
                                 <TablixMember>
                                   <Visibility>
-                                    <Hidden>=IIF((not Fields!PrintDetails.Value)and(Fields!PrintAmountInLCY.Value)and(Fields!VendorName.Value&lt;&gt;""),False,True)</Hidden>
+                                    <Hidden>=IIF((not Fields!PrintDetails.Value)and(not Fields!PrintAmountInLCY.Value)and(Fields!VendorName.Value&lt;&gt;""),False,True)</Hidden>
                                   </Visibility>
                                   <KeepWithGroup>Before</KeepWithGroup>
                                   <KeepTogether>true</KeepTogether>
                                 </TablixMember>
                                 <TablixMember>
                                   <Visibility>
-                                    <Hidden>=IIF(((not Fields!PrintDetails.Value)and(not Fields!PrintAmountInLCY.Value))
+                                    <Hidden>=IIF(((not Fields!PrintDetails.Value)and(Fields!PrintAmountInLCY.Value))
 and(Fields!TempCurrency2Code.Value="")
 and(not Fields!VendorNo.Value=""),False,True)</Hidden>
                                   </Visibility>

@@ -652,6 +652,7 @@ report 50106 "RV Aged Accounts Payable Basic"
                         ApplicationArea = Basic, Suite;
                         Caption = 'Print Amounts in LCY';
                         ToolTip = 'Specifies if you want the report to specify the aging per vendor ledger entry.';
+                        Visible = false;//Hide this for always only has one LCY layout 2026/07/17
                     }
                     field(PrintDetails; PrintDetails)
                     {
@@ -719,19 +720,21 @@ report 50106 "RV Aged Accounts Payable Basic"
             Caption = 'Aged Accounts Payable Summary';
             Summary = 'The Aged Accounts Payable Summary provides a basic layout.';
         }
-        layout("RV_AgedAccountsPayableDetail.rdlc")
+        /* layout("RV_AgedAccountsPayableDetail.rdlc")
         {
             Type = RDLC;
             LayoutFile = '.\ReportLayout\RV_AgedAccountsPayableDetail.rdlc';
             Caption = 'Aged Accounts Payable Details';
             Summary = 'The Aged Accounts Payable Details provides a detailed layout.';
-        }
+        } */
     }
 
     trigger OnPreReport()
     var
         FormatDocument: Codeunit "Format Document";
     begin
+        PrintAmountInLCY := true;//Hide this for always only has one LCY layout 2026/07/17
+
         if HeadingType = HeadingType::"Number of Months" then begin
             Agingby := Agingby::"Due Date";
             Evaluate(PeriodLength, '31D');
