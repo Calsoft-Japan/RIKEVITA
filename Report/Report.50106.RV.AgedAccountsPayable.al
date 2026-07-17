@@ -349,6 +349,8 @@ report 50106 "RV Aged Accounts Payable Basic"
                     }
                     column(GLLCYCode; GLSetup."LCY Code") { }
 
+                    column(EntryCurrencyCode; EntryCurrencyCode) { }
+
                     trigger OnAfterGetRecord()
                     var
                         PeriodIndex: Integer;
@@ -459,6 +461,12 @@ report 50106 "RV Aged Accounts Payable Basic"
                         CurrExchRate.SetAscending("Starting Date", true);
                         if CurrExchRate.FindLast() then
                             CurExchRateAmt := CurrExchRate."Relational Exch. Rate Amount";
+
+
+                        if VendorLedgEntryEndingDate."Currency Code" <> '' then
+                            EntryCurrencyCode := VendorLedgEntryEndingDate."Currency Code"
+                        else
+                            EntryCurrencyCode := GLSetup."LCY Code";
                     end;
 
                     trigger OnPostDataItem()
@@ -601,8 +609,7 @@ report 50106 "RV Aged Accounts Payable Basic"
                 if TempCurrencyAmount.FindSet(false) then
                     repeat
                         if TempCurrencyAmount.Date <> DMY2Date(31, 12, 9999) then
-                            AgedVendorLedgEntry[GetPeriodIndex(TempCurrencyAmount.Date)]."Remaining Amount" :=
-                              TempCurrencyAmount.Amount
+                            AgedVendorLedgEntry[GetPeriodIndex(TempCurrencyAmount.Date)]."Remaining Amount" := TempCurrencyAmount.Amount
                         else
                             AgedVendorLedgEntry[7]."Remaining Amount" := TempCurrencyAmount.Amount;//AgedVendorLedgEntry[6]
                     until TempCurrencyAmount.Next() = 0;
@@ -845,6 +852,7 @@ report 50106 "RV Aged Accounts Payable Basic"
         VBActName: Text;
         VBActSWIFT: Text;
         VBActNo: Text;
+        EntryCurrencyCode: Code[10];
 
     protected var
         TempVendorLedgEntry: Record "Vendor Ledger Entry" temporary;

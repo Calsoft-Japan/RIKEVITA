@@ -6461,7 +6461,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!CurrCode_TempVenLedgEntryLoop.Value</Value>
+                                  <Value>=Fields!EntryCurrencyCode.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -7862,7 +7862,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!CurrCode_TempVenLedgEntryLoop.Value</Value>
+                                  <Value>=Fields!EntryCurrencyCode.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -14636,6 +14636,9 @@ End Function
         </Field>
         <Field Name="GLLCYCode">
           <DataField>GLLCYCode</DataField>
+        </Field>
+        <Field Name="EntryCurrencyCode">
+          <DataField>EntryCurrencyCode</DataField>
         </Field>
         <Field Name="Number_CurrencyTotals">
           <DataField>Number_CurrencyTotals</DataField>
