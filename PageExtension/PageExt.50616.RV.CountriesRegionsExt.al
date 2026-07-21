@@ -8,11 +8,11 @@ pageextension 50616 "RV_Countries/Regions" extends "Countries/Regions"
     {
         addafter("ISO Numeric Code")
         {
-            field("RV_Sailing Category"; Rec."RV_Sailing Category Code")
+            field("RV_Holding Category"; Rec."RV_Sailing Category Code")
             {
                 ApplicationArea = All;
             }
-            field("RV_Sailing Period"; Rec."RV_Sailing Period")
+            field("RV_Holding Period"; Rec."RV_Sailing Period")
             {
                 ApplicationArea = All;
             }

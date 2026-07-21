@@ -16,16 +16,16 @@ tableextension 50605 "RV Ship-to Address" extends "Ship-to Address"
             Caption = 'Bypass ECR';
             DataClassification = ToBeClassified;
         }
-        field(50602; "RV_Sailing Category"; Code[20])
+        field(50602; "RV_Holding Category"; Code[20])
         {
-            Caption = 'Sailing Category';
+            Caption = 'Holding Category';
             FieldClass = FlowField;
             CalcFormula = lookup("Country/Region"."RV_Sailing Category Code" where(Code = field("Country/Region Code")));
             Editable = false;
         }
-        field(50603; "RV_Sailing Period"; DateFormula)
+        field(50603; "RV_Holding Period"; DateFormula)
         {
-            Caption = 'Sailing Period';
+            Caption = 'Holding Period';
             FieldClass = FlowField;
             CalcFormula = lookup("Country/Region"."RV_Sailing Period" where(Code = field("Country/Region Code")));
             Editable = false;

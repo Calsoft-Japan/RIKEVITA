@@ -57,6 +57,12 @@ pageextension 50108 "RV Sales Order Ext" extends "Sales Order"
                     Description = 'FDD012';
                     Editable = AllowClosingDate;
                 }
+                field("RV_RDD"; Rec."RV_RDD")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD006';
+                    Editable = AllowStaffingDate;
+                }
                 field("RV_Stuffing Date"; Rec."RV_Stuffing Date")
                 {
                     ApplicationArea = All;
@@ -155,9 +161,7 @@ pageextension 50108 "RV Sales Order Ext" extends "Sales Order"
             //RVItemTrackHist."Sales Order Line No." := QryItemTrack.SalesOrderLineNo;
             RVItemTrackHist."Lot No." := QryItemTrack.LotNo;
             RVItemTrackHist."Container No." := QryItemTrack.RV_Container_No_;
-            //if QryItemTrack.QtyperUOM <> 0 then
-            //    RVItemTrackHist.Qty := QryItemTrack.Quantity / QryItemTrack.QtyperUOM;
-            RVItemTrackHist.Qty := QryItemTrack.Quantity;
+            RVItemTrackHist.Qty := QryItemTrack.Quantity / QryItemTrack.QtyperUOM;
             RVItemTrackHist."External Document No." := Rec."External Document No.";
             RVItemTrackHist."Sell-to Customer No." := Rec."Sell-to Customer No.";
             RVItemTrackHist."Item No." := QryItemTrack.Item_No_;

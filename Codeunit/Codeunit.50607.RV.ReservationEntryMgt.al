@@ -12,6 +12,7 @@ codeunit 50607 ReservationEntryMgt
         OutputILEntry: Record "Item Ledger Entry";
         ResEntryTransfer: Record "Reservation Entry";
         PlanBOM: Record "Planning Component";
+        ProdOrder: Record "Production Order";
     begin
         TemTransferOrder.DeleteAll();
         TemProdOrder.DeleteAll();
@@ -77,6 +78,7 @@ codeunit 50607 ReservationEntryMgt
                                     TemProdOrder.SetRange("No.", ResEntryPlus."Source ID");
                                     IF TemProdOrder.isempty THEN BEGIN
                                         TemProdOrder."No." := ResEntryPlus."Source ID";
+                                        TemProdOrder."Due Date" := ILEntry."Posting Date";
                                         TemProdOrder.Insert();
                                     END;
                                 end else begin
@@ -113,6 +115,7 @@ codeunit 50607 ReservationEntryMgt
                                         TemProdOrder.SetRange("No.", OutputILEntry."Document No.");
                                         IF TemProdOrder.isempty THEN BEGIN
                                             TemProdOrder."No." := OutputILEntry."Document No.";
+                                            TemProdOrder."Due Date" := OutputILEntry."Posting Date";
                                             TemProdOrder.Insert();
                                         END;
                                     end;
@@ -132,6 +135,12 @@ codeunit 50607 ReservationEntryMgt
                                 TemProdOrder.SetRange("No.", ResEntryPlus."Source ID");
                                 IF TemProdOrder.isempty THEN BEGIN
                                     TemProdOrder."No." := ResEntryPlus."Source ID";
+
+                                    ProdOrder.Reset();
+                                    ProdOrder.SetRange("No.", ResEntryPlus."Source ID");
+                                    IF ProdOrder.FindFirst() THEN
+                                        TemProdOrder."Due Date" := ProdOrder."Due Date";
+
                                     TemProdOrder.Insert();
                                 END;
                             end;
@@ -150,6 +159,7 @@ codeunit 50607 ReservationEntryMgt
         TransferLine: Record "Transfer Line";
         ILEntry: Record "Item Ledger Entry";
         OutputILEntry: Record "Item Ledger Entry";
+        ProdOrder: Record "Production Order";
     begin
         ResEntryMinus.Reset();
         IF TransResEntryPlus."Source Type" = 5741 THEN BEGIN
@@ -218,6 +228,7 @@ codeunit 50607 ReservationEntryMgt
                                         TemProdOrder.SetRange("No.", ResEntryPlus."Source ID");
                                         IF TemProdOrder.isempty THEN BEGIN
                                             TemProdOrder."No." := ResEntryPlus."Source ID";
+                                            TemProdOrder."Due Date" := ILEntry."Posting Date";
                                             TemProdOrder.Insert();
                                         END;
                                     end else begin
@@ -254,6 +265,7 @@ codeunit 50607 ReservationEntryMgt
                                             TemProdOrder.SetRange("No.", OutputILEntry."Document No.");
                                             IF TemProdOrder.isempty THEN BEGIN
                                                 TemProdOrder."No." := OutputILEntry."Document No.";
+                                                TemProdOrder."Due Date" := OutputILEntry."Posting Date";
                                                 TemProdOrder.Insert();
                                             END;
                                         end;
@@ -273,6 +285,12 @@ codeunit 50607 ReservationEntryMgt
                                     TemProdOrder.SetRange("No.", ResEntryPlus."Source ID");
                                     IF TemProdOrder.isempty THEN BEGIN
                                         TemProdOrder."No." := ResEntryPlus."Source ID";
+
+                                        ProdOrder.Reset();
+                                        ProdOrder.SetRange("No.", ResEntryPlus."Source ID");
+                                        IF ProdOrder.FindFirst() THEN
+                                            TemProdOrder."Due Date" := ProdOrder."Due Date";
+
                                         TemProdOrder.Insert();
                                     END;
                                 end;
@@ -283,15 +301,24 @@ codeunit 50607 ReservationEntryMgt
         end;
     end;
 
-    procedure GetProdNoInfo(var ProdNo: Text[250])
+    procedure GetProdNoInfo(var ProdNo: Text[250]; var DueData: Date)
+    var
+        MaxDueDate: Date;
     begin
         ProdNo := '';
+        TemProdOrder.Reset();
         if TemProdOrder.FindSet() then
             repeat
                 if ProdNo = '' then
                     ProdNo := TemProdOrder."No."
                 else
                     ProdNo := ProdNo + '|' + TemProdOrder."No.";
+
+                if DueData = 0D then
+                    DueData := TemProdOrder."Due Date"
+                else
+                    if TemProdOrder."Due Date" > DueData then
+                        DueData := TemProdOrder."Due Date";
             until TemProdOrder.Next() = 0;
     end;
 

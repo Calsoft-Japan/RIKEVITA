@@ -1,11 +1,11 @@
 /// <summary>
-/// Table RV Sailing Category (ID 50605)
+/// Table RV Holding Category (ID 50605)
 /// FDD006 2026/03/31: New. (Stephen)
 /// </summary>
-table 50605 "RV Sailing Category"
+table 50605 "RV Holding Category"
 {
     DataClassification = ToBeClassified;
-    LookupPageId = "RV Sailing Category";
+    LookupPageId = "RV Holding Category";
 
     fields
     {
@@ -19,9 +19,9 @@ table 50605 "RV Sailing Category"
             Caption = 'Description';
             DataClassification = ToBeClassified;
         }
-        field(3; "Sailing Period Calculation"; DateFormula)
+        field(3; "Holding Period Calculation"; DateFormula)
         {
-            Caption = 'Sailing Period Calculation';
+            Caption = 'Holding Period Calculation';
             DataClassification = ToBeClassified;
         }
     }

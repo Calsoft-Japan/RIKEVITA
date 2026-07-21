@@ -4,6 +4,7 @@
 /// PageExtension RV Item Card (ID 50606) extends "Item Card" Merge from 50606 to 50200, FDD014 2026/02/23: New. (Bobby.ji)
 /// FDD014 2026/02/23: New. (Stephen)
 /// FDD020 2026/04/08：New.（Bobby.ji）
+/// FDD006 2026/07/17: Add fields (Stephen)
 /// </summary>
 pageextension 50200 "RV Item Card Ext" extends "Item Card"
 {
@@ -27,6 +28,16 @@ pageextension 50200 "RV Item Card Ext" extends "Item Card"
         }
         addafter("Item Category Code")
         {
+            field("RV_ECR Required"; Rec."RV_ECR Required")
+            {
+                ApplicationArea = all;
+                description = 'FDD006';
+            }
+            field("RV_ECR Ageing Period"; Rec."RV_ECR Ageing Period")
+            {
+                ApplicationArea = all;
+                description = 'FDD001';
+            }
             field(RV_RSPO; Rec.RV_RSPO)
             {
                 Caption = 'RSPO';
@@ -42,6 +53,7 @@ pageextension 50200 "RV Item Card Ext" extends "Item Card"
                 Caption = 'Print RSPO No.';
                 ApplicationArea = all;
             }
+
         }
     }
 

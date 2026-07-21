@@ -1,13 +1,13 @@
 /// <summary>
-/// Page RV MPS Sailing Category(ID 50605)
+/// Page RV MPS Holding Category (ID 50605)
 /// FDD006 2026/02/23: New. (stephen)
 /// </summary>
-page 50605 "RV Sailing Category"
+page 50605 "RV Holding Category"
 {
     ApplicationArea = All;
-    Caption = 'Sailing Category';
+    Caption = 'Holding Category';
     PageType = List;
-    SourceTable = "RV Sailing Category";
+    SourceTable = "RV Holding Category";
     UsageCategory = Lists;
 
     layout
@@ -24,9 +24,9 @@ page 50605 "RV Sailing Category"
                 {
                     ToolTip = 'Specifies the value of the Description field.', Comment = '%';
                 }
-                field("Sailing Period Calculation"; Rec."Sailing Period Calculation")
+                field("Holding Period Calculation"; Rec."Holding Period Calculation")
                 {
-                    ToolTip = 'Specifies the value of the Sailing Period Calculation field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Holding Period Calculation field.', Comment = '%';
                 }
             }
         }

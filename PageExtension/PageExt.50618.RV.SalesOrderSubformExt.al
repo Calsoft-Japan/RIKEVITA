@@ -41,6 +41,11 @@ pageextension 50618 "RV_Sales Order Subform" extends "Sales Order Subform"
                 Description = 'FDD012';
                 Editable = AllowStaffingDate;
             }
+            field("RV_RDD"; Rec."RV_RDD")
+            {
+                ApplicationArea = All;
+                Description = 'FD006';
+            }
             field(RV_ETD; Rec."RV_ETD")
             {
                 ApplicationArea = All;

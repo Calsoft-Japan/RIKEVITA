@@ -165,5 +165,16 @@ tableextension 50607 "RV Sales Header" extends "Sales Header"
                 end;
             end;
         }
+        field(50603; "RV_Shipment Type"; Enum "RV Shipment Type")
+        {
+            Caption = 'Shipment Type';
+            DataClassification = ToBeClassified;
+        }
+        field(50604; "RV_RDD"; Date)
+        {
+            Caption = 'RDD';
+            DataClassification = ToBeClassified;
+            description = 'FDD006';
+        }
     }
 }

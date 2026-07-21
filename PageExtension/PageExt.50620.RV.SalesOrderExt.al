@@ -6,12 +6,12 @@ pageextension 50620 "RV_Sales Order" extends "Sales Order"
 {
     layout
     {
-        addlast("Shipping and Billing")
+        addafter("Shipment Method Code")
         {
-            // field("RV_Stuffing Date"; Rec."RV_Stuffing Date")
-            // {
-            //     ApplicationArea = All;
-            // }
+            field("RV_Shipment Type"; Rec."RV_Shipment Type")
+            {
+                ApplicationArea = All;
+            }
         }
     }
 }

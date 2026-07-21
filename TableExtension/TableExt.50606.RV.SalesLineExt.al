@@ -28,5 +28,11 @@ tableextension 50606 "RV Sales Line" extends "Sales Line"
             Caption = 'Is New';
             DataClassification = ToBeClassified;
         }
+        field(50604; "RV_RDD"; Date)
+        {
+            Caption = 'RDD';
+            DataClassification = ToBeClassified;
+            description = 'FDD006';
+        }
     }
 }

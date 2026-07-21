@@ -4,7 +4,7 @@ page 50405 "RV Invy. Planning Name"
     ApplicationArea = All;
     Caption = 'Inventory Planning Name';
     PageType = Card;
-    //UsageCategory = tasks;
+    UsageCategory = tasks;
     SourceTable = "RV Invy. Planning Name";
 
     layout

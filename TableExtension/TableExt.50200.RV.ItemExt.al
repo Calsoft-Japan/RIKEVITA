@@ -2,6 +2,7 @@
 /// TableExtension RV_ITEM (ID 50200) extends Item table
 /// FDD001 2026/03/12: New. (Bobby.ji)
 /// FDD020 2026/04
+/// FDD006 2026/07/17: Add fields (Stephen)
 /// </summary>
 tableextension 50200 "RV ITEM" extends "Item"
 {
@@ -39,6 +40,11 @@ tableextension 50200 "RV ITEM" extends "Item"
         {
             Caption = 'Grade';
             Description = 'FDD027';
+        }
+        field(50600; "RV_ECR Ageing Period"; DateFormula)
+        {
+            Caption = 'ECR Ageing Period';
+            Description = 'FDD001';
         }
     }
     trigger OnBeforeModify()

@@ -22,6 +22,9 @@ report 50602 "RV ECR Calculation Info"
             var
                 SalesReservationInfo: Codeunit ReservationEntryMgt;
                 ProdLine: Record "Prod. Order Line";
+                Item: Record Item;
+                tmpDate: date;
+                tmpDataCal: DateFormula;
             begin
                 Salesheader.get(Salesline."Document Type", Salesline."Document No.");
 
@@ -34,16 +37,18 @@ report 50602 "RV ECR Calculation Info"
                     SalesECRStatusInfo."Original ECR Date" := Salesline."RV_ECR Date";
                     SalesECRStatusInfo."ECR Required" := Salesline."RV_ECR Required";
                     SalesECRStatusInfo."Bypass ECR" := not Salesline."RV_ECR Required";
+                    SalesECRStatusInfo."Shipment Type" := Salesheader."RV_Shipment Type";
                     SalesECRStatusInfo.Insert();
                 end;
 
                 SalesECRStatusInfo."Customer Name" := Salesheader."Sell-to Customer Name";
                 SalesECRStatusInfo."Item Description" := Salesline.Description;
-                SalesECRStatusInfo."Shipment Method" := Salesheader."Shipment Method Code";
+                // SalesECRStatusInfo."Shipment Method" := Salesheader."Shipment Method Code";
+                SalesECRStatusInfo."Shipment Type" := Salesheader."RV_Shipment Type";
                 SalesECRStatusInfo."Ship-to Country" := Salesheader."Ship-to Country/Region Code";
                 if ShiptoAddress.get(Salesheader."Sell-to Customer No.", Salesheader."Ship-to Code") then begin
-                    ShiptoAddress.CalcFields("RV_Sailing Category");
-                    SalesECRStatusInfo."Sailing Category" := ShiptoAddress."RV_Sailing Category";
+                    ShiptoAddress.CalcFields("RV_Holding Category");
+                    SalesECRStatusInfo."Sailing Category" := ShiptoAddress."RV_Holding Category";
                 end else
                     SalesECRStatusInfo."Sailing Category" := '';
 
@@ -53,19 +58,56 @@ report 50602 "RV ECR Calculation Info"
                 //FindReqLine(ReservEntry);
                 Clear(SalesReservationInfo);
                 SalesReservationInfo.FindReservationEntry(Salesline);
-                SalesReservationInfo.GetProdNoInfo(SalesECRStatusInfo."Prod. Order No.");
+                SalesReservationInfo.GetProdNoInfo(SalesECRStatusInfo."Prod. Order No.", SalesECRStatusInfo."Prod. Due Date");
 
-                if SalesECRStatusInfo."Prod. Order No." <> '' then begin
-                    ProdLine.Reset();
-                    ProdLine.SetFilter("Prod. Order No.", SalesECRStatusInfo."Prod. Order No.");
-                    ProdLine.setrange("Item No.", SalesECRStatusInfo."Item No.");
-                    if ProdLine.FindFirst() then
-                        SalesECRStatusInfo."Prod. Due Date" := ProdLine."Due Date";
-                end;
+                // if SalesECRStatusInfo."Prod. Order No." <> '' then begin
+                //     ProdLine.Reset();
+                //     ProdLine.SetFilter("Prod. Order No.", SalesECRStatusInfo."Prod. Order No.");
+                //     ProdLine.setrange("Item No.", SalesECRStatusInfo."Item No.");
+                //     if ProdLine.findfirst() then
+                //         SalesECRStatusInfo."Prod. Due Date" := ProdLine."Due Date";
+                // end;
 
                 SalesECRStatusInfo."Reservation Quantity" := Salesline."Reserved Quantity";
                 SalesECRStatusInfo."Order Quantity" := Salesline."Quantity";
-                SalesECRStatusInfo."Latest ECR Date" := Salesline."RV_ECR Date";
+                if SalesECRStatusInfo."Prod. Due Date" = 0D then
+                    SalesECRStatusInfo."Latest ECR Date" := Salesline."RV_ECR Date"
+                else begin
+                    if Salesline."RV_ECR Required" then begin
+                        case Salesheader."RV_Shipment Type" of
+                            Salesheader."RV_Shipment Type"::Air:
+                                begin
+                                    Item.get(SalesECRStatusInfo."Item No.");
+                                    if format(RVSetup."Holding Period for Air") <> '' then
+                                        evaluate(tmpDataCal, '+' + format(RVSetup."Holding Period for Air"));
+                                    tmpDate := CalcDate(tmpDataCal, SalesECRStatusInfo."Prod. Due Date");
+                                    if format(Item."RV_ECR Ageing Period") <> '' then
+                                        evaluate(tmpDataCal, '+' + format(Item."RV_ECR Ageing Period"));
+                                    tmpDate := CalcDate(tmpDataCal, tmpDate);
+                                    SalesECRStatusInfo."Latest ECR Date" := tmpDate;
+                                end;
+                            Salesheader."RV_Shipment Type"::Land,
+                            Salesheader."RV_Shipment Type"::Sea:
+                                begin
+                                    Item.get(SalesECRStatusInfo."Item No.");
+                                    ShiptoAddress.CalcFields("RV_Holding Period");
+                                    if format(ShiptoAddress."RV_Holding Period") <> '' then
+                                        evaluate(tmpDataCal, '+' + format(ShiptoAddress."RV_Holding Period"));
+                                    tmpDate := CalcDate(tmpDataCal, SalesECRStatusInfo."Prod. Due Date");
+                                    if format(Item."RV_ECR Ageing Period") <> '' then
+                                        evaluate(tmpDataCal, '+' + format(Item."RV_ECR Ageing Period"));
+                                    tmpDate := CalcDate(tmpDataCal, tmpDate);
+                                    SalesECRStatusInfo."Latest ECR Date" := tmpDate;
+                                end;
+                        end;
+                    end else begin
+                        Item.get(SalesECRStatusInfo."Item No.");
+                        if format(Item."RV_ECR Ageing Period") <> '' then
+                            evaluate(tmpDataCal, '+' + format(Item."RV_ECR Ageing Period"));
+                        tmpDate := CalcDate(tmpDataCal, SalesECRStatusInfo."Prod. Due Date");
+                        SalesECRStatusInfo."Latest ECR Date" := tmpDate;
+                    end;
+                end;
                 if Today() > SalesECRStatusInfo."Original ECR Date" then
                     SalesECRStatusInfo.Delayed := true
                 else
@@ -96,6 +138,10 @@ report 50602 "RV ECR Calculation Info"
             }
         }
     }
+    trigger onprereport()
+    begin
+        RVSetup.get();
+    end;
 
     trigger OnPostReport()
     begin
@@ -111,6 +157,7 @@ report 50602 "RV ECR Calculation Info"
         ILEntry: Record "Item Ledger Entry";
         LotNoInfo: Record "Lot No. Information";
         IsRunedOnce: Boolean;
+        RVSetup: record "RV rikevita setup";
 
     procedure ECRSetReservationFilters(var ReservEntry: Record "Reservation Entry"; salesLine: Record "Sales Line")
     begin

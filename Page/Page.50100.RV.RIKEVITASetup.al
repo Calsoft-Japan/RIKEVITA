@@ -5,6 +5,7 @@
 /// FDD009 2026/04/29: Charge Allocation fields Added. (Shawn)
 /// FDD021 2026/05/11: Bank Information fields Added. (Bobby)
 /// FDD028 2026/05/17: Item Trace fields Added. (Shawn)
+/// FDD006 2026/07/17: Add fields (Stephen)
 /// </summary>
 page 50100 "RIKEVITA Setup"/// 
 {
@@ -114,10 +115,14 @@ page 50100 "RIKEVITA Setup"///
                     Description = 'FDD028';
                     ApplicationArea = All;
                 }
-
                 field("Segment Code"; Rec."Segment Code")
                 {
                     Description = 'FDD017';
+                    ApplicationArea = All;
+                }
+                field("Holding Period for Air"; Rec."Holding Period for Air")
+                {
+                    Description = 'FDD006';
                     ApplicationArea = All;
                 }
             }

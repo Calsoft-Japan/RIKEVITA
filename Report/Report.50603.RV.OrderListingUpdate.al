@@ -97,7 +97,7 @@ report 50603 "RV Order Listing Update"
 
                 //Logistics Information
                 IF ShiptoAddress.get(SalesHeader."Sell-to Customer No.", SalesHeader."Ship-to Code") THEN BEGIN
-                    OrderListing."Holding Requirement 1" := ShiptoAddress."RV_Sailing Period";
+                    OrderListing."Holding Requirement 1" := ShiptoAddress."RV_Holding Period";
                     OrderListing."Bypass Holding Requirement" := ShiptoAddress."RV_Bypass ECR";
                 END;
 

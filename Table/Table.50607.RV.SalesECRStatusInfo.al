@@ -57,7 +57,7 @@ table 50607 "RV Sales ECR Status Info."
         {
             Caption = 'Sailing Category';
             DataClassification = ToBeClassified;
-            TableRelation = "RV Sailing Category".Code;
+            TableRelation = "RV Holding Category".Code;
         }
         field(11; "ECR Required"; Boolean)
         {
@@ -128,6 +128,11 @@ table 50607 "RV Sales ECR Status Info."
         field(21; "ECR Change Remark"; Text[150])
         {
             Caption = 'ECR Change Remark';
+            DataClassification = ToBeClassified;
+        }
+        field(22; "Shipment Type"; Enum "RV Shipment Type")
+        {
+            Caption = 'Shipment Type';
             DataClassification = ToBeClassified;
         }
     }

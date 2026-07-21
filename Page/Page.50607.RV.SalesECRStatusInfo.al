@@ -48,10 +48,15 @@ page 50607 "RV Sales ECR Status Info."
                     Editable = false;
                     ToolTip = 'Specifies the value of the Prod. Order No.', Comment = '%';
                 }
-                field("Shipment Method"; Rec."Shipment Method")
+                // field("Shipment Method"; Rec."Shipment Method")
+                // {
+                //     Editable = false;
+                //     ToolTip = 'Specifies the value of the Shipment Method field.', Comment = '%';
+                // }
+                field("Shipment Type"; Rec."Shipment Type")
                 {
                     Editable = false;
-                    ToolTip = 'Specifies the value of the Shipment Method field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Shipment Type field.', Comment = '%';
                 }
                 field("Sailing Category"; Rec."Sailing Category")
                 {

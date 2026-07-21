@@ -16,11 +16,11 @@ pageextension 50617 "RV_Ship-to Address" extends "Ship-to Address"
             {
                 ApplicationArea = All;
             }
-            field("RV_Sailing Category"; Rec."RV_Sailing Category")
+            field("RV_Holding Category"; Rec."RV_Holding Category")
             {
                 ApplicationArea = All;
             }
-            field("RV_Sailing Period"; Rec."RV_Sailing Period")
+            field("RV_Holding Period"; Rec."RV_Holding Period")
             {
                 ApplicationArea = All;
             }

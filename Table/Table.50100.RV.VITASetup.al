@@ -5,6 +5,7 @@
 /// FDD009 2026/04/29: Charge Allocation fields Added. (Shawn)
 /// FDD021 2026/05/11: Bank Information fields Added. (Bobby)
 /// FDD028 2026/05/17: Item Trace fields Added. (Shawn)
+/// FDD006 2026/07/17: Add fields (Stephen)
 /// </summary>
 table 50100 "RV RIKEVITA Setup"
 {
@@ -291,6 +292,11 @@ table 50100 "RV RIKEVITA Setup"
         {
             Description = 'FDD017';
             Caption = 'Segment Code';
+        }
+        field(50600; "Holding Period for Air"; DateFormula)
+        {
+            Description = 'FDD006';
+            Caption = 'Holding Period for Air';
         }
     }
     keys

@@ -1,0 +1,217 @@
+page 50409 "RV Inventory Availble"
+{
+    ApplicationArea = All;
+    Caption = 'Inventory Availble Name';
+    PageType = Card;
+    UsageCategory = tasks;
+    SourceTable = "RV Invy. Available Name";
+
+    layout
+    {
+        area(Content)
+        {
+            group(General)
+            {
+                Caption = 'General';
+
+                field(Name; Rec.Name)
+                {
+                    ToolTip = 'Specifies the value of the Name field.', Comment = '%';
+                }
+                field(Description; Rec.Description)
+                {
+                    ToolTip = 'Specifies the value of the Description field.', Comment = '%';
+                }
+                field(Site; Rec.Site)
+                {
+                    ToolTip = 'Specifies the value of the Site field.', Comment = '%';
+                }
+                field("Starting Date"; Rec."Starting Date")
+                {
+                    ToolTip = 'Specifies the value of the Starting Date field.', Comment = '%';
+                }
+
+            }
+            Part(DeliverySchedulingLines; "RV.Available Invy. Lines")
+            {
+                ApplicationArea = All;
+                Caption = 'Delivery Scheduling Lines';
+                UpdatePropagation = Both;
+                SubPageLink = "Available Invy. Name" = field(Name);
+            }
+        }
+
+    }
+    actions
+    {
+        area(Processing)
+        {
+            action("Collect Data")
+            {
+                Caption = 'Collect Data';
+                ApplicationArea = All;
+                Image = Create;
+                trigger OnAction()
+                var
+                    WarehouseEntry: Record "Warehouse Entry";
+                    WarehouseEntry1: Record "Warehouse Entry";
+                    Vendor: Record Vendor;
+                    Item: Record Item;
+                    ItemLedgerEntry: Record "Item Ledger Entry";
+
+                    ItemNo: Code[20];
+                    LocationCode: Code[10];
+                    LotNo: Code[30];
+                    SITECODE: Code[20];
+                    Bin: Record Bin;
+                    BinCode: Code[20];
+                begin
+                    Rec.TestField("Starting Date");
+                    AvailableInvyLine.Reset();
+                    AvailableInvyLine.SetRange("Available Invy. Name", Rec.Name);
+                    AvailableInvyLine.DeleteAll();
+                    AvailableInvyLine."Available Invy. Name" := Rec.Name;
+                    EntryNo := 1;
+                    ItemLedgerEntry.Reset();
+                    ItemLedgerEntry.SetRange("Posting Date", 0D, Rec."Starting Date");
+                    if SITECODE <> '' then
+                        ItemLedgerEntry.SetRange("Global Dimension 1 Code", SITECODE);
+                    ItemLedgerEntry.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Global Dimension 1 Code");
+                    ItemLedgerEntry.CalcSums(Quantity);
+                    if ItemLedgerEntry.FindSet() then begin
+                        If (ItemNo <> ItemLedgerEntry."Item No.") OR
+                        (LocationCode <> ItemLedgerEntry."Location Code") OR
+                        (LotNo <> ItemLedgerEntry."Lot No.") OR
+                        (SITECODE <> ItemLedgerEntry."Global Dimension 1 Code") then begin
+                            ItemNo := ItemLedgerEntry."Item No.";
+                            LocationCode := ItemLedgerEntry."Location Code";
+                            LotNo := ItemLedgerEntry."Lot No.";
+                            SITECODE := ItemLedgerEntry."Global Dimension 1 Code";
+                            repeat
+                                WarehouseEntry.Reset();
+                                WarehouseEntry.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Zone Code", "Bin Code");
+                                WarehouseEntry.SetRange("Item No.", Item."No.");
+                                WarehouseEntry.SetRange("Location Code", ItemLedgerEntry."Location Code");
+                                WarehouseEntry.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
+                                WarehouseEntry.SetRange("Zone Code", SITECODE);
+                                if WarehouseEntry.FindSet() then
+                                    repeat
+                                        IF BinCode <> WarehouseEntry."Bin Code" then begin
+                                            BinCode := WarehouseEntry."Bin Code";
+                                            Bin.Get(WarehouseEntry."Bin Code");
+                                            WarehouseEntry1.Reset();
+                                            WarehouseEntry1.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Zone Code", "Bin Code");
+                                            WarehouseEntry1.SetRange("Item No.", Item."No.");
+                                            WarehouseEntry1.SetRange("Location Code", ItemLedgerEntry."Location Code");
+                                            WarehouseEntry1.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
+                                            WarehouseEntry1.SetRange("Zone Code", SITECODE);
+                                            WarehouseEntry1.SetRange("Bin Code", BinCode);
+                                            WarehouseEntry1.CalcSums("Qty. (Base)");
+                                            InsertInvyAvailableLine(ItemLedgerEntry, WarehouseEntry1);
+                                        end;
+                                    until WarehouseEntry.Next() = 0;
+                            until ItemLedgerEntry.Next() = 0;
+                        end;
+                    end;
+                end;
+            }
+
+        }
+    }
+    procedure InsertInvyAvailableLine(ILE: Record "Item Ledger Entry"; WE: Record "Warehouse Entry")
+    var
+        Item: Record Item;
+        LotInfo: Record "Lot No. Information";
+        ItemCategory: Record "Item Category";
+        StandardCostElent: Record "Standard Cost Element Details";
+        GLSetup: Record "General Ledger Setup";
+
+    begin
+        AvailableInvyLine.Init();
+        //Filter infromation
+        AvailableInvyLine."Available Invy. Name" := Rec.Name;
+        AvailableInvyLine."Entry No." := EntryNo;
+        EntryNo += 1;
+        AvailableInvyLine."Calculating Base Date" := rec."Starting Date";
+        AvailableInvyLine."Item No." := ILE."Item No.";
+
+        //Item master infromation
+        Item.get(ILE."Item No.");
+        AvailableInvyLine."Item Description" := item.Description;
+        AvailableInvyLine."Item Description 2" := item."Description 2";
+        AvailableInvyLine.RSPO := item.RV_RSPO;
+        AvailableInvyLine."Base Unit of Measure" := Item."Base Unit of Measure";
+        //AvailableInvyLine.Allergen := item.Allergen;
+        //AvailableInvyLine."Derive Unit of Measure" :=
+        //AvailableInvyLine."KG Unit of Measure" := 
+
+        //Inventory Information
+        AvailableInvyLine.Site := ILE."Global Dimension 1 Code";
+        //AvailableInvyLine.Segment := ILE
+        AvailableInvyLine.Location := ILE."Location Code";
+        AvailableInvyLine."Lot No." := ILE."Lot No.";
+        AvailableInvyLine."Bin Code" := WE."Bin Code";
+        //AvailableInvyLine.Classification := Location.Status
+        If LotInfo.Get(ILE."Item No.", ILE."Variant Code", ILE."Lot No.") then begin
+            //AvailableInvyLine."Sub Lot No." := 
+            AvailableInvyLine."Mfg. Date" := LotInfo."RV_Manufacture Date";
+        end;
+
+        AvailableInvyLine."Base Unit Invy. Qty." := WE."Qty. (Base)";
+        //AvailableInvyLine."KG Unit Invy. Qty."
+        AvailableInvyLine."Expiration Date" := ILE."Expiration Date";
+
+        //Inventory Quantity and Amount Information
+        StandardCostElent.Reset();
+        StandardCostElent.SetRange("Item No.", ILE."Item No.");
+        //StandardCostElent.SetRange("Period Code");
+        If StandardCostElent.FindFirst() then begin
+
+            AvailableInvyLine."Direct Dep. Exp." := StandardCostElent."Direct Dep. Exp.";
+            AvailableInvyLine."Direct Dep. Exp. Amt." := Round(AvailableInvyLine."Direct Labor Cost" * AvailableInvyLine."Base Unit Invy. Qty.",
+            GLSetup."Amount Rounding Precision");
+            AvailableInvyLine."Direct Fixed Cost" := StandardCostElent."Direct Fixed Cost";
+            AvailableInvyLine."Direct Fixed Cost Amt." := Round(AvailableInvyLine."Direct Fixed Cost" * AvailableInvyLine."Base Unit Invy. Qty.",
+            GLSetup."Amount Rounding Precision");
+            AvailableInvyLine."Direct Labor Cost" := StandardCostElent."Direct Labor Cost";
+            AvailableInvyLine."Direct Labor Cost Amt." := Round(AvailableInvyLine."Direct Labor Cost" * AvailableInvyLine."Base Unit Invy. Qty.",
+            GLSetup."Amount Rounding Precision");
+            AvailableInvyLine."Electricity Fee" := StandardCostElent."Electricity Fee";
+            AvailableInvyLine."Electricity Fee Amt." := round(AvailableInvyLine."Electricity Fee" * AvailableInvyLine."Base Unit Invy. Qty.",
+            GLSetup."Amount Rounding Precision");
+            AvailableInvyLine."Gas Fee" := StandardCostElent."Gas Fee";
+            AvailableInvyLine."Gas Fee Amt." := Round(AvailableInvyLine."Gas Fee" * AvailableInvyLine."Base Unit Invy. Qty.",
+            GLSetup."Amount Rounding Precision");
+            AvailableInvyLine."Indirect Cost" := StandardCostElent."Indirect Cost";
+            AvailableInvyLine."Indirect Cost Amt." := Round(AvailableInvyLine."Indirect Cost" * AvailableInvyLine."Base Unit Invy. Qty.",
+            GLSetup."Amount Rounding Precision");
+            AvailableInvyLine."Raw Material Cost" := StandardCostElent."Raw Material Cost";
+            AvailableInvyLine."Raw Material Cost Amt." := Round(AvailableInvyLine."Raw Material Cost" * AvailableInvyLine."Base Unit Invy. Qty.",
+            GLSetup."Amount Rounding Precision");
+            AvailableInvyLine."Package Material Cost" := StandardCostElent."Package Material Cost";
+            AvailableInvyLine."Package Material Cost Amt." := Round(AvailableInvyLine."Package Material Cost" * AvailableInvyLine."Base Unit Invy. Qty.",
+            GLSetup."Amount Rounding Precision");
+            AvailableInvyLine.Water := StandardCostElent.Water;
+            AvailableInvyLine."Water Amt." := Round(AvailableInvyLine.Water * AvailableInvyLine."Base Unit Invy. Qty.",
+            GLSetup."Amount Rounding Precision");
+
+            //AvailableInvyLine."Unit Cost 1"
+            //AvailableInvyLine."Cost Amount 1"
+
+            //AvailableInvyLine."Unit Cost 2"
+            //AvailableInvyLine."Cost Amount 2"
+
+            //AvailableInvyLine."Unit Cost 3"
+            //AvailableInvyLine."Cost Amount 3"
+
+            //AvailableInvyLine."Roll Unit Cost"
+            //AvailableInvyLine."Roll Cost Amount"
+
+        end;
+        AvailableInvyLine.Insert();
+    end;
+
+    var
+        AvailableInvyLine: record "RV.Available Invy. Line";
+        EntryNo: Integer;
+}

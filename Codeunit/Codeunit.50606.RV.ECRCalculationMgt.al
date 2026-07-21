@@ -56,8 +56,11 @@ codeunit 50606 "RV ECR Calculation Mgt"
     var
         SalesLine: Record "Sales Line";
         ECRStatusInfo: Record "RV Sales ECR Status Info.";
+        ShiptoAddress: Record "Ship-to Address";
     begin
         if (Rec."Ship-to Code" <> xRec."Ship-to Code") then begin
+            ShiptoAddress.Get(Rec."Sell-to Customer No.", Rec."Ship-to Code");
+            Rec."RV_Shipment Type" := ShiptoAddress."RV_Shipment Type";
             ModifyECRInfo(rec."No.", 0, rec."RV_Stuffing Date", rec."Ship-to Code");
         end;
     end;
@@ -117,6 +120,7 @@ codeunit 50606 "RV ECR Calculation Mgt"
         SalesLine.RV_ETD := SalesHeader.RV_ETD;
         SalesLine."RV_ECR Date" := SalesHeader."RV_Stuffing Date";
         SalesLine.Validate("RV_Stuffing Date", SalesHeader."RV_Stuffing Date");
+        SalesLine.RV_RDD := SalesHeader.RV_RDD;
         ShiptoAddress.get(SalesHeader."Sell-to Customer No.", SalesHeader."Ship-to Code");
         SalesLine."RV_ECR Required" := ShiptoAddress."RV_Bypass ECR";
     end;
@@ -139,18 +143,36 @@ codeunit 50606 "RV ECR Calculation Mgt"
         tmpDataCal: DateFormula;
     begin
         if (rec."RV_Stuffing Date" <> xRec."RV_Stuffing Date") then begin
-            SalesHeader.get(Rec."Document Type", Rec."Document No.");
-            ShiptoAddress.get(SalesHeader."Sell-to Customer No.", SalesHeader."Ship-to Code");
-            ShiptoAddress.CalcFields("RV_Sailing Period");
+            ValidateSalesLineShipmentDate(Rec, Rec.FieldNo("RV_Stuffing Date"));
+            // SalesHeader.get(Rec."Document Type", Rec."Document No.");
+            // ShiptoAddress.get(SalesHeader."Sell-to Customer No.", SalesHeader."Ship-to Code");
+            // ShiptoAddress.CalcFields("RV_Holding Period");
 
-            if format(ShiptoAddress."RV_Sailing Period") <> '' then
-                Evaluate(tmpDataCal, '-' + format(ShiptoAddress."RV_Sailing Period"));
-            Rec."RV_ECR Date" := Rec."RV_Stuffing Date";
-            if Rec."RV_Stuffing Date" <> 0D then
-                //Rec."Shipment Date" := CalcDate(tmpDataCal, Rec."RV_Stuffing Date");
-                Rec.Validate("Shipment Date", CalcDate(tmpDataCal, Rec."RV_Stuffing Date"))
-            else
-                rec.Validate("Shipment Date", Rec."RV_Stuffing Date");
+            // if format(ShiptoAddress."RV_Holding Period") <> '' then
+            //     Evaluate(tmpDataCal, '-' + format(ShiptoAddress."RV_Holding Period"));
+            // Rec."RV_ECR Date" := Rec."RV_Stuffing Date";
+            // if Rec."RV_Stuffing Date" <> 0D then
+            //     Rec.Validate("Shipment Date", CalcDate(tmpDataCal, Rec."RV_Stuffing Date"))
+            // else
+            //     rec.Validate("Shipment Date", Rec."RV_Stuffing Date");
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::table, Database::"Sales line", OnAfterValidateEvent, "No.", false, false)]
+    procedure SalesLineOnAfterValidateNoEvent(var Rec: Record "Sales Line"; var xRec: Record "Sales Line")
+
+    begin
+        if rec."No." <> xrec."No." then begin
+            ValidateSalesLineShipmentDate(Rec, Rec.FieldNo("No."));
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::table, Database::"Sales line", OnAfterValidateEvent, "RV_RDD", false, false)]
+    procedure SalesLineOnAfterValidateRVRDDEvent(var Rec: Record "Sales Line"; var xRec: Record "Sales Line")
+
+    begin
+        if rec."RV_RDD" <> xrec."RV_RDD" then begin
+            ValidateSalesLineShipmentDate(Rec, Rec.FieldNo("RV_RDD"));
         end;
     end;
 
@@ -173,6 +195,84 @@ codeunit 50606 "RV ECR Calculation Mgt"
                         if ECRStatusInfo."ECR Status" = ECRStatusInfo."ECR Status"::"On-Hold" then
                             error(ErrCheckStatus, SalesHeader."No.", SalesLine."Line No.");
             until SalesLine.next() = 0;
+        end;
+    end;
+
+    procedure ValidateSalesLineShipmentDate(var salesLine: Record "Sales Line"; fieldNo: Integer)
+    var
+        Item: Record Item;
+        SH: Record "Sales Header";
+        ShiptoAddress: Record "Ship-to Address";
+        RVSetup: Record "RV RIKEVITA Setup";
+        tmpDate: date;
+        tmpDataCal: DateFormula;
+    begin
+        SH.get(salesLine."Document Type", salesLine."Document No.");
+        RVSetup.Get();
+        Item.get(salesLine."No.");
+
+        if fieldNo = salesLine.FieldNo("No.") then begin
+            salesLine.RV_RDD := SH.RV_RDD;
+            salesLine."RV_Stuffing Date" := SH."RV_Stuffing Date";
+
+            salesLine."RV_ECR Required" := Item."RV_ECR Required";
+            salesLine."RV_Closing Date" := SH.RV_RDD;
+
+            if format(RVSetup."Stuffing Date Calculation") <> '' then
+                evaluate(tmpDataCal, '-' + format(RVSetup."Stuffing Date Calculation"));
+
+            if salesLine.RV_RDD <> 0D then
+                salesLine."RV_Stuffing Date" := CalcDate(tmpDataCal, salesLine.RV_RDD);
+        end;
+
+        if fieldNo = salesLine.FieldNo("RV_RDD") then begin
+            if format(RVSetup."Stuffing Date Calculation") <> '' then
+                evaluate(tmpDataCal, '-' + format(RVSetup."Stuffing Date Calculation"));
+
+            if salesLine.RV_RDD <> 0D then
+                salesLine."RV_Stuffing Date" := CalcDate(tmpDataCal, salesLine.RV_RDD);
+        end;
+
+        salesLine."RV_ECR Date" := salesLine."RV_Stuffing Date";
+
+        ShiptoAddress.get(SH."Sell-to Customer No.", SH."Ship-to Code");
+        ShiptoAddress.CalcFields("RV_Holding Period");
+
+        if salesLine."RV_ECR Required" then begin
+            case ShiptoAddress."RV_Shipment Type" of
+                ShiptoAddress."RV_Shipment Type"::Air:
+                    begin
+                        if format(RVSetup."Holding Period for Air") <> '' then
+                            evaluate(tmpDataCal, '-' + format(RVSetup."Holding Period for Air"));
+                        if salesLine."RV_ECR Date" <> 0D then
+                            tmpDate := CalcDate(tmpDataCal, salesLine."RV_ECR Date");
+                        if format(Item."RV_ECR Ageing Period") <> '' then
+                            evaluate(tmpDataCal, '-' + format(Item."RV_ECR Ageing Period"));
+                        if tmpDate <> 0D then begin
+                            tmpDate := CalcDate(tmpDataCal, tmpDate);
+                            salesLine.Validate("Shipment Date", tmpDate);
+                        end;
+                    end;
+                else begin
+                    if format(ShiptoAddress."RV_Holding Period") <> '' then
+                        evaluate(tmpDataCal, '-' + format(ShiptoAddress."RV_Holding Period"));
+                    if salesLine."RV_ECR Date" <> 0D then
+                        tmpDate := CalcDate(tmpDataCal, salesLine."RV_ECR Date");
+                    if format(Item."RV_ECR Ageing Period") <> '' then
+                        evaluate(tmpDataCal, '-' + format(Item."RV_ECR Ageing Period"));
+                    if tmpDate <> 0D then begin
+                        tmpDate := CalcDate(tmpDataCal, tmpDate);
+                        salesLine.Validate("Shipment Date", tmpDate);
+                    end;
+                end;
+            end;
+        end else begin
+            if format(Item."RV_ECR Ageing Period") <> '' then
+                evaluate(tmpDataCal, '-' + format(Item."RV_ECR Ageing Period"));
+            if salesLine."RV_ECR Date" <> 0D then
+                tmpDate := CalcDate(tmpDataCal, salesLine."RV_ECR Date");
+            if tmpDate <> 0D then
+                salesLine.Validate("Shipment Date", tmpDate);
         end;
     end;
 
@@ -209,21 +309,23 @@ codeunit 50606 "RV ECR Calculation Mgt"
             SalesLine.SetRange("Line No.", parLine);
         if SalesLine.findset() then
             repeat
-                if ShiptoAddress.get(SalesLine."Sell-to Customer No.", parShiptoCode) then begin
-                    //SalesLine.RV_isNotNew := true;
-                    SalesLine."RV_Stuffing Date" := parDate;
-                    SalesLine."RV_ECR Date" := SalesLine."RV_Stuffing Date";
-                    ShiptoAddress.CalcFields("RV_Sailing Period");
-                    if (format(ShiptoAddress."RV_Sailing Period") <> '')
-                   and (parDate <> 0D) then begin
-                        Evaluate(tmpDataCal, '-' + format(ShiptoAddress."RV_Sailing Period"));
-                        //SalesLine."Shipment Date" := CalcDate(tmpDataCal, parDate);
-                        SalesLine.Validate("Shipment Date", CalcDate(tmpDataCal, parDate));
-                    end else
-                        SalesLine.Validate("Shipment Date", SalesLine."RV_Stuffing Date");
-                    SalesLine."RV_ECR Required" := ShiptoAddress."RV_Bypass ECR";
-                    SalesLine.Modify();
-                end;
+                ValidateSalesLineShipmentDate(SalesLine, SalesLine.FieldNo("No."));
+                SalesLine.Modify();
+            // if ShiptoAddress.get(SalesLine."Sell-to Customer No.", parShiptoCode) then begin
+            //     //SalesLine.RV_isNotNew := true;
+            //     SalesLine."RV_Stuffing Date" := parDate;
+            //     SalesLine."RV_ECR Date" := SalesLine."RV_Stuffing Date";
+            //     ShiptoAddress.CalcFields("RV_Holding Period");
+            //     if (format(ShiptoAddress."RV_Holding Period") <> '')
+            //    and (parDate <> 0D) then begin
+            //         Evaluate(tmpDataCal, '-' + format(ShiptoAddress."RV_Holding Period"));
+            //         //SalesLine."Shipment Date" := CalcDate(tmpDataCal, parDate);
+            //         SalesLine.Validate("Shipment Date", CalcDate(tmpDataCal, parDate));
+            //     end else
+            //         SalesLine.Validate("Shipment Date", SalesLine."RV_Stuffing Date");
+            //     SalesLine."RV_ECR Required" := ShiptoAddress."RV_Bypass ECR";
+            //     SalesLine.Modify();
+            // end;
             until SalesLine.next() = 0;
     end;
 
@@ -236,15 +338,26 @@ codeunit 50606 "RV ECR Calculation Mgt"
     begin
         SalesHeader.get(SalesLine."Document Type", SalesLine."Document No.");
         if ShiptoAddress.get(SalesHeader."Sell-to Customer No.", SalesHeader."Ship-to Code") then begin
-            ShiptoAddress.CalcFields("RV_Sailing Period");
+            ShiptoAddress.CalcFields("RV_Holding Period");
 
-            if format(ShiptoAddress."RV_Sailing Period") <> '' then
-                Evaluate(tmpDataCal, '-' + format(ShiptoAddress."RV_Sailing Period"));
+            if format(ShiptoAddress."RV_Holding Period") <> '' then
+                Evaluate(tmpDataCal, '-' + format(ShiptoAddress."RV_Holding Period"));
             SalesLine."RV_ECR Date" := SalesLine."RV_Stuffing Date";
             if SalesLine."RV_Stuffing Date" <> 0D then
                 SalesLine.Validate("Shipment Date", CalcDate(tmpDataCal, SalesLine."RV_Stuffing Date"))
             else
                 SalesLine.Validate("Shipment Date", SalesLine."RV_Stuffing Date");
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::page, page::"Sales Order Subform", OnNewRecordEvent, '', false, false)]
+    procedure SalesOrderSubformOnNewRecordEvent(var Rec: Record "Sales Line")
+    var
+        SalesHeader: Record "Sales Header";
+    begin
+        if SalesHeader.get(Rec."Document Type", Rec."Document No.") then begin
+            rec.RV_RDD := SalesHeader.RV_RDD;
+            rec."RV_Stuffing Date" := SalesHeader."RV_Stuffing Date";
         end;
     end;
 }

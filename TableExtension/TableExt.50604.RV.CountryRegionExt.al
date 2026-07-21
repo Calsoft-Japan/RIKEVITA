@@ -10,14 +10,14 @@ tableextension 50604 "RV Country/Region Ext" extends "Country/Region"
         {
             DataClassification = ToBeClassified;
             Caption = 'Sailing Category Code';
-            TableRelation = "RV Sailing Category";
+            TableRelation = "RV Holding Category";
 
             trigger OnValidate()
             var
-                SailingCategory: Record "RV Sailing Category";
+                SailingCategory: Record "RV Holding Category";
             begin
                 if SailingCategory.Get("RV_Sailing Category Code") then
-                    "RV_Sailing Period" := SailingCategory."Sailing Period Calculation"
+                    "RV_Sailing Period" := SailingCategory."Holding Period Calculation"
                 else
                     Evaluate("RV_Sailing Period", '');
             end;
