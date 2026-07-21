@@ -18,6 +18,11 @@ pageextension 50205 "RV Company Information Ext" extends "Company Information"
                 Caption = 'RESO Certificate No.';
                 ApplicationArea = all;
             }
+            field("Register. No. for Rikevita"; Rec."RV_Registration No.")
+            {
+                Caption = 'Register. No. for Rikevita';
+                ApplicationArea = all;
+            }
         }
     }
 }

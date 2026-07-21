@@ -23,7 +23,7 @@ report 50204 "RV Posted Sales Invoice(Local)"
             column(CompanyName; CompanyInfo.Name)
             {
             }
-            column(RegistrationNo; 'Registration No. ' + CompanyInfo."Registration No.")
+            column(RegistrationNo; 'Registration No. ' + CompanyInfo."RV_Registration No.")
             {
             }
             column(SSTRegNo; 'SST Reg No. ' + CompanyInfo."RV_SST Reg No.")

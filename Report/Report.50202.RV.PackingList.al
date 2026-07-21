@@ -30,7 +30,7 @@ report 50202 "RV Packing List Report"
                 column(CompanyName; CompanyInfo.Name)
                 {
                 }
-                column(RegistrationNo; 'Registration No. ' + CompanyInfo."Registration No.")
+                column(RegistrationNo; 'Registration No. ' + CompanyInfo."RV_Registration No.")
                 {
                 }
                 column(SSTRegNo; 'SST Reg No. ' + CompanyInfo."RV_SST Reg No.")
@@ -256,29 +256,50 @@ report 50202 "RV Packing List Report"
                             until RecWarehousePackingInfo.Next() = 0;
                         end;
 
-                        if TempOrderNo < 10 then begin
-                            if TempOrderNo mod 5 = 0 then begin
-                                OrderNo += "Sales Order No." + '<br>';
-                            end else begin
-                                OrderNo += "Sales Order No." + '  ';
-                            end;
-                            TempOrderNo := TempOrderNo + 1;
-                        end;
                     end;
                 }
 
                 trigger OnAfterGetRecord()
                 var
                     ISODoc: Record "RV ISO Document";
+                    WarehousePackingInfo: Record "RV Warehouse Packing Info.";
+                    TempWarehousePackingInfo: Record "RV Warehouse Packing Info." temporary;
+                    TempOrderNo: Integer;
                 begin
                     OrderNo := '';
+                    TempOrderNo := 1;
+
                     ISODoc.Reset();
                     ISODoc.SetRange("Report Code", 'PACKING LIST');
                     if ISODoc.FindFirst() then begin
                         ISODocumentNo := ISODoc."ISO Document No.";
                         ISODocVersion := ISODoc."ISO Doc. Version No.";
                     end;
+                    WarehousePackingInfo.Reset();
+                    WarehousePackingInfo.SetRange("Posted Whse. Shipment No.", "No.");
+                    if WarehousePackingInfo.FindSet() then begin
+                        repeat
+                            if ((TempOrderNo < 10) and (WarehousePackingInfo."Sales Order No." <> '')) then begin
+                                TempWarehousePackingInfo.Reset();
+                                TempWarehousePackingInfo.SetRange("Sales Order No.", WarehousePackingInfo."Sales Order No.");
+                                if not TempWarehousePackingInfo.FindFirst() then begin
+                                    if TempOrderNo mod 5 = 0 then begin
+                                        OrderNo += WarehousePackingInfo."Sales Order No." + '<br>';
+                                    end else begin
+                                        OrderNo += WarehousePackingInfo."Sales Order No." + '  ';
+                                    end;
+                                    TempWarehousePackingInfo.Init();
+                                    TempWarehousePackingInfo."Sales Order No." := WarehousePackingInfo."Sales Order No.";
+                                    TempWarehousePackingInfo."SO Line No." := WarehousePackingInfo."SO Line No.";
+                                    TempWarehousePackingInfo."Lot No." := WarehousePackingInfo."Lot No.";
+                                    TempWarehousePackingInfo."Line No." := WarehousePackingInfo."Line No.";
+                                    TempWarehousePackingInfo.Insert();
+                                    TempOrderNo := TempOrderNo + 1;
+                                end;
+                            end;
 
+                        until WarehousePackingInfo.Next() = 0;
+                    end;
                 end;
             }
             trigger OnPreDataItem()

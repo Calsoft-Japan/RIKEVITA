@@ -17,5 +17,10 @@ tableextension 50205 "RV Company Information" extends "Company Information"
             Caption = 'SST Reg No.';
             Description = 'FDD020';
         }
+        field(50202; "RV_Registration No."; Text[30])
+        {
+            Caption = 'Registr. No. for Rikevia';
+            Description = 'FDD020';
+        }
     }
 }
