@@ -70,6 +70,8 @@ codeunit 50202 "RV Post Warehouse Shipment"
         SalesLine: Record "Sales Line";//FDD007
         WhsShipment: Record "Warehouse Shipment Header";//FDD007
         PriceCalculation: Interface "Price Calculation";//FDD007
+        NeedReopen: Boolean;
+        ReleaseSalesDoc: Codeunit "Release Sales Document";
     begin
         //FDD008
         PostedWhseShptLine."RV_B/L Date" := WhseShptLine."RV_B/L Date";
@@ -86,6 +88,10 @@ codeunit 50202 "RV Post Warehouse Shipment"
         WhseShptLine."Shipment Date" := WhsShipment."Posting Date";
         WhseShptLine.Modify();
 
+        NeedReopen := (SalesHeader.Status = SalesHeader.Status::Released);
+        if NeedReopen then
+            ReleaseSalesDoc.Reopen(SalesHeader);
+
         SalesLine.Reset();
         SalesLine.SetRange("Document Type", WhseShptLine."Source Subtype");
         SalesLine.SetRange("Document No.", WhseShptLine."Source No.");
@@ -101,6 +107,9 @@ codeunit 50202 "RV Post Warehouse Shipment"
             SalesLine.Validate("Unit Price");
             SalesLine.Modify();
         end;
+
+        if NeedReopen then
+            SalesHeader.PerformManualRelease();
         //FDD007
     end;
 
