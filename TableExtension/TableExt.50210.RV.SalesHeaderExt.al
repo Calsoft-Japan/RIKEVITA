@@ -35,8 +35,25 @@ tableextension 50210 "RV Sales Header Ext" extends "Sales Header"
         }
         field(50207; "RV_SAILING ON OR ABOUT"; Date)
         {
-            Caption = 'RV SAILING ON OR ABOUT';
+            Caption = 'RV Sailing On Board';
             Description = 'FDD021';
         }
+        field(50401; "RV_Sales Force Remark"; Text[250])
+        {
+            Caption = 'Sales Force Remark';
+            Description = 'FDD021';
+        }
+        field(50402; "RV_Sales Office Sales Rep."; Text[50])
+        {
+            Caption = 'Sales Office Sales Rep.';
+            Description = 'FDD021';
+        }
+        field(50403; "RV_RVM PIC"; Text[50])
+        {
+            Caption = 'RVM PIC';
+            Description = 'FDD021';
+        }
+
+
     }
 }

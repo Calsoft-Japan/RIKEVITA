@@ -53,6 +53,11 @@ pageextension 50200 "RV Item Card Ext" extends "Item Card"
                 Caption = 'Print RSPO No.';
                 ApplicationArea = all;
             }
+            field("Allergen"; Rec.Allergen)
+            {
+                Caption = 'Print RSPO No.';
+                ApplicationArea = all;
+            }
 
         }
     }

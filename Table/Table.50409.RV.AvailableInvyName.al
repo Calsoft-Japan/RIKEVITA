@@ -1,6 +1,8 @@
 table 50409 "RV Invy. Available Name"
 {
     Caption = 'RV Invy. Available Name';
+    DrillDownPageId = "RV Invy Availble Names";
+    LookupPageId = "RV Invy Availble Names";
     DataCaptionFields = Name, Description;
     DataClassification = CustomerContent;
 
@@ -26,9 +28,9 @@ table 50409 "RV Invy. Available Name"
             tableRelation = "Dimension Value" where("Global Dimension No." = const(1));
         }
 
-        field(5; "Starting Date"; Date)
+        field(5; "Inventory Valuation Date"; Date)
         {
-            Caption = 'Starting Date';
+            Caption = 'Inventory Valuation Date';
         }
 
     }

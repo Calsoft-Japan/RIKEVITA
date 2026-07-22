@@ -43,6 +43,7 @@ report 50603 "RV Order Listing Update"
                 OrderListing: Record "RV Order Listing";
                 ItemUnitOfMeasure: Record "Item Unit of Measure";
                 SLReserveEntry: Record "Reservation Entry";
+            //ProdHeader:Record "Production Order";
 
             begin
                 //TransferOrderNo := '';
@@ -76,6 +77,9 @@ report 50603 "RV Order Listing Update"
                 OrderListing."Customer No." := SalesHeader."Sell-to Customer No.";
                 OrderListing."Ship-to Customer Name" := SalesHeader."Ship-to Name";
                 OrderListing."Ship-to Country" := SalesHeader."Ship-to Country/Region Code";
+                OrderListing."Sales Force Remark" := SalesHeader."RV_Sales Force Remark";
+                OrderListing."RVM PIC" := SalesHeader."RV_RVM PIC";
+                OrderListing."Sales Office Sales Rep." := SalesHeader."RV_Sales Office Sales Rep.";
 
                 IF SalesLine."Requested Delivery Date" <> 0D then
                     OrderListing."Order Lead Time (Days)" := SalesLine."Requested Delivery Date" - SalesHeader."Order Date"
@@ -136,16 +140,29 @@ report 50603 "RV Order Listing Update"
 
                 IF TemProdOrder.FindSet() then
                     repeat
-                        if OrderListing."Prod. Order No." = '' then
-                            OrderListing."Prod. Order No." := TemProdOrder."No."
-                        else
-                            OrderListing."Prod. Order No." := OrderListing."Prod. Order No." + '|' + TemProdOrder."No.";
-                        ProdLine.Reset;
-                        ProdLine.SetRange("Prod. Order No.", TemProdOrder."No.");
-                        ProdLine.SetRange("Item No.", salesLine."No.");
-                        if ProdLine.Findfirst() then
-                            if OrderListing."Prod. Order Line No." <> FORMAT(ProdLine."Line No.") then
-                                OrderListing."Prod. Order Line No." := FORMAT(ProdLine."Line No.");
+                        If ProdHeader.Get(ProdHeader.Status::"Firm Planned", TemProdOrder."No.") then begin
+                            if OrderListing."Prod. Order No." = '' then
+                                OrderListing."Firm Prod. Order No." := TemProdOrder."No."
+                            else
+                                OrderListing."Firm Prod. Order No." := OrderListing."Firm Prod. Order No." + '|' + TemProdOrder."No.";
+                            ProdLine.Reset;
+                            ProdLine.SetRange("Prod. Order No.", TemProdOrder."No.");
+                            ProdLine.SetRange("Item No.", salesLine."No.");
+                            if ProdLine.Findfirst() then
+                                if OrderListing."Firm Prod. Order Line No." <> FORMAT(ProdLine."Line No.") then
+                                    OrderListing."Firm Prod. Order Line No." := FORMAT(ProdLine."Line No.");
+                        end else begin
+                            if OrderListing."Prod. Order No." = '' then
+                                OrderListing."Prod. Order No." := TemProdOrder."No."
+                            else
+                                OrderListing."Prod. Order No." := OrderListing."Prod. Order No." + '|' + TemProdOrder."No.";
+                            ProdLine.Reset;
+                            ProdLine.SetRange("Prod. Order No.", TemProdOrder."No.");
+                            ProdLine.SetRange("Item No.", salesLine."No.");
+                            if ProdLine.Findfirst() then
+                                if OrderListing."Prod. Order Line No." <> FORMAT(ProdLine."Line No.") then
+                                    OrderListing."Prod. Order Line No." := FORMAT(ProdLine."Line No.");
+                        end;
                     until TemProdOrder.Next() = 0;
                 //OrderListing."Prod. Order Line No." := ProdOrderLineNo;
                 //OrderListing."Transfer Order No." := TransferOrderNo;

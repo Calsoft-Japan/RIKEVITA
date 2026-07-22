@@ -1,5 +1,3 @@
-namespace RIKEVITA.RIKEVITA;
-
 page 50406 "RV Invy. Planning Lines"
 {
     ApplicationArea = All;

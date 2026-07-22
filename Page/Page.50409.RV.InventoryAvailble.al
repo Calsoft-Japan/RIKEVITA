@@ -1,9 +1,9 @@
-page 50409 "RV Inventory Availble"
+page 50409 "RV Inventory Availble Name"
 {
     ApplicationArea = All;
     Caption = 'Inventory Availble Name';
     PageType = Card;
-    UsageCategory = tasks;
+    //UsageCategory = tasks;
     SourceTable = "RV Invy. Available Name";
 
     layout
@@ -26,7 +26,7 @@ page 50409 "RV Inventory Availble"
                 {
                     ToolTip = 'Specifies the value of the Site field.', Comment = '%';
                 }
-                field("Starting Date"; Rec."Starting Date")
+                field("Starting Date"; Rec."Inventory Valuation Date")
                 {
                     ToolTip = 'Specifies the value of the Starting Date field.', Comment = '%';
                 }
@@ -50,7 +50,10 @@ page 50409 "RV Inventory Availble"
             {
                 Caption = 'Collect Data';
                 ApplicationArea = All;
-                Image = Create;
+                Image = InventoryCalculation;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedOnly = false;
                 trigger OnAction()
                 var
                     WarehouseEntry: Record "Warehouse Entry";
@@ -58,7 +61,8 @@ page 50409 "RV Inventory Availble"
                     Vendor: Record Vendor;
                     Item: Record Item;
                     ItemLedgerEntry: Record "Item Ledger Entry";
-
+                    ItemLedgerEntry2: Record "Item Ledger Entry";
+                    Location: Record Location;
                     ItemNo: Code[20];
                     LocationCode: Code[10];
                     LotNo: Code[30];
@@ -66,19 +70,20 @@ page 50409 "RV Inventory Availble"
                     Bin: Record Bin;
                     BinCode: Code[20];
                 begin
-                    Rec.TestField("Starting Date");
+                    Rec.TestField("Inventory Valuation Date");
                     AvailableInvyLine.Reset();
                     AvailableInvyLine.SetRange("Available Invy. Name", Rec.Name);
                     AvailableInvyLine.DeleteAll();
                     AvailableInvyLine."Available Invy. Name" := Rec.Name;
                     EntryNo := 1;
                     ItemLedgerEntry.Reset();
-                    ItemLedgerEntry.SetRange("Posting Date", 0D, Rec."Starting Date");
+                    ItemLedgerEntry.SetRange("Posting Date", 0D, Rec."Inventory Valuation Date");
                     if SITECODE <> '' then
                         ItemLedgerEntry.SetRange("Global Dimension 1 Code", SITECODE);
                     ItemLedgerEntry.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Global Dimension 1 Code");
-                    ItemLedgerEntry.CalcSums(Quantity);
+                    //ItemLedgerEntry.CalcSums(Quantity);
                     if ItemLedgerEntry.FindSet() then begin
+                        ItemLedgerEntry2.CopyFilters(ItemLedgerEntry);
                         If (ItemNo <> ItemLedgerEntry."Item No.") OR
                         (LocationCode <> ItemLedgerEntry."Location Code") OR
                         (LotNo <> ItemLedgerEntry."Lot No.") OR
@@ -87,30 +92,46 @@ page 50409 "RV Inventory Availble"
                             LocationCode := ItemLedgerEntry."Location Code";
                             LotNo := ItemLedgerEntry."Lot No.";
                             SITECODE := ItemLedgerEntry."Global Dimension 1 Code";
-                            repeat
-                                WarehouseEntry.Reset();
-                                WarehouseEntry.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Zone Code", "Bin Code");
-                                WarehouseEntry.SetRange("Item No.", Item."No.");
-                                WarehouseEntry.SetRange("Location Code", ItemLedgerEntry."Location Code");
-                                WarehouseEntry.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
-                                WarehouseEntry.SetRange("Zone Code", SITECODE);
-                                if WarehouseEntry.FindSet() then
+                            IF Location.Get(LocationCode) then begin
+                                if Location."Bin Mandatory" = true Then begin
                                     repeat
-                                        IF BinCode <> WarehouseEntry."Bin Code" then begin
-                                            BinCode := WarehouseEntry."Bin Code";
-                                            Bin.Get(WarehouseEntry."Bin Code");
-                                            WarehouseEntry1.Reset();
-                                            WarehouseEntry1.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Zone Code", "Bin Code");
-                                            WarehouseEntry1.SetRange("Item No.", Item."No.");
-                                            WarehouseEntry1.SetRange("Location Code", ItemLedgerEntry."Location Code");
-                                            WarehouseEntry1.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
-                                            WarehouseEntry1.SetRange("Zone Code", SITECODE);
-                                            WarehouseEntry1.SetRange("Bin Code", BinCode);
-                                            WarehouseEntry1.CalcSums("Qty. (Base)");
-                                            InsertInvyAvailableLine(ItemLedgerEntry, WarehouseEntry1);
-                                        end;
-                                    until WarehouseEntry.Next() = 0;
-                            until ItemLedgerEntry.Next() = 0;
+                                        WarehouseEntry.Reset();
+                                        WarehouseEntry.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Zone Code", "Bin Code");
+                                        WarehouseEntry.SetRange("Item No.", Item."No.");
+                                        WarehouseEntry.SetRange("Location Code", ItemLedgerEntry."Location Code");
+                                        WarehouseEntry.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
+                                        WarehouseEntry.SetRange("Zone Code", SITECODE);
+                                        if WarehouseEntry.FindSet() then
+                                            repeat
+                                                IF BinCode <> WarehouseEntry."Bin Code" then begin
+                                                    BinCode := WarehouseEntry."Bin Code";
+                                                    Bin.Get(WarehouseEntry."Bin Code");
+                                                    WarehouseEntry1.Reset();
+                                                    WarehouseEntry1.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Zone Code", "Bin Code");
+                                                    WarehouseEntry1.SetRange("Item No.", Item."No.");
+                                                    WarehouseEntry1.SetRange("Location Code", ItemLedgerEntry."Location Code");
+                                                    WarehouseEntry1.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
+                                                    //WarehouseEntry1.SetRange("Zone Code", SITECODE);
+                                                    WarehouseEntry1.SetRange("Bin Code", BinCode);
+                                                    WarehouseEntry1.CalcSums("Qty. (Base)");
+                                                    InsertInvyAvailableLine(ItemLedgerEntry, WarehouseEntry1);
+                                                end;
+                                            until WarehouseEntry.Next() = 0;
+                                    until ItemLedgerEntry.Next() = 0;
+                                end else begin
+                                    ItemLedgerEntry2.SetRange("Location Code", ItemLedgerEntry."Location Code");
+                                    ItemLedgerEntry2.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
+                                    ItemLedgerEntry2.CalcSums(Quantity);
+                                    Clear(WarehouseEntry1);
+                                    InsertInvyAvailableLine(ItemLedgerEntry, WarehouseEntry1);
+                                end;
+                            end else begin
+                                ItemLedgerEntry2.SetRange("Location Code", ItemLedgerEntry."Location Code");
+                                ItemLedgerEntry2.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
+                                ItemLedgerEntry2.CalcSums(Quantity);
+                                Clear(WarehouseEntry1);
+                                InsertInvyAvailableLine(ItemLedgerEntry, WarehouseEntry1);
+                            end;
                         end;
                     end;
                 end;
@@ -132,7 +153,7 @@ page 50409 "RV Inventory Availble"
         AvailableInvyLine."Available Invy. Name" := Rec.Name;
         AvailableInvyLine."Entry No." := EntryNo;
         EntryNo += 1;
-        AvailableInvyLine."Calculating Base Date" := rec."Starting Date";
+        AvailableInvyLine."Calculating Base Date" := rec."Inventory Valuation Date";
         AvailableInvyLine."Item No." := ILE."Item No.";
 
         //Item master infromation
@@ -141,9 +162,9 @@ page 50409 "RV Inventory Availble"
         AvailableInvyLine."Item Description 2" := item."Description 2";
         AvailableInvyLine.RSPO := item.RV_RSPO;
         AvailableInvyLine."Base Unit of Measure" := Item."Base Unit of Measure";
-        //AvailableInvyLine.Allergen := item.Allergen;
+        AvailableInvyLine.Allergen := item.Allergen;
         //AvailableInvyLine."Derive Unit of Measure" :=
-        //AvailableInvyLine."KG Unit of Measure" := 
+        AvailableInvyLine."KG Unit of Measure" := 'KG';
 
         //Inventory Information
         AvailableInvyLine.Site := ILE."Global Dimension 1 Code";
@@ -156,8 +177,10 @@ page 50409 "RV Inventory Availble"
             //AvailableInvyLine."Sub Lot No." := 
             AvailableInvyLine."Mfg. Date" := LotInfo."RV_Manufacture Date";
         end;
-
-        AvailableInvyLine."Base Unit Invy. Qty." := WE."Qty. (Base)";
+        if we."Bin Code" <> '' then
+            AvailableInvyLine."Base Unit Invy. Qty." := WE."Qty. (Base)"
+        else
+            AvailableInvyLine."Base Unit Invy. Qty." := ILE.Quantity;
         //AvailableInvyLine."KG Unit Invy. Qty."
         AvailableInvyLine."Expiration Date" := ILE."Expiration Date";
 

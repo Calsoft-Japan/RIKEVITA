@@ -2,6 +2,8 @@ table 50407 "RV Invy. Valuation Name"
 
 {
     Caption = 'Invy. Valuation Name';
+    DrillDownPageId = "RV Invy. Valuation Names";
+    LookupPageId = "RV Invy. Valuation Names";
     DataCaptionFields = Name, Description;
     DataClassification = CustomerContent;
 

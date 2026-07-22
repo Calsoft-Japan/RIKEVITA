@@ -42,7 +42,7 @@ table 50410 "RV.Available Invy. Line"
         }
         field(8; "Segment"; Code[20])
         {
-            Caption = 'Site';
+            Caption = 'Segment';
             TableRelation = "Dimension Value" where("Global Dimension No." = const(2));
         }
         field(10; "Location"; Code[10])

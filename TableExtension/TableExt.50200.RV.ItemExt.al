@@ -41,6 +41,11 @@ tableextension 50200 "RV ITEM" extends "Item"
             Caption = 'Grade';
             Description = 'FDD027';
         }
+        field(50401; "Allergen"; Boolean)
+        {
+            Caption = 'Allergen';
+            Description = 'FDD043';
+        }
         field(50600; "RV_ECR Ageing Period"; DateFormula)
         {
             Caption = 'ECR Ageing Period';

@@ -1,10 +1,10 @@
 
-page 50407 "RV Inventory Valuation"
+page 50407 "RV Inventory Valuation Name"
 {
     ApplicationArea = All;
-    Caption = 'Inventory Valuation';
+    Caption = 'Inventory Valuation Name';
     PageType = Card;
-    UsageCategory = tasks;
+    //UsageCategory = tasks;
     SourceTable = "RV Invy. Valuation Name";
 
     layout
@@ -54,16 +54,39 @@ page 50407 "RV Inventory Valuation"
             {
                 Caption = 'Collect Data';
                 ApplicationArea = All;
-                Image = Create;
+                Image = InventoryCalculation;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedOnly = false;
                 trigger OnAction()
                 var
                     Item: Record Item;
                     ItemLedgerEntry: Record "Item Ledger Entry";
+                    ReasonCode: Record "Reason Code";
                 begin
                     Rec.TestField("Starting Date");
                     InvyValuationLine.Reset();
                     InvyValuationLine.SetRange("Inventory Valuation Name", Rec.Name);
                     InvyValuationLine.DeleteAll();
+                    VarianceRC := '';
+                    WScrapRC := '';
+                    SamDisposeRC := '';
+                    ReasonCode.Reset();
+                    ReasonCode.SetRange("RV_Reason Code Type", reasoncode."RV_Reason Code Type"::"Sample Dispose");
+                    IF ReasonCode.FindFirst() Then
+                        SamDisposeRC := ReasonCode.Code
+                    else
+                        Error('please set the Sample Dispose reason code');
+                    ReasonCode.SetRange("RV_Reason Code Type", reasoncode."RV_Reason Code Type"::Variance);
+                    IF ReasonCode.FindFirst() Then
+                        VarianceRC := ReasonCode.Code
+                    else
+                        Error('please set the Vaniance reason code');
+                    ReasonCode.SetRange("RV_Reason Code Type", reasoncode."RV_Reason Code Type"::"Waste Scrap");
+                    IF ReasonCode.FindFirst() Then
+                        WScrapRC := ReasonCode.Code
+                    else
+                        Error('please set the Waste Scrap reason code');
                     EntryNo := 1;
                     Item.reset;
                     If Rec.Site <> '' then
@@ -86,7 +109,7 @@ page 50407 "RV Inventory Valuation"
         HasEntriesWithinDateRange: Boolean;
 
     begin
-        Item.CalcFields("Assembly BOM");
+        //Item.CalcFields("Assembly BOM");
         EndDate := Rec."Ending Date";
         StartDate := Rec."Starting Date";
         if EndDate = 0D then
@@ -115,7 +138,7 @@ page 50407 "RV Inventory Valuation"
                 IsEmptyLine := IsEmptyLine and ((StartingInvoicedQty = 0));
                 IsEmptyLine := IsEmptyLine and ((StartingExpectedQty = 0));
             end;
-
+            //Output Purchase Inbound
             if HasEntriesWithinDateRange then begin
                 ValueEntry.SetRange("Posting Date", StartDate, EndDate);
                 ValueEntry.SetFilter(
@@ -127,7 +150,7 @@ page 50407 "RV Inventory Valuation"
                 ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
                 AssignAmounts(ValueEntry, IncreaseInvoicedQty, IncreaseExpectedQty, 1);
             end;
-
+            //Sales Consumption Outbound
             if HasEntriesWithinDateRange then begin
                 ValueEntry.SetRange("Posting Date", StartDate, EndDate);
                 ValueEntry.SetFilter(
@@ -139,33 +162,36 @@ page 50407 "RV Inventory Valuation"
                 ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
                 AssignAmounts(ValueEntry, DecreaseInvoicedQty, DecreaseExpectedQty, -1);
             end;
+
             //Dispose
             if HasEntriesWithinDateRange then begin
                 ValueEntry.SetRange("Posting Date", StartDate, EndDate);
                 ValueEntry.SetRange(
                     "Item Ledger Entry Type",
                     ValueEntry."Item Ledger Entry Type"::"Negative Adjmt.");
-                ValueEntry.SetRange("Reason Code", 'Disposal');
+                ValueEntry.SetRange("Reason Code", SamDisposeRC);
                 ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
                 AssignAmounts(ValueEntry, DisposeInvoicedQty, DisposeExpectedQty, -1);
             end;
+
             //Waste or Scrap
             if HasEntriesWithinDateRange then begin
                 ValueEntry.SetRange("Posting Date", StartDate, EndDate);
                 ValueEntry.SetRange(
                     "Item Ledger Entry Type",
                     ValueEntry."Item Ledger Entry Type"::"Negative Adjmt.");
-                ValueEntry.SetRange("Reason Code", 'Waste');
+                ValueEntry.SetRange("Reason Code", WScrapRC);
                 ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
                 AssignAmounts(ValueEntry, WasteInvoicedQty, WasteExpectedQty, -1);
             end;
+
             //Variance
             if HasEntriesWithinDateRange then begin
                 ValueEntry.SetRange("Posting Date", StartDate, EndDate);
                 ValueEntry.SetRange(
                     "Item Ledger Entry Type",
                     ValueEntry."Item Ledger Entry Type"::"Negative Adjmt.");
-                ValueEntry.SetRange("Reason Code", 'Variance');
+                ValueEntry.SetRange("Reason Code", VarianceRC);
                 ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
                 AssignAmounts(ValueEntry, VarianceInvoicedQty, VarianceExpectedQty, -1);
             end;
@@ -197,15 +223,6 @@ page 50407 "RV Inventory Valuation"
             end;
         end;
 
-        //ValueEntry.SetRange("Posting Date", 0D, EndDate);
-        //ValueEntry.SetRange("Item Ledger Entry Type");
-        //ValueEntry.CalcSums("Cost Posted to G/L", "Expected Cost Posted to G/L");
-        //ExpCostPostedToGL += ValueEntry."Expected Cost Posted to G/L";
-        //InvCostPostedToGL += ValueEntry."Cost Posted to G/L";
-        //StartingExpectedValue += StartingInvoicedValue;
-        //IncreaseExpectedValue += IncreaseInvoicedValue;
-        //DecreaseExpectedValue += DecreaseInvoicedValue;
-        //CostPostedToGL := ExpCostPostedToGL + InvCostPostedToGL;
         if not IsEmptyLine then
             InsertInvyValuationLine(Item, Item."Global Dimension 1 Code");
     end;
@@ -250,6 +267,7 @@ page 50407 "RV Inventory Valuation"
         EntryNo += 1;
         InvyValuationLine."Item No." := Item."No.";
         InvyValuationLine.Site := SiteNo;
+
         //Item master infromation
         InvyValuationLine."Item Description" := Item.Description;
         //InvyValuationLine."Standard Cost"
@@ -310,4 +328,8 @@ page 50407 "RV Inventory Valuation"
         IsEmptyLine: Boolean;
         InvyValuationLine: record "RV.Inventory Valuation Line";
         EntryNo: Integer;
+        VarianceRC: Code[10];
+        WScrapRC: Code[10];
+        SamDisposeRC: Code[10];
+
 }

@@ -2,6 +2,7 @@
 /// pageextension Sales Order Ext (ID 50108) extends "Sales Order" page
 /// FDD005 2026/03/14: New. (Liuyang)
 /// FDD012 2026/04/19 Liuyang
+/// /// FDD026 2026/07/21 Stephen
 /// </summary>
 pageextension 50108 "RV Sales Order Ext" extends "Sales Order"
 {
@@ -78,6 +79,21 @@ pageextension 50108 "RV Sales Order Ext" extends "Sales Order"
                 {
                     ApplicationArea = All;
                     Description = 'FDD012';
+                }
+                field("RV_Sales Force Remark"; Rec."RV_Sales Force Remark")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD026';
+                }
+                field("RV_RVM PIC"; Rec."RV_RVM PIC")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD026';
+                }
+                field("RV_Sales Office Sales Rep."; Rec."RV_Sales Office Sales Rep.")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD026';
                 }
             }
         }

@@ -165,6 +165,31 @@ table 50608 "RV Order Listing"
             Caption = 'Holding Requirement';
             DataClassification = ToBeClassified;
         }
+        field(36; "Firm Prod. Order No."; Text[250])
+        {
+            Caption = 'Firm Prod. Order No.';
+            DataClassification = ToBeClassified;
+        }
+        field(37; "Firm Prod. Order Line No."; Text[250])
+        {
+            Caption = 'Firm Prod. Order Line No.';
+            DataClassification = ToBeClassified;
+        }
+        field(38; "Sales Force Remark"; Text[250])
+        {
+            Caption = 'Sales Force Remark';
+            DataClassification = ToBeClassified;
+        }
+        field(39; "Sales Office Sales Rep."; Text[50])
+        {
+            Caption = 'Sales Office Sales Rep.';
+            DataClassification = ToBeClassified;
+        }
+        field(41; "RVM PIC"; Text[50])
+        {
+            Caption = 'RVM PIC';
+            DataClassification = ToBeClassified;
+        }
         field(40; "Holding Requirement 1"; DateFormula)
         {
             Caption = 'Holding Requirement';

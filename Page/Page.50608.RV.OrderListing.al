@@ -83,6 +83,16 @@ page 50608 "RV Order Listing"
                     ToolTip = 'Specifies the value of the Reserved Qty. (KG) field.', Comment = '%';
                     Editable = false;
                 }
+                field("Firm Prod. Order No."; Rec."Firm Prod. Order No.")
+                {
+                    ToolTip = 'Specifies the value of the Firm Prod. Order No. field.', Comment = '%';
+                    Editable = false;
+                }
+                field("Firm Prod. Order Line No."; Rec."Firm Prod. Order Line No.")
+                {
+                    ToolTip = 'Specifies the value of the Firm Prod. Order Line No. field.', Comment = '%';
+                    Editable = false;
+                }
                 field("Prod. Order No."; Rec."Prod. Order No.")
                 {
                     ToolTip = 'Specifies the value of the Prod. Order No. field.', Comment = '%';
@@ -93,6 +103,7 @@ page 50608 "RV Order Listing"
                     ToolTip = 'Specifies the value of the Prod. Order Line No. field.', Comment = '%';
                     Editable = false;
                 }
+
                 field("Transfer Order No."; Rec."Transfer Order No.")
                 {
                     ToolTip = 'Specifies the value of the Transfer Order No. field.', Comment = '%';
@@ -194,6 +205,22 @@ page 50608 "RV Order Listing"
                     ToolTip = 'Specifies the value of the Comment field.', Comment = '%';
                     Editable = true;
                 }
+                field("Sales Force Remark"; Rec."Sales Force Remark")
+                {
+                    ToolTip = 'Specifies the value of the Sales Force Remark field.', Comment = '%';
+                    Editable = true;
+                }
+                field("RVM PIC"; Rec."RVM PIC")
+                {
+                    ToolTip = 'Specifies the value of the RVM PIC field.', Comment = '%';
+                    Editable = true;
+                }
+                field("Sales Office Sales Rep."; Rec."Sales Office Sales Rep.")
+                {
+                    ToolTip = 'Specifies the value of the "Sales Office Sales Rep." field.', Comment = '%';
+                    Editable = true;
+                }
+
 
                 field(SystemCreatedAt; Rec.SystemCreatedAt)
                 {
