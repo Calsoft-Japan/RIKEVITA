@@ -16,7 +16,7 @@ table 50406 "RV Invy. Planning Line"
             Caption = 'Entry No.';
             autoIncrement = true;
         }
-        field(3; VendorNo; Code[20])
+        field(3; "Vendor No"; Code[20])
         {
             Caption = 'Vendor No.';
             TableRelation = Vendor;

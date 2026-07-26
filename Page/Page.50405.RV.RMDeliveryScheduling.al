@@ -199,7 +199,7 @@ page 50405 "RV Invy. Planning Name"
         Item.Get(prodOrderComponent."Item No.");
         DeliverySchedulingLine."Unit of Measure" := Item."Base Unit of Measure";
         DeliverySchedulingLine."Item Description" := Item.Description;
-        DeliverySchedulingLine.VendorNo := Item."Vendor No.";
+        DeliverySchedulingLine."Vendor No" := Item."Vendor No.";
         //DeliverySchedulingLine.VendorName := Item."Vendor Name";
     end;
 }

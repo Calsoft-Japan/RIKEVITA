@@ -551,7 +551,7 @@ codeunit 50104 "RV Bank Payment to Excel"
         end;
 
         //SegCode := GetDimensionValueCode(GenJnlLine, 'ACC_SEGMNT');
-        SegCode := RVSetup."Segment Code";
+        SegCode := RVSetup."Segment Dim. Code";
 
         TempExcelBuffer.NewRow();
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);

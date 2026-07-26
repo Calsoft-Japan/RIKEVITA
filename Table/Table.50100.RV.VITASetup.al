@@ -288,10 +288,23 @@ table 50100 "RV RIKEVITA Setup"
             Description = 'FDD028';
             Caption = 'ILE Last Entry No. (Item Trace)';
         }
-        field(52; "Segment Code"; Code[20])
+        field(52; "Segment Dim. Code"; Code[20])
         {
-            Description = 'FDD017';
-            Caption = 'Segment Code';
+            Description = 'Common Function';
+            Caption = 'Segment Dimension Code';
+            TableRelation = Dimension;
+        }
+        field(53; "Item Type Dim. Code"; Code[20])
+        {
+            Description = 'Common Function';
+            Caption = 'Item Type Dimension Code';
+            TableRelation = Dimension;
+        }
+        field(54; "SITE Dim. Code"; Code[20])
+        {
+            Description = 'Common Function';
+            Caption = 'SITE Dimension Code';
+            TableRelation = Dimension;
         }
         field(50600; "Holding Period for Air"; DateFormula)
         {

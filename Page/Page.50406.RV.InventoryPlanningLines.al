@@ -25,7 +25,7 @@ page 50406 "RV Invy. Planning Lines"
                     ApplicationArea = Basic, Suite;
                     ToolTip = 'Specifies the value of the Item Description field.', Comment = '%';
                 }
-                field(VendorNo; Rec.VendorNo)
+                field("Vendor No"; Rec."Vendor No")
                 {
                     ApplicationArea = Basic, Suite;
                     ToolTip = 'Specifies the value of the Vendor No. field.', Comment = '%';

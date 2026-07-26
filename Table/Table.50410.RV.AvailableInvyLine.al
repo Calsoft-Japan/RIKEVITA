@@ -7,7 +7,7 @@ table 50410 "RV.Available Invy. Line"
     {
         field(1; "Available Invy. Name"; Code[10])
         {
-            Caption = 'Demand Forecast Name';
+            Caption = 'Available Invy. Name';
             NotBlank = true;
             TableRelation = "RV Invy. Planning Name";
         }

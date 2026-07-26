@@ -1,6 +1,6 @@
 table 50409 "RV Invy. Available Name"
 {
-    Caption = 'RV Invy. Available Name';
+    Caption = 'Invy. Available Name';
     DrillDownPageId = "RV Invy Availble Names";
     LookupPageId = "RV Invy Availble Names";
     DataCaptionFields = Name, Description;

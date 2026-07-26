@@ -115,9 +115,19 @@ page 50100 "RIKEVITA Setup"///
                     Description = 'FDD028';
                     ApplicationArea = All;
                 }
-                field("Segment Code"; Rec."Segment Code")
+                field("Segment Code"; Rec."Segment Dim. Code")
                 {
-                    Description = 'FDD017';
+                    Description = 'Comment Function';
+                    ApplicationArea = All;
+                }
+                field("Item Type Dimension Code"; Rec."Item Type Dim. Code")
+                {
+                    Description = 'Item Type Dimension Code';
+                    ApplicationArea = All;
+                }
+                field("SITE Dimension Code"; Rec."SITE Dim. Code")
+                {
+                    Description = 'SITE Dimension Code';
                     ApplicationArea = All;
                 }
                 field("Holding Period for Air"; Rec."Holding Period for Air")

@@ -152,6 +152,7 @@ permissionset 50100 GeneratedPermission
         codeunit "RV Transf PO Addtion Fields "=X,
         codeunit "RV TransferWarehouseShipment"=X,
         codeunit "RV User Permission Check"=X,
+        codeunit "RV Whse. Posting Subscriber"=X,
         page "ISO Symbol Image FactBox"=X,
         page "ISO Symbol Setting"=X,
         page "RIKEVITA Setup"=X,
