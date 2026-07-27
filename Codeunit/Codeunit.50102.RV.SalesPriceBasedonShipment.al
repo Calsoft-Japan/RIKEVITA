@@ -83,10 +83,14 @@ codeunit 50102 "RV Sales Price Based on Shpt."
         //PostedWhseShptLine: Record "Posted Whse. Shipment Line";
         PriceCalculation: Interface "Price Calculation";//FDD007
         ReleaseSalesDoc: Codeunit "Release Sales Document";
+        NeedReopen: Boolean;
     begin
-        if SalesHeader.Invoice = true then begin
+
+        NeedReopen := (SalesHeader.Status = SalesHeader.Status::Released);
+        if NeedReopen then
             ReleaseSalesDoc.Reopen(SalesHeader);
 
+        if SalesHeader.Invoice = true then begin
             SalesLine.Reset();
             SalesLine.SetRange("Document Type", SalesHeader."Document Type");
             SalesLine.SetRange("Document No.", SalesHeader."No.");
@@ -120,9 +124,10 @@ codeunit 50102 "RV Sales Price Based on Shpt."
                         SalesLine.Modify();
                     end;
                 until SalesLine.Next() = 0;
-
-            SalesHeader.PerformManualRelease();
         end;
+
+        //if NeedReopen then
+        //    SalesHeader.PerformManualRelease();
     end;
 
 
