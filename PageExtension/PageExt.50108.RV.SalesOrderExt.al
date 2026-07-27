@@ -177,7 +177,8 @@ pageextension 50108 "RV Sales Order Ext" extends "Sales Order"
             //RVItemTrackHist."Sales Order Line No." := QryItemTrack.SalesOrderLineNo;
             RVItemTrackHist."Lot No." := QryItemTrack.LotNo;
             RVItemTrackHist."Container No." := QryItemTrack.RV_Container_No_;
-            RVItemTrackHist.Qty := QryItemTrack.Quantity / QryItemTrack.QtyperUOM;
+            if QryItemTrack.QtyperUOM <> 0 then
+                RVItemTrackHist.Qty := QryItemTrack.Quantity / QryItemTrack.QtyperUOM;
             RVItemTrackHist."External Document No." := Rec."External Document No.";
             RVItemTrackHist."Sell-to Customer No." := Rec."Sell-to Customer No.";
             RVItemTrackHist."Item No." := QryItemTrack.Item_No_;
