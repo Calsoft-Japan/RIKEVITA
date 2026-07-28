@@ -5,6 +5,7 @@ tableextension 50402 "RV Location" extends Location
         field(50400; "RV_Invy. Status"; enum "RV Inventory Status")
         {
             Caption = 'Inventory Status';
+            ValuesAllowed = 0, 2, 3, 8;
             DataClassification = ToBeClassified;
         }
     }

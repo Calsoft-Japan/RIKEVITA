@@ -1,7 +1,9 @@
-// ------------------------------------------------------------------------------------------------
-// Raw Material Delivery Scheduling for prod.
-// ------------------------------------------------------------------------------------------------
-table 50405 "RV Invy. Planning Name"
+/// <summary>
+/// Table RV Invy. Planning Name (ID 50407).
+/// FDD006 2026/03/31: New. (Stephen)
+/// </summary>
+
+table 50417 "RV Invy. Planning Name"
 {
     Caption = 'Invy. Planning Name';
     //DrillDownPageID = "Demand Forecast Names";
@@ -25,15 +27,19 @@ table 50405 "RV Invy. Planning Name"
             Caption = 'View By';
         }
 
-        field(4; "Site"; Code[20])
+        field(4; "Site"; text[250])
         {
             Caption = 'Site';
-            tableRelation = "Dimension Value" where("Global Dimension No." = const(1));
+            // tableRelation = "Dimension Value".code where("Global Dimension No." = const(1));
         }
 
         field(5; "Starting Date"; Date)
         {
             Caption = 'Starting Date';
+        }
+        field(6; "Item Filter"; Text[100])
+        {
+            Caption = 'Item Filter';
         }
 
     }
@@ -61,6 +67,16 @@ table 50405 "RV Invy. Planning Name"
                     Error('');
             DeliverySchedulingLine.DeleteAll();
         end;
+    end;
+
+    trigger OnInsert()
+    begin
+        rec.TestField(Name);
+    end;
+
+    trigger OnModify()
+    begin
+        rec.TestField(Name);
     end;
 
     var

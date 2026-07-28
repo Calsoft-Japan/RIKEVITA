@@ -1,4 +1,8 @@
-table 50406 "RV Invy. Planning Line"
+/// <summary>
+/// Table RV Invy. Planning Line (ID 50408).
+/// FDD006 2026/03/31: New. (Stephen)
+/// </summary>
+table 50418 "RV Invy. Planning Line"
 {
     Caption = 'Inventory Planning Line';
     DataClassification = ToBeClassified;
@@ -16,7 +20,7 @@ table 50406 "RV Invy. Planning Line"
             Caption = 'Entry No.';
             autoIncrement = true;
         }
-        field(3; "Vendor No"; Code[20])
+        field(3; VendorNo; Code[20])
         {
             Caption = 'Vendor No.';
             TableRelation = Vendor;
@@ -41,8 +45,21 @@ table 50406 "RV Invy. Planning Line"
         }
         field(8; "Unit of Measure"; Code[10])
         {
-            Caption = 'Unit of Measure';
+            Caption = 'Base Unit of Measure';
             TableRelation = "Unit of Measure";
+        }
+        field(9; "Date Type"; enum "RV Invy. Planning Data Type")
+        {
+            Caption = 'Date Type';
+        }
+        field(10; "Inventory Before Period"; decimal)
+        {
+            Caption = 'Inventory Before Period';
+            DecimalPlaces = 0 : 5;
+        }
+        field(11; PIC; Text[50])
+        {
+            Caption = 'PIC';
         }
         field(101; "Date1 Quantity"; decimal)
         {
@@ -91,7 +108,7 @@ table 50406 "RV Invy. Planning Line"
         }
         field(110; "Date10 Quantity"; decimal)
         {
-            Caption = 'Date1';
+            Caption = 'Date10';
             DecimalPlaces = 0 : 5;
         }
         field(111; "Date11 Quantity"; decimal)
@@ -197,6 +214,11 @@ table 50406 "RV Invy. Planning Line"
         field(131; "Date31 Quantity"; decimal)
         {
             Caption = 'Date31';
+            DecimalPlaces = 0 : 5;
+        }
+        field(132; "Date32 Quantity"; decimal)
+        {
+            Caption = 'Date32';
             DecimalPlaces = 0 : 5;
         }
     }
