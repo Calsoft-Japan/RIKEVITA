@@ -8303,7 +8303,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!VendLedgEntryEndingDtAmt.Value</Value>
+                                  <Value>=Fields!VendLedgEntryEndDtAmtLCY.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -8768,7 +8768,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!VendLedgEntryEndingDtAmt.Value</Value>
+                                  <Value>=Fields!VendLedgEntryEndDtAmtLCY.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -8804,7 +8804,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!CurrCode_TempVenLedgEntryLoop.Value</Value>
+                                  <Value>=Fields!EntryCurrencyCode.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontSize>8pt</FontSize>
@@ -8829,6 +8829,7 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -13169,7 +13170,7 @@
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF((not First(Fields!PrintDetails.Value))and(First(Fields!PrintAmountInLCY.Value)),False,True)</Hidden>
+                    <Hidden>=IIF((not First(Fields!PrintDetails.Value))and(not First(Fields!PrintAmountInLCY.Value)),False,True)</Hidden>
                   </Visibility>
                   <KeepWithGroup>After</KeepWithGroup>
                   <RepeatOnNewPage>true</RepeatOnNewPage>
@@ -13177,7 +13178,7 @@
                 </TablixMember>
                 <TablixMember>
                   <Visibility>
-                    <Hidden>=IIF((not First(Fields!PrintDetails.Value))and(not First(Fields!PrintAmountInLCY.Value)),False,True)</Hidden>
+                    <Hidden>=IIF((not First(Fields!PrintDetails.Value))and(First(Fields!PrintAmountInLCY.Value)),False,True)</Hidden>
                   </Visibility>
                   <KeepWithGroup>After</KeepWithGroup>
                   <RepeatOnNewPage>true</RepeatOnNewPage>
