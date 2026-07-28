@@ -328,7 +328,7 @@ codeunit 50104 "RV Bank Payment to Excel"
             Email := vend."E-Mail";
             Advice := VLE.Description;
 
-            NewNIRC := Vend."Registration Number";
+            NewNIRC := '';//Vend."Registration Number";
             if Vend."Partner Type" = Vend."Partner Type"::Person then begin
                 PassportNo := Vend."RV_ID No./Passport No.";
                 NewNIRC := Vend."RV_ID No./Passport No.";
@@ -348,6 +348,9 @@ codeunit 50104 "RV Bank Payment to Excel"
             if Empl."RV_Expat Employee" then
                 PassportNo := Empl."RV_ID No./Passport No.";
         end;
+
+        if Advice = '' then
+            Advice := GenJnlLine.Description;
 
 
         TempExcelBuffer.NewRow();
@@ -550,8 +553,8 @@ codeunit 50104 "RV Bank Payment to Excel"
                 AppliedAmt := VLE."Amount (LCY)"; // Fallback if Amount to apply isn't set manually
         end;
 
-        //SegCode := GetDimensionValueCode(GenJnlLine, 'ACC_SEGMNT');
-        SegCode := RVSetup."Segment Dim. Code";
+        SegCode := GetDimensionValueCode(GenJnlLine, RVSetup."Segment Dim. Code");//'ACC_SEGMNT');
+        //SegCode := RVSetup."Segment Dim. Code";
 
         TempExcelBuffer.NewRow();
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
