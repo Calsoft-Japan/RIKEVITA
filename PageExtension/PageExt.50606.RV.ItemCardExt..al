@@ -1,9 +1,22 @@
 /// <summary>
 /// PageExtension RV Item Card (ID 50606) extends "Item Card"
 /// FDD014 2026/02/23: New. (Stephen)
+/// FDD014 2026/07/28: Add field. (Stephen)
 /// </summary>
 pageextension 50606 "RV_Item Card" extends "Item Card"
 {
+    layout
+    {
+        addlast(Item)
+        {
+            field(RV_PIC; Rec."RV_PIC")
+            {
+                ApplicationArea = All;
+                Caption = 'PIC';
+                Description = 'FDDXXX';
+            }
+        }
+    }
     actions
     {
         modify(BOMStructure)
