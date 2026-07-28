@@ -178,6 +178,12 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
             Description = 'FDD008';
             DataClassification = ToBeClassified;
         }
+        field(50113; "RV_Shipment Type"; Enum "RV Shipment Type")
+        {
+            Caption = 'Shipment Type';
+            Description = 'FDD008';
+            DataClassification = ToBeClassified;
+        }
         field(50200; "RV_Consignee Name"; Text[100])
         {
             Caption = 'Consignee Name';

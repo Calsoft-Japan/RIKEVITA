@@ -22,6 +22,7 @@ codeunit 50202 "RV Post Warehouse Shipment"
         PostedWhseShipmentHeader."RV_Ship-to Name" := WarehouseShipmentHeader."RV_Ship-to Name";
         PostedWhseShipmentHeader."RV_SAILING ON OR ABOUT" := WarehouseShipmentHeader."RV_SAILING ON OR ABOUT";
         PostedWhseShipmentHeader."RV_Shipping Type Code" := WarehouseShipmentHeader."RV_Shipping Type Code";//FDD008 Update
+        PostedWhseShipmentHeader."RV_Shipment Type" := WarehouseShipmentHeader."RV_Shipment Type";//FDD008 Update
 
         //FDD008
         PostedWhseShipmentHeader."RV_B/L Date" := WarehouseShipmentHeader."RV_B/L Date";

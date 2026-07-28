@@ -12,6 +12,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
         WhseShptHeader."RV_Stuffing Date" := SalesHeader."RV_Stuffing Date";
         WhseShptHeader.RV_ETD := SalesHeader."RV_ETD";
         WhseShptHeader.RV_ETA := SalesHeader."RV_ETA";
+        WhseShptHeader."RV_Shipment Type" := SalesHeader."RV_Shipment Type";//FDD008 Update
         WhseShptHeader.Modify();
     end;
 
@@ -36,6 +37,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
                 WarehouseShipmentHeader."RV_Stuffing Date" := SalesHeader."RV_Stuffing Date";
                 WarehouseShipmentHeader.RV_ETD := SalesHeader."RV_ETD";
                 WarehouseShipmentHeader.RV_ETA := SalesHeader."RV_ETA";
+                WarehouseShipmentHeader."RV_Shipment Type" := SalesHeader."RV_Shipment Type";//FDD008 Update
                 WarehouseShipmentHeader.Modify();
 
                 WhseHeaderCreated := true;
@@ -69,6 +71,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
             WarehouseShipmentHeader."RV_Stuffing Date" := SOHeader."RV_Stuffing Date";
             WarehouseShipmentHeader.RV_ETD := SOHeader."RV_ETD";
             WarehouseShipmentHeader.RV_ETA := SOHeader."RV_ETA";
+            WarehouseShipmentHeader."RV_Shipment Type" := SOHeader."RV_Shipment Type";//FDD008 Update
             WarehouseShipmentHeader.Modify();
         end;
 

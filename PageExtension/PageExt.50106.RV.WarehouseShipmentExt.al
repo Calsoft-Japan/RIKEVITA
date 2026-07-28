@@ -8,6 +8,11 @@ pageextension 50106 "RV Warehouse Shipment Ext" extends "Warehouse Shipment"
     {
         addafter("Shipment Method Code")
         {
+            field("RV_Shipment Type"; Rec."RV_Shipment Type")
+            {
+                ApplicationArea = All;
+                Description = 'FDD008';
+            }
             field("RV_Shipping Type Code"; Rec."RV_Shipping Type Code")
             {
                 ApplicationArea = All;
