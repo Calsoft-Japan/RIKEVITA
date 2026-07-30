@@ -24,7 +24,6 @@ page 50513 "RV COA ShipmentLotNo"
                 ApplicationArea = All;
                 SubPageLink = "COA No." = field("COA No.");
                 UpdatePropagation = Both;
-                Editable = SubCOACardEditable;
             }
             group(Control22)
             {
@@ -208,7 +207,6 @@ page 50513 "RV COA ShipmentLotNo"
             }
         }
     }
-
     trigger OnAfterGetCurrRecord()
     begin
         //SetQAEnable

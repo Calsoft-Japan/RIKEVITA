@@ -1,7 +1,7 @@
-page 50410 "RV.Available Invy. Lines"
+page 50410 "RV.Stock Balance Lines"
 {
     ApplicationArea = All;
-    Caption = 'Available Invy. Lines';
+    Caption = 'Stock Balance Lines';
     PageType = ListPart;
     DeleteAllowed = false;
     InsertAllowed = false;
@@ -47,10 +47,10 @@ page 50410 "RV.Available Invy. Lines"
                 {
                     ToolTip = 'Specifies the value of the Site field.', Comment = '%';
                 }
-                field(Site; Rec.Site)
+                /*field(Site; Rec.Site)
                 {
                     ToolTip = 'Specifies the value of the Site field.', Comment = '%';
-                }
+                }*/
 
                 field(Location; Rec.Location)
                 {
@@ -115,7 +115,7 @@ page 50410 "RV.Available Invy. Lines"
                 {
                     ToolTip = 'Specifies the value of the Cost Amount 2 field.', Comment = '%';
                 }
-                field("Unit Cost 3"; Rec."Unit Cost 3")
+                /*field("Unit Cost 3"; Rec."Unit Cost 3")
                 {
                     ToolTip = 'Specifies the value of the Unit Cost 3 field.', Comment = '%';
                 }
@@ -131,7 +131,7 @@ page 50410 "RV.Available Invy. Lines"
                 field("Roll Cost Amount"; Rec."Roll Cost Amount")
                 {
                     ToolTip = 'Specifies the value of the Roll Cost Amount field.', Comment = '%';
-                }
+                }*/
                 field("Derive Unit of Measure"; Rec."Derive Unit of Measure")
                 {
                     ToolTip = 'Specifies the value of the Derive Unit of Measure field.', Comment = '%';

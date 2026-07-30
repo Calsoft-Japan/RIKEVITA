@@ -6,7 +6,7 @@ page 50537 "RV Item Ledger Entries"
 {
     PageType = List;
     ApplicationArea = All;
-    UsageCategory = Lists;
+    //UsageCategory = Lists;
     Caption = 'Item Ledger Entries';
     SourceTable = "Item Ledger Entry";
     Editable = false;

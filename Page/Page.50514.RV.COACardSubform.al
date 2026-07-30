@@ -20,6 +20,7 @@ page 50514 "RV COA Card Subform"
                 field("COA No."; Rec."COA No.")
                 {
                     ApplicationArea = All;
+                    Editable = SubCOACardEditable;
                     trigger OnAssistEdit()
                     begin
                         if (Rec."COA No." = '') then begin
@@ -34,6 +35,7 @@ page 50514 "RV COA Card Subform"
                 field("Ref. Order Type"; Rec."Ref. Order Type QA")
                 {
                     ApplicationArea = All;
+                    Editable = SubCOACardEditable;
                     trigger OnValidate()
                     begin
                         Rec."Order No." := '';
@@ -55,6 +57,7 @@ page 50514 "RV COA Card Subform"
                 field("Order No."; Rec."Order No.")
                 {
                     ApplicationArea = All;
+                    Editable = SubCOACardEditable;
                     trigger OnLookup(var Text: Text): Boolean
                     var
                         PostedWhShipLine: Record "Posted Whse. Shipment Line";
@@ -101,6 +104,7 @@ page 50514 "RV COA Card Subform"
                 field("Item No."; Rec."Item No.")
                 {
                     ApplicationArea = All;
+                    Editable = SubCOACardEditable;
                 }
                 field("Item Description"; Rec."Item Description")
                 {
@@ -109,31 +113,38 @@ page 50514 "RV COA Card Subform"
                 field("Ship-to Customer No."; Rec."Ship-to Customer No.")
                 {
                     ApplicationArea = All;
+                    Editable = SubCOACardEditable;
                 }
                 field("Ship-to Customer Name"; Rec."Ship-to Customer Name")
                 {
                     ApplicationArea = All;
+                    Editable = SubCOACardEditable;
                 }
                 field("Ship-to Code"; Rec."Ship-to Code")
                 {
                     ApplicationArea = All;
+                    Editable = SubCOACardEditable;
                 }
                 field("Bill-to Customer No."; Rec."Bill-to Customer No.")
                 {
                     ApplicationArea = All;
+                    Editable = SubCOACardEditable;
                 }
                 field("Bill-to Customer Name"; Rec."Bill-to Customer Name")
                 {
                     ApplicationArea = All;
+                    Editable = SubCOACardEditable;
                 }
                 field("Final Destination"; Rec."Final Destination")
                 {
                     ApplicationArea = All;
+                    Editable = SubCOACardEditable;
                 }
                 field("Mark"; Rec."Mark")
                 {
                     ApplicationArea = All;
                     MultiLine = true;
+                    Editable = SubCOACardEditable;
                 }
                 field("QA Comment"; Rec."QA Comment")
                 {
@@ -153,7 +164,6 @@ page 50514 "RV COA Card Subform"
                 field("QA Checked Remark"; Rec."QA Checked Remark")
                 {
                     ApplicationArea = All;
-                    Editable = false;
                     MultiLine = true;
                 }
                 field("QA Checked Date"; Rec."QA Checked Date")
@@ -169,7 +179,6 @@ page 50514 "RV COA Card Subform"
                 field("QA Approved Remark"; Rec."QA Approved Remark")
                 {
                     ApplicationArea = All;
-                    Editable = false;
                     MultiLine = true;
                 }
                 field("QA Approved Date"; Rec."QA Approved Date")
@@ -188,12 +197,12 @@ page 50514 "RV COA Card Subform"
 
     trigger OnOpenPage()
     begin
-        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable);
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable, SubCOACardEditable);
     end;
 
     trigger OnAfterGetCurrRecord()
     begin
-        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable);
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable, SubCOACardEditable);
     end;
 
 
@@ -206,6 +215,7 @@ page 50514 "RV COA Card Subform"
         QACheckEnable: Boolean;
         QAApproveEnable: Boolean;
         QARejectEnable: Boolean;
+        SubCOACardEditable: Boolean;
 
     procedure UpdateQALine_Action()
     var
@@ -347,7 +357,7 @@ page 50514 "RV COA Card Subform"
         Rec.CheckRemark_Input();
 
         //Enable
-        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable);
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable, SubCOACardEditable);
 
     end;
 
@@ -360,7 +370,7 @@ page 50514 "RV COA Card Subform"
         Rec.ApprovedRemark_Input();
 
         //Enable
-        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable);
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable, SubCOACardEditable);
     end;
 
     procedure COAReject_Action()
@@ -370,7 +380,7 @@ page 50514 "RV COA Card Subform"
         //IsQARejectAllowed
         Rec.IsQARejectAllowed();
         //Enable
-        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable);
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable, SubCOACardEditable);
 
         Rec."QA Status" := Rec."QA Status"::Rejected;
         Rec.Modify();
@@ -378,7 +388,6 @@ page 50514 "RV COA Card Subform"
         QAShipmentLotNo.Reset();
         QAShipmentLotNo.SetRange("COA No.", Rec."COA No.");
         QAShipmentLotNo.ModifyAll("QA Status", Rec."QA Status"::Rejected);
-
     end;
 
     procedure COAReverse_Action()
@@ -388,11 +397,10 @@ page 50514 "RV COA Card Subform"
         //IsQAReverseAllowed
         Rec.IsQAReverseAllowed();
         //Enable
-        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable);
+        Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable, SubCOACardEditable);
 
         Clear(Rec."QA Approved By");
         Clear(Rec."QA Approved Date");
-        Clear(Rec."QA Approved Remark");
         Rec."QA Status" := Rec."QA Status"::Checked;
         Rec.Modify();
 

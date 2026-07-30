@@ -38,12 +38,12 @@ table 50410 "RV.Available Invy. Line"
         field(7; "Site"; Code[20])
         {
             Caption = 'Site';
-            TableRelation = "Dimension Value" where("Global Dimension No." = const(1));
+            TableRelation = "Dimension Value" where("Global Dimension No." = const(2));
         }
         field(8; "Segment"; Code[20])
         {
             Caption = 'Segment';
-            TableRelation = "Dimension Value" where("Global Dimension No." = const(2));
+            //TableRelation = "Dimension Value" where("Global Dimension No." = const(2));
         }
         field(10; "Location"; Code[10])
         {

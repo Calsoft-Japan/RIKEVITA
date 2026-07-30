@@ -9,12 +9,12 @@ pageextension 50201 "RV Item Tracking Lines Ext" extends "Item Tracking Lines"
         addbefore("Expiration Date")
         {
 
-            field("RV_Container No."; Rec."RV_Container No.")//FDD008
+            /*field("RV_Container No."; Rec."RV_Container No.")//FDD008
             {
                 Caption = 'Container No.';
                 ApplicationArea = All;
                 Editable = AllowContainer;
-            }
+            }*/
             field("Manufacture Date"; Rec."RV_Manufacture Date")
             {
                 Caption = 'Manufacture Date';

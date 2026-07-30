@@ -313,9 +313,8 @@ table 50508 "RV QA Header"
     end;
 
     procedure SetQAEnable(var UpdateQALineEnable: Boolean; var QACheckEnable: Boolean;
-                        var QAApproveEnable: Boolean; var QARejectEnable: Boolean)
+                        var QAApproveEnable: Boolean; var QARejectEnable: Boolean; var SubCOACardEditable: Boolean)
     begin
-
         CASE Rec."QA Status" OF
             (Rec."QA Status"::Analyzing):
                 begin
@@ -323,6 +322,8 @@ table 50508 "RV QA Header"
                     QACheckEnable := true;
                     QAApproveEnable := false;
                     QARejectEnable := false;
+
+                    SubCOACardEditable := true;
                 end;
             (Rec."QA Status"::Checked):
                 begin
@@ -330,6 +331,8 @@ table 50508 "RV QA Header"
                     QACheckEnable := false;
                     QAApproveEnable := true;
                     QARejectEnable := false;
+
+                    SubCOACardEditable := true;
                 end;
             (Rec."QA Status"::Approved):
                 begin
@@ -337,6 +340,8 @@ table 50508 "RV QA Header"
                     QACheckEnable := false;
                     QAApproveEnable := false;
                     QARejectEnable := true;
+
+                    SubCOACardEditable := false;
                 end;
             (Rec."QA Status"::Rejected):
                 begin
@@ -344,6 +349,8 @@ table 50508 "RV QA Header"
                     QACheckEnable := false;
                     QAApproveEnable := false;
                     QARejectEnable := false;
+
+                    SubCOACardEditable := false;
                 end;
         END;
 

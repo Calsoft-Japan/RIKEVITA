@@ -36,12 +36,12 @@ table 50408 "RV.Inventory Valuation Line"
         field(7; "Site"; Code[20])
         {
             Caption = 'Site';
-            TableRelation = "Dimension Value" where("Global Dimension No." = const(1));
+            TableRelation = "Dimension Value" where("Global Dimension No." = const(2));
         }
         field(8; "Segment"; Code[20])
         {
-            Caption = 'Site';
-            TableRelation = "Dimension Value" where("Global Dimension No." = const(2));
+            Caption = 'Segment';
+            //TableRelation = "Dimension Value" where("Global Dimension No." = const(2));
         }
         field(9; "Unit of Measure"; Code[10])
         {

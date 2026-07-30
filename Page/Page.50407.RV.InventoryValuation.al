@@ -63,6 +63,7 @@ page 50407 "RV Inventory Valuation Name"
                     Item: Record Item;
                     ItemLedgerEntry: Record "Item Ledger Entry";
                     ReasonCode: Record "Reason Code";
+                    SITEDimValue: Record "Dimension Value";
                 begin
                     Rec.TestField("Starting Date");
                     InvyValuationLine.Reset();
@@ -87,15 +88,31 @@ page 50407 "RV Inventory Valuation Name"
                         WScrapRC := ReasonCode.Code
                     else
                         Error('please set the Waste Scrap reason code');
+                    StandardCostPeriod.reset;
+                    StandardCostPeriod.Setfilter("Effective Start Date", '<=%1', Rec."Ending Date");
+                    StandardCostPeriod.Setfilter("Effective End Date", '>=%1', Rec."Ending Date");
+                    IF NOT StandardCostPeriod.FindLast() then begin
+                        if NOT Dialog.Confirm('No found effective standart cost with the valuation date, Do you continute ?') then
+                            Error('');
+                        StandardCostPeriod.Init();
+                    end;
+                    GLSetup.get();
                     EntryNo := 1;
                     Item.reset;
-                    If Rec.Site <> '' then
-                        Item.SetFilter("Global Dimension 1 Filter", Rec.Site);
                     Item.SetRange(Type, Item.type::Inventory);
-                    If Item.findset then
-                        repeat
-                            CalculateItem(Item)
-                        until Item.Next = 0;
+                    If Item.findset then begin
+                        SITEDimValue.reset;
+                        SITEDimValue.SetRange("Dimension Code", GLSetup."Global Dimension 2 Code");
+                        If Rec.Site <> '' then
+                            SITEDimValue.SetRange(Code, Rec.Site);
+                        if SITEDimValue.FindSet() then
+                            repeat
+                                item.SetFilter("Global Dimension 2 Filter", SITEDimValue.Code);
+                                repeat
+                                    CalculateItem(Item)
+                                until Item.Next = 0;
+                            until SITEDimValue.next = 0;
+                    end
                 end;
 
             }
@@ -117,10 +134,25 @@ page 50407 "RV Inventory Valuation Name"
 
         StartingInvoicedQty := 0;
         StartingExpectedQty := 0;
+        IncreaseInvoicedQty := 0;
+        IncreaseExpectedQty := 0;
+        DecreaseInvoicedQty := 0;
+        DecreaseExpectedQty := 0;
+        VarianceInvoicedQty := 0;
+        DisposeInvoicedQty := 0;
+        WasteInvoicedQty := 0;
+        VarianceExpectedQty := 0;
+        DisposeExpectedQty := 0;
+        WasteExpectedQty := 0;
+        CreditExpectedQty := 0;
+        CreditInvoicedQty := 0;
 
+        StandardCostElent.Reset();
+
+        RIKEVITASetup.get();
         ValueEntry.Reset();
         ValueEntry.SetRange("Item No.", Item."No.");
-        ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
+        ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
         ValueEntry.SetRange("Posting Date", 0D, EndDate);
         IsEmptyLine := ValueEntry.IsEmpty();
         if not IsEmptyLine then begin
@@ -134,95 +166,142 @@ page 50407 "RV Inventory Valuation Name"
             if StartDate > 0D then begin
                 ValueEntry.SetRange("Posting Date", 0D, CalcDate('<-1D>', StartDate));
                 ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
+                ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
                 AssignAmounts(ValueEntry, StartingInvoicedQty, StartingExpectedQty, 1);
                 IsEmptyLine := IsEmptyLine and ((StartingInvoicedQty = 0));
                 IsEmptyLine := IsEmptyLine and ((StartingExpectedQty = 0));
             end;
+        end;
+        if HasEntriesWithinDateRange then begin
             //Output Purchase Inbound
-            if HasEntriesWithinDateRange then begin
-                ValueEntry.SetRange("Posting Date", StartDate, EndDate);
-                ValueEntry.SetFilter(
-                    "Item Ledger Entry Type", '%1|%2|%3',
-                    ValueEntry."Item Ledger Entry Type"::Purchase,
-                    //ValueEntry."Item Ledger Entry Type"::"Positive Adjmt.",
-                    ValueEntry."Item Ledger Entry Type"::Output,
-                    ValueEntry."Item Ledger Entry Type"::"Assembly Output");
-                ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
-                AssignAmounts(ValueEntry, IncreaseInvoicedQty, IncreaseExpectedQty, 1);
-            end;
+            //The purchase credit can not devide by ILE type and document type
+            ValueEntry.SetRange("Posting Date", StartDate, EndDate);
+            ValueEntry.SetFilter(
+                "Item Ledger Entry Type", '%1',
+                ValueEntry."Item Ledger Entry Type"::Purchase);
+            ValueEntry.SetFilter("Invoiced Quantity", '>0');
+            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
+            AssignAmounts(ValueEntry, IncreaseInvoicedQty, IncreaseExpectedQty, 1);
+
+            ValueEntry.SetRange("Posting Date", StartDate, EndDate);
+            ValueEntry.SetFilter(
+                "Item Ledger Entry Type", '%1|%2',
+                ValueEntry."Item Ledger Entry Type"::Output,
+                ValueEntry."Item Ledger Entry Type"::"Assembly Output");
+            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
+            AssignAmounts(ValueEntry, IncreaseInvoicedQty, IncreaseExpectedQty, 1);
+
             //Sales Consumption Outbound
-            if HasEntriesWithinDateRange then begin
-                ValueEntry.SetRange("Posting Date", StartDate, EndDate);
-                ValueEntry.SetFilter(
-                    "Item Ledger Entry Type", '%1|%2|%3',
-                    ValueEntry."Item Ledger Entry Type"::Sale,
-                    //ValueEntry."Item Ledger Entry Type"::"Negative Adjmt.",
-                    ValueEntry."Item Ledger Entry Type"::Consumption,
-                    ValueEntry."Item Ledger Entry Type"::"Assembly Consumption");
-                ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
-                AssignAmounts(ValueEntry, DecreaseInvoicedQty, DecreaseExpectedQty, -1);
-            end;
+            //The Sales credit can not devide by ILE type and document type
+            ValueEntry.SetRange("Posting Date", StartDate, EndDate);
+            ValueEntry.SetRange(
+                "Item Ledger Entry Type", ValueEntry."Item Ledger Entry Type"::Sale);
+            ValueEntry.SetFilter("Invoiced Quantity", '<0');
+            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
+            AssignAmounts(ValueEntry, DecreaseInvoicedQty, DecreaseExpectedQty, -1);
+
+            ValueEntry.SetRange("Posting Date", StartDate, EndDate);
+            ValueEntry.SetFilter(
+                "Item Ledger Entry Type", '%1|%2',
+                  ValueEntry."Item Ledger Entry Type"::Consumption,
+                ValueEntry."Item Ledger Entry Type"::"Assembly Consumption");
+            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
+            AssignAmounts(ValueEntry, DecreaseInvoicedQty, DecreaseExpectedQty, -1);
+
+            //Purchase Credit quantity
+            ValueEntry.SetRange("Posting Date", StartDate, EndDate);
+            ValueEntry.SetFilter(
+                "Item Ledger Entry Type", '%1',
+                ValueEntry."Item Ledger Entry Type"::Purchase);
+            ValueEntry.SetFilter("Invoiced Quantity", '<0');
+            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
+            AssignAmounts(ValueEntry, CreditInvoicedQty, CreditExpectedQty, -1);
+
+            //Sales Credit quantity
+            ValueEntry.SetRange("Posting Date", StartDate, EndDate);
+            ValueEntry.SetRange(
+                "Item Ledger Entry Type", ValueEntry."Item Ledger Entry Type"::Sale);
+            ValueEntry.SetFilter("Invoiced Quantity", '>0');
+            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
+            AssignAmounts(ValueEntry, CreditInvoicedQty, CreditExpectedQty, 1);
 
             //Dispose
-            if HasEntriesWithinDateRange then begin
-                ValueEntry.SetRange("Posting Date", StartDate, EndDate);
-                ValueEntry.SetRange(
-                    "Item Ledger Entry Type",
-                    ValueEntry."Item Ledger Entry Type"::"Negative Adjmt.");
-                ValueEntry.SetRange("Reason Code", SamDisposeRC);
-                ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
-                AssignAmounts(ValueEntry, DisposeInvoicedQty, DisposeExpectedQty, -1);
-            end;
+            ValueEntry.SetRange("Posting Date", StartDate, EndDate);
+            ValueEntry.SetFilter(
+                "Item Ledger Entry Type", '%1|%2',
+                ValueEntry."Item Ledger Entry Type"::"Negative Adjmt.",
+                ValueEntry."Item Ledger Entry Type"::"Positive Adjmt.");
+            ValueEntry.SetRange("Reason Code", SamDisposeRC);
+            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
+            AssignAmounts(ValueEntry, DisposeInvoicedQty, DisposeExpectedQty, -1);
 
             //Waste or Scrap
-            if HasEntriesWithinDateRange then begin
-                ValueEntry.SetRange("Posting Date", StartDate, EndDate);
-                ValueEntry.SetRange(
-                    "Item Ledger Entry Type",
-                    ValueEntry."Item Ledger Entry Type"::"Negative Adjmt.");
-                ValueEntry.SetRange("Reason Code", WScrapRC);
-                ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
-                AssignAmounts(ValueEntry, WasteInvoicedQty, WasteExpectedQty, -1);
-            end;
+            ValueEntry.SetRange("Posting Date", StartDate, EndDate);
+            ValueEntry.SetFilter(
+                                "Item Ledger Entry Type", '%1|%2',
+                ValueEntry."Item Ledger Entry Type"::"Negative Adjmt.",
+                ValueEntry."Item Ledger Entry Type"::"Positive Adjmt.");
+            ValueEntry.SetRange("Reason Code", WScrapRC);
+            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
+            AssignAmounts(ValueEntry, WasteInvoicedQty, WasteExpectedQty, -1);
 
             //Variance
-            if HasEntriesWithinDateRange then begin
-                ValueEntry.SetRange("Posting Date", StartDate, EndDate);
-                ValueEntry.SetRange(
-                    "Item Ledger Entry Type",
-                    ValueEntry."Item Ledger Entry Type"::"Negative Adjmt.");
-                ValueEntry.SetRange("Reason Code", VarianceRC);
-                ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
-                AssignAmounts(ValueEntry, VarianceInvoicedQty, VarianceExpectedQty, -1);
-            end;
+            ValueEntry.SetRange("Posting Date", StartDate, EndDate);
+            ValueEntry.SetFilter(
+                    "Item Ledger Entry Type", '%1|%2',
+                ValueEntry."Item Ledger Entry Type"::"Negative Adjmt.",
+                ValueEntry."Item Ledger Entry Type"::"Positive Adjmt.");
+            ValueEntry.SetRange("Reason Code", VarianceRC);
+            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
+            AssignAmounts(ValueEntry, VarianceInvoicedQty, VarianceExpectedQty, -1);
 
-            if HasEntriesWithinDateRange then begin
-                ValueEntry.SetRange("Posting Date", StartDate, EndDate);
-                ValueEntry.SetRange("Item Ledger Entry Type", ValueEntry."Item Ledger Entry Type"::Transfer);
-                if ValueEntry.FindSet() then
-                    repeat
-                        if true in [ValueEntry."Valued Quantity" < 0, not GetOutboundItemEntry(ValueEntry."Item Ledger Entry No.", Item."No.", Rec.Site)] then
-                            AssignAmounts(ValueEntry, DecreaseInvoicedQty, DecreaseExpectedQty, -1)
-                        else
-                            AssignAmounts(ValueEntry, IncreaseInvoicedQty, IncreaseExpectedQty, 1);
-                    until ValueEntry.Next() = 0;
+            ValueEntry.SetRange("Posting Date", StartDate, EndDate);
+            ValueEntry.SetFilter(
+                    "Item Ledger Entry Type", '%1|%2',
+                ValueEntry."Item Ledger Entry Type"::"Negative Adjmt.",
+                ValueEntry."Item Ledger Entry Type"::"Positive Adjmt.");
+            ValueEntry.SetRange("Reason Code", '');
+            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
+            AssignAmounts(ValueEntry, VarianceInvoicedQty, VarianceExpectedQty, -1);
 
-                IsEmptyLine := IsEmptyLine and ((IncreaseInvoicedQty = 0));
-                IsEmptyLine := IsEmptyLine and ((DecreaseInvoicedQty = 0));
-                IsEmptyLine := IsEmptyLine and ((IncreaseExpectedQty = 0));
-                IsEmptyLine := IsEmptyLine and ((DecreaseExpectedQty = 0));
-
-                IsEmptyLine := IsEmptyLine and ((WasteInvoicedQty = 0));
-                IsEmptyLine := IsEmptyLine and ((VarianceInvoicedQty = 0));
-                IsEmptyLine := IsEmptyLine and ((DisposeInvoicedQty = 0));
-
-                IsEmptyLine := IsEmptyLine and ((WasteExpectedQty = 0));
-                IsEmptyLine := IsEmptyLine and ((DisposeExpectedQty = 0));
-                IsEmptyLine := IsEmptyLine and ((VarianceExpectedQty = 0));
-
-            end;
+            //Transfer
+            ValueEntry.SetRange("Posting Date", StartDate, EndDate);
+            ValueEntry.SetRange("Item Ledger Entry Type", ValueEntry."Item Ledger Entry Type"::Transfer);
+            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            if ValueEntry.FindSet() then
+                repeat
+                    if true in [ValueEntry."Valued Quantity" < 0, not GetOutboundItemEntry(ValueEntry."Item Ledger Entry No.", Item."No.", Rec.Site)] then
+                        AssignAmounts(ValueEntry, TransferInvoicedQty, TransferExpectedQty, -1)
+                    else
+                        AssignAmounts(ValueEntry, TransferInvoicedQty, TransferExpectedQty, 1);
+                until ValueEntry.Next() = 0;
         end;
+        IsEmptyLine := IsEmptyLine and ((IncreaseInvoicedQty = 0));
+        IsEmptyLine := IsEmptyLine and ((DecreaseInvoicedQty = 0));
+        IsEmptyLine := IsEmptyLine and ((IncreaseExpectedQty = 0));
+        IsEmptyLine := IsEmptyLine and ((DecreaseExpectedQty = 0));
 
+        IsEmptyLine := IsEmptyLine and ((WasteInvoicedQty = 0));
+        IsEmptyLine := IsEmptyLine and ((VarianceInvoicedQty = 0));
+        IsEmptyLine := IsEmptyLine and ((DisposeInvoicedQty = 0));
+
+        IsEmptyLine := IsEmptyLine and ((WasteExpectedQty = 0));
+        IsEmptyLine := IsEmptyLine and ((DisposeExpectedQty = 0));
+        IsEmptyLine := IsEmptyLine and ((VarianceExpectedQty = 0));
+        IsEmptyLine := IsEmptyLine and ((TransferExpectedQty = 0));
+        IsEmptyLine := IsEmptyLine and ((TransferInvoicedQty = 0));
+        IsEmptyLine := IsEmptyLine and ((CreditInvoicedQty = 0));
+        IsEmptyLine := IsEmptyLine and ((CreditExpectedQty = 0));
         if not IsEmptyLine then
             InsertInvyValuationLine(Item, Item."Global Dimension 1 Code");
     end;
@@ -257,8 +336,8 @@ page 50407 "RV Inventory Valuation Name"
         LotInfo: Record "Lot No. Information";
         ItemCategory: Record "Item Category";
         StandardCostElent: Record "Standard Cost Element Details";
-        GLSetup: Record "General Ledger Setup";
-
+        StandUnitCost: Decimal;
+        DefaultDim: Record "Default Dimension";
     begin
         InvyValuationLine.Init();
         //Filter infromation
@@ -269,38 +348,67 @@ page 50407 "RV Inventory Valuation Name"
         InvyValuationLine.Site := SiteNo;
 
         //Item master infromation
+        StandardCostElent.Reset();
+        StandardCostElent.SetRange("Item No.", Item."No.");
+        StandardCostElent.SetRange(StandardCostElent."Period Code", StandardCostPeriod.Code);
+        If StandardCostElent.FindFirst() then begin
+            //InvyValuationLine."Standard Cost"
+            //InvyValuationLine."Standard Cost UM"
+            StandUnitCost := StandardCostElent."Direct Dep. Exp." +
+                                   StandardCostElent."Direct Fixed Cost" +
+                                   StandardCostElent."Direct Labor Cost" +
+                                   StandardCostElent."Electricity Fee" +
+                                   StandardCostElent."Gas Fee" +
+                                   StandardCostElent."Indirect Cost" +
+                                   StandardCostElent."Raw Material Cost" +
+                                   StandardCostElent."Package Material Cost" +
+                                   StandardCostElent.Water;
+        end;
         InvyValuationLine."Item Description" := Item.Description;
-        //InvyValuationLine."Standard Cost"
+        InvyValuationLine."Unit of Measure" := item."Base Unit of Measure";
         //InvyValuationLine."Standard Cost UM"
         //InvyValuationLine.Cap.
-        //InvyValuationLine.UOM
+        DefaultDim.Reset();
+        DefaultDim.SetRange("No.", Item."No.");
+        DefaultDim.SetRange("Table ID", 27);
+        DefaultDim.SetRange("Dimension Code", RIKEVITASetup."Segment Dim. Code");
+        if DefaultDim.FindFirst() then
+            InvyValuationLine.Segment := DefaultDim."Dimension Value Code";
 
         InvyValuationLine."Starting Balance Quantity" := StartingInvoicedQty;
-        //InvyValuationLine."Starting Balance Amount"
+        InvyValuationLine."Starting Balance Amount" := Round(StandUnitCost * StartingInvoicedQty, GLSetup."Amount Rounding Precision");
 
         InvyValuationLine."Period Order Quantity" := IncreaseInvoicedQty;
-        //InvyValuationLine."Period Order Amount"
+        InvyValuationLine."Period Order Amount" := Round(StandUnitCost * IncreaseInvoicedQty, GLSetup."Amount Rounding Precision");
 
-        //InvyValuationLine."Period Credit Quantity"
-        //InvyValuationLine."Period Order Credit Amount"
+        InvyValuationLine."Period Credit Quantity" := CreditInvoicedQty;
+        InvyValuationLine."Period Order Credit Amount" := Round(StandUnitCost * InvyValuationLine."Period Credit Quantity", GLSetup."Amount Rounding Precision");
 
         InvyValuationLine."Sample Dispose Quantity" := DisposeInvoicedQty;
-        //InvyValuationLine."Sample Dispose Amount"
+        InvyValuationLine."Sample Dispose Amount" := Round(StandUnitCost * DisposeInvoicedQty, GLSetup."Amount Rounding Precision");
 
         InvyValuationLine."Consumption Quantity" := DecreaseInvoicedQty;
-        //InvyValuationLine."Consumption Amount"
+        InvyValuationLine."Consumption Amount" := Round(StandUnitCost * DecreaseInvoicedQty, GLSetup."Amount Rounding Precision");
 
         InvyValuationLine."Waste Scrap Quantity" := WasteInvoicedQty;
-        //InvyValuationLine."Waste Scrap Amount"
+        InvyValuationLine."Waste Scrap Amount" := Round(StandUnitCost * WasteInvoicedQty, GLSetup."Amount Rounding Precision");
 
-        //InvyValuationLine."Transfer Amount"
         //InvyValuationLine."Transfer Quantity"
+        InvyValuationLine."Transfer Amount" := Round(StandUnitCost * InvyValuationLine."Transfer Quantity", GLSetup."Amount Rounding Precision");
 
         InvyValuationLine."Variance Quantity" := VarianceInvoicedQty;
-        //InvyValuationLine."Variance Amount"
+        InvyValuationLine."Variance Amount" := Round(StandUnitCost * VarianceInvoicedQty, GLSetup."Amount Rounding Precision");
 
         InvyValuationLine."Ending Balance Quantity" := StartingInvoicedQty + IncreaseInvoicedQty - DecreaseInvoicedQty;
-        //InvyValuationLine."Ending Balance Amount"
+        InvyValuationLine."Ending Balance Amount" := InvyValuationLine."Starting Balance Amount" +
+                                                       InvyValuationLine."Period Order Amount" -
+                                                       InvyValuationLine."Period Order Credit Amount" -
+                                                       InvyValuationLine."Sample Dispose Amount" -
+                                                       InvyValuationLine."Consumption Amount" -
+                                                       InvyValuationLine."Waste Scrap Amount" +
+                                                       InvyValuationLine."Transfer Amount" -
+                                                       InvyValuationLine."Variance Amount";
+
         InvyValuationLine.Insert();
     end;
 
@@ -319,17 +427,25 @@ page 50407 "RV Inventory Valuation Name"
         IncreaseExpectedQty: Decimal;
         DecreaseInvoicedQty: Decimal;
         DecreaseExpectedQty: Decimal;
-        VarianceInvoicedQty: Decimal;
-        DisposeInvoicedQty: Decimal;
-        WasteInvoicedQty: Decimal;
         VarianceExpectedQty: Decimal;
+        VarianceInvoicedQty: Decimal;
         DisposeExpectedQty: Decimal;
+        DisposeInvoicedQty: Decimal;
         WasteExpectedQty: Decimal;
+        WasteInvoicedQty: Decimal;
+        CreditExpectedQty: Decimal;
+        CreditInvoicedQty: Decimal;
+        TransferExpectedQty: Decimal;
+        TransferInvoicedQty: Decimal;
         IsEmptyLine: Boolean;
         InvyValuationLine: record "RV.Inventory Valuation Line";
         EntryNo: Integer;
         VarianceRC: Code[10];
         WScrapRC: Code[10];
         SamDisposeRC: Code[10];
+        StandardCostElent: Record "Standard Cost Element Details";
+        StandardCostPeriod: Record "Standard Cost Element Period";
+        GLSetup: Record "General Ledger Setup";
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
 
 }

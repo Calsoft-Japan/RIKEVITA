@@ -1,7 +1,7 @@
-page 50412 "RV Invy Availble Names"
+page 50412 "RV BackedDate Stock Names"
 {
     ApplicationArea = All;
-    Caption = 'Inventory Available Names';
+    Caption = 'BackedDate Stock Balance Names';
     PageType = List;
     usagecategory = Lists;
     SourceTable = "RV Invy. Available Name";
@@ -20,7 +20,7 @@ page 50412 "RV Invy Availble Names"
                 {
                     ToolTip = 'Specifies the value of the Description field.', Comment = '%';
                 }
-                field("Inventory Calculating Date"; Rec."Inventory Valuation Date")
+                field("Inventory Valuation Date"; Rec."Inventory Valuation Date")
                 {
                     ToolTip = 'Specifies the value of the Inventory Valuation Date field.', Comment = '%';
                 }
@@ -48,7 +48,7 @@ page 50412 "RV Invy Availble Names"
 
                 trigger OnAction()
                 var
-                    InventoryAvailble: Page "RV Inventory Availble Name";
+                    InventoryAvailble: Page "RV BackedDate Stock";
                 begin
                     InventoryAvailble.SetRecord(Rec);
                     InventoryAvailble.Run();
