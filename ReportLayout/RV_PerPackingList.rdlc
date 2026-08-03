@@ -42,7 +42,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.25in</Height>
+                  <Height>0.07292in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -1725,11 +1725,11 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.75062in</Height>
+                  <Height>0.25in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox17">
+                        <Textbox Name="Textbox44">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -1745,7 +1745,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox17</rd:DefaultName>
+                          <rd:DefaultName>Textbox44</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>Solid</Style>
@@ -1780,138 +1780,21 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Rectangle Name="Rectangle10">
-                          <ReportItems>
-                            <Textbox Name="Shipment_Method_Code">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Fields!Shipment_Method_Code.Value</Value>
-                                      <Style>
-                                        <FontSize>8pt</FontSize>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Shipment_Method_Code</rd:DefaultName>
-                              <Height>11pt</Height>
-                              <Width>2.15625in</Width>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Middle</VerticalAlign>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox50">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>COUNTRY OF ORIGIN:MALAYSIA.</Value>
-                                      <Style>
-                                        <FontStyle>Normal</FontStyle>
-                                        <FontSize>8pt</FontSize>
-                                        <FontWeight>Normal</FontWeight>
-                                        <TextDecoration>None</TextDecoration>
-                                        <Color>#000000</Color>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox50</rd:DefaultName>
-                              <Top>0.15278in</Top>
-                              <Height>11pt</Height>
-                              <Width>2.15625in</Width>
-                              <ZIndex>1</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <VerticalAlign>Middle</VerticalAlign>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="Textbox51">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>="SALES ORDER NO: "+Fields!Sales_Order_No.Value</Value>
-                                      <Style>
-                                        <FontSize>8pt</FontSize>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>Textbox51</rd:DefaultName>
-                              <Top>0.30556in</Top>
-                              <Height>11pt</Height>
-                              <Width>2.15625in</Width>
-                              <ZIndex>2</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                            <Textbox Name="External_Document_No">
-                              <CanGrow>true</CanGrow>
-                              <KeepTogether>true</KeepTogether>
-                              <Paragraphs>
-                                <Paragraph>
-                                  <TextRuns>
-                                    <TextRun>
-                                      <Value>=Fields!External_Document_No.Value</Value>
-                                      <Style>
-                                        <FontSize>8pt</FontSize>
-                                      </Style>
-                                    </TextRun>
-                                  </TextRuns>
-                                  <Style />
-                                </Paragraph>
-                              </Paragraphs>
-                              <rd:DefaultName>External_Document_No</rd:DefaultName>
-                              <Top>0.45833in</Top>
-                              <Height>11pt</Height>
-                              <Width>2.15625in</Width>
-                              <ZIndex>3</ZIndex>
-                              <Style>
-                                <Border>
-                                  <Style>None</Style>
-                                </Border>
-                                <PaddingLeft>2pt</PaddingLeft>
-                                <PaddingRight>2pt</PaddingRight>
-                                <PaddingTop>2pt</PaddingTop>
-                                <PaddingBottom>2pt</PaddingBottom>
-                              </Style>
-                            </Textbox>
-                          </ReportItems>
+                        <Textbox Name="WarehouseComment">
+                          <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!WarehouseComment.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>WarehouseComment</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1919,13 +1802,17 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                             <RightBorder>
                               <Style>Solid</Style>
                             </RightBorder>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
                           </Style>
-                        </Rectangle>
+                        </Textbox>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox19">
+                        <Textbox Name="Textbox10">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -1939,7 +1826,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox19</rd:DefaultName>
+                          <rd:DefaultName>Textbox10</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1959,7 +1846,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox20">
+                        <Textbox Name="Textbox48">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -1973,7 +1860,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox20</rd:DefaultName>
+                          <rd:DefaultName>Textbox48</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -1993,7 +1880,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox21">
+                        <Textbox Name="Textbox49">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -2007,7 +1894,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox21</rd:DefaultName>
+                          <rd:DefaultName>Textbox49</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2027,7 +1914,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox22">
+                        <Textbox Name="Textbox52">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -2041,7 +1928,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox22</rd:DefaultName>
+                          <rd:DefaultName>Textbox52</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2061,7 +1948,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox23">
+                        <Textbox Name="Textbox54">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
@@ -2075,7 +1962,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox23</rd:DefaultName>
+                          <rd:DefaultName>Textbox54</rd:DefaultName>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -2530,7 +2417,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                           </Style>
                         </Textbox>
                         <ColSpan>2</ColSpan>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell />
@@ -2655,7 +2541,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                 <TablixMember>
                   <Group Name="Sales_Order_No">
                     <GroupExpressions>
-                      <GroupExpression>=Fields!Sales_Order_No.Value</GroupExpression>
                       <GroupExpression>=Fields!Number.Value</GroupExpression>
                     </GroupExpressions>
                     <PageBreak>
@@ -2699,12 +2584,13 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                             <Hidden>=iif((Fields!Symbol_Display_Packing_List.Value) and (Fields!Number.Value=1),false,true)</Hidden>
                           </Visibility>
                         </TablixMember>
-                        <TablixMember>
-                          <Visibility>
-                            <Hidden>=iif(Fields!Number.Value=1,false,true)</Hidden>
-                          </Visibility>
-                        </TablixMember>
                       </TablixMembers>
+                    </TablixMember>
+                    <TablixMember>
+                      <Visibility>
+                        <Hidden>=iif(Fields!Number.Value=1,false,true)</Hidden>
+                      </Visibility>
+                      <KeepWithGroup>Before</KeepWithGroup>
                     </TablixMember>
                     <TablixMember>
                       <Visibility>
@@ -2723,7 +2609,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
             <Top>0.06107in</Top>
-            <Height>4.08386in</Height>
+            <Height>3.40616in</Height>
             <Width>7.29749in</Width>
             <Style>
               <Border>
@@ -2732,7 +2618,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>4.82931in</Height>
+        <Height>3.56889in</Height>
         <Style />
       </Body>
       <Width>7.31542in</Width>
@@ -3624,7 +3510,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Top>3.03611in</Top>
               <Left>0.52083in</Left>
               <Height>11pt</Height>
-              <Width>2.06436in</Width>
+              <Width>2.11111in</Width>
               <ZIndex>26</ZIndex>
               <Style>
                 <Border>
@@ -4050,6 +3936,9 @@ End Function
         </Field>
         <Field Name="Shipment_Method_Code">
           <DataField>Shipment_Method_Code</DataField>
+        </Field>
+        <Field Name="WarehouseComment">
+          <DataField>WarehouseComment</DataField>
         </Field>
         <Field Name="MARKS">
           <DataField>MARKS</DataField>

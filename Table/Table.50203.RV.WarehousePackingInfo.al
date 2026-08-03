@@ -82,6 +82,7 @@ table 50203 "RV Warehouse Packing Info."
             begin
                 Item.Get(Rec."Item No.");
                 Rec."Gross Weight" := Rec."No. of Packages" * Item."Gross Weight";
+                Rec.Measurement := Rec."No. of Packages" * Item."Unit Volume";
             end;
         }
         field(11; "Contents Per Package"; Decimal)

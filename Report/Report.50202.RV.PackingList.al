@@ -97,6 +97,9 @@ report 50202 "RV Packing List Report"
                 column(Shipment_Method_Code; "Shipment Method Code")
                 {
                 }
+                column(WarehouseComment; WarehouseComment)
+                {
+                }
                 dataitem(WarehousePackingInfo; "RV Warehouse Packing Info.")
                 {
                     DataItemTableView = where("Posted Whse. Shipment No." = filter(<> ''));
@@ -169,7 +172,6 @@ report 50202 "RV Packing List Report"
                         RecPostedWhseShipmentLine: Record "Posted Whse. Shipment Line";
                         RecItemLedgerEntry: Record "Item Ledger Entry";
                         RecWarehousePackingInfo: Record "RV Warehouse Packing Info.";
-                        chr10: Char;
                         TempNo: Integer;
                         oldContainerNo: Text;
                         TempOrderNo: Integer;
@@ -265,9 +267,11 @@ report 50202 "RV Packing List Report"
                     WarehousePackingInfo: Record "RV Warehouse Packing Info.";
                     TempWarehousePackingInfo: Record "RV Warehouse Packing Info." temporary;
                     TempOrderNo: Integer;
+                    WarehouseCommentLine: Record "Warehouse Comment Line";
                 begin
                     OrderNo := '';
                     TempOrderNo := 1;
+                    chr10 := 10;
 
                     ISODoc.Reset();
                     ISODoc.SetRange("Report Code", 'PACKING LIST');
@@ -299,6 +303,16 @@ report 50202 "RV Packing List Report"
                             end;
 
                         until WarehousePackingInfo.Next() = 0;
+                    end;
+
+                    WarehouseCommentLine.Reset();
+                    WarehouseCommentLine.SetRange("No.", "No.");
+                    WarehouseCommentLine.SetRange("Table Name", WarehouseCommentLine."Table Name"::"Whse. Shipment");
+                    WarehouseCommentLine.SetCurrentKey("Line No.");
+                    if WarehouseCommentLine.FindSet() then begin
+                        repeat
+                            WarehouseComment += WarehouseCommentLine.Comment + '<br>';
+                        until WarehouseCommentLine.Next() = 0;
                     end;
                 end;
             }
@@ -349,6 +363,8 @@ report 50202 "RV Packing List Report"
         EntryNo: Integer;
         CerfiticateNo: Text;
         OrderNo: Text;
+        WarehouseComment: Text;
+        chr10: Char;
 
     trigger OnPreReport()
     begin
