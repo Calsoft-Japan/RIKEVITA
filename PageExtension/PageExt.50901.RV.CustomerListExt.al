@@ -14,6 +14,11 @@ pageextension 50901 "RV Customer List Ext" extends "Customer List"
                 Caption = 'Charge Type';
                 ApplicationArea = all;
             }
+            field("RV_HTP Adjustment Price"; Rec."RV_HTP Adjustment Price")
+            {
+                Caption = 'HTP Adjustment Price';
+                ApplicationArea = all;
+            }
         }
     }
 

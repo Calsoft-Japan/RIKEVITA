@@ -27,7 +27,16 @@ page 50900 "RV Charge Calculations"
                 field("Charge Type"; Rec."Charge Type")
                 {
                 }
+                field(LOB; Rec.LOB)
+                {
+                }
                 field("Invoice Currency Code"; Rec."Invoice Currency Code")
+                {
+                }
+                field("Vendor No."; Rec."Vendor No.")
+                {
+                }
+                field("Vendor Invoice No."; Rec."Vendor Invoice No.")
                 {
                 }
                 field("Calculation Date"; Rec."Calculation Date")

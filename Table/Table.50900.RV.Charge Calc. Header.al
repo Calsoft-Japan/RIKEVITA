@@ -34,6 +34,11 @@ table 50900 "RV Charge Calc. Header"
         {
             Caption = 'Charge Type';
 
+            trigger OnValidate()
+            begin
+                if (xRec."Charge Type" <> "Charge Type") and ("Charge Type" = Enum::"RV Charge Type"::" ") then
+                    Error(ChargeTypeBlankErr);
+            end;
         }
 
         field(6; "Invoice Currency Code"; Code[10])
@@ -81,7 +86,35 @@ table 50900 "RV Charge Calc. Header"
 
         field(8; "Need Re-Calc."; Boolean)
         {
-            Caption = 'Status';
+            Caption = 'Need Re-Calc.';
+        }
+
+        field(9; LOB; Code[20])
+        {
+            Caption = 'LOB';
+            TableRelation = Customer."No." where("RV_Charge Type" = field("Charge Type"));
+
+            trigger OnValidate()
+            var
+                recCust: Record Customer;
+            begin
+
+                if LOB <> '' then begin
+                    if "Charge Type" = Enum::"RV Charge Type"::" " then
+                        Error(ChargeTypeBlankErr);
+                end;
+
+                if xRec.LOB <> LOB then begin
+                    if recCust.Get(LOB) then begin
+                        Validate("Invoice Currency Code", recCust."Currency Code");
+                        Validate("HTP Adjustment Price", recCust."RV_HTP Adjustment Price");
+                    end else begin
+                        Validate("Invoice Currency Code", '');
+                        Validate("HTP Adjustment Price", 0);
+                    end;
+                end;
+
+            end;
         }
 
         field(11; "HTP Adjustment Price"; Decimal)
@@ -210,6 +243,16 @@ table 50900 "RV Charge Calc. Header"
             FieldClass = FlowField;
             CalcFormula = sum("RV Charge Calc. Line"."Quantity (KG)" where("Document No." = field("No.")));
         }
+        field(41; "Vendor No."; Code[20])
+        {
+            Caption = 'Vendor No.';
+            TableRelation = Vendor."No.";
+        }
+        field(42; "Vendor Invoice No."; Code[35])
+        {
+            Caption = 'Vendor Invoice No.';
+            TableRelation = "Purch. Inv. Header"."Vendor Invoice No.";
+        }
 
     }
     keys
@@ -224,6 +267,7 @@ table 50900 "RV Charge Calc. Header"
 
         ModifyOnCompletedErr: Label 'Cannot modify or delete the compeleted data.';
         ChangeToCompletedErr: Label 'Status will be Completed after Carry Out.';
+        ChargeTypeBlankErr: Label 'Charge Type is blank!';
 
 
     trigger OnInsert()
@@ -246,6 +290,7 @@ table 50900 "RV Charge Calc. Header"
         CheckStatusCompleted();
 
         if (xRec."Charge Type" <> Rec."Charge Type")
+            or (xRec."LOB" <> Rec."LOB")
             or (xRec."Invoice Currency Code" <> Rec."Invoice Currency Code")
             or (xRec."HTP Adjustment Price" <> Rec."HTP Adjustment Price")
             or (xRec."01-COO" <> Rec."01-COO")

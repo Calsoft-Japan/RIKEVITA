@@ -25,6 +25,13 @@ table 50901 "RV Charge Calc. Line"
         {
             Caption = 'Sales Order No.';
 
+            trigger OnValidate()
+            var
+            begin
+                if xRec."Sales Order No." <> "Sales Order No." then
+                    TestField("Posted Whse. Shipment No.", '');
+            end;
+
         }
         field(4; "Sales Order Line No."; Integer)
         {
@@ -370,6 +377,12 @@ table 50901 "RV Charge Calc. Line"
             Editable = false;
             Enabled = true;
             DecimalPlaces = 0 : 5;
+        }
+        field(51; "Posted Whse. Shipment No."; Code[20])
+        {
+            Caption = 'Posted Whse. Shipment No.';
+            Editable = false;
+            Enabled = true;
         }
 
     }

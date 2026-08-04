@@ -228,6 +228,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."01-COO (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 if CCLine."02-FORWARDING (Order Curr.)" > 0 then begin
@@ -238,6 +240,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."02-FORWARDING (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 if CCLine."03-FUMIGATION (Order Curr.)" > 0 then begin
@@ -248,6 +252,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."03-FUMIGATION (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 if CCLine."04-HEALTH (Order Curr.)" > 0 then begin
@@ -258,6 +264,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."04-HEALTH (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 if CCLine."05-PALLETIZING (Order Curr.)" > 0 then begin
@@ -268,6 +276,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."05-PALLETIZING (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 if CCLine."06-PHYTO (Order Curr.)" > 0 then begin
@@ -278,6 +288,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."06-PHYTO (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 if CCLine."07-STUFFING (Order Curr.)" > 0 then begin
@@ -288,6 +300,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."07-STUFFING (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 if CCLine."08-TRANSPORT (Order Curr.)" > 0 then begin
@@ -298,6 +312,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."08-TRANSPORT (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 if CCLine."09-REACH (Order Curr.)" > 0 then begin
@@ -308,6 +324,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."09-REACH (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 if CCLine."10-Label (Order Curr.)" > 0 then begin
@@ -318,6 +336,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."10-Label (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 if CCLine."11-OF (Order Curr.)" > 0 then begin
@@ -328,6 +348,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."11-OF (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 if CCLine."99-OTHERS (Order Curr.)" > 0 then begin
@@ -338,6 +360,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."99-OTHERS (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 if CCLine."FREIGHT (Order Curr.)" > 0 then begin
@@ -348,6 +372,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."FREIGHT (Order Curr.)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 //Insert New Sales Order Lines for HTP Adjustment
@@ -359,6 +385,8 @@ codeunit 50900 "RV Charge Calc. Mgt"
                     SalesLine.Validate("Unit Price", CCLine."HTP Adj. Price (Order Curr.)" * CCLine."Quantity (KG)");
                     SalesLine.Validate("Qty. to Ship", 1);
                     SalesLine.Insert(true);
+
+                    FinalizeFOBSOLine(SalesLine);
                 end;
 
                 //Post Ship for Created Sales Order Lines
@@ -383,6 +411,21 @@ codeunit 50900 "RV Charge Calc. Mgt"
         pSalesLine."Document No." := CCLine."Sales Order No.";
         pSalesLine."Line No." := pLineNo;
         pSalesLine.Validate(Type, Enum::"Sales Line Type"::Item);
+    end;
+
+    local procedure FinalizeFOBSOLine(var pSalesLine: Record "Sales Line")
+    var
+        recSalesLine_Alloc: Record "Sales Line";
+    begin
+        recSalesLine_Alloc.SetRange("Document Type", pSalesLine."Document Type");
+        recSalesLine_Alloc.SetRange("Document No.", pSalesLine."Document No.");
+        recSalesLine_Alloc.SetRange(Type, Enum::"Sales Line Type"::Item);
+        if recSalesLine_Alloc.FindFirst() then begin
+            pSalesLine.Validate("Shortcut Dimension 1 Code", recSalesLine_Alloc."Shortcut Dimension 1 Code");
+            pSalesLine.Validate("Shortcut Dimension 2 Code", recSalesLine_Alloc."Shortcut Dimension 2 Code");
+            pSalesLine.Validate("Dimension Set ID", recSalesLine_Alloc."Dimension Set ID");
+            pSalesLine.Modify(true);
+        end;
     end;
 
     local procedure CarryOutCNF()

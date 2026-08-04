@@ -17,5 +17,10 @@ tableextension 50900 "RV Customer Ext" extends Customer
             Description = 'FDD009';
             Caption = 'Charge Type';
         }
+        field(50901; "RV_HTP Adjustment Price"; Decimal)
+        {
+            Description = 'FDD009';
+            Caption = 'HTP Adjustment Price';
+        }
     }
 }

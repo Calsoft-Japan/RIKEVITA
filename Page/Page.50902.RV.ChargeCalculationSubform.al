@@ -26,14 +26,15 @@ page 50902 "RV Charge Calculation Subform"
                 {
                     Visible = false;
                 }
+                field("Posted Whse. Shipment No."; Rec."Posted Whse. Shipment No.")
+                {
+                }
                 field("Sales Order No."; Rec."Sales Order No.")
                 {
                     trigger OnLookup(var Text: Text): Boolean
                     var
                         ChargeCalcHeader: Record "RV Charge Calc. Header";
                         SalesLineView: Record "Sales line";
-                        SalesLineLookup: Record "Sales line";
-                        pagSalesLine: Page "Sales Lines";
 
                         ChargeTypeBlankErr: Label 'Charge Type is blank!';
 
@@ -44,7 +45,6 @@ page 50902 "RV Charge Calculation Subform"
                         if ChargeCalcHeader."Charge Type" = Enum::"RV Charge Type"::" " then
                             Error(ChargeTypeBlankErr);
 
-                        Clear(pagSalesLine);
                         SalesLineView.Reset();
                         SalesLineView.SetRange("Document Type", Enum::"Sales Document Type"::Order);
                         SalesLineView.SetRange(Type, Enum::"Sales Line Type"::Item);
@@ -203,6 +203,60 @@ page 50902 "RV Charge Calculation Subform"
 
         area(processing)
         {
+            action("Select Posted Whse. Shipment No.")
+            {
+                Caption = 'Select Posted Whse. Shipment No.';
+                ApplicationArea = All;
+                Image = SelectLineToApply;
+
+                trigger OnAction()
+                var
+                    ChargeCalcHeader: Record "RV Charge Calc. Header";
+                    PostedWhseHdrView: Record "Posted Whse. Shipment Header";
+                    recPostedWhseLine: Record "Posted Whse. Shipment Line";
+                    recSalesLine: Record "Sales Line";
+                    recChargeCalcLine: Record "RV Charge Calc. Line";
+
+                    ChargeTypeBlankErr: Label 'Charge Type is blank!';
+
+                begin
+
+                    ChargeCalcHeader.Get(Rec."Document No.");
+
+                    if ChargeCalcHeader."Charge Type" = Enum::"RV Charge Type"::" " then
+                        Error(ChargeTypeBlankErr);
+
+                    PostedWhseHdrView.Reset();
+                    PostedWhseHdrView.SetRange("RV_Charge Allocated", false);
+
+                    if Page.RunModal(Page::"Posted Whse. Shipment List", PostedWhseHdrView) = Action::LookupOK then begin
+                        recPostedWhseLine.SetRange("No.", PostedWhseHdrView."No.");
+                        recPostedWhseLine.SetRange("Source Document", recPostedWhseLine."Source Document"::"Sales Order");
+                        if recPostedWhseLine.FindSet() then
+                            repeat
+                                if recSalesLine.Get(Enum::"Sales Document Type"::Order,
+                                    recPostedWhseLine."Source No.",
+                                    recPostedWhseLine."Source Line No.") then begin
+
+                                    recSalesLine.TestField(Type, Enum::"Sales Line Type"::Item);
+                                    recSalesLine.TestField("RV_Charge Type", ChargeCalcHeader."Charge Type");
+                                    recSalesLine.TestField("RV_Item Type", Enum::"Item Type"::Inventory);
+                                    recSalesLine.TestField("RV_Charge Allocated", false);
+
+                                    Rec.Init();
+                                    Rec."Sales Order No." := recSalesLine."Document No.";
+                                    Rec.Validate("Sales Order Line No.", recSalesLine."Line No.");
+                                    Rec.Insert();
+
+                                end;
+                            until recPostedWhseLine.Next() = 0;
+
+                    end;
+
+                    CurrPage.Update();
+                end;
+            }
+
             action("Calculate Charge")
             {
                 Caption = 'Calculate Charge';

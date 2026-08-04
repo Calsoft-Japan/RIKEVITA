@@ -14,6 +14,11 @@ pageextension 50900 "RV Customer Card Ext" extends "Customer Card"
                 Caption = 'Charge Type';
                 ApplicationArea = all;
             }
+            field("RV_HTP Adjustment Price"; Rec."RV_HTP Adjustment Price")
+            {
+                Caption = 'HTP Adjustment Price';
+                ApplicationArea = all;
+            }
         }
 
         addlast(General)
