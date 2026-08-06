@@ -118,18 +118,14 @@ pageextension 50202 "RV Planning Worksheet Ext" extends "Planning Worksheet"
             if ItemVendor.Count > 0 then begin
                 Rec."RV_AvailableInMultipleVendor" := true;
                 IsVendorSelection := true;
+                Rec.Modify();
             end;
         end
         else begin
             Rec."RV_AvailableInMultipleVendor" := false;
             IsVendorSelection := false;
+            Rec.Modify();
         end;
-
-
-        /* IsVendorSelection := false;
-        if Rec."RV AvailableInMultipleVendor" then begin
-            IsVendorSelection := true;
-        end; */
     end;
 
 
