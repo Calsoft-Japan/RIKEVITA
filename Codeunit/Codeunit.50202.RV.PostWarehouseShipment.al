@@ -88,11 +88,11 @@ codeunit 50202 "RV Post Warehouse Shipment"
         PostedWhseShptLine."Shipment Date" := WhsShipment."Posting Date";
         WhseShptLine."Shipment Date" := WhsShipment."Posting Date";
         WhseShptLine.Modify();
-
+        /*
         NeedReopen := (SalesHeader.Status = SalesHeader.Status::Released);
         if NeedReopen then
             ReleaseSalesDoc.Reopen(SalesHeader);
-
+        
         SalesLine.Reset();
         SalesLine.SetRange("Document Type", WhseShptLine."Source Subtype");
         SalesLine.SetRange("Document No.", WhseShptLine."Source No.");
@@ -108,10 +108,11 @@ codeunit 50202 "RV Post Warehouse Shipment"
             SalesLine.Validate("Unit Price");
             SalesLine.Modify();
         end;
-
+        
         if NeedReopen then
             SalesHeader.PerformManualRelease();
         //FDD007
+        */
     end;
 
 }

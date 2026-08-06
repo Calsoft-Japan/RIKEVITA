@@ -85,11 +85,11 @@ codeunit 50102 "RV Sales Price Based on Shpt."
         ReleaseSalesDoc: Codeunit "Release Sales Document";
         NeedReopen: Boolean;
     begin
-
+        /*
         NeedReopen := (SalesHeader.Status = SalesHeader.Status::Released);
         if NeedReopen then
             ReleaseSalesDoc.Reopen(SalesHeader);
-
+        
         if SalesHeader.Invoice = true then begin
             SalesLine.Reset();
             SalesLine.SetRange("Document Type", SalesHeader."Document Type");
@@ -116,16 +116,16 @@ codeunit 50102 "RV Sales Price Based on Shpt."
                         PostedWhseShptLine.SetAscending("Shipment Date", false);
                         if PostedWhseShptLine.FindFirst() then
                             SalesLine."Shipment Date" := PostedWhseShptLine."Shipment Date"; */
+        /*
+        SalesLine.GetPriceCalculationHandler("Price Type"::Sale, SalesHeader, PriceCalculation);
 
-                        SalesLine.GetPriceCalculationHandler("Price Type"::Sale, SalesHeader, PriceCalculation);
-
-                        SalesLine.ApplyPrice(SalesLine.FieldNo("Shipment Date"), PriceCalculation);
-                        SalesLine.Validate("Unit Price");
-                        SalesLine.Modify();
-                    end;
-                until SalesLine.Next() = 0;
-        end;
-
+        SalesLine.ApplyPrice(SalesLine.FieldNo("Shipment Date"), PriceCalculation);
+        SalesLine.Validate("Unit Price");
+        SalesLine.Modify();
+    end;
+until SalesLine.Next() = 0;
+end;
+*/
         //if NeedReopen then
         //    SalesHeader.PerformManualRelease();
     end;
