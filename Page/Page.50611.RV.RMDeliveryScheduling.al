@@ -1,5 +1,9 @@
+/// <summary>
+/// Page RV Invy. Planning Name (ID 50405).
+/// FDD006 2026/03/31: New. (Stephen)
+/// </summary>
 
-page 50415 "RV Invy. Planning Name"
+page 50611 "RV Invy. Planning Name"
 {
     ApplicationArea = All;
     Caption = 'Inventory Planning Name';
@@ -27,31 +31,44 @@ page 50415 "RV Invy. Planning Name"
                     caption = 'Delivery Scheduling Starting Date';
                     ToolTip = 'Specifies the value of the Starting Date field.', Comment = '%';
                 }
-                field(site; Rec.Site)
-                {
-                    CaptionClass = '1,3,1';
-                    ToolTip = 'Specifies the global dimension 1 filter that will be used to create the worksheet.';
+                // field(site; Rec.Site)
+                // {
+                //     CaptionClass = '1,3,1';
+                //     ToolTip = 'Specifies the global dimension 1 filter that will be used to create the worksheet.';
 
-                    trigger OnLookup(var Text: Text): Boolean
-                    var
-                        DimVal: Record "Dimension Value";
-                        DimValList: Page "Dimension Value List";
-                    begin
-                        Clear(DimValList);
-                        DimVal.SetRange("Global Dimension No.", 1);
-                        DimValList.SetTableView(DimVal);
-                        DimValList.LookupMode(true);
-                        if DimValList.RunModal() = Action::LookupOK then begin
-                            Text := DimValList.GetSelectionFilter();
-                            exit(true);
-                        end else
-                            exit(false);
-                    end;
-                }
+                //     trigger OnLookup(var Text: Text): Boolean
+                //     var
+                //         DimVal: Record "Dimension Value";
+                //         DimValList: Page "Dimension Value List";
+                //     begin
+                //         Clear(DimValList);
+                //         DimVal.SetRange("Global Dimension No.", 1);
+                //         DimValList.SetTableView(DimVal);
+                //         DimValList.LookupMode(true);
+                //         if DimValList.RunModal() = Action::LookupOK then begin
+                //             Text := DimValList.GetSelectionFilter();
+                //             exit(true);
+                //         end else
+                //             exit(false);
+                //     end;
+                // }
                 field("Item Filter"; Rec."Item Filter")
                 {
                     caption = 'Item Filter';
                     ToolTip = 'Specifies the value of the Item Filter field.', Comment = '%';
+
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        ItemList: Page "Item List";
+                    begin
+                        Clear(ItemList);
+                        ItemList.LookupMode(true);
+                        if ItemList.RunModal() = Action::LookupOK then begin
+                            Text := ItemList.GetSelectionFilter();
+                            exit(true);
+                        end else
+                            exit(false);
+                    end;
                 }
             }
             Part(DeliverySchedulingLines; "RV Invy. Planning Lines")
@@ -90,7 +107,7 @@ page 50415 "RV Invy. Planning Name"
                     DeliverySchedulingLine.SetRange("Delivery Scheduling Name", Rec.Name);
                     DeliverySchedulingLine.DeleteAll();
                     DeliverySchedulingLine."Delivery Scheduling Name" := Rec.Name;
-                    DeliverySchedulingLine."Entry No." := 1;
+                    // DeliverySchedulingLine."Entry No." := 1;
                     // ProdOrderComponent.Reset();
                     // prodOrderComponent.SetCurrentKey("Shortcut Dimension 2 Code", "Item No.");
                     // ProdOrderComponent.Setrange("Due Date",

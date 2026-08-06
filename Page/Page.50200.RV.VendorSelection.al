@@ -94,9 +94,10 @@ page 50200 "RV Vendor Selection"
                     begin
                         CurrPage.Update(true);
                         Rec.CalcFields("Total Split Quantity");
-                        if (RecQuantity - Rec."Total Split Quantity" < 0) and (Rec."Total Split Quantity" <> 0) then begin
+                        /*if (Rec."Total Split Quantity" <> 0) then begin
                             Message('Balance Quantity must be 0 before you close this page.');
                         end;
+                        */
                     end;
 
                 }

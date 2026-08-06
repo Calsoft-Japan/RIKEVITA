@@ -1,6 +1,9 @@
-namespace RIKEVITA.RIKEVITA;
+/// <summary>
+/// Page RV Invy. Planning Names (ID 50404).
+/// FDD006 2026/03/31: New. (Stephen)
+/// </summary>
 
-page 50414 "RV Invy. Planning Names"
+page 50610 "RV Invy. Planning Names"
 {
     ApplicationArea = All;
     Caption = 'Inventory Planning Names';
@@ -22,10 +25,10 @@ page 50414 "RV Invy. Planning Names"
                 {
                     ToolTip = 'Specifies the value of the Description field.', Comment = '%';
                 }
-                field(Site; Rec.Site)
-                {
-                    ToolTip = 'Specifies the value of the Site field.', Comment = '%';
-                }
+                // field(Site; Rec.Site)
+                // {
+                //     ToolTip = 'Specifies the value of the Site field.', Comment = '%';
+                // }
             }
         }
     }
@@ -48,6 +51,14 @@ page 50414 "RV Invy. Planning Names"
                     RMDeliveryScheduling.SetRecord(Rec);
                     RMDeliveryScheduling.Run();
                 end;
+            }
+
+        }
+        area(Promoted)
+        {
+            actionref(CalculateInventoryPlanning_prompt; "Calculate Inventory Planning")
+            {
+
             }
         }
     }

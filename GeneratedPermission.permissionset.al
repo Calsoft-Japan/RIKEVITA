@@ -234,8 +234,22 @@ permissionset 50100 GeneratedPermission
         query "Inventory Master File"=X,
         query "RV Item Balance by Vendor"=X,
         query "RV Item Detail by Vendor"=X,
+        query "RV Item Inventory"=X,
+        query "RV Planned Order Receipt"=X,
+        query "RV Planning Issues"=X,
+        query "RV Planning Receipt"=X,
+        query "RV Planning Tran. Ship"=X,
         query "RV Prod. Result Journal Line G"=X,
+        query "RV Qty. in Transit"=X,
+        query "RV Qty. on Component Lines"=X,
+        query "RV Qty. on Purch. Order"=X,
+        query "RV Qty. on Purch. Return"=X,
+        query "RV Qty. on Sales Order"=X,
+        query "RV Qty. on Sales Return"=X,
         query "RV Query Item Tracking Hist"=X,
         query "RV Query SO Detail"=X,
-        query "RV Query SO Ship Summery"=X;
+        query "RV Query SO Ship Summery"=X,
+        query "RV Scheduled Receipt"=X,
+        query "RV Trans. Ord. Receipt"=X,
+        query "RV Trans. Ord. Shipment"=X;
 }
