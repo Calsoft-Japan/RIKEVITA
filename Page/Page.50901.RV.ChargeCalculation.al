@@ -56,6 +56,23 @@ page 50901 "RV Charge Calculation"
                 }
                 field("Vendor Invoice No."; Rec."Vendor Invoice No.")
                 {
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        recVend: Record Vendor;
+                        PurchInvHdrView: Record "Purch. Inv. Header";
+
+                    begin
+
+                        Rec.TestField("Vendor No.");
+
+                        PurchInvHdrView.Reset();
+                        PurchInvHdrView.SetRange("Buy-from Vendor No.", Rec."Vendor No.");
+
+                        if Page.RunModal(Page::"Posted Purchase Invoices", PurchInvHdrView) = Action::LookupOK then begin
+                            Rec."Vendor Invoice No." := PurchInvHdrView."Vendor Invoice No.";
+                        end;
+
+                    end;
                 }
                 field("Calculation Date"; Rec."Calculation Date")
                 {

@@ -216,12 +216,17 @@ page 50902 "RV Charge Calculation Subform"
                     recPostedWhseLine: Record "Posted Whse. Shipment Line";
                     recSalesLine: Record "Sales Line";
                     recChargeCalcLine: Record "RV Charge Calc. Line";
+                    recChargeCalcLine1: Record "RV Charge Calc. Line";
+
+                    LastLineNo: Integer;
 
                     ChargeTypeBlankErr: Label 'Charge Type is blank!';
+                    LineNotFoundErr: Label 'Posted Warehouse Shipment Line is not found!';
 
                 begin
 
                     ChargeCalcHeader.Get(Rec."Document No.");
+                    ChargeCalcHeader.TestField(LOB);
 
                     if ChargeCalcHeader."Charge Type" = Enum::"RV Charge Type"::" " then
                         Error(ChargeTypeBlankErr);
@@ -232,24 +237,40 @@ page 50902 "RV Charge Calculation Subform"
                     if Page.RunModal(Page::"Posted Whse. Shipment List", PostedWhseHdrView) = Action::LookupOK then begin
                         recPostedWhseLine.SetRange("No.", PostedWhseHdrView."No.");
                         recPostedWhseLine.SetRange("Source Document", recPostedWhseLine."Source Document"::"Sales Order");
-                        if recPostedWhseLine.FindSet() then
+                        recPostedWhseLine.SetRange("Destination Type", recPostedWhseLine."Destination Type"::Customer);
+                        recPostedWhseLine.SetRange("Destination No.", ChargeCalcHeader.LOB);
+                        if recPostedWhseLine.FindSet() then begin
+
+                            LastLineNo := 0;
+                            recChargeCalcLine1.SetRange("Document No.", ChargeCalcHeader."No.");
+                            if recChargeCalcLine1.FindLast() then
+                                LastLineNo := recChargeCalcLine1."Line No.";
+
                             repeat
                                 if recSalesLine.Get(Enum::"Sales Document Type"::Order,
                                     recPostedWhseLine."Source No.",
                                     recPostedWhseLine."Source Line No.") then begin
+
+                                    recSalesLine.CalcFields("RV_Charge Type", "RV_Item Type", "RV_Charge Allocated");
 
                                     recSalesLine.TestField(Type, Enum::"Sales Line Type"::Item);
                                     recSalesLine.TestField("RV_Charge Type", ChargeCalcHeader."Charge Type");
                                     recSalesLine.TestField("RV_Item Type", Enum::"Item Type"::Inventory);
                                     recSalesLine.TestField("RV_Charge Allocated", false);
 
+                                    LastLineNo += 10000;
                                     Rec.Init();
+                                    Rec."Document No." := ChargeCalcHeader."No.";
+                                    Rec."Line No." := LastLineNo;
                                     Rec."Sales Order No." := recSalesLine."Document No.";
                                     Rec.Validate("Sales Order Line No.", recSalesLine."Line No.");
                                     Rec.Insert();
 
                                 end;
                             until recPostedWhseLine.Next() = 0;
+                        end else begin
+                            Error(LineNotFoundErr);
+                        end;
 
                     end;
 
