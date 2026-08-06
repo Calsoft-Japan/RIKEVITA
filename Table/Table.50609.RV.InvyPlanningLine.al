@@ -1,8 +1,8 @@
 /// <summary>
-/// Table RV Invy. Planning Line (ID 50408).
+/// Table RV Invy. Planning Line (ID 50609).
 /// FDD006 2026/03/31: New. (Stephen)
 /// </summary>
-table 50418 "RV Invy. Planning Line"
+table 50609 "RV Invy. Planning Line"
 {
     Caption = 'Inventory Planning Line';
     DataClassification = ToBeClassified;
@@ -15,11 +15,11 @@ table 50418 "RV Invy. Planning Line"
             NotBlank = true;
             TableRelation = "RV Invy. Planning Name";
         }
-        field(2; "Entry No."; Integer)
-        {
-            Caption = 'Entry No.';
-            autoIncrement = true;
-        }
+        // field(2; "Entry No."; Integer)
+        // {
+        //     Caption = 'Entry No.';
+        //     autoIncrement = true;
+        // }
         field(3; VendorNo; Code[20])
         {
             Caption = 'Vendor No.';
@@ -38,11 +38,11 @@ table 50418 "RV Invy. Planning Line"
         {
             Caption = 'Item Description';
         }
-        field(7; "Site"; Code[20])
-        {
-            Caption = 'Site';
-            TableRelation = "Dimension Value" where("Global Dimension No." = const(1));
-        }
+        // field(7; "Site"; Code[20])
+        // {
+        //     Caption = 'Site';
+        //     TableRelation = "Dimension Value" where("Global Dimension No." = const(1));
+        // }
         field(8; "Unit of Measure"; Code[10])
         {
             Caption = 'Base Unit of Measure';
@@ -224,7 +224,7 @@ table 50418 "RV Invy. Planning Line"
     }
     keys
     {
-        key(Key1; "Delivery Scheduling Name", "Entry No.")
+        key(Key1; "Delivery Scheduling Name", "Item No.", "Date Type")
         {
             Clustered = true;
         }

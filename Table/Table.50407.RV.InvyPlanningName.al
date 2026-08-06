@@ -1,9 +1,9 @@
 /// <summary>
-/// Table RV Invy. Planning Name (ID 50407).
+/// Table RV Invy. Planning Name (ID 50610).
 /// FDD006 2026/03/31: New. (Stephen)
 /// </summary>
 
-table 50417 "RV Invy. Planning Name"
+table 50610 "RV Invy. Planning Name"
 {
     Caption = 'Invy. Planning Name';
     //DrillDownPageID = "Demand Forecast Names";
@@ -27,11 +27,11 @@ table 50417 "RV Invy. Planning Name"
             Caption = 'View By';
         }
 
-        field(4; "Site"; text[250])
-        {
-            Caption = 'Site';
-            // tableRelation = "Dimension Value".code where("Global Dimension No." = const(1));
-        }
+        // field(4; "Site"; text[250])
+        // {
+        //     Caption = 'Site';
+        //     // tableRelation = "Dimension Value".code where("Global Dimension No." = const(1));
+        // }
 
         field(5; "Starting Date"; Date)
         {
