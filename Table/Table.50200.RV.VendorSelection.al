@@ -98,9 +98,10 @@ table 50200 "RV Vendor Selection"
                     Error('Quantity to Order must not be less than the Minimum Order Quantity.');
                 end;
 
-                if (Rec."Quantity to Order" > Rec."Maximum Order Quantity") and (Rec."Quantity to Order" <> 0) then begin
+                if (Rec."Maximum Order Quantity" > 0) and (Rec."Quantity to Order" > Rec."Maximum Order Quantity") and (Rec."Quantity to Order" <> 0) then begin
                     Error('Quantity to Order must not be more than the Maximum Order Quantity.');
                 end;
+
             end;
         }
         field(12; "Unit of Measure Code"; Code[10])
