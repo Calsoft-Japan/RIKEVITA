@@ -18,6 +18,8 @@ page 50902 "RV Charge Calculation Subform"
         {
             repeater(General)
             {
+                FreezeColumn = "Sales Order Line No.";
+
                 field("Document No."; Rec."Document No.")
                 {
                     Visible = false;
@@ -225,6 +227,8 @@ page 50902 "RV Charge Calculation Subform"
 
                 begin
 
+                    Rec.CheckHeaderStatusCompleted();
+
                     ChargeCalcHeader.Get(Rec."Document No.");
                     ChargeCalcHeader.TestField(LOB);
 
@@ -262,6 +266,7 @@ page 50902 "RV Charge Calculation Subform"
                                     Rec.Init();
                                     Rec."Document No." := ChargeCalcHeader."No.";
                                     Rec."Line No." := LastLineNo;
+                                    Rec."Posted Whse. Shipment No." := recPostedWhseLine."No.";
                                     Rec."Sales Order No." := recSalesLine."Document No.";
                                     Rec.Validate("Sales Order Line No.", recSalesLine."Line No.");
                                     Rec.Insert();
