@@ -112,6 +112,7 @@ report 50200 "RV Delivery Order Report"
                     RecItemLedgerEntry: Record "Item Ledger Entry";
                     RecItem: Record Item;
                     ItemUOM: Record "Item Unit of Measure";
+                    QtyperUnitofMeasure: Decimal;
                 begin
                     LotNo := '';
                     QuantityKGValue := '';
@@ -138,14 +139,16 @@ report 50200 "RV Delivery Order Report"
                             LotNo += RecItemLedgerEntry."Lot No." + ' - ' + Format(Abs(RecItemLedgerEntry.Quantity)) + ' ' + ItemBUOM + '<br>';
                             if ItemUOM.Get(SalesShipmentLine."No.", 'KG') then begin
                                 QuantityKGValue += Format(Abs(RecItemLedgerEntry.Quantity / ItemUOM."Qty. per Unit of Measure")) + ' KG <br>';
+                                TotalQuantityKG += Abs(RecItemLedgerEntry.Quantity / ItemUOM."Qty. per Unit of Measure");
                             end;
-                            TotalQuantityKG += Abs(RecItemLedgerEntry.Quantity / ItemUOM."Qty. per Unit of Measure");
+
                         until RecItemLedgerEntry.Next() = 0;
                     end;
 
                     if TotalQuantityKG <> 0 then begin
+                        QtyperUnitofMeasure := 1 / RecItemLedgerEntry."Qty. per Unit of Measure";
                         PackageInfo := StrSubstNo('(%1 %2 X %3 %4 = %5 %6)',
-                                        TotalQuantityKG / Round(1 / RecItemLedgerEntry."Qty. per Unit of Measure", 1, '='), ItemBUOM, Round(1 / RecItemLedgerEntry."Qty. per Unit of Measure", 1, '='), RecItemLedgerEntry."Unit of Measure Code", TotalQuantityKG, RecItemLedgerEntry."Unit of Measure Code");
+                                        Round(TotalQuantityKG / QtyperUnitofMeasure, 0.01, '='), ItemBUOM, Round(QtyperUnitofMeasure, 0.01, '='), RecItemLedgerEntry."Unit of Measure Code", TotalQuantityKG, RecItemLedgerEntry."Unit of Measure Code");
                     end;
 
                 end;
