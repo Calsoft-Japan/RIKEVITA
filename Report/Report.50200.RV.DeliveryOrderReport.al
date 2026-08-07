@@ -137,16 +137,19 @@ report 50200 "RV Delivery Order Report"
                     if RecItemLedgerEntry.FindSet() then begin
                         repeat
                             LotNo += RecItemLedgerEntry."Lot No." + ' - ' + Format(Abs(RecItemLedgerEntry.Quantity)) + ' ' + ItemBUOM + '<br>';
-                            if ItemUOM.Get(SalesShipmentLine."No.", 'KG') then begin
+                            if (ItemUOM.Get(SalesShipmentLine."No.", 'KG') and (ItemUOM."Qty. per Unit of Measure" <> 0)) then begin
                                 QuantityKGValue += Format(Abs(RecItemLedgerEntry.Quantity / ItemUOM."Qty. per Unit of Measure")) + ' KG <br>';
                                 TotalQuantityKG += Abs(RecItemLedgerEntry.Quantity / ItemUOM."Qty. per Unit of Measure");
+                            end else begin
+                                QuantityKGValue += '  KG <br>';
+                                TotalQuantityKG += 0;
                             end;
 
                         until RecItemLedgerEntry.Next() = 0;
                     end;
 
                     if TotalQuantityKG <> 0 then begin
-                        QtyperUnitofMeasure := 1 / RecItemLedgerEntry."Qty. per Unit of Measure";
+                        QtyperUnitofMeasure := Round(1 / RecItemLedgerEntry."Qty. per Unit of Measure", 0.00001, '=');
                         PackageInfo := StrSubstNo('(%1 %2 X %3 %4 = %5 %6)',
                                         Round(TotalQuantityKG / QtyperUnitofMeasure, 0.01, '='), ItemBUOM, Round(QtyperUnitofMeasure, 0.01, '='), RecItemLedgerEntry."Unit of Measure Code", TotalQuantityKG, RecItemLedgerEntry."Unit of Measure Code");
                     end;
