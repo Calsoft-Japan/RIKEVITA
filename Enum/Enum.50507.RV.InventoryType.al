@@ -9,5 +9,5 @@ enum 50507 "RV Inventory Type"
     value(0; "BLCK") { Caption = 'BLCK'; }
     value(1; "DISP") { Caption = 'DISP'; }
     value(2; "DMGE") { Caption = 'DMGE'; }
-    value(3; "SUCS") { Caption = 'SUCS'; }
+    value(3; "SUCS") { Caption = 'STCK'; }
 }

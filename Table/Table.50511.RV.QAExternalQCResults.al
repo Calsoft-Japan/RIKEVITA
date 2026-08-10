@@ -99,6 +99,10 @@ table 50511 "RV QA External QC Results"
         {
             Caption = 'Value Table Name';
         }
+        field(103; "QC Specification Name"; Code[20])
+        {
+            Caption = 'QC Specification Name';
+        }
     }
     keys
     {

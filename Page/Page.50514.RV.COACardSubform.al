@@ -260,6 +260,7 @@ page 50514 "RV COA Card Subform"
                             QAInternalQCResults.Init();
                             QAInternalQCResults."COA No." := Rec."COA No.";
                             QAInternalQCResults."COA Lot No." := QAShipmentLotNo."Lot No.";
+                            QAInternalQCResults."QC Specification Name" := FQCLine."QC Specification Name";
                             QAInternalQCResults."QC Internal Spec. Line No." := FQCLine."Line No.";
                             QAInternalQCResults."QC Parameter Name" := FQCLine."QC Parameter Name";
                             QAInternalQCResults."QC Value" := FQCLine."QC Value";
@@ -341,6 +342,9 @@ page 50514 "RV COA Card Subform"
                         QAExternalQCResults."COA Lot No." := QAShipmentLotNo."Lot No.";
                         QAExternalQCResults."QC External Spec. Line No." := ExternalSpecLineNo;
                         QAExternalQCResults.Validate("QC Parameter Name", QCSpecificationLine."QC Parameter Name");
+                        QAExternalQCResults."QC Specification Name" := QCSpecificationLine."QC Specification Name";
+                        QAexternalqcresults."Alpha. Min" := QCSpecificationLine."Minimum Value";
+                        QAexternalqcresults."Alpha. Max" := QCSpecificationLine."Maximum Value";
                         QAExternalQCResults.Insert();
                     until QCSpecificationLine.next = 0;
                 end;
