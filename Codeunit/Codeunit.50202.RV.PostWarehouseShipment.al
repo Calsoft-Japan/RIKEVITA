@@ -115,4 +115,16 @@ codeunit 50202 "RV Post Warehouse Shipment"
         */
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Shipment (Yes/No)", OnBeforeConfirmWhseShipmentPost, '', false, false)]
+    local procedure "Whse.-Post Shipment (Yes/No)_OnBeforeConfirmWhseShipmentPost"(var WhseShptLine: Record "Warehouse Shipment Line"; var HideDialog: Boolean; var Invoice: Boolean; var IsPosted: Boolean; var Selection: Integer)
+    var
+        PackingInfo: Record "RV Warehouse Packing Info.";
+    begin
+        PackingInfo.Reset();
+        PackingInfo.SetRange("Warehouse Shipment No.", WhseShptLine."No.");
+        if not PackingInfo.FindFirst() then begin
+            Error('Before posting the warehouse shipment, please run the "Create Packing Information" function to generate packing information.');
+        end;
+    end;
+
 }
