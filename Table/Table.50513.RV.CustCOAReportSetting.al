@@ -40,9 +40,9 @@ table 50513 "RV Cust. COA Report Setting"
         {
             Caption = 'Display COA Date';
         }
-        field(8; "Expire Date"; Boolean)
+        field(8; "Expired Date Calc. logic"; Enum "RV Expired Date Calc. logic")
         {
-            Caption = 'Expire Date';
+            Caption = 'Expired Date Calc. logic';
         }
     }
     keys

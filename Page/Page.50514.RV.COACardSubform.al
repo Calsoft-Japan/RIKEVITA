@@ -260,6 +260,7 @@ page 50514 "RV COA Card Subform"
                             QAInternalQCResults.Init();
                             QAInternalQCResults."COA No." := Rec."COA No.";
                             QAInternalQCResults."COA Lot No." := QAShipmentLotNo."Lot No.";
+                            QAInternalQCResults."COA Container No." := QAShipmentLotNo."Container No.";
                             QAInternalQCResults."QC Specification Name" := FQCLine."QC Specification Name";
                             QAInternalQCResults."QC Internal Spec. Line No." := FQCLine."Line No.";
                             QAInternalQCResults."QC Parameter Name" := FQCLine."QC Parameter Name";
@@ -324,6 +325,7 @@ page 50514 "RV COA Card Subform"
                 if QCSpecificationLine.findset then begin
                     QAExternalQCResults.Reset();
                     QAExternalQCResults.SetRange("COA No.", Rec."COA No.");
+                    //QAExternalQCResults.SetRange("COA Container No.", QAShipmentLotNo."Container No.");
                     QAExternalQCResults.SetRange("COA Lot No.", QAShipmentLotNo."Lot No.");
 
                     if QAExternalQCResults.FindSet() then begin
@@ -340,9 +342,10 @@ page 50514 "RV COA Card Subform"
 
                         QAExternalQCResults."COA No." := Rec."COA No.";
                         QAExternalQCResults."COA Lot No." := QAShipmentLotNo."Lot No.";
+                        QAExternalQCResults."COA Container No." := QAShipmentLotNo."Container No.";
                         QAExternalQCResults."QC External Spec. Line No." := ExternalSpecLineNo;
                         QAExternalQCResults.Validate("QC Parameter Name", QCSpecificationLine."QC Parameter Name");
-                        QAExternalQCResults."QC Specification Name" := QCSpecificationLine."QC Specification Name";
+						QAExternalQCResults."QC Specification Name" := QCSpecificationLine."QC Specification Name";
                         QAexternalqcresults."Alpha. Min" := QCSpecificationLine."Minimum Value";
                         QAexternalqcresults."Alpha. Max" := QCSpecificationLine."Maximum Value";
                         QAExternalQCResults.Insert();

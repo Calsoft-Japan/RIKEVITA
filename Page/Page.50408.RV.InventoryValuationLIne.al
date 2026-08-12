@@ -36,14 +36,15 @@ page 50408 "RV Inventory Valuation Line"
                 {
                     ToolTip = 'Specifies the value of the Unit of Measure field.', Comment = '%';
                 }
-                field("Starting Balance Amount"; Rec."Starting Balance Amount")
-                {
-                    ToolTip = 'Specifies the value of the Starting Balance Amount field.', Comment = '%';
-                }
                 field("Starting Balance Quantity"; Rec."Starting Balance Quantity")
                 {
                     ToolTip = 'Specifies the value of the Starting Balance Quantity field.', Comment = '%';
                 }
+                field("Starting Balance Amount"; Rec."Starting Balance Amount")
+                {
+                    ToolTip = 'Specifies the value of the Starting Balance Amount field.', Comment = '%';
+                }
+
                 field("Period Order Quantity"; Rec."Period Order Quantity")
                 {
                     ToolTip = 'Specifies the value of the Period Order Quantity field.', Comment = '%';

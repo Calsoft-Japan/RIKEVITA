@@ -21,4 +21,8 @@ enum 50401 "RV Reason Code Type"
     {
         Caption = 'Sample or Dispose';
     }
+    value(4; "Transfer Site")
+    {
+        Caption = 'Transfer Site';
+    }
 }

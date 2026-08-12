@@ -20,11 +20,13 @@ page 50608 "RV Order Listing"
                 {
                     ToolTip = 'Specifies the value of the Blanket Sales Order No. field.', Comment = '%';
                     Editable = false;
+                    visible = false;
                 }
                 field("Blanket Sales Order Line No."; Rec."Blanket Sales Order Line No.")
                 {
                     ToolTip = 'Specifies the value of the Blanket Sales Order Line No. field.', Comment = '%';
                     Editable = false;
+                    visible = false;
                 }
                 field("Sales Order No."; Rec."Sales Order No.")
                 {
@@ -213,12 +215,12 @@ page 50608 "RV Order Listing"
                 field("RVM PIC"; Rec."RVM PIC")
                 {
                     ToolTip = 'Specifies the value of the RVM PIC field.', Comment = '%';
-                    Editable = true;
+                    Editable = false;
                 }
                 field("Sales Office Sales Rep."; Rec."Sales Office Sales Rep.")
                 {
                     ToolTip = 'Specifies the value of the "Sales Office Sales Rep." field.', Comment = '%';
-                    Editable = true;
+                    Editable = false;
                 }
 
 
@@ -227,26 +229,7 @@ page 50608 "RV Order Listing"
                     ToolTip = 'Specifies the value of the SystemCreatedAt field.', Comment = '%';
                     Editable = false;
                 }
-                field(SystemCreatedBy; Rec.SystemCreatedBy)
-                {
-                    ToolTip = 'Specifies the value of the SystemCreatedBy field.', Comment = '%';
-                    Editable = false;
-                }
-                field(SystemId; Rec.SystemId)
-                {
-                    ToolTip = 'Specifies the value of the SystemId field.', Comment = '%';
-                    Editable = false;
-                }
-                field(SystemModifiedAt; Rec.SystemModifiedAt)
-                {
-                    ToolTip = 'Specifies the value of the SystemModifiedAt field.', Comment = '%';
-                    Editable = false;
-                }
-                field(SystemModifiedBy; Rec.SystemModifiedBy)
-                {
-                    ToolTip = 'Specifies the value of the SystemModifiedBy field.', Comment = '%';
-                    Editable = false;
-                }
+
 
             }
 

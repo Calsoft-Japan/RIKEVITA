@@ -66,6 +66,11 @@ page 50509 "RV IQC Card"
                     ApplicationArea = All;
                     Editable = QCCardEnable;
                 }
+                field("Location Code"; Rec."Location Code")
+                {
+                    ApplicationArea = All;
+                    Editable = QCCardEnable;
+                }
                 field("RM Manufacture Date"; Rec."RM Manufacture Date")
                 {
                     ApplicationArea = All;

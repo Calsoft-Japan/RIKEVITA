@@ -26,7 +26,7 @@ table 50407 "RV Invy. Valuation Name"
         field(4; "Site"; Code[20])
         {
             Caption = 'Site';
-            tableRelation = "Dimension Value" where("Global Dimension No." = const(2));
+            tableRelation = "Dimension Value".Code where("Global Dimension No." = const(2));
         }
 
         field(5; "Starting Date"; Date)

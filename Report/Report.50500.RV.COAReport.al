@@ -72,6 +72,9 @@ report 50500 "RV_COA Report"
                     column(DateWording_remarkText; DateWording_remarkText)
                     {
                     }
+                    column(MARKSCommentAll; MARKSCommentAll)
+                    {
+                    }
                     column(OutputNo; OutputNo)
                     {
                     }
@@ -82,9 +85,9 @@ report 50500 "RV_COA Report"
                     {
                         DataItemLink = "COA No." = FIELD("COA No.");
                         DataItemLinkReference = "QA Header";
-                        DataItemTableView = sorting("COA No.", "COA Lot Line No.");
+                        DataItemTableView = sorting("COA No.", "container No.", "Lot No.");
 
-                        column(ContainerNoNo; "Container No.")//CONTAINER
+                        column(ContainerNo; "Container No.")//CONTAINER
                         {
                         }
                         column(Header_Quantity; HeaderQuantity)//HeaderQuantity
@@ -99,6 +102,9 @@ report 50500 "RV_COA Report"
                         column(UOM; UOM)
                         {
                         }
+                        column(comment; "Comment")
+                        {
+                        }
                         column(QAShipmentLine_Line_No; "RV QA Shipment Lot No."."COA Lot Line No.")
                         {
                         }
@@ -108,13 +114,12 @@ report 50500 "RV_COA Report"
                         column(LotNo; "lot No.")
                         {
                         }
-                        column(PRODDATE; FormatExpireDateText)
+                        column(PRODDATE; FormatManufacturingDateText)
                         {
                         }
                         column(BESTBEFOREDATE; FormatExpireDateText)
                         {
                         }
-
                         dataitem(ExternalQCLoop; "Integer")
                         {
                             DataItemTableView = sorting(Number);
@@ -136,11 +141,18 @@ report 50500 "RV_COA Report"
                             column(result; resultText) //5
                             {
                             }
-
+                            column(COAlotNo; COAlotNo) //add
+                            {
+                            }
+                            column(COAContainerNo; COAContainerNo) //add
+                            {
+                            }
                             trigger OnPreDataItem()
                             begin
+                                ExternalQCResults.SetCurrentKey("COA No.", "COA Container No.", "COA Lot No.");
                                 ExternalQCResults.SetRange("COA No.", "RV QA Shipment Lot No."."COA No.");//COA Lot Line No.
-                                ExternalQCResults.SetRange("COA Lot Line No.", "RV QA Shipment Lot No."."COA Lot Line No.");//COA Lot Line No.
+                                //ExternalQCResults.SetRange("COA Container No.", "RV QA Shipment Lot No."."Container No.");//COA Container No.
+                                ExternalQCResults.SetRange("COA Lot No.", "RV QA Shipment Lot No."."Lot No.");//COA Lot No.
                                 SETRANGE(Number, 1, ExternalQCResults.COUNT);
                             end;
 
@@ -156,6 +168,8 @@ report 50500 "RV_COA Report"
                                 CLEAR(SPECIFICATIONText);
                                 CLEAR(resultText);
                                 CLEAR(SpecLineNoText);
+                                clear(COAContainerNo);
+                                clear(COAlotNo);
 
                                 CASE DisplayMethodCharsSpec OF
                                     DisplayMethodCharsSpec::Method:
@@ -168,13 +182,15 @@ report 50500 "RV_COA Report"
                                         begin
 
                                             METHODText := '';
-                                            SPECIFICATIONText := ExternalQCResults."Alpha. Max" + ExternalQCResults."Alpha. Min";
+                                            IF (ExternalQCResults."Alpha. Min" <> '') OR (ExternalQCResults."Alpha. Max" <> '') THEN
+                                                SPECIFICATIONText := ExternalQCResults."Alpha. Min" + '..' + ExternalQCResults."Alpha. Max";
                                         end;
                                     DisplayMethodCharsSpec::"Method &Chars Spec.":
                                         begin
 
                                             METHODText := ExternalQCResults."QC Value";
-                                            SPECIFICATIONText := ExternalQCResults."Alpha. Max" + ExternalQCResults."Alpha. Min";
+                                            IF (ExternalQCResults."Alpha. Min" <> '') OR (ExternalQCResults."Alpha. Max" <> '') THEN
+                                                SPECIFICATIONText := ExternalQCResults."Alpha. Min" + '..' + ExternalQCResults."Alpha. Max";
                                         end;
                                     DisplayMethodCharsSpec::"None":
                                         begin
@@ -184,6 +200,8 @@ report 50500 "RV_COA Report"
                                 end;
 
                                 resultText := ExternalQCResults."COA Value";
+                                COAlotNo := ExternalQCResults."COA Lot No.";
+                                COAContainerNo := ExternalQCResults."COA Container No.";
                                 SpecLineNoText := Format(Number) + '.';
                             end;
                         }
@@ -197,10 +215,12 @@ report 50500 "RV_COA Report"
                             Clear(LineQuantity);
                             Clear(QtyCalculated);
                             Clear(FormatExpireDateText);
+                            Clear(FormatManufacturingDateText);
 
                             if not Item.get("QA Header"."Item No.") then
                                 Item.Init();
 
+                            "RV QA Shipment Lot No.".CalcFields("Container Quantity", "Container Qty. (Base)");
                             LineQuantity := Format("RV QA Shipment Lot No."."Qty. (Base)") + ' ' + Item."Base Unit of Measure";
                             ContainerNo := "RV QA Shipment Lot No."."Container No.";
 
@@ -210,11 +230,11 @@ report 50500 "RV_COA Report"
                                 QtyCalculated := Round("RV QA Shipment Lot No.".Quantity / "RV QA Shipment Lot No."."Qty. (Base)", UOMMgt.QtyRndPrecision());
 
                             HeaderQuantity := 'NET ' +
-                            format("RV QA Shipment Lot No.".Quantity) +
+                            format("RV QA Shipment Lot No."."Container Quantity") +
                             ' KG (NET ' +
                             format(QtyCalculated) + ' ' +
                             "RV QA Shipment Lot No.".UOM + ' x ' +
-                            format("RV QA Shipment Lot No."."Qty. (Base)") + ' ' +
+                            format("RV QA Shipment Lot No."."Container Qty. (Base)") + ' ' +
                             Item."Base Unit of Measure" + ')';
 
                             /*
@@ -231,11 +251,31 @@ report 50500 "RV_COA Report"
                             “20” is the “Qty.” of “Shipment Lot No. List”. 
                             “CTN” is   UM field of “Shipment Lot No. List”.
                             */
-
-                            if DateCalculation = DateCalculation::"Shelf Life By Months Without Days MMM-YYYY" then
-                                FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date", 0, '<Month Text,3>-<Year4>')
-                            else if DateCalculation = DateCalculation::"Shelf Life By Months DD-MMM-YYYY" then
-                                FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date", 0, '<Day,2>-<Month Text,3>-<Year4>');
+                            //FormatManufacturingDateText
+                            if DateCalculation = DateCalculation::"Shelf Life By Months Without Days MMM-YYYY" then begin
+                                FormatManufacturingDateText := Format("RV QA Shipment Lot No."."Manufacturing Date", 0, '<Month Text,3>-<Year4>');
+                            end else if DateCalculation = DateCalculation::"Shelf Life By Months DD-MMM-YYYY" then begin
+                                FormatManufacturingDateText := Format("RV QA Shipment Lot No."."Manufacturing Date", 0, '<Day,2>-<Month Text,3>-<Year4>');
+                            end;
+                            //FormatExpireDateText
+                            if DateCalculation = DateCalculation::"Shelf Life By Months Without Days MMM-YYYY" then begin //Dec-2025
+                                FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date", 0, '<Month Text,3>-<Year4>');
+                            end else if DateCalculation = DateCalculation::"Shelf Life By Months DD-MMM-YYYY" then begin //16-Sep-2025
+                                CASE ExpiredDateCalclogic of
+                                    ExpiredDateCalclogic::"By days": //16-Sep-2025
+                                        begin
+                                            FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date", 0, '<Day,2>-<Month Text,3>-<Year4>');
+                                        end;
+                                    ExpiredDateCalclogic::"By month": //Dec-2025
+                                        begin
+                                            FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date", 0, '<Month Text,3>-<Year4>');
+                                        end;
+                                    ExpiredDateCalclogic::"By month + end of the month": //31-Sep-2025
+                                        begin
+                                            FormatExpireDateText := Format(CalcDate('+CM', "RV QA Shipment Lot No."."Expire Date"), 0, '<Day,2>-<Month Text,3>-<Year4>');
+                                        end;
+                                end;
+                            end;
                         end;
                     }
                 }
@@ -263,13 +303,13 @@ report 50500 "RV_COA Report"
 
                 CompanyInfo.Get();
                 CompanyInfo.CalcFields(Picture);
-                Format_DateText := Format(Today(), 0, '<Day,2>-<Month Text,3>-<Year4>');
 
                 QAShipmentLotNo.SetRange("COA No.", "COA No.");
 
                 //SalesOrderNoText
                 Clear(SalesOrderNoText);
                 CollectUniqueSalesOrderNo("COA No.");
+                CollectAllMARKSComment("COA No.");
 
                 Clear(PRODUCTText);
                 Clear(MARKSText);
@@ -303,6 +343,7 @@ report 50500 "RV_COA Report"
                     DisplayQuantityPerLot := CustCOAReportSetting."Display Quantity Per Lot.";
                     DisplayMethodCharsSpec := CustCOAReportSetting."Display Method&Chars Spec.";
                     DateCalculation := CustCOAReportSetting."Date Calculation";
+                    ExpiredDateCalclogic := CustCOAReportSetting."Expired Date Calc. logic";
                     //DateWording
                     if (CustCOAReportSetting."Date Wording" = DateWording::"Best Before Date") then begin
                         DateWordingText := 'BEST BEFORE DATE';
@@ -312,6 +353,12 @@ report 50500 "RV_COA Report"
                         DateWording_remarkText := 'Expiry Date';
                     end;
 
+                    //"Display COA Date"
+                    if (CustCOAReportSetting."Display COA Date" = DisplayCOADate::"COA Created Date") then
+                        Format_DateText := Format("QA Header"."COA Created Date", 0, '<Day,2>-<Month Text,3>-<Year4>')
+                    else if (CustCOAReportSetting."Display COA Date" = DisplayCOADate::"COA Print Date") then
+                        Format_DateText := Format(WorkDate(), 0, '<Day,2>-<Month Text,3>-<Year4>');
+
                 end else begin
                     CustCOAReportSetting.Reset();
                     CustCOAReportSetting.SetRange("Customer No.", "Ship-to Customer No.");
@@ -319,6 +366,7 @@ report 50500 "RV_COA Report"
                         DisplayQuantityPerLot := CustCOAReportSetting."Display Quantity Per Lot.";
                         DisplayMethodCharsSpec := CustCOAReportSetting."Display Method&Chars Spec.";
                         DateCalculation := CustCOAReportSetting."Date Calculation";
+                        ExpiredDateCalclogic := CustCOAReportSetting."Expired Date Calc. logic";
 
                         //DateWording
                         if (CustCOAReportSetting."Date Wording" = DateWording::"Best Before Date") then begin
@@ -328,6 +376,11 @@ report 50500 "RV_COA Report"
                             DateWordingText := 'EXPIRY DATE';
                             DateWording_remarkText := 'Expiry Date';
                         end;
+                        //"Display COA Date"
+                        if (CustCOAReportSetting."Display COA Date" = DisplayCOADate::"COA Created Date") then
+                            Format_DateText := Format("QA Header"."COA Created Date", 0, '<Day,2>-<Month Text,3>-<Year4>')
+                        else if (CustCOAReportSetting."Display COA Date" = DisplayCOADate::"COA Print Date") then
+                            Format_DateText := Format(WorkDate(), 0, '<Day,2>-<Month Text,3>-<Year4>');
 
                     end else begin
                         DisplayQuantityPerLot := false;
@@ -396,11 +449,13 @@ report 50500 "RV_COA Report"
         CompanyInfo: Record "Company Information";
         CustCOAReportSetting: Record "RV Cust. COA Report Setting";
         DateWording: Enum "RV Date Wording";
+        DisplayCOADate: Enum "RV Display COA Date";
         DisplayMethodCharsSpec: Enum "RV Display Method Chars Spec.";
         DateWordingText: Text;
         DateWording_remarkText: Text;
         DisplayQuantityPerLot: Boolean;
         DateCalculation: Enum "RV Date Calculation";
+        ExpiredDateCalclogic: Enum "RV Expired Date Calc. logic";
         METHOD_Caption: Text;
         SPECIFICATION_Caption: Text;
         METHODText: Text;
@@ -418,10 +473,14 @@ report 50500 "RV_COA Report"
         UOM: Text[50];
         Item: Record Item;
         FormatExpireDateText: Text;
+        FormatManufacturingDateText: Text;
         resultText: Text;
         SpecLineNoText: Text;
+        COAlotNo: Text;
+        COAContainerNo: Text;
         PRODUCTText: Text;
         Format_DateText: Text;
+        MARKSCommentAll: Text;
 
     procedure CollectUniqueSalesOrderNo(ParCOANO: Code[20])
     var
@@ -449,6 +508,25 @@ report 50500 "RV_COA Report"
         end;
     end;
 
+    procedure CollectAllMARKSComment(ParCOANO: Code[20])
+    var
+        QAShipmentLotNo: Record "RV QA Shipment Lot No.";
+        LineComment: Text;
+    begin
+        Clear(MARKSCommentAll);
+
+        QAShipmentLotNo.SetRange("COA No.", ParCOANO);
+        if QAShipmentLotNo.FindSet() then
+            repeat
+                LineComment := QAShipmentLotNo."Comment";
+                if LineComment <> '' then begin
+                    if MARKSCommentAll <> '' then
+                        MARKSCommentAll += TypeHelper.LFSeparator();
+                    MARKSCommentAll += LineComment;
+                end;
+            until QAShipmentLotNo.Next() = 0;
+    end;
+
     procedure ClearData()
     begin
         Clear(DateWordingText);
@@ -467,10 +545,12 @@ report 50500 "RV_COA Report"
         Clear(MARKSList);
         Clear(FormatExpireDateText);
         Clear(resultText);
+        COAlotNo := '';
         Clear(SpecLineNoText);
         Clear(PRODUCTText);
         Clear(Format_DateText);
         Clear(UOM);
+        Clear(MARKSCommentAll);
     end;
 }
 

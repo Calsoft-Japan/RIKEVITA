@@ -61,10 +61,18 @@ table 50508 "RV QA Header"
         field(13; "QA Checked Remark"; Text[150])
         {
             Caption = 'QA Checked Remark';
+            trigger OnValidate()
+            begin
+                ValidateQACheckedRemark();
+            end;
         }
         field(14; "QA Approved Remark"; Text[150])
         {
             Caption = 'QA Approved Remark';
+            trigger OnValidate()
+            begin
+                ValidateQAApprovedRemark();
+            end;
         }
         field(16; "COA Created Date"; Date)
         {
@@ -185,7 +193,7 @@ table 50508 "RV QA Header"
 
     end;
 
-    procedure IsQACheckAllowed(): Boolean
+    procedure IsQACheckAllowed()
     var
         UserSetup: Record "User Setup";
         TextCheckErr: Label 'You don''t have permission to Check!';
@@ -196,6 +204,20 @@ table 50508 "RV QA Header"
         end else
             Error(TextCheckErr);
     end;
+
+    procedure ValidateQACheckedRemark()
+    var
+        UserSetup: Record "User Setup";
+        TextCheckErr: Label 'You don''t have permission to Edit!';
+    begin
+        if UserSetup.Get(UserId) then begin
+            if not UserSetup."RV_Allow QA Check" then
+                Error(TextCheckErr);
+        end else
+            Error(TextCheckErr);
+    end;
+
+
 
     procedure IsQAApproveAllowed()
     var
@@ -210,6 +232,18 @@ table 50508 "RV QA Header"
 
         if "QA Checked By" = '' then
             Error('You need to Check before Approve.');
+    end;
+
+    procedure ValidateQAApprovedRemark()
+    var
+        UserSetup: Record "User Setup";
+        TextApproveErr: Label 'You don''t have permission to Edit!';
+    begin
+        if UserSetup.Get(UserId) then begin
+            if not UserSetup."RV_Allow QA Approve" then
+                Error(TextApproveErr);
+        end else
+            Error(TextApproveErr);
     end;
 
     procedure IsQARejectAllowed()
@@ -425,6 +459,7 @@ table 50508 "RV QA Header"
                         QAShipmentLotNo."Qty. per UOM" := WarehousePackingInfo."Contents Per Package";
                         QAShipmentLotNo."Container No." := WarehousePackingInfo."Container No";
                         QAShipmentLotNo.UOM := WarehousePackingInfo."Contents UOM";
+                        QAShipmentLotNo.Comment := WarehousePackingInfo.Comment;
 
                         //QAShipmentLotNo."Qty. (Base)" := Abs(ItemLedgEntry.Quantity);
                         ItemLedgEntry.Reset();
@@ -488,6 +523,7 @@ table 50508 "RV QA Header"
                         QAShipmentLotNo."Qty. per UOM" := WarehousePackingInfo."Contents Per Package";
                         QAShipmentLotNo."Container No." := WarehousePackingInfo."Container No";
                         QAShipmentLotNo.UOM := WarehousePackingInfo."Contents UOM";
+                        QAShipmentLotNo.Comment := WarehousePackingInfo.Comment;
 
                         //QAShipmentLotNo."Qty. (Base)" := -ReservEntry."Quantity (Base)";
                         ItemLedgEntry.Reset();

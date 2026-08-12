@@ -64,12 +64,35 @@ table 50509 "RV QA Shipment Lot No."
             Caption = 'Qty. per UOM';
             DecimalPlaces = 0 : 5;
         }
+        field(18; "Comment"; Text[80])
+        {
+            Caption = 'Comment';
+        }
+        field(19; "Container Quantity"; Decimal)
+        {
+            Caption = 'Container Quantity';
+            DecimalPlaces = 0 : 5;
+            FieldClass = FlowField;
+            CalcFormula = sum("RV QA Shipment Lot No.".Quantity where("COA No." = field("COA No."), "Container No." = field("Container No.")));
+            Editable = false;
+        }
+        field(20; "Container Qty. (Base)"; Decimal)
+        {
+            Caption = 'Container Qty. (Base)';
+            DecimalPlaces = 0 : 5;
+            FieldClass = FlowField;
+            CalcFormula = sum("RV QA Shipment Lot No."."Qty. (Base)" where("COA No." = field("COA No."), "Container No." = field("Container No.")));
+            Editable = false;
+        }
     }
     keys
     {
         key(PK; "COA No.", "COA Lot Line No.")
         {
             Clustered = true;
+        }
+        key(key2; "COA No.", "Container No.", "Lot No.")
+        {
         }
     }
 

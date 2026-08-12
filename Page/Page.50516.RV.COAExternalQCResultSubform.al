@@ -29,14 +29,19 @@ page 50516 "RV COA ExterQCResult Subform"
                     Editable = false;
                     Visible = false;
                 }
-
+                field("COA Container No."; Rec."COA Container No.")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    Visible = false;
+                }
                 field("QC External Spec. Line No."; Rec."QC External Spec. Line No.")
                 {
                     ApplicationArea = All;
                     Editable = false;
                     Visible = false;
                 }
-                field("QC Specification Name"; Rec."QC Specification Name")
+				field("QC Specification Name"; Rec."QC Specification Name")
                 {
                     ApplicationArea = All;
                     Editable = false;

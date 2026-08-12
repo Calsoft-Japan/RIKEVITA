@@ -57,6 +57,7 @@ table 50505 "RV QC Header"
                         "Item No." := Purchaseline."No.";
                         "Item Description" := Purchaseline.Description;
                         "Vendor No." := Purchaseline."Buy-from Vendor No.";
+                        "Location Code" := Purchaseline."Location Code";
                         PurchaseHeader.get(Purchaseline."Document Type"::Order, Purchaseline."Document No.");
                         "Vendor Name" := PurchaseHeader."Buy-from Vendor Name";
                         "Customer No." := PurchaseHeader."Sell-to Customer No.";
@@ -73,6 +74,7 @@ table 50505 "RV QC Header"
                         "Item No." := PurchRcptLine."No.";
                         "Item Description" := PurchRcptLine.Description;
                         "Vendor No." := PurchRcptLine."Buy-from Vendor No.";
+                        "Location Code" := PurchRcptLine."Location Code";
                         PurchRcptHeader.get(PurchRcptLine."Document No.");
                         "Vendor Name" := PurchRcptHeader."Buy-from Vendor Name";
                         "Customer No." := PurchRcptHeader."Sell-to Customer No.";

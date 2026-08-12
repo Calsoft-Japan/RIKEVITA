@@ -51,11 +51,11 @@ page 50612 "RV Invy. Planning Lines"
                     ApplicationArea = Basic, Suite;
                     ToolTip = 'Specifies the value of the Unit of Measure field.', Comment = '%';
                 }
-                field("Inventory Before Period"; Rec."Inventory Before Period")
-                {
-                    ApplicationArea = Basic, Suite;
-                    ToolTip = 'Specifies the value of the Inventory Before Period field.', Comment = '%';
-                }
+                // field("Inventory Before Period"; Rec."Inventory Before Period")
+                // {
+                //     ApplicationArea = Basic, Suite;
+                //     ToolTip = 'Specifies the value of the Inventory Before Period field.', Comment = '%';
+                // }
                 field("Date Type"; Rec."Date Type")
                 {
                     ApplicationArea = Basic, Suite;
@@ -842,12 +842,12 @@ page 50612 "RV Invy. Planning Lines"
             while QueryPlanningReceipt.Read() do begin
                 if DeliverySchedulingLine.get(InvyPlanningName.Name,
                                                 QueryPlanningReceipt.ItemNo,
-                                                "RV Invy. Planning Data Type"::"Planned Inventory") then begin
+                                                "RV Invy. Planning Data Type"::"Scheduled Receipt") then begin
 
                     UpdateDeliverySchedulingLine(DeliverySchedulingLine, QueryPlanningReceipt.Quantity, i);
                 end else begin
                     InitDeliverySchedulingLine(QueryPlanningReceipt.ItemNo, QueryPlanningReceipt.Quantity, "RV Invy. Planning Data Type"::"Planned Inventory", i);
-                    InitDeliverySchedulingLine(QueryPlanningReceipt.ItemNo, 0, "RV Invy. Planning Data Type"::"Scheduled Receipt", 0);
+                    InitDeliverySchedulingLine(QueryPlanningReceipt.ItemNo, 0, "RV Invy. Planning Data Type"::"Planned Inventory", 0);
                     InitDeliverySchedulingLine(QueryPlanningReceipt.ItemNo, 0, "RV Invy. Planning Data Type"::"Gross Requirement", 0);
                 end;
             end;
@@ -859,12 +859,12 @@ page 50612 "RV Invy. Planning Lines"
             while QueryPlannedOrderReceipt.Read() do begin
                 if DeliverySchedulingLine.get(InvyPlanningName.Name,
                                                 QueryPlannedOrderReceipt.ItemNo,
-                                                "RV Invy. Planning Data Type"::"Planned Inventory") then begin
+                                                "RV Invy. Planning Data Type"::"Scheduled Receipt") then begin
 
                     UpdateDeliverySchedulingLine(DeliverySchedulingLine, QueryPlannedOrderReceipt.Quantity, i);
                 end else begin
                     InitDeliverySchedulingLine(QueryPlannedOrderReceipt.ItemNo, QueryPlannedOrderReceipt.Quantity, "RV Invy. Planning Data Type"::"Planned Inventory", i);
-                    InitDeliverySchedulingLine(QueryPlannedOrderReceipt.ItemNo, 0, "RV Invy. Planning Data Type"::"Scheduled Receipt", 0);
+                    InitDeliverySchedulingLine(QueryPlannedOrderReceipt.ItemNo, 0, "RV Invy. Planning Data Type"::"Planned Inventory", 0);
                     InitDeliverySchedulingLine(QueryPlannedOrderReceipt.ItemNo, 0, "RV Invy. Planning Data Type"::"Gross Requirement", 0);
 
                 end;
@@ -874,11 +874,109 @@ page 50612 "RV Invy. Planning Lines"
         end;
 
         DeliverySchedulingLine.Reset();
+        DeliverySchedulingLine.SetRange("Date Type", DeliverySchedulingLine."Date Type"::"Planned Inventory");
         if DeliverySchedulingLine.FindSet() then
             repeat
-                rec.Init();
-                rec.TransferFields(DeliverySchedulingLine);
-                rec.Insert();
+                GrossReq.get(DeliverySchedulingLine."Delivery Scheduling Name", DeliverySchedulingLine."Item No.", "RV Invy. Planning Data Type"::"Gross Requirement");
+                SchedReceipt.get(DeliverySchedulingLine."Delivery Scheduling Name", DeliverySchedulingLine."Item No.", "RV Invy. Planning Data Type"::"Scheduled Receipt");
+                DeliverySchedulingLine."Date1 Quantity" := DeliverySchedulingLine."Inventory Before Period" -
+                                                            GrossReq."Date1 Quantity" +
+                                                            SchedReceipt."Date1 Quantity";
+                DeliverySchedulingLine."Date2 Quantity" := DeliverySchedulingLine."Date1 Quantity" -
+                                                            GrossReq."Date2 Quantity" +
+                                                            SchedReceipt."Date2 Quantity";
+                DeliverySchedulingLine."Date3 Quantity" := DeliverySchedulingLine."Date2 Quantity" -
+                                                            GrossReq."Date3 Quantity" +
+                                                            SchedReceipt."Date3 Quantity";
+                DeliverySchedulingLine."Date4 Quantity" := DeliverySchedulingLine."Date3 Quantity" -
+                                                            GrossReq."Date4 Quantity" +
+                                                            SchedReceipt."Date4 Quantity";
+                //add other 32
+                DeliverySchedulingLine."Date5 Quantity" := DeliverySchedulingLine."Date4 Quantity" -
+                                                                GrossReq."Date5 Quantity" +
+                                                                SchedReceipt."Date5 Quantity";
+                DeliverySchedulingLine."Date6 Quantity" := DeliverySchedulingLine."Date5 Quantity" -
+                                                            GrossReq."Date6 Quantity" +
+                                                            SchedReceipt."Date6 Quantity";
+                DeliverySchedulingLine."Date7 Quantity" := DeliverySchedulingLine."Date6 Quantity" -
+                                                            GrossReq."Date7 Quantity" +
+                                                            SchedReceipt."Date7 Quantity";
+                DeliverySchedulingLine."Date8 Quantity" := DeliverySchedulingLine."Date7 Quantity" -
+                                                            GrossReq."Date8 Quantity" +
+                                                            SchedReceipt."Date8 Quantity";
+                DeliverySchedulingLine."Date9 Quantity" := DeliverySchedulingLine."Date8 Quantity" -
+                                                            GrossReq."Date9 Quantity" +
+                                                            SchedReceipt."Date9 Quantity";
+                DeliverySchedulingLine."Date10 Quantity" := DeliverySchedulingLine."Date9 Quantity" -
+                                                            GrossReq."Date10 Quantity" +
+                                                            SchedReceipt."Date10 Quantity";
+                DeliverySchedulingLine."Date11 Quantity" := DeliverySchedulingLine."Date10 Quantity" -
+                                                            GrossReq."Date11 Quantity" +
+                                                            SchedReceipt."Date11 Quantity";
+                DeliverySchedulingLine."Date12 Quantity" := DeliverySchedulingLine."Date11 Quantity" -
+                                                            GrossReq."Date12 Quantity" +
+                                                            SchedReceipt."Date12 Quantity";
+                DeliverySchedulingLine."Date13 Quantity" := DeliverySchedulingLine."Date12 Quantity" -
+                                                            GrossReq."Date13 Quantity" +
+                                                            SchedReceipt."Date13 Quantity";
+                DeliverySchedulingLine."Date14 Quantity" := DeliverySchedulingLine."Date13 Quantity" -
+                                                            GrossReq."Date14 Quantity" +
+                                                            SchedReceipt."Date14 Quantity";
+                DeliverySchedulingLine."Date15 Quantity" := DeliverySchedulingLine."Date14 Quantity" -
+                                                            GrossReq."Date15 Quantity" +
+                                                            SchedReceipt."Date15 Quantity";
+                DeliverySchedulingLine."Date16 Quantity" := DeliverySchedulingLine."Date15 Quantity" -
+                                                            GrossReq."Date16 Quantity" +
+                                                            SchedReceipt."Date16 Quantity";
+                DeliverySchedulingLine."Date17 Quantity" := DeliverySchedulingLine."Date16 Quantity" -
+                                                            GrossReq."Date17 Quantity" +
+                                                            SchedReceipt."Date17 Quantity";
+                DeliverySchedulingLine."Date18 Quantity" := DeliverySchedulingLine."Date17 Quantity" -
+                                                            GrossReq."Date18 Quantity" +
+                                                            SchedReceipt."Date18 Quantity";
+                DeliverySchedulingLine."Date19 Quantity" := DeliverySchedulingLine."Date18 Quantity" -
+                                                            GrossReq."Date19 Quantity" +
+                                                            SchedReceipt."Date19 Quantity";
+                DeliverySchedulingLine."Date20 Quantity" := DeliverySchedulingLine."Date19 Quantity" -
+                                                            GrossReq."Date20 Quantity" +
+                                                            SchedReceipt."Date20 Quantity";
+                DeliverySchedulingLine."Date21 Quantity" := DeliverySchedulingLine."Date20 Quantity" -
+                                                            GrossReq."Date21 Quantity" +
+                                                            SchedReceipt."Date21 Quantity";
+                DeliverySchedulingLine."Date22 Quantity" := DeliverySchedulingLine."Date21 Quantity" -
+                                                            GrossReq."Date22 Quantity" +
+                                                            SchedReceipt."Date22 Quantity";
+                DeliverySchedulingLine."Date23 Quantity" := DeliverySchedulingLine."Date22 Quantity" -
+                                                            GrossReq."Date23 Quantity" +
+                                                            SchedReceipt."Date23 Quantity";
+                DeliverySchedulingLine."Date24 Quantity" := DeliverySchedulingLine."Date23 Quantity" -
+                                                            GrossReq."Date24 Quantity" +
+                                                            SchedReceipt."Date24 Quantity";
+                DeliverySchedulingLine."Date25 Quantity" := DeliverySchedulingLine."Date24 Quantity" -
+                                                            GrossReq."Date25 Quantity" +
+                                                            SchedReceipt."Date25 Quantity";
+                DeliverySchedulingLine."Date26 Quantity" := DeliverySchedulingLine."Date25 Quantity" -
+                                                            GrossReq."Date26 Quantity" +
+                                                            SchedReceipt."Date26 Quantity";
+                DeliverySchedulingLine."Date27 Quantity" := DeliverySchedulingLine."Date26 Quantity" -
+                                                            GrossReq."Date27 Quantity" +
+                                                            SchedReceipt."Date27 Quantity";
+                DeliverySchedulingLine."Date28 Quantity" := DeliverySchedulingLine."Date27 Quantity" -
+                                                            GrossReq."Date28 Quantity" +
+                                                            SchedReceipt."Date28 Quantity";
+                DeliverySchedulingLine."Date29 Quantity" := DeliverySchedulingLine."Date28 Quantity" -
+                                                            GrossReq."Date29 Quantity" +
+                                                            SchedReceipt."Date29 Quantity";
+                DeliverySchedulingLine."Date30 Quantity" := DeliverySchedulingLine."Date29 Quantity" -
+                                                            GrossReq."Date30 Quantity" +
+                                                            SchedReceipt."Date30 Quantity";
+                DeliverySchedulingLine."Date31 Quantity" := DeliverySchedulingLine."Date30 Quantity" -
+                                                            GrossReq."Date31 Quantity" +
+                                                            SchedReceipt."Date31 Quantity";
+                DeliverySchedulingLine."Date32 Quantity" := DeliverySchedulingLine."Date31 Quantity" -
+                                                            GrossReq."Date32 Quantity" +
+                                                            SchedReceipt."Date32 Quantity";
+                DeliverySchedulingLine.Modify();
             until DeliverySchedulingLine.Next() = 0;
 
         if rec.FindFirst() then;
@@ -948,7 +1046,9 @@ page 50612 "RV Invy. Planning Lines"
 
     var
         DayCaption: array[32] of Text[30];
-        DeliverySchedulingLine: Record "RV Invy. Planning Line" temporary;
+        DeliverySchedulingLine: Record "RV Invy. Planning Line";
+        GrossReq: Record "RV Invy. Planning Line";
+        SchedReceipt: Record "RV Invy. Planning Line";
         i: Integer;
         j: Integer;
         Item: Record Item;

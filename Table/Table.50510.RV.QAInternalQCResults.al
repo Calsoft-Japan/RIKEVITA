@@ -63,7 +63,11 @@ table 50510 "RV QA Internal QC Results"
         {
             Caption = 'COA Lot No.';
         }
-        field(14; "QC Specification Name"; Code[20])
+        field(14; "COA Container No."; Code[100])
+        {
+            Caption = 'COA Container No.';
+        }
+        field(15; "QC Specification Name"; Code[20])
         {
             Caption = 'QC Specification Name';
             TableRelation = "RV QC Specification";

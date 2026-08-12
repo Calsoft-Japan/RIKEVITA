@@ -1,6 +1,7 @@
-
+//Stephen 2026/8/12 create subscriber for report 
 codeunit 50400 "RV Whse. Posting Subscriber"
 {
+    //Set the SITE dimension code in the warehouse entry based on the warehouse journal line
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse. Jnl.-Register Line", OnInitWhseEntryCopyFromWhseJnlLine, '', false, false)]
     local procedure SetSITECode(var WarehouseEntry: Record "Warehouse Entry"; var WarehouseJournalLine: Record "Warehouse Journal Line")
     var
@@ -103,5 +104,32 @@ codeunit 50400 "RV Whse. Posting Subscriber"
                 end;
         end;
     end;
-
+    //Stephen 2026/8/12 check reason code for each line to be posted from Item Journal before posting
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post", OnCodeOnBeforeItemJnlPostBatchRun, '', false, false)]
+    local procedure CheckReasonCode(var ItemJournalLine: Record "Item Journal Line")
+    var
+        ItemJournalLine2: Record "Item Journal Line";
+    begin
+        ItemJournalLine2.copy(ItemJournalLine);
+        if ItemJournalLine2.FindSet() then begin
+            repeat
+                if ItemJournalLine2."Reason Code" = '' then
+                    Error('Please set reason code for each record.');
+            until ItemJournalLine2.Next() = 0;
+        end;
+    end;
+    //Stephen 2026/8/12 check reason code for each line to be posted from Item Journal before posting
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Jnl.-Post+Print", OnCodeOnBeforeItemJnlPostBatchRun, '', false, false)]
+    local procedure CheckReasonCode2(var ItemJournalLine: Record "Item Journal Line")
+    var
+        ItemJournalLine2: Record "Item Journal Line";
+    begin
+        ItemJournalLine2.copy(ItemJournalLine);
+        if ItemJournalLine2.FindSet() then begin
+            repeat
+                if ItemJournalLine2."Reason Code" = '' then
+                    Error('Please set reason code for each record.');
+            until ItemJournalLine2.Next() = 0;
+        end;
+    end;
 }

@@ -44,7 +44,7 @@ page 50519 "RV CustCOAReportSetting"
                 {
                     ApplicationArea = All;
                 }
-                field("Expire Date"; Rec."Expire Date")
+                field("Expired Date Calc. logic"; Rec."Expired Date Calc. logic")
                 {
                     ApplicationArea = All;
                 }

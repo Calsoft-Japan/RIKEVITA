@@ -87,6 +87,11 @@ page 50513 "RV COA ShipmentLotNo"
                         Editable = false;
                         Visible = false;
                     }
+                    field(Comment; Rec.Comment)
+                    {
+                        ApplicationArea = All;
+                        Editable = false;
+                    }
                 }
             }
 
