@@ -170,7 +170,7 @@ table 50203 "RV Warehouse Packing Info."
     keys
     {
         //key(PK; "Warehouse Shipment No.", "Posted Whse. Shipment No.", "Sales Order No.", "SO Line No.")
-        key(PK; "Sales Order No.", "SO Line No.", "Lot No.", "Line No.")
+        key(PK; "Warehouse Shipment No.", "Sales Order No.", "SO Line No.", "Lot No.", "Line No.")
         {
             Clustered = true;
         }
