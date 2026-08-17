@@ -90,7 +90,7 @@ codeunit 50102 "RV Sales Price Based on Shpt."
         if NeedReopen then
             ReleaseSalesDoc.Reopen(SalesHeader);
 
-        if SalesHeader.Invoice = true then begin
+        if (SalesHeader.Invoice = true) or (SalesHeader.Ship = true) then begin
             SalesLine.Reset();
             SalesLine.SetRange("Document Type", SalesHeader."Document Type");
             SalesLine.SetRange("Document No.", SalesHeader."No.");
