@@ -162,6 +162,7 @@ page 50205 "Warehouse Packing Info"
                     WshpLine: Record "Warehouse Shipment Line";
                     PackingInfo: Record "RV Warehouse Packing Info.";
                     QtytoShip: Decimal;
+                    WarehouseShipment: Page "Warehouse Shipment";
                 begin
                     TempSourceNo := '';
                     TempSourceLineNo := 0;
@@ -304,12 +305,15 @@ page 50205 "Warehouse Packing Info"
         TempQtyPerUOM: Decimal;
         TempUOM: Code[10];
 
-    local procedure InsertPackingInfo(WhseShpgHeader: Record "Warehouse Shipment Header"; WshpLine: Record "Warehouse Shipment Line")
+    procedure InsertPackingInfo(WhseShpgHeader: Record "Warehouse Shipment Header"; WshpLine: Record "Warehouse Shipment Line")
     var
         SOHeader: Record "Sales Header";//FDD005
         PackingInfo: Record "RV Warehouse Packing Info.";
         ReservationEntry: Record "Reservation Entry";
         LineNo: Integer;
+        TempLotNo: Code[50];
+        TempQuantity: Decimal;
+        TempLotQuantity: Decimal;
     begin
         LineNo := 10000;
         ReservationEntry.Reset();
@@ -317,24 +321,59 @@ page 50205 "Warehouse Packing Info"
         ReservationEntry.SetRange("Source Ref. No.", TempSourceLineNo);
         ReservationEntry.SetRange("Item No.", TempItemNo);
         //ReservationEntry.SetRange("Location Code", WhseShpgHeader."Location Code");
+        ReservationEntry.SetCurrentKey("Lot No.");
+
         if ReservationEntry.FindSet() then begin
+            TempLotNo := '';
+            TempQuantity := 0;
+            TempLotQuantity := 0;
             //FDD005
             SOHeader.Reset();
             SOHeader.SetRange("Document Type", "Sales Document Type"::Order);
             SOHeader.SetRange("No.", TempSourceNo);
             if SOHeader.FindSet() then;
             //FDD005
-
             repeat
+                if (ReservationEntry."Lot No." <> TempLotNo) and (TempLotNo <> '') then begin
+                    PackingInfo.Init();
+                    PackingInfo."Warehouse Shipment No." := WhseShpgHeader."No.";
+                    PackingInfo."Sales Order No." := TempSourceNo;
+                    PackingInfo."SO Line No." := TempSourceLineNo;
+                    PackingInfo."Item No." := TempItemNo;
+                    PackingInfo."Lot No." := ReservationEntry."Lot No.";
+                    //PackingInfo."Container No" := ReservationEntry."RV_Container No.";
+                    PackingInfo.Quantity := TempQuantity;//Abs(ReservationEntry."Quantity (Base)");
+                    PackingInfo."Lot Quantity" := TempLotQuantity;//Abs(ReservationEntry."Quantity (Base)");
+                    PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
+                    PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
+                    PackingInfo."Contents UOM" := TempUOM;
+                    PackingInfo."Net Weight" := TempQtyToShip;
+                    PackingInfo."Gross Weight UOM" := TempUOM;
+                    PackingInfo."Line No." := LineNo;
+                    PackingInfo."External Document No." := SOHeader."External Document No.";//FDD005
+                    PackingInfo."Sell-to Customer No." := SOHeader."Sell-to Customer No.";//FDD005
+                    PackingInfo."Qty. per Unit of Measure" := ReservationEntry."Qty. per Unit of Measure";//FDD005
+                    PackingInfo."Quantity (KG)" := ReservationEntry."Quantity (Base)";//FDD005
+                    PackingInfo.Insert();
+                    LineNo += 10000;
+
+                    TempQuantity := 0;
+                    TempLotQuantity := 0;
+                end;
+                TempLotNo := ReservationEntry."Lot No.";
+                TempQuantity += Abs(ReservationEntry."Quantity (Base)");
+                TempLotQuantity += Abs(ReservationEntry."Quantity (Base)");
+            until ReservationEntry.Next() = 0;
+
+            if TempLotNo <> '' then begin
                 PackingInfo.Init();
                 PackingInfo."Warehouse Shipment No." := WhseShpgHeader."No.";
                 PackingInfo."Sales Order No." := TempSourceNo;
                 PackingInfo."SO Line No." := TempSourceLineNo;
                 PackingInfo."Item No." := TempItemNo;
                 PackingInfo."Lot No." := ReservationEntry."Lot No.";
-                PackingInfo."Container No" := ReservationEntry."RV_Container No.";
-                PackingInfo.Quantity := Abs(ReservationEntry."Quantity (Base)");
-                PackingInfo."Lot Quantity" := Abs(ReservationEntry."Quantity (Base)");
+                PackingInfo.Quantity := TempQuantity;
+                PackingInfo."Lot Quantity" := TempLotQuantity;
                 PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
                 PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
                 PackingInfo."Contents UOM" := TempUOM;
@@ -347,7 +386,8 @@ page 50205 "Warehouse Packing Info"
                 PackingInfo."Quantity (KG)" := ReservationEntry."Quantity (Base)";//FDD005
                 PackingInfo.Insert();
                 LineNo += 10000;
-            until ReservationEntry.Next() = 0;
+
+            end;
         end;
     end;
 
