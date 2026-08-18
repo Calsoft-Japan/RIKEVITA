@@ -215,6 +215,22 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
             Description = 'FDD019';
             TableRelation = "Country/Region";
         }
+
+        modify("Posting Date")
+        {
+            trigger OnAfterValidate()
+            var
+                WhseShptLine: Record "Warehouse Shipment Line";
+            begin
+                WhseShptLine.Reset();
+                WhseShptLine.SetRange("No.", Rec."No.");
+                if WhseShptLine.FindSet() then
+                    repeat
+                        WhseShptLine."Shipment Date" := Rec."Posting Date";
+                        WhseShptLine.Modify();
+                    until WhseShptLine.Next() = 0;
+            end;
+        }
     }
 
     trigger OnDelete()//FDD019

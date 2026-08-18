@@ -14,6 +14,7 @@ pageextension 50202 "RV Planning Worksheet Ext" extends "Planning Worksheet"
                 Caption = 'Available in Multiple Vendors';
                 ApplicationArea = all;
                 Editable = false;
+
             }
         }
         addafter("Description")
@@ -38,7 +39,7 @@ pageextension 50202 "RV Planning Worksheet Ext" extends "Planning Worksheet"
                 Promoted = true;
                 PromotedCategory = Process;
                 PromotedOnly = true;
-                Enabled = IsVendorSelection;
+                Enabled = Rec.RV_AvailableInMultipleVendor;
 
                 trigger OnAction()
                 var
@@ -103,31 +104,6 @@ pageextension 50202 "RV Planning Worksheet Ext" extends "Planning Worksheet"
             }
         }
     }
-    var
-        IsVendorSelection: Boolean;
-
-    trigger OnAfterGetRecord()
-    var
-        ItemVendor: Record "Item Vendor";
-    begin
-        IsVendorSelection := false;
-
-        ItemVendor.Reset();
-        ItemVendor.SetRange("Item No.", Rec."No.");
-        if ItemVendor.FindFirst() then begin
-            if ItemVendor.Count > 0 then begin
-                Rec."RV_AvailableInMultipleVendor" := true;
-                IsVendorSelection := true;
-                Rec.Modify();
-            end;
-        end
-        else begin
-            Rec."RV_AvailableInMultipleVendor" := false;
-            IsVendorSelection := false;
-            Rec.Modify();
-        end;
-    end;
-
 
     procedure SplitCurline()
     var
