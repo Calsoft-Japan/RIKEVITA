@@ -25,10 +25,27 @@ page 50610 "RV Invy. Planning Names"
                 {
                     ToolTip = 'Specifies the value of the Description field.', Comment = '%';
                 }
-                // field(Site; Rec.Site)
-                // {
-                //     ToolTip = 'Specifies the value of the Site field.', Comment = '%';
-                // }
+                field("Starting Date"; Rec."Starting Date")
+                {
+                    caption = 'Inventory Planning Starting Date';
+                    ToolTip = 'Specifies the value of the Starting Date field.', Comment = '%';
+                }
+                field("Item Filter"; Rec."Item Filter")
+                {
+                    ToolTip = 'Specifies the value of the Item Filter field.', Comment = '%';
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        ItemList: Page "Item List";
+                    begin
+                        Clear(ItemList);
+                        ItemList.LookupMode(true);
+                        if ItemList.RunModal() = Action::LookupOK then begin
+                            Text := ItemList.GetSelectionFilter();
+                            exit(true);
+                        end else
+                            exit(false);
+                    end;
+                }
             }
         }
     }

@@ -1,7 +1,7 @@
 page 50612 "RV Invy. Planning Lines"
 {
-    ApplicationArea = All;
-    Caption = 'Inventory Planning Lines';
+    // ApplicationArea = All;
+    Caption = 'Lines';
     DeleteAllowed = false;
     InsertAllowed = false;
     modifyAllowed = false;
@@ -16,6 +16,7 @@ page 50612 "RV Invy. Planning Lines"
         {
             repeater(control1)
             {
+                ShowCaption = false;
                 field("Item No."; Rec."Item No.")
                 {
                     ApplicationArea = Basic, Suite;
@@ -590,7 +591,8 @@ page 50612 "RV Invy. Planning Lines"
         ProgressWindow: Dialog;
         Counter: Integer;
 
-        QueryItemInv: Query "RV Item Inventory";
+        // QueryItemInv: Query "RV Item Inventory";
+        ItemQty: record Item;
         QueryQtyOnComponentLines: Query "RV Qty. on Component Lines";
         QueryPlanningIssues: Query "RV Planning Issues";
         QueryPlanningTranShip: Query "RV Planning Tran. Ship";
@@ -607,8 +609,6 @@ page 50612 "RV Invy. Planning Lines"
     begin
         InvyPlanningName.TestField("Starting Date");
 
-        rec.Reset();
-        rec.DeleteAll();
         DeliverySchedulingLine.Reset();
         DeliverySchedulingLine.DeleteAll();
         Lastno := 0;
@@ -619,17 +619,19 @@ page 50612 "RV Invy. Planning Lines"
             PeriodStartDate[i + 1] := CalcDate('+1D', PeriodStartDate[i]);
         end;
 
+        ItemQty.Reset();
         if InvyPlanningName."Item Filter" <> '' then
-            QueryItemInv.SetFilter(ItemNo, InvyPlanningName."Item Filter");
-        QueryItemInv.SetRange(PostingDate, 0D, InvyPlanningName."Starting Date" - 1);
-        QueryItemInv.setfilter(Quantity, '<>%1', 0);
-        QueryItemInv.open();
-        while QueryItemInv.Read() do begin
-            InitDeliverySchedulingLine(QueryItemInv.ItemNo, QueryItemInv.Quantity, "RV Invy. Planning Data Type"::"Gross Requirement", 0);
-            InitDeliverySchedulingLine(QueryItemInv.ItemNo, QueryItemInv.Quantity, "RV Invy. Planning Data Type"::"Planned Inventory", 0);
-            InitDeliverySchedulingLine(QueryItemInv.ItemNo, QueryItemInv.Quantity, "RV Invy. Planning Data Type"::"Scheduled Receipt", 0);
-        end;
-        QueryItemInv.Close();
+            ItemQty.SetFilter("No.", InvyPlanningName."Item Filter");
+        // QueryItemInv.SetRange(PostingDate, 0D, InvyPlanningName."Starting Date" - 1);
+        ItemQty.setfilter(Inventory, '<>%1', 0);
+        ItemQty.setautoCalcFields(Inventory);
+        if ItemQty.findset() then
+            repeat
+                InitDeliverySchedulingLine(ItemQty."No.", ItemQty.Inventory, "RV Invy. Planning Data Type"::"Gross Requirement", 0);
+                InitDeliverySchedulingLine(ItemQty."No.", ItemQty.Inventory, "RV Invy. Planning Data Type"::"Planned Inventory", 0);
+                InitDeliverySchedulingLine(ItemQty."No.", ItemQty.Inventory, "RV Invy. Planning Data Type"::"Scheduled Receipt", 0);
+            until ItemQty.next() = 0;
+
 
         for i := 1 to 32 do begin
 
@@ -846,7 +848,7 @@ page 50612 "RV Invy. Planning Lines"
 
                     UpdateDeliverySchedulingLine(DeliverySchedulingLine, QueryPlanningReceipt.Quantity, i);
                 end else begin
-                    InitDeliverySchedulingLine(QueryPlanningReceipt.ItemNo, QueryPlanningReceipt.Quantity, "RV Invy. Planning Data Type"::"Planned Inventory", i);
+                    InitDeliverySchedulingLine(QueryPlanningReceipt.ItemNo, QueryPlanningReceipt.Quantity, "RV Invy. Planning Data Type"::"Scheduled Receipt", i);
                     InitDeliverySchedulingLine(QueryPlanningReceipt.ItemNo, 0, "RV Invy. Planning Data Type"::"Planned Inventory", 0);
                     InitDeliverySchedulingLine(QueryPlanningReceipt.ItemNo, 0, "RV Invy. Planning Data Type"::"Gross Requirement", 0);
                 end;
@@ -863,7 +865,7 @@ page 50612 "RV Invy. Planning Lines"
 
                     UpdateDeliverySchedulingLine(DeliverySchedulingLine, QueryPlannedOrderReceipt.Quantity, i);
                 end else begin
-                    InitDeliverySchedulingLine(QueryPlannedOrderReceipt.ItemNo, QueryPlannedOrderReceipt.Quantity, "RV Invy. Planning Data Type"::"Planned Inventory", i);
+                    InitDeliverySchedulingLine(QueryPlannedOrderReceipt.ItemNo, QueryPlannedOrderReceipt.Quantity, "RV Invy. Planning Data Type"::"Scheduled Receipt", i);
                     InitDeliverySchedulingLine(QueryPlannedOrderReceipt.ItemNo, 0, "RV Invy. Planning Data Type"::"Planned Inventory", 0);
                     InitDeliverySchedulingLine(QueryPlannedOrderReceipt.ItemNo, 0, "RV Invy. Planning Data Type"::"Gross Requirement", 0);
 
