@@ -141,17 +141,22 @@ report 50205 "RV Sales Invoice(Oversea)"
                     column(CustomerPO; CustomerPO)
                     {
                     }
-
+                    column(SalesListComment; SalesListComment)
+                    {
+                    }
                     trigger OnAfterGetRecord()
                     var
                         RecItem: Record Item;
                         RecSalesShipmentHeader: Record "Sales Shipment Header";
                         RecItemReference: Record "Item Reference";
+                        RecSalesShipmentLine: Record "Sales Shipment Line";
+                        RecPostedWhseShipmentLine: Record "Posted Whse. Shipment Line";
+                        RecWarehousePackingInfo: Record "RV Warehouse Packing Info.";
                     begin
                         SalesOrderNo := '';
                         CustomerPO := '';
                         FOBAmount := 0;
-
+                        SalesListComment := '';
                         RecItem.Get("No.");
 
                         if "No." = RIKEVITASetup."Freight Charge Item No" then begin
@@ -196,6 +201,28 @@ report 50205 "RV Sales Invoice(Oversea)"
                             Description2 := SalesLine."Description 2";
                         end;
 
+                        RecSalesShipmentLine.Reset();
+                        RecSalesShipmentLine.SetRange("Document No.", "Shipment No.");
+                        RecSalesShipmentLine.SetRange("Line No.", "Shipment Line No.");
+                        if RecSalesShipmentLine.FindFirst() then begin
+                            RecPostedWhseShipmentLine.Reset();
+                            RecPostedWhseShipmentLine.SetRange("Source No.", RecSalesShipmentLine."Order No.");
+                            RecPostedWhseShipmentLine.SetRange("Source Line No.", RecSalesShipmentLine."Order Line No.");
+                            RecPostedWhseShipmentLine.SetRange("Posted Source No.", RecSalesShipmentLine."Document No.");
+                            if RecPostedWhseShipmentLine.FindFirst() then begin
+                                RecWarehousePackingInfo.Reset();
+                                RecWarehousePackingInfo.SetRange("Sales Order No.", RecPostedWhseShipmentLine."Source No.");
+                                RecWarehousePackingInfo.SetRange("SO Line No.", RecPostedWhseShipmentLine."Source Line No.");
+                                RecWarehousePackingInfo.SetRange("Posted Whse. Shipment No.", RecPostedWhseShipmentLine."No.");
+                                if RecWarehousePackingInfo.FindSet() then begin
+                                    repeat
+                                        SalesListComment += RecWarehousePackingInfo.Comment + Format(chr10);
+                                    until RecWarehousePackingInfo.Next() = 0;
+                                end;
+                            end;
+                        end;
+
+
                     end;
 
                 }
@@ -223,6 +250,9 @@ report 50205 "RV Sales Invoice(Oversea)"
                 column(WorkDescription; ShowWorkDescription)
                 {
                 }
+                column(SalesComment; SalesComment)
+                {
+                }
                 trigger OnAfterGetRecord()
                 var
                     ISODoc: Record "RV ISO Document";
@@ -234,13 +264,16 @@ report 50205 "RV Sales Invoice(Oversea)"
                     TempSalesShipmentHeader: Record "Sales Shipment Header" temporary;
                     SalesLine: Record "Sales Line";
                     TypeHelper: Codeunit "Type Helper";
+                    SalesCommentLine: Record "Sales Comment Line";
                 begin
+                    chr10 := 10;
                     CompanyInfo.Get();
                     CompanyInfo.CalcFields(Picture);
                     CerfiticateNo := '';
                     OrderNo := '';
                     TotalFreightCharges := 0;
                     TempNo := 1;
+                    SalesComment := '';
                     ISODoc.Reset();
                     ISODoc.SetRange("Report Code", 'OVERSEA INVOICE');
                     if ISODoc.FindFirst() then begin
@@ -295,7 +328,15 @@ report 50205 "RV Sales Invoice(Oversea)"
                     "Work Description".CreateInStream(WorkDescriptionInstream, TEXTENCODING::UTF8);
                     ShowWorkDescription := TypeHelper.ReadAsTextWithSeparator(WorkDescriptionInstream, TypeHelper.LFSeparator());
 
-
+                    SalesCommentLine.Reset();
+                    SalesCommentLine.SetRange("No.", "No.");
+                    SalesCommentLine.SetRange("Document Type", SalesCommentLine."Document Type"::Invoice);
+                    SalesCommentLine.SetCurrentKey("Line No.");
+                    if SalesCommentLine.FindSet() then begin
+                        repeat
+                            SalesComment += SalesCommentLine.Comment + Format(chr10);
+                        until SalesCommentLine.Next() = 0;
+                    end;
                 end;
 
                 trigger OnPostDataItem()
@@ -362,6 +403,9 @@ report 50205 "RV Sales Invoice(Oversea)"
         ShowWorkDescription: Text;
         WorkDescriptionInstream: InStream;
         TempNo: Integer;
+        SalesComment: Text;
+        chr10: Char;
+        SalesListComment: Text;
 
     trigger OnPreReport()
     begin

@@ -263,17 +263,17 @@ page 50205 "Warehouse Packing Info"
                                             InsertPackingInfo."Lot No." := PackingInfo."Lot No.";
                                             InsertPackingInfo.Quantity := TempPackingInfo."Lot Quantity" - SumQuantity;
                                             InsertPackingInfo."Lot Quantity" := PackingInfo."Lot Quantity";
-                                            InsertPackingInfo.Validate("No. of Packages", PackingInfo."No. of Packages");
+                                            InsertPackingInfo.Validate("No. of Packages", InsertPackingInfo.Quantity);
                                             InsertPackingInfo."Contents Per Package" := PackingInfo."Contents Per Package";
                                             InsertPackingInfo."Contents UOM" := PackingInfo."Contents UOM";
-                                            InsertPackingInfo."Net Weight" := PackingInfo."Net Weight";
+                                            InsertPackingInfo."Net Weight" := InsertPackingInfo.Quantity;//PackingInfo."Net Weight";
                                             InsertPackingInfo."Gross Weight UOM" := PackingInfo."Gross Weight UOM";
                                             InsertPackingInfo."Line No." := MaxLineNo;
 
                                             InsertPackingInfo."External Document No." := PackingInfo."External Document No.";//FDD005
                                             InsertPackingInfo."Sell-to Customer No." := PackingInfo."Sell-to Customer No.";//FDD005
                                             InsertPackingInfo."Qty. per Unit of Measure" := PackingInfo."Qty. per Unit of Measure";//FDD005
-                                            InsertPackingInfo."Quantity (KG)" := PackingInfo."Quantity (KG)";//FDD005
+                                            InsertPackingInfo."Quantity (KG)" := Abs(PackingInfo."Quantity (KG)");//FDD005
                                             InsertPackingInfo.Insert();
 
                                             TempCalPackingInfo.Init();
@@ -340,20 +340,21 @@ page 50205 "Warehouse Packing Info"
                     PackingInfo."Sales Order No." := TempSourceNo;
                     PackingInfo."SO Line No." := TempSourceLineNo;
                     PackingInfo."Item No." := TempItemNo;
-                    PackingInfo."Lot No." := ReservationEntry."Lot No.";
+                    PackingInfo."Lot No." := TempLotNo;
                     //PackingInfo."Container No" := ReservationEntry."RV_Container No.";
                     PackingInfo.Quantity := TempQuantity;//Abs(ReservationEntry."Quantity (Base)");
                     PackingInfo."Lot Quantity" := TempLotQuantity;//Abs(ReservationEntry."Quantity (Base)");
-                    PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
+                    //PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
+                    PackingInfo.Validate("No. of Packages", TempQuantity);
                     PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
                     PackingInfo."Contents UOM" := TempUOM;
-                    PackingInfo."Net Weight" := TempQtyToShip;
+                    PackingInfo."Net Weight" := TempQuantity;//TempQtyToShip;
                     PackingInfo."Gross Weight UOM" := TempUOM;
                     PackingInfo."Line No." := LineNo;
                     PackingInfo."External Document No." := SOHeader."External Document No.";//FDD005
                     PackingInfo."Sell-to Customer No." := SOHeader."Sell-to Customer No.";//FDD005
                     PackingInfo."Qty. per Unit of Measure" := ReservationEntry."Qty. per Unit of Measure";//FDD005
-                    PackingInfo."Quantity (KG)" := ReservationEntry."Quantity (Base)";//FDD005
+                    PackingInfo."Quantity (KG)" := Abs(ReservationEntry."Quantity (Base)");//FDD005
                     PackingInfo.Insert();
                     LineNo += 10000;
 
@@ -371,19 +372,20 @@ page 50205 "Warehouse Packing Info"
                 PackingInfo."Sales Order No." := TempSourceNo;
                 PackingInfo."SO Line No." := TempSourceLineNo;
                 PackingInfo."Item No." := TempItemNo;
-                PackingInfo."Lot No." := ReservationEntry."Lot No.";
+                PackingInfo."Lot No." := TempLotNo;
                 PackingInfo.Quantity := TempQuantity;
                 PackingInfo."Lot Quantity" := TempLotQuantity;
-                PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
+                //PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
+                PackingInfo.Validate("No. of Packages", TempQuantity);
                 PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
                 PackingInfo."Contents UOM" := TempUOM;
-                PackingInfo."Net Weight" := TempQtyToShip;
+                PackingInfo."Net Weight" := TempQuantity;//TempQtyToShip;
                 PackingInfo."Gross Weight UOM" := TempUOM;
                 PackingInfo."Line No." := LineNo;
                 PackingInfo."External Document No." := SOHeader."External Document No.";//FDD005
                 PackingInfo."Sell-to Customer No." := SOHeader."Sell-to Customer No.";//FDD005
                 PackingInfo."Qty. per Unit of Measure" := ReservationEntry."Qty. per Unit of Measure";//FDD005
-                PackingInfo."Quantity (KG)" := ReservationEntry."Quantity (Base)";//FDD005
+                PackingInfo."Quantity (KG)" := Abs(ReservationEntry."Quantity (Base)");//FDD005
                 PackingInfo.Insert();
                 LineNo += 10000;
 

@@ -65,6 +65,10 @@ table 50203 "RV Warehouse Packing Info."
             Caption = 'Quantity';
             Description = 'FDD019';
             DecimalPlaces = 0 : 5;
+            trigger OnValidate()
+            begin
+                Validate("No. of Packages", Quantity);
+            end;
         }
         field(9; "Case No."; Text[20])
         {
@@ -76,11 +80,13 @@ table 50203 "RV Warehouse Packing Info."
             Caption = 'No. of Packages';
             Description = 'FDD019';
             DecimalPlaces = 0 : 5;
+            Editable = false;
             trigger OnValidate()
             var
                 Item: Record Item;
             begin
                 Item.Get(Rec."Item No.");
+                Rec."Net Weight" := Rec.Quantity;
                 Rec."Gross Weight" := Rec."No. of Packages" * Item."Gross Weight";
                 Rec.Measurement := Rec."No. of Packages" * Item."Unit Volume";
             end;
@@ -90,6 +96,7 @@ table 50203 "RV Warehouse Packing Info."
             Caption = 'Contents Per Package';
             Description = 'FDD019';
             DecimalPlaces = 0 : 5;
+            Editable = false;
         }
         field(12; "Contents UOM"; Code[10])
         {
@@ -102,12 +109,14 @@ table 50203 "RV Warehouse Packing Info."
             Caption = 'Net Weight';
             Description = 'FDD019';
             DecimalPlaces = 0 : 5;
+            Editable = false;
         }
         field(14; "Gross Weight"; Decimal)
         {
             Caption = 'Gross Weight';
             Description = 'FDD019';
             DecimalPlaces = 0 : 5;
+            Editable = false;
         }
         field(15; "Gross Weight UOM"; Code[10])
         {

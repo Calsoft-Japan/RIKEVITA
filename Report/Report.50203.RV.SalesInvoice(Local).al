@@ -220,7 +220,7 @@ report 50203 "RV Sales Invoice(Local)"
     var
         CompanyInfo: Record "Company Information";
         RIKEVITASetup: Record "RV RIKEVITA Setup";
-        ReportTitle: Label 'INVOICE';
+        ReportTitle: Label 'FORMA INVOICE';
         ISODocumentNo: Text;
         ISODocVersion: Text;
         Description: Text;

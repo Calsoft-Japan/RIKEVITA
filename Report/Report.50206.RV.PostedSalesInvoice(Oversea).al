@@ -136,6 +136,9 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                     column(CustomerPO; CustomerPO)
                     {
                     }
+                    column(SalesListComment; SalesListComment)
+                    {
+                    }
                     trigger OnAfterGetRecord()
                     var
                         RecItem: Record Item;
@@ -145,7 +148,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                         SalesOrderNo := '';
                         CustomerPO := '';
                         FOBAmount := 0;
-
+                        SalesListComment := '';
                         RecItem.Get("No.");
                         if "No." = RIKEVITASetup."Freight Charge Item No" then begin
                             TotalFreightCharges += "Line Amount";
@@ -214,6 +217,9 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                 column(WorkDescription; ShowWorkDescription)
                 {
                 }
+                column(SalesComment; SalesComment)
+                {
+                }
                 trigger OnAfterGetRecord()
                 var
                     ISODoc: Record "RV ISO Document";
@@ -226,13 +232,16 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                     TempSalesShipmentHeader: Record "Sales Shipment Header" temporary;
                     SalesInvoiceLine: Record "Sales Invoice Line";
                     TypeHelper: Codeunit "Type Helper";
+                    SalesCommentLine: Record "Sales Comment Line";
                 begin
+                    chr10 := 10;
                     CompanyInfo.Get();
                     CompanyInfo.CalcFields(Picture);
                     CerfiticateNo := '';
                     OrderNo := '';
                     TotalFreightCharges := 0;
                     TempNo := 1;
+                    SalesComment := '';
                     ISODoc.Reset();
                     ISODoc.SetRange("Report Code", 'OVERSEA INVOICE');
                     if ISODoc.FindFirst() then begin
@@ -287,7 +296,15 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                     "Work Description".CreateInStream(WorkDescriptionInstream, TEXTENCODING::UTF8);
                     ShowWorkDescription := TypeHelper.ReadAsTextWithSeparator(WorkDescriptionInstream, TypeHelper.LFSeparator());
 
-
+                    SalesCommentLine.Reset();
+                    SalesCommentLine.SetRange("No.", "No.");
+                    SalesCommentLine.SetRange("Document Type", SalesCommentLine."Document Type"::Invoice);
+                    SalesCommentLine.SetCurrentKey("Line No.");
+                    if SalesCommentLine.FindSet() then begin
+                        repeat
+                            SalesComment += SalesCommentLine.Comment + Format(chr10);
+                        until SalesCommentLine.Next() = 0;
+                    end;
                 end;
 
                 trigger OnPostDataItem()
@@ -357,6 +374,9 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
         ExchangeRate: Decimal;
         ShowWorkDescription: Text;
         WorkDescriptionInstream: InStream;
+        SalesComment: Text;
+        chr10: Char;
+        SalesListComment: Text;
 
     trigger OnPreReport()
     begin

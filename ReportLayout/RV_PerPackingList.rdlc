@@ -83,7 +83,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                           </Visibility>
                           <Style>
                             <Border>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                             </Border>
                             <TopBorder>
                               <Color>Black</Color>
@@ -97,12 +97,12 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                             </BottomBorder>
                             <LeftBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                               <Width>1pt</Width>
                             </LeftBorder>
                             <RightBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                               <Width>1pt</Width>
                             </RightBorder>
                             <VerticalAlign>Top</VerticalAlign>
@@ -155,7 +155,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                             </LeftBorder>
                             <RightBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
+                              <Style>None</Style>
                               <Width>1pt</Width>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -192,7 +192,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                             </Border>
                             <RightBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
                               <Width>1pt</Width>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -229,7 +228,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                             </Border>
                             <RightBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
                               <Width>1pt</Width>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -266,7 +264,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                             </Border>
                             <RightBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
                               <Width>1pt</Width>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -303,7 +300,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                             </Border>
                             <RightBorder>
                               <Color>Black</Color>
-                              <Style>Solid</Style>
                               <Width>1pt</Width>
                             </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -338,9 +334,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                             <Border>
                               <Style>None</Style>
                             </Border>
-                            <RightBorder>
-                              <Style>Solid</Style>
-                            </RightBorder>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -2624,7 +2617,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
       <Width>7.31542in</Width>
       <Page>
         <PageHeader>
-          <Height>3.91944in</Height>
+          <Height>3.69027in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -2679,39 +2672,6 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                 <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
-            <Textbox Name="Textbox2">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!SSTRegNo.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style />
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox2</rd:DefaultName>
-              <Top>0.5925in</Top>
-              <Left>1.57167in</Left>
-              <Height>0.25in</Height>
-              <Width>2.09375in</Width>
-              <ZIndex>2</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Middle</VerticalAlign>
-                <PaddingLeft>2pt</PaddingLeft>
-                <PaddingRight>2pt</PaddingRight>
-                <PaddingTop>2pt</PaddingTop>
-                <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
             <Textbox Name="Textbox3">
               <CanGrow>true</CanGrow>
               <KeepTogether>true</KeepTogether>
@@ -2725,15 +2685,17 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                       </Style>
                     </TextRun>
                   </TextRuns>
-                  <Style />
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox3</rd:DefaultName>
-              <Top>0.5925in</Top>
-              <Left>3.73486in</Left>
+              <Top>0.49527in</Top>
+              <Left>1.57167in</Left>
               <Height>0.25in</Height>
-              <Width>2.20833in</Width>
-              <ZIndex>3</ZIndex>
+              <Width>4.37152in</Width>
+              <ZIndex>2</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -2766,31 +2728,14 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>5.29749in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
-              <ZIndex>4</ZIndex>
+              <ZIndex>3</ZIndex>
+              <Visibility>
+                <Hidden>=IIf(First(Fields!IsPrePacking.Value, "DataSet_Result"),true,false)</Hidden>
+              </Visibility>
               <Style>
                 <Border>
                   <Style>Solid</Style>
                 </Border>
-                <TopBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </TopBorder>
-                <BottomBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </BottomBorder>
-                <LeftBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </LeftBorder>
-                <RightBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </RightBorder>
                 <VerticalAlign>Middle</VerticalAlign>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
@@ -2821,31 +2766,14 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>6.29749in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
-              <ZIndex>5</ZIndex>
+              <ZIndex>4</ZIndex>
+              <Visibility>
+                <Hidden>=IIf(First(Fields!IsPrePacking.Value, "DataSet_Result"),true,false)</Hidden>
+              </Visibility>
               <Style>
                 <Border>
                   <Style>Solid</Style>
                 </Border>
-                <TopBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </TopBorder>
-                <BottomBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </BottomBorder>
-                <LeftBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </LeftBorder>
-                <RightBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </RightBorder>
                 <VerticalAlign>Middle</VerticalAlign>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
@@ -2874,31 +2802,14 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>5.29749in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
-              <ZIndex>6</ZIndex>
+              <ZIndex>5</ZIndex>
+              <Visibility>
+                <Hidden>=IIf(First(Fields!IsPrePacking.Value, "DataSet_Result"),true,false)</Hidden>
+              </Visibility>
               <Style>
                 <Border>
                   <Style>Solid</Style>
                 </Border>
-                <TopBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </TopBorder>
-                <BottomBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </BottomBorder>
-                <LeftBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </LeftBorder>
-                <RightBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </RightBorder>
                 <VerticalAlign>Middle</VerticalAlign>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
@@ -2929,31 +2840,14 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>6.29749in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
-              <ZIndex>7</ZIndex>
+              <ZIndex>6</ZIndex>
+              <Visibility>
+                <Hidden>=IIf(First(Fields!IsPrePacking.Value, "DataSet_Result"),true,false)</Hidden>
+              </Visibility>
               <Style>
                 <Border>
                   <Style>Solid</Style>
                 </Border>
-                <TopBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </TopBorder>
-                <BottomBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </BottomBorder>
-                <LeftBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </LeftBorder>
-                <RightBorder>
-                  <Color>Black</Color>
-                  <Style>Solid</Style>
-                  <Width>1pt</Width>
-                </RightBorder>
                 <VerticalAlign>Middle</VerticalAlign>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
@@ -2982,7 +2876,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>5.29749in</Left>
               <Height>11pt</Height>
               <Width>1in</Width>
-              <ZIndex>8</ZIndex>
+              <ZIndex>7</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3011,7 +2905,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>6.29749in</Left>
               <Height>11pt</Height>
               <Width>1in</Width>
-              <ZIndex>9</ZIndex>
+              <ZIndex>8</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3029,7 +2923,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                       <Value>=First(Fields!ReportTitle.Value, "DataSet_Result")</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
-                        <FontSize>18pt</FontSize>
+                        <FontSize>16pt</FontSize>
                         <FontWeight>Bold</FontWeight>
                         <TextDecoration>None</TextDecoration>
                         <Color>#000000</Color>
@@ -3045,8 +2939,8 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Top>1.24875in</Top>
               <Left>1.57167in</Left>
               <Height>0.36042in</Height>
-              <Width>4.37152in</Width>
-              <ZIndex>10</ZIndex>
+              <Width>3.59027in</Width>
+              <ZIndex>9</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3078,7 +2972,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Top>1.73201in</Top>
               <Height>11pt</Height>
               <Width>0.73958in</Width>
-              <ZIndex>11</ZIndex>
+              <ZIndex>10</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3108,7 +3002,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>0.73958in</Left>
               <Height>11pt</Height>
               <Width>4.31194in</Width>
-              <ZIndex>12</ZIndex>
+              <ZIndex>11</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3136,7 +3030,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Top>1.88479in</Top>
               <Height>11pt</Height>
               <Width>0.73958in</Width>
-              <ZIndex>13</ZIndex>
+              <ZIndex>12</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3165,7 +3059,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>0.73958in</Left>
               <Height>11pt</Height>
               <Width>2.70833in</Width>
-              <ZIndex>14</ZIndex>
+              <ZIndex>13</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3194,7 +3088,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>0.73958in</Left>
               <Height>11pt</Height>
               <Width>2.70833in</Width>
-              <ZIndex>15</ZIndex>
+              <ZIndex>14</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3223,7 +3117,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>0.73958in</Left>
               <Height>11pt</Height>
               <Width>2.70833in</Width>
-              <ZIndex>16</ZIndex>
+              <ZIndex>15</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3252,7 +3146,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>0.73958in</Left>
               <Height>11pt</Height>
               <Width>2.70833in</Width>
-              <ZIndex>17</ZIndex>
+              <ZIndex>16</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3281,7 +3175,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>0.73958in</Left>
               <Height>11pt</Height>
               <Width>2.70833in</Width>
-              <ZIndex>18</ZIndex>
+              <ZIndex>17</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3310,7 +3204,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>4.00986in</Left>
               <Height>11pt</Height>
               <Width>1.04166in</Width>
-              <ZIndex>19</ZIndex>
+              <ZIndex>18</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3339,7 +3233,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>5.05152in</Left>
               <Height>11pt</Height>
               <Width>1.15104in</Width>
-              <ZIndex>20</ZIndex>
+              <ZIndex>19</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3367,7 +3261,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Top>2.81389in</Top>
               <Height>11pt</Height>
               <Width>0.98611in</Width>
-              <ZIndex>21</ZIndex>
+              <ZIndex>20</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3396,7 +3290,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>0.98611in</Left>
               <Height>11pt</Height>
               <Width>1.64583in</Width>
-              <ZIndex>22</ZIndex>
+              <ZIndex>21</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3425,7 +3319,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>4.00986in</Left>
               <Height>11pt</Height>
               <Width>1.04166in</Width>
-              <ZIndex>23</ZIndex>
+              <ZIndex>22</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3454,7 +3348,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>5.05152in</Left>
               <Height>11pt</Height>
               <Width>1.90625in</Width>
-              <ZIndex>24</ZIndex>
+              <ZIndex>23</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3482,7 +3376,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Top>3.03611in</Top>
               <Height>11pt</Height>
               <Width>0.52083in</Width>
-              <ZIndex>25</ZIndex>
+              <ZIndex>24</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3511,7 +3405,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Left>0.52083in</Left>
               <Height>11pt</Height>
               <Width>2.11111in</Width>
-              <ZIndex>26</ZIndex>
+              <ZIndex>25</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3539,8 +3433,8 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Top>3.03264in</Top>
               <Left>4.00974in</Left>
               <Height>11pt</Height>
-              <Width>0.52083in</Width>
-              <ZIndex>27</ZIndex>
+              <Width>0.34896in</Width>
+              <ZIndex>26</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3566,10 +3460,10 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               </Paragraphs>
               <rd:DefaultName>Textbox102</rd:DefaultName>
               <Top>3.03264in</Top>
-              <Left>4.53056in</Left>
+              <Left>4.3587in</Left>
               <Height>11pt</Height>
-              <Width>2.42721in</Width>
-              <ZIndex>28</ZIndex>
+              <Width>2.59908in</Width>
+              <ZIndex>27</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3597,8 +3491,8 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Top>3.25486in</Top>
               <Left>4.00974in</Left>
               <Height>11pt</Height>
-              <Width>0.52083in</Width>
-              <ZIndex>29</ZIndex>
+              <Width>0.34896in</Width>
+              <ZIndex>28</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3624,10 +3518,10 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               </Paragraphs>
               <rd:DefaultName>Textbox102</rd:DefaultName>
               <Top>3.25486in</Top>
-              <Left>4.53056in</Left>
+              <Left>4.3587in</Left>
               <Height>11pt</Height>
-              <Width>2.42721in</Width>
-              <ZIndex>30</ZIndex>
+              <Width>2.59908in</Width>
+              <ZIndex>29</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3642,7 +3536,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>SAILING ON OR ABOUT :</Value>
+                      <Value>SAILING ON OR BOARDING :</Value>
                       <Style>
                         <FontSize>8pt</FontSize>
                       </Style>
@@ -3655,8 +3549,8 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Top>3.47708in</Top>
               <Left>4.00986in</Left>
               <Height>11pt</Height>
-              <Width>1.32291in</Width>
-              <ZIndex>31</ZIndex>
+              <Width>1.56845in</Width>
+              <ZIndex>30</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3682,10 +3576,10 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               </Paragraphs>
               <rd:DefaultName>Textbox102</rd:DefaultName>
               <Top>3.47708in</Top>
-              <Left>5.33277in</Left>
+              <Left>5.57831in</Left>
               <Height>11pt</Height>
-              <Width>1.625in</Width>
-              <ZIndex>32</ZIndex>
+              <Width>1.37946in</Width>
+              <ZIndex>31</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3712,11 +3606,11 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox26</rd:DefaultName>
-              <Top>0.91194in</Top>
+              <Top>0.84597in</Top>
               <Left>1.57167in</Left>
               <Height>11pt</Height>
               <Width>4.37152in</Width>
-              <ZIndex>33</ZIndex>
+              <ZIndex>32</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3743,7 +3637,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>No 11, Jalan Bayu, 81200 Tampoi, Johor Bahru, Johor Darul Takzim, Malaysia</Value>
+                      <Value>No. 11, Jalan Bayu, 81200 Tampoi, Johor Bahru, Johor Darul Takzim, Malaysia.</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontFamily>Calibri</FontFamily>
@@ -3761,7 +3655,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Top>0.02778in</Top>
               <Left>2.03439in</Left>
               <Height>11pt</Height>
-              <Width>3.76992in</Width>
+              <Width>3.9088in</Width>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -3775,7 +3669,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>Tel: 07-238 1733, 07-213 2100 Fax: 07-238 1737</Value>
+                      <Value>Tel: 07-2381733, 07-2132100  Fax: 07-2381737</Value>
                       <Style>
                         <FontStyle>Normal</FontStyle>
                         <FontFamily>Calibri</FontFamily>
@@ -3795,7 +3689,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
               <Top>0.18055in</Top>
               <Left>2.03439in</Left>
               <Height>11pt</Height>
-              <Width>3.76992in</Width>
+              <Width>3.9088in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
@@ -3942,6 +3836,9 @@ End Function
         </Field>
         <Field Name="MARKS">
           <DataField>MARKS</DataField>
+        </Field>
+        <Field Name="IsPrePacking">
+          <DataField>IsPrePacking</DataField>
         </Field>
         <Field Name="Case_No">
           <DataField>Case_No</DataField>

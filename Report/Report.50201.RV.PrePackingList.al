@@ -87,10 +87,10 @@ report 50201 "RV Pre Packing List Report"
                 column(FromValue; "RV_Country of Origin")
                 {
                 }
-                column(ToValue; "RV_Ship-to Name")
+                column(ToValue; "RV_Final Destination")
                 {
                 }
-                column(SailingOnOrAbout; "RV_SAILING ON OR ABOUT")
+                column(SailingOnOrAbout; Format("RV_SAILING ON OR ABOUT", 0, '<Day,2>/<Month,2>/<Year4>'))
                 {
                 }
                 column(Shipment_Method_Code; "Shipment Method Code")
@@ -99,13 +99,17 @@ report 50201 "RV Pre Packing List Report"
                 column(WarehouseComment; WarehouseComment)
                 {
                 }
+                column(MARKS; MARKS)
+                {
+                }
+                column(IsPrePacking; IsPrePacking)
+                {
+                }
                 dataitem(WarehousePackingInfo; "RV Warehouse Packing Info.")
                 {
                     DataItemTableView = where("Posted Whse. Shipment No." = filter(''));
                     DataItemLink = "Warehouse Shipment No." = field("No.");
-                    column(MARKS; MARKS)
-                    {
-                    }
+
                     column(Case_No; "Case No.")
                     {
                     }
@@ -171,8 +175,10 @@ report 50201 "RV Pre Packing List Report"
                         RecReservationEntry: Record "Reservation Entry";
                         RecWarehouseShipmentLine: Record "Warehouse Shipment Line";
                         RecWarehousePackingInfo: Record "RV Warehouse Packing Info.";
+                        TempWarehousePackingInfo: Record "RV Warehouse Packing Info." temporary;
                         TempNo: Integer;
                         oldContainerNo: Text;
+                        TempLotNo: Code[50];
                     begin
                         chr10 := 10;
                         LotNoNumber := 0;
@@ -184,6 +190,8 @@ report 50201 "RV Pre Packing List Report"
                         CerfiticateNo := '';
                         oldContainerNo := '';
                         ExternalDocumentNo := 'CUSTOMER PO NO: ';
+
+
                         if RecItem.Get("Item No.") then begin
                             Description := RecItem.Description;
                             Description2 := RecItem."Description 2";
@@ -217,45 +225,68 @@ report 50201 "RV Pre Packing List Report"
                                 ExternalDocumentNo := ExternalDocumentNo + RecSalesHeader."External Document No.";
                             end;
 
-                            MARKS := RecSalesHeader."Sell-to Customer Name" + Format(chr10) + RecSalesHeader."Sell-to City" + Format(chr10) + "Sales Order No.";
-                        end else begin
-                            RecSalesShipmentHeader.Reset();
-                            RecSalesShipmentHeader.SetRange("Order No.", "Sales Order No.");
-                            if RecSalesShipmentHeader.FindFirst() then begin
-                                MARKS := RecSalesShipmentHeader."Sell-to Customer Name" + Format(chr10) + RecSalesShipmentHeader."Sell-to City" + Format(chr10) + "Sales Order No.";
-                            end;
+                            //MARKS := RecSalesHeader."Sell-to Customer Name" + Format(chr10) + RecSalesHeader."Sell-to City" + Format(chr10) + "Sales Order No.";
+                            /*end; else begin
+                                RecSalesShipmentHeader.Reset();
+                                RecSalesShipmentHeader.SetRange("Order No.", "Sales Order No.");
+                                if RecSalesShipmentHeader.FindFirst() then begin
+                                    MARKS := RecSalesShipmentHeader."Sell-to Customer Name" + Format(chr10) + RecSalesShipmentHeader."Sell-to City" + Format(chr10) + "Sales Order No.";
+                                end;*/
                         end;
                         RecWarehousePackingInfo.Reset();
                         RecWarehousePackingInfo.SetRange("Warehouse Shipment No.", "Warehouse Shipment No.");
-                        RecWarehousePackingInfo.SetRange("Sales Order No.", "Sales Order No.");
-                        RecWarehousePackingInfo.SetCurrentKey("Container No");
+                        //RecWarehousePackingInfo.SetRange("Sales Order No.", "Sales Order No.");
+                        RecWarehousePackingInfo.SetCurrentKey("Container No", "Lot No.");
                         if RecWarehousePackingInfo.FindSet() then begin
                             repeat
-                                RecItem.Get(RecWarehousePackingInfo."Item No.");
-                                if (RecWarehousePackingInfo."Container No" = '') and (LotNoNumber = 0) then begin
-                                    LotNo1 += '<b>' + RecWarehousePackingInfo."Container No" + '</b><br>LOT NO. :<br>';
+                                TempWarehousePackingInfo.Reset();
+                                TempWarehousePackingInfo.SetRange("Container No", RecWarehousePackingInfo."Container No");
+                                TempWarehousePackingInfo.SetRange("Lot No.", RecWarehousePackingInfo."Lot No.");
+                                if TempWarehousePackingInfo.FindFirst() then begin
+                                    TempWarehousePackingInfo.Quantity := TempWarehousePackingInfo.Quantity + RecWarehousePackingInfo.Quantity;
+                                    TempWarehousePackingInfo.Modify();
+                                end else begin
+                                    TempWarehousePackingInfo.Init();
+                                    TempWarehousePackingInfo."Warehouse Shipment No." := RecWarehousePackingInfo."Warehouse Shipment No.";
+                                    TempWarehousePackingInfo."Sales Order No." := RecWarehousePackingInfo."Sales Order No.";
+                                    TempWarehousePackingInfo."SO Line No." := RecWarehousePackingInfo."SO Line No.";
+                                    TempWarehousePackingInfo."Lot No." := RecWarehousePackingInfo."Lot No.";
+                                    TempWarehousePackingInfo."Line No." := RecWarehousePackingInfo."Line No.";
+                                    TempWarehousePackingInfo."Item No." := RecWarehousePackingInfo."Item No.";
+                                    TempWarehousePackingInfo."Container No" := RecWarehousePackingInfo."Container No";
+                                    TempWarehousePackingInfo.Quantity := RecWarehousePackingInfo.Quantity;
+                                    TempWarehousePackingInfo.Insert();
+                                end;
+                            until RecWarehousePackingInfo.Next() = 0;
+                        end;
+                        TempWarehousePackingInfo.Reset();
+                        TempWarehousePackingInfo.SetCurrentKey("Container No");
+                        if TempWarehousePackingInfo.FindSet() then begin
+                            repeat
+                                RecItem.Get(TempWarehousePackingInfo."Item No.");
+                                if (TempWarehousePackingInfo."Container No" = '') and (LotNoNumber = 0) then begin
+                                    LotNo1 += '<b>' + TempWarehousePackingInfo."Container No" + '</b><br>LOT NO. :<br>';
                                     LotNo2 += '<br><br>';
                                 end;
-                                if oldContainerNo <> RecWarehousePackingInfo."Container No" then begin
+                                if oldContainerNo <> TempWarehousePackingInfo."Container No" then begin
                                     if LotNoNumber mod 2 = 1 then begin
                                         LotNo2 += '<br><br><br>';
                                     end;
                                     LotNoNumber := 1;
-                                    LotNo1 += '<b>' + RecWarehousePackingInfo."Container No" + '</b><br>LOT NO. :<br>' + RecItem.Description + '<br>' + RecWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(RecWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."Base Unit of Measure" + '<br><br>';
+                                    LotNo1 += '<b>' + TempWarehousePackingInfo."Container No" + '</b><br>LOT NO. :<br>' + RecItem.Description + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."Base Unit of Measure" + '<br><br>';
                                     LotNo2 += '<br><br>';
-                                    oldContainerNo := RecWarehousePackingInfo."Container No";
+                                    oldContainerNo := TempWarehousePackingInfo."Container No";
                                 end else begin
                                     LotNoNumber := LotNoNumber + 1;
                                     if LotNoNumber mod 2 = 0 then begin
-                                        LotNo2 += RecItem.Description + '<br>' + RecWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(RecWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."Base Unit of Measure" + '<br><br>';
+                                        LotNo2 += RecItem.Description + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."Base Unit of Measure" + '<br><br>';
                                     end else begin
-                                        LotNo1 += RecItem.Description + '<br>' + RecWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(RecWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."Base Unit of Measure" + '<br><br>';
+                                        LotNo1 += RecItem.Description + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."Base Unit of Measure" + '<br><br>';
                                     end;
 
                                 end;
-                            until RecWarehousePackingInfo.Next() = 0;
+                            until TempWarehousePackingInfo.Next() = 0;
                         end;
-
 
                     end;
                 }
@@ -272,7 +303,7 @@ report 50201 "RV Pre Packing List Report"
                     OrderNo := '';
                     TempOrderNo := 1;
                     WarehouseComment := '';
-
+                    MARKS := '';
                     ISODoc.Reset();
                     ISODoc.SetRange("Report Code", 'PACKING LIST');
                     if ISODoc.FindFirst() then begin
@@ -302,7 +333,8 @@ report 50201 "RV Pre Packing List Report"
                                     TempOrderNo := TempOrderNo + 1;
                                 end;
                             end;
-
+                            if WarehousePackingInfo.Comment <> '' then
+                                MARKS += WarehousePackingInfo.Comment + Format(chr10);
                         until WarehousePackingInfo.Next() = 0;
                     end;
 
@@ -320,6 +352,7 @@ report 50201 "RV Pre Packing List Report"
             trigger OnPreDataItem()
             begin
                 SetRange(Number, 1, 2);
+                IsPrePacking := true;
             end;
         }
     }
@@ -342,7 +375,7 @@ report 50201 "RV Pre Packing List Report"
         ItemSymbolSetting: Record "RV Item Symbol Setting";
         CompanyInfo: Record "Company Information";
         IsPrePacking: Boolean;
-        ReportTitle: Label 'PRE PACKING LIST';
+        ReportTitle: Label 'PROFORMA PACKING LIST';
         ISODocumentNo: Text;
         ISODocVersion: Text;
         InvoiceNo: Text;
