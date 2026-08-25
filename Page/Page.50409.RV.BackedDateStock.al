@@ -35,7 +35,7 @@ page 50409 "RV BackedDate Stock"
             Part(DeliverySchedulingLines; "RV.Stock Balance Lines")
             {
                 ApplicationArea = All;
-                Caption = 'Delivery Scheduling Lines';
+                Caption = 'Stock Lines';
                 UpdatePropagation = Both;
                 SubPageLink = "Available Invy. Name" = field(Name);
             }

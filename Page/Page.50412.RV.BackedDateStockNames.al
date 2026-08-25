@@ -1,7 +1,7 @@
 page 50412 "RV BackedDate Stock Names"
 {
     ApplicationArea = All;
-    Caption = 'BackedDate Stock Balance Names';
+    Caption = 'BackedDate Stock Balance';
     PageType = List;
     usagecategory = Lists;
     SourceTable = "RV Invy. Available Name";
@@ -24,10 +24,10 @@ page 50412 "RV BackedDate Stock Names"
                 {
                     ToolTip = 'Specifies the value of the Inventory Valuation Date field.', Comment = '%';
                 }
-                field(Site; Rec.Site)
+                /*field(Site; Rec.Site)
                 {
                     ToolTip = 'Specifies the value of the Site field.', Comment = '%';
-                }
+                }*/
             }
         }
     }

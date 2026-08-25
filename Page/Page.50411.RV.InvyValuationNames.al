@@ -1,7 +1,7 @@
 page 50411 "RV Invy. Valuation Names"
 {
     ApplicationArea = All;
-    Caption = 'Inventory Valuation Names';
+    Caption = 'Inventory Valuation';
     PageType = List;
     usagecategory = Lists;
     SourceTable = "RV Invy. Valuation Name";

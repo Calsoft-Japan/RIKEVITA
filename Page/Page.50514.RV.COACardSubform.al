@@ -145,6 +145,7 @@ page 50514 "RV COA Card Subform"
                     ApplicationArea = All;
                     MultiLine = true;
                     Editable = SubCOACardEditable;
+                    Visible = false;
                 }
                 field("QA Comment"; Rec."QA Comment")
                 {
@@ -345,7 +346,7 @@ page 50514 "RV COA Card Subform"
                         QAExternalQCResults."COA Container No." := QAShipmentLotNo."Container No.";
                         QAExternalQCResults."QC External Spec. Line No." := ExternalSpecLineNo;
                         QAExternalQCResults.Validate("QC Parameter Name", QCSpecificationLine."QC Parameter Name");
-						QAExternalQCResults."QC Specification Name" := QCSpecificationLine."QC Specification Name";
+                        QAExternalQCResults."QC Specification Name" := QCSpecificationLine."QC Specification Name";
                         QAexternalqcresults."Alpha. Min" := QCSpecificationLine."Minimum Value";
                         QAexternalqcresults."Alpha. Max" := QCSpecificationLine."Maximum Value";
                         QAExternalQCResults.Insert();

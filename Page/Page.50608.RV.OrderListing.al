@@ -16,18 +16,7 @@ page 50608 "RV Order Listing"
         {
             repeater(General)
             {
-                field("Blanket Sales Order No."; Rec."Blanket Sales Order No.")
-                {
-                    ToolTip = 'Specifies the value of the Blanket Sales Order No. field.', Comment = '%';
-                    Editable = false;
-                    visible = false;
-                }
-                field("Blanket Sales Order Line No."; Rec."Blanket Sales Order Line No.")
-                {
-                    ToolTip = 'Specifies the value of the Blanket Sales Order Line No. field.', Comment = '%';
-                    Editable = false;
-                    visible = false;
-                }
+
                 field("Sales Order No."; Rec."Sales Order No.")
                 {
                     ToolTip = 'Specifies the value of the Sales Order No. field.', Comment = '%';
@@ -106,16 +95,6 @@ page 50608 "RV Order Listing"
                     Editable = false;
                 }
 
-                field("Transfer Order No."; Rec."Transfer Order No.")
-                {
-                    ToolTip = 'Specifies the value of the Transfer Order No. field.', Comment = '%';
-                }
-                field("Transfer Order Line No."; Rec."Transfer Order Line No.")
-                {
-                    ToolTip = 'Specifies the value of the Transfer Order Line No. field.', Comment = '%';
-                    Editable = false;
-                }
-
                 field("Requested Delivery Date"; Rec."Requested Delivery Date")
                 {
                     ToolTip = 'Specifies the value of the Requested Delivery Date field.', Comment = '%';
@@ -136,7 +115,16 @@ page 50608 "RV Order Listing"
                     ToolTip = 'Specifies the value of the Ship-to Country field.', Comment = '%';
                     Editable = false;
                 }
-
+                field("Bill-to Customer No."; Rec."Bill-to Customer No.")
+                {
+                    ToolTip = 'Specifies the value of the Bill-to Customer No. field.', Comment = '%';
+                    Editable = false;
+                }
+                field("Bill-to Customer Name"; Rec."Bill-to Customer Name")
+                {
+                    ToolTip = 'Specifies the value of the Bill-to Customer Name field.', Comment = '%';
+                    Editable = false;
+                }
                 field(Status; Rec.Status)
                 {
                     ToolTip = 'Specifies the value of the Status field.', Comment = '%';
@@ -182,11 +170,6 @@ page 50608 "RV Order Listing"
                     Editable = false;
                 }
 
-                field("Packing Line"; Rec."Packing Line")
-                {
-                    ToolTip = 'Specifies the value of the Packing Line No. field.', Comment = '%';
-                    Editable = false;
-                }
                 field("Closing Date & Time"; Rec."Closing Date & Time")
                 {
                     ToolTip = 'Specifies the value of the Closing Date & Time field.', Comment = '%';

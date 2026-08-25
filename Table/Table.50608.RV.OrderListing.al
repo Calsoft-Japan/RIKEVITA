@@ -165,6 +165,37 @@ table 50608 "RV Order Listing"
             Caption = 'Holding Requirement';
             DataClassification = ToBeClassified;
         }
+        field(30; "Bypass Holding Requirement"; Boolean)
+        {
+            Caption = 'Bypass Holding Requirement';
+            DataClassification = ToBeClassified;
+        }
+
+        field(31; "Packing Line"; Code[20])
+        {
+            Caption = 'Packing Line No.';
+            DataClassification = ToBeClassified;
+        }
+        field(32; "Closing Date & Time"; DateTime)
+        {
+            Caption = 'Closing Date & Time';
+            DataClassification = ToBeClassified;
+        }
+        field(33; "Order Age (Days)"; Integer)
+        {
+            Caption = 'Order Age (Days)';
+            DataClassification = ToBeClassified;
+        }
+        field(34; "SI Received Date"; Date)
+        {
+            Caption = 'SI Received Date';
+            DataClassification = ToBeClassified;
+        }
+        field(35; Comment; Text[250])
+        {
+            Caption = 'Comment';
+            DataClassification = ToBeClassified;
+        }
         field(36; "Firm Prod. Order No."; Text[250])
         {
             Caption = 'Firm Prod. Order No.';
@@ -185,50 +216,33 @@ table 50608 "RV Order Listing"
             Caption = 'Sales Office Sales Rep.';
             DataClassification = ToBeClassified;
         }
-        field(41; "RVM PIC"; Text[50])
-        {
-            Caption = 'RVM PIC';
-            DataClassification = ToBeClassified;
-        }
+
         field(40; "Holding Requirement 1"; DateFormula)
         {
             Caption = 'Holding Requirement';
             DataClassification = ToBeClassified;
         }
-        field(30; "Bypass Holding Requirement"; Boolean)
+        field(41; "RVM PIC"; Text[50])
         {
-            Caption = 'Bypass Holding Requirement';
+            Caption = 'RVM PIC';
             DataClassification = ToBeClassified;
         }
 
-        field(31; "Packing Line"; Code[20])
-        {
-            Caption = 'Packing Line No.';
-            DataClassification = ToBeClassified;
-        }
-        field(32; "Closing Date & Time"; DateTime)
-        {
-            Caption = 'Closing Date & Time';
-            DataClassification = ToBeClassified;
-        }
         field(42; "Closing Date & Time 2"; Date)
         {
             Caption = 'Closing Date & Time';
             DataClassification = ToBeClassified;
         }
-        field(33; "Order Age (Days)"; Integer)
+
+        field(43; "Bill-to Customer No."; Code[20])
         {
-            Caption = 'Order Age (Days)';
+            Caption = 'Bill-to Customer No.';
             DataClassification = ToBeClassified;
+            TableRelation = Customer."No.";
         }
-        field(34; "SI Received Date"; Date)
+        field(44; "Bill-to Customer Name"; Text[100])
         {
-            Caption = 'SI Received Date';
-            DataClassification = ToBeClassified;
-        }
-        field(35; Comment; Text[250])
-        {
-            Caption = 'Comment';
+            Caption = 'Bill-to Customer Name';
             DataClassification = ToBeClassified;
         }
 

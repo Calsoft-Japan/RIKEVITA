@@ -129,7 +129,7 @@ report 50500 "RV_COA Report"
                             column(SpecLineNo; SpecLineNoText)//1
                             {
                             }
-                            column(QCParameterName; ExternalQCResults."QC Parameter Name")//2
+                            column(QCParameterName; QCParameterName)//2
                             {
                             }
                             column(METHOD; METHODText) //3
@@ -164,33 +164,53 @@ report 50500 "RV_COA Report"
                                 END ELSE
                                     IF ExternalQCResults.NEXT = 0 THEN;
 
+                                clear(QCParameterName);
                                 CLEAR(METHODText);
                                 CLEAR(SPECIFICATIONText);
                                 CLEAR(resultText);
                                 CLEAR(SpecLineNoText);
                                 clear(COAContainerNo);
                                 clear(COAlotNo);
+                                clear(QCSpecResult);
+
+                                GetQCExternalSpecDesc("QA Header", ExternalQCResults, QCSpecResult);
+
+                                if QCSpecResult[1] <> '' then
+                                    QCParameterName := QCSpecResult[1]
+                                else
+                                    QCParameterName := ExternalQCResults."QC Parameter Name";
 
                                 CASE DisplayMethodCharsSpec OF
                                     DisplayMethodCharsSpec::Method:
                                         begin
 
-                                            METHODText := ExternalQCResults."QC Value";
+                                            METHODText := QCSpecResult[2];
+
                                             SPECIFICATIONText := '';
                                         end;
                                     DisplayMethodCharsSpec::"Chars Spec.":
                                         begin
 
                                             METHODText := '';
-                                            IF (ExternalQCResults."Alpha. Min" <> '') OR (ExternalQCResults."Alpha. Max" <> '') THEN
-                                                SPECIFICATIONText := ExternalQCResults."Alpha. Min" + '..' + ExternalQCResults."Alpha. Max";
+
+                                            if QCSpecResult[3] <> '' then begin
+                                                SPECIFICATIONText := QCSpecResult[3];
+                                            end else begin
+                                                IF (ExternalQCResults."Alpha. Min" <> '') OR (ExternalQCResults."Alpha. Max" <> '') THEN
+                                                    SPECIFICATIONText := ExternalQCResults."Alpha. Min" + '..' + ExternalQCResults."Alpha. Max";
+                                            end;
                                         end;
                                     DisplayMethodCharsSpec::"Method &Chars Spec.":
                                         begin
 
-                                            METHODText := ExternalQCResults."QC Value";
-                                            IF (ExternalQCResults."Alpha. Min" <> '') OR (ExternalQCResults."Alpha. Max" <> '') THEN
-                                                SPECIFICATIONText := ExternalQCResults."Alpha. Min" + '..' + ExternalQCResults."Alpha. Max";
+                                            METHODText := QCSpecResult[2];
+
+                                            if QCSpecResult[3] <> '' then begin
+                                                SPECIFICATIONText := QCSpecResult[3];
+                                            end else begin
+                                                IF (ExternalQCResults."Alpha. Min" <> '') OR (ExternalQCResults."Alpha. Max" <> '') THEN
+                                                    SPECIFICATIONText := ExternalQCResults."Alpha. Min" + '..' + ExternalQCResults."Alpha. Max";
+                                            end;
                                         end;
                                     DisplayMethodCharsSpec::"None":
                                         begin
@@ -362,6 +382,7 @@ report 50500 "RV_COA Report"
                 end else begin
                     CustCOAReportSetting.Reset();
                     CustCOAReportSetting.SetRange("Customer No.", "Ship-to Customer No.");
+                    CustCOAReportSetting.SetFilter("Ship-to Code", '=%1', '');
                     if CustCOAReportSetting.FindFirst() then begin
                         DisplayQuantityPerLot := CustCOAReportSetting."Display Quantity Per Lot.";
                         DisplayMethodCharsSpec := CustCOAReportSetting."Display Method&Chars Spec.";
@@ -459,6 +480,7 @@ report 50500 "RV_COA Report"
         METHOD_Caption: Text;
         SPECIFICATION_Caption: Text;
         METHODText: Text;
+        QCParameterName: Text;
         ContainerNo: Text;
         HeaderQuantity: Text;
         LineQuantity: Text;
@@ -467,6 +489,7 @@ report 50500 "RV_COA Report"
         SalesOrderNoText: Text;
         MARKSText: array[4] of Text;
         MARKSList: List of [Text];
+        QCSpecResult: array[3] of Text[250];
         TypeHelper: Codeunit "Type Helper";
         CopyText: Text[50];
         OutputNo: Integer;
@@ -525,6 +548,39 @@ report 50500 "RV_COA Report"
                     MARKSCommentAll += LineComment;
                 end;
             until QAShipmentLotNo.Next() = 0;
+    end;
+
+
+    procedure GetQCExternalSpecDesc(NewQAHeader: Record "RV QA Header"; NewExternalQCResults: Record "RV QA External QC Results"; var Result: array[3] of Text[250])
+    var
+        ExternalSpecDescription: Record "RV External Spec. Description";
+    begin
+        Clear(Result);
+
+        ExternalSpecDescription.Reset();
+        ExternalSpecDescription.SetRange("Customer No.", NewQAHeader."Ship-to Customer No.");
+        ExternalSpecDescription.SetRange("Ship-to Code", NewQAHeader."Ship-to Code");
+        ExternalSpecDescription.SetRange("External Spec. Name", NewExternalQCResults."QC Specification Name");
+        ExternalSpecDescription.SetRange("QC Parameter Name", NewExternalQCResults."QC Parameter Name");
+        if ExternalSpecDescription.FindFirst() then begin
+
+            Result[1] := ExternalSpecDescription."QC Parameter Name";
+            Result[2] := ExternalSpecDescription.Method;
+            Result[3] := ExternalSpecDescription."Characteristic Specification";
+
+        end else begin
+            ExternalSpecDescription.Reset();
+            ExternalSpecDescription.SetRange("Customer No.", NewQAHeader."Ship-to Customer No.");
+            ExternalSpecDescription.SetFilter("Ship-to Code", '=%1', '');
+            ExternalSpecDescription.SetRange("External Spec. Name", NewExternalQCResults."QC Specification Name");
+            ExternalSpecDescription.SetRange("QC Parameter Name", NewExternalQCResults."QC Parameter Name");
+            if ExternalSpecDescription.FindFirst() then begin
+                //DescriptionとSpecification
+                Result[1] := ExternalSpecDescription."QC Parameter Name";
+                Result[2] := ExternalSpecDescription.Method;
+                Result[3] := ExternalSpecDescription."Characteristic Specification";
+            end;
+        end;
     end;
 
     procedure ClearData()

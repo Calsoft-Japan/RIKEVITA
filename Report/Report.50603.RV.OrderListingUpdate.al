@@ -77,6 +77,8 @@ report 50603 "RV Order Listing Update"
                 OrderListing."Customer No." := SalesHeader."Sell-to Customer No.";
                 OrderListing."Ship-to Customer Name" := SalesHeader."Ship-to Name";
                 OrderListing."Ship-to Country" := SalesHeader."Ship-to Country/Region Code";
+                orderlisting."Bill-to Customer No." := SalesHeader."Bill-to Customer No.";
+                orderlisting."Bill-to Customer Name" := SalesHeader."Bill-to Name";
                 OrderListing."Sales Force Remark" := SalesHeader."RV_Sales Force Remark";
                 OrderListing."RVM PIC" := SalesHeader."RV_RVM PIC";
                 OrderListing."Sales Office Sales Rep." := SalesHeader."RV_Sales Office Sales Rep.";
@@ -85,9 +87,11 @@ report 50603 "RV Order Listing Update"
                     OrderListing."Order Lead Time (Days)" := SalesLine."Requested Delivery Date" - SalesHeader."Order Date"
                 else
                     OrderListing."Order Lead Time (Days)" := SalesLine."Planned Delivery Date" - SalesHeader."Order Date";
-                OrderListing."Packing Date" := SalesLine."RV_Stuffing Date";
-                OrderListing."ECR Date" := SalesLine."RV_ECR Date";
 
+                OrderListing."ECR Date" := SalesLine."RV_ECR Date";
+                OrderListing.ETA := SalesLine.RV_ETA;
+                OrderListing.ETD := SalesLine.RV_ETD;
+                OrderListing."Packing Date" := SalesLine."Shipment Date";
                 //KG quantity calculation.
                 IF SalesLine."Unit of Measure Code" = 'KG' THEN begin
                     OrderListing."Order Qty. (KG)" := SalesLine.Quantity;
@@ -113,7 +117,7 @@ report 50603 "RV Order Listing Update"
                     OrderListing."SI Received Date" := WhseshipmentLine."RV_SI Received Date";
                     OrderListing.ETA := WhseshipmentLine.RV_ETA;
                     OrderListing.ETD := WhseshipmentLine.RV_ETD;
-                    OrderListing."Packing Date" := WhseshipmentLine."RV_Stuffing Date";
+                    //OrderListing."Packing Date" := WhseshipmentLine."Shipment Date";
                 end;
 
                 //related information
@@ -171,7 +175,7 @@ report 50603 "RV Order Listing Update"
                 ProdHeader.Reset();
                 ProdHeader.SetFilter("No.", OrderListing."Prod. Order No.");
                 if ProdHeader.FindLast() then
-                    OrderListing."Packing Line" := SalesHeader."Shortcut Dimension 2 Code";
+                    OrderListing."Packing Date" := ProdHeader."Due Date";
                 //Status Update
                 if OrderListing."Reserved Qty. (UOM)" <= 0 then
                     OrderListing.Status := OrderListing.Status::Ordered
