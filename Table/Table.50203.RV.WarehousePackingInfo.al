@@ -68,6 +68,7 @@ table 50203 "RV Warehouse Packing Info."
             trigger OnValidate()
             begin
                 Validate("No. of Packages", Quantity);
+                Validate("Quantity (KG)", Quantity * "Qty. per Unit of Measure");
             end;
         }
         field(9; "Case No."; Text[20])
