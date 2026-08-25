@@ -266,14 +266,14 @@ page 50205 "Warehouse Packing Info"
                                             InsertPackingInfo.Validate("No. of Packages", InsertPackingInfo.Quantity);
                                             InsertPackingInfo."Contents Per Package" := PackingInfo."Contents Per Package";
                                             InsertPackingInfo."Contents UOM" := PackingInfo."Contents UOM";
-                                            InsertPackingInfo."Net Weight" := InsertPackingInfo.Quantity;//PackingInfo."Net Weight";
+                                            InsertPackingInfo."Net Weight" := InsertPackingInfo.Quantity * InsertPackingInfo."Contents Per Package";//PackingInfo."Net Weight";
                                             InsertPackingInfo."Gross Weight UOM" := PackingInfo."Gross Weight UOM";
                                             InsertPackingInfo."Line No." := MaxLineNo;
 
                                             InsertPackingInfo."External Document No." := PackingInfo."External Document No.";//FDD005
                                             InsertPackingInfo."Sell-to Customer No." := PackingInfo."Sell-to Customer No.";//FDD005
                                             InsertPackingInfo."Qty. per Unit of Measure" := PackingInfo."Qty. per Unit of Measure";//FDD005
-                                            InsertPackingInfo."Quantity (KG)" := Abs(InsertPackingInfo."Quantity" * PackingInfo."Qty. per Unit of Measure");//FDD005
+                                            InsertPackingInfo."Quantity (KG)" := Abs(InsertPackingInfo."Quantity" / PackingInfo."Qty. per Unit of Measure");//FDD005
                                             InsertPackingInfo.Insert();
 
                                             TempCalPackingInfo.Init();
@@ -348,13 +348,13 @@ page 50205 "Warehouse Packing Info"
                     PackingInfo.Validate("No. of Packages", TempQuantity);
                     PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
                     PackingInfo."Contents UOM" := TempUOM;
-                    PackingInfo."Net Weight" := TempQuantity;//TempQtyToShip;
+                    PackingInfo."Net Weight" := TempQuantity / TempQtyPerUOM;//TempQtyToShip;
                     PackingInfo."Gross Weight UOM" := TempUOM;
                     PackingInfo."Line No." := LineNo;
                     PackingInfo."External Document No." := SOHeader."External Document No.";//FDD005
                     PackingInfo."Sell-to Customer No." := SOHeader."Sell-to Customer No.";//FDD005
                     PackingInfo."Qty. per Unit of Measure" := ReservationEntry."Qty. per Unit of Measure";//FDD005
-                    PackingInfo."Quantity (KG)" := Abs(PackingInfo.Quantity * PackingInfo."Qty. per Unit of Measure");//FDD005
+                    PackingInfo."Quantity (KG)" := Abs(PackingInfo.Quantity / PackingInfo."Qty. per Unit of Measure");//FDD005
                     PackingInfo.Insert();
                     LineNo += 10000;
 
@@ -379,13 +379,13 @@ page 50205 "Warehouse Packing Info"
                 PackingInfo.Validate("No. of Packages", TempQuantity);
                 PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
                 PackingInfo."Contents UOM" := TempUOM;
-                PackingInfo."Net Weight" := TempQuantity;//TempQtyToShip;
+                PackingInfo."Net Weight" := TempQuantity / TempQtyPerUOM;//TempQtyToShip;
                 PackingInfo."Gross Weight UOM" := TempUOM;
                 PackingInfo."Line No." := LineNo;
                 PackingInfo."External Document No." := SOHeader."External Document No.";//FDD005
                 PackingInfo."Sell-to Customer No." := SOHeader."Sell-to Customer No.";//FDD005
                 PackingInfo."Qty. per Unit of Measure" := ReservationEntry."Qty. per Unit of Measure";//FDD005
-                PackingInfo."Quantity (KG)" := Abs(PackingInfo.Quantity * PackingInfo."Qty. per Unit of Measure");//FDD005
+                PackingInfo."Quantity (KG)" := Abs(PackingInfo.Quantity / PackingInfo."Qty. per Unit of Measure");//FDD005
                 PackingInfo.Insert();
                 LineNo += 10000;
 

@@ -203,7 +203,7 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
                     PackingInfo."External Document No." := SOHeader."External Document No.";//FDD005
                     PackingInfo."Sell-to Customer No." := SOHeader."Sell-to Customer No.";//FDD005
                     PackingInfo."Qty. per Unit of Measure" := ReservationEntry."Qty. per Unit of Measure";//FDD005
-                    PackingInfo."Quantity (KG)" := Abs(ReservationEntry."Quantity (Base)");//FDD005
+                    PackingInfo."Quantity (KG)" := Abs(TempQuantity / ReservationEntry."Qty. per Unit of Measure");//FDD005
                     PackingInfo.Insert();
                     LineNo += 10000;
 
@@ -234,7 +234,7 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
                 PackingInfo."External Document No." := SOHeader."External Document No.";//FDD005
                 PackingInfo."Sell-to Customer No." := SOHeader."Sell-to Customer No.";//FDD005
                 PackingInfo."Qty. per Unit of Measure" := ReservationEntry."Qty. per Unit of Measure";//FDD005
-                PackingInfo."Quantity (KG)" := Abs(ReservationEntry."Quantity (Base)");//FDD005
+                PackingInfo."Quantity (KG)" := Abs(TempQuantity / ReservationEntry."Qty. per Unit of Measure");//FDD005
                 PackingInfo.Insert();
                 LineNo += 10000;
 

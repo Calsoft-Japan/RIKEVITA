@@ -68,7 +68,7 @@ table 50203 "RV Warehouse Packing Info."
             trigger OnValidate()
             begin
                 Validate("No. of Packages", Quantity);
-                Validate("Quantity (KG)", Quantity * "Qty. per Unit of Measure");
+                Validate("Quantity (KG)", Quantity / "Qty. per Unit of Measure");
             end;
         }
         field(9; "Case No."; Text[20])
@@ -87,7 +87,7 @@ table 50203 "RV Warehouse Packing Info."
                 Item: Record Item;
             begin
                 Item.Get(Rec."Item No.");
-                Rec."Net Weight" := Rec.Quantity;
+                Rec."Net Weight" := Rec.Quantity * Rec."Contents Per Package";
                 Rec."Gross Weight" := Rec."No. of Packages" * Item."Gross Weight";
                 Rec.Measurement := Rec."No. of Packages" * Item."Unit Volume";
             end;
@@ -175,6 +175,7 @@ table 50203 "RV Warehouse Packing Info."
         {
             Caption = 'Qty. in KG';
             Description = 'FDD005';
+            Editable = false;
         }
     }
     keys

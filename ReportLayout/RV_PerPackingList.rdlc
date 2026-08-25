@@ -1460,7 +1460,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.53036in</Height>
+                  <Height>0.63202in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2602,7 +2602,7 @@ Cstr(Fields!CerfiticateNo.Value)</Value>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
             <Top>0.06107in</Top>
-            <Height>3.40616in</Height>
+            <Height>3.50782in</Height>
             <Width>7.29749in</Width>
             <Style>
               <Border>
