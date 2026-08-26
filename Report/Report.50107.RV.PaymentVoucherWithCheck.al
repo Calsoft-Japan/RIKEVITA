@@ -95,7 +95,7 @@ report 50107 "RV Payment Voucher With Check"
                 { }
                 column(Document_No_ByVID; "Document No.")
                 { }
-                column(Amount_to_Apply_ByVID; "Amount to Apply")
+                column(Amount_to_Apply_ByVID; Abs("Amount to Apply"))
                 {
                     AutoFormatExpression = VendorLedgerEntryApplyID."Currency Code";
                     AutoFormatType = 1;
@@ -119,7 +119,7 @@ report 50107 "RV Payment Voucher With Check"
                 { }
                 column(Document_No_ByVDoc; "Document No.")
                 { }
-                column(Amount_to_Apply_ByVDoc; "Amount to Apply")
+                column(Amount_to_Apply_ByVDoc; Abs("Amount to Apply"))
                 {
                     AutoFormatExpression = VendorLedgerEntryApplyDoc."Currency Code";
                     AutoFormatType = 1;
@@ -142,7 +142,7 @@ report 50107 "RV Payment Voucher With Check"
                 { }
                 column(Document_No_ByEID; "Document No.")
                 { }
-                column(Amount_to_Apply_ByEID; "Amount to Apply")
+                column(Amount_to_Apply_ByEID; Abs("Amount to Apply"))
                 {
                     AutoFormatExpression = EmployeeLedgerEntryApplyID."Currency Code";
                     AutoFormatType = 1;
@@ -165,7 +165,7 @@ report 50107 "RV Payment Voucher With Check"
                 { }
                 column(Document_No_ByEDoc; "Document No.")
                 { }
-                column(Amount_to_Apply_ByEDoc; "Amount to Apply")
+                column(Amount_to_Apply_ByEDoc; Abs("Amount to Apply"))
                 {
                     AutoFormatExpression = EmployeeLedgerEntryApplyDoc."Currency Code";
                     AutoFormatType = 1;
@@ -527,12 +527,15 @@ report 50107 "RV Payment Voucher With Check"
                             GenJnlLine3 := GenJnlLine;
                             GenJnlLine3.TestField("Posting No. Series", '');
 
-                            GenJnlLine3."RV_Cheque No." := GenJnlLine."RV_Cheque No.";
+                            /* GenJnlLine3."RV_Cheque No." := GenJnlLine."RV_Cheque No.";
                             GenJnlLine3."RV_APV No." := GenJnlLine."Document No.";
                             if (GenJnlLine."Bal. Account Type" = "Gen. Journal Account Type"::"Bank Account") and (GenJnlLine."Bal. Account No." <> '') and BankAct.Get(GenJnlLine."Bal. Account No.") then
                                 GenJnlLine3."RV_Cheque No." := BankAct."Last Check No.";
 
-                            GenJnlLine3."Document No." := UseCheckNo;
+                            GenJnlLine3."Document No." := UseCheckNo; */
+
+                            if (GenJnlLine."Bal. Account Type" = "Gen. Journal Account Type"::"Bank Account") and (GenJnlLine."Bal. Account No." <> '') and BankAct.Get(GenJnlLine."Bal. Account No.") then
+                                GenJnlLine3."RV_Cheque No." := IncStr(BankAct."Last Check No.");
 
                             //OnAfterAssignGenJnlLineDocNoAndAccountType(GenJnlLine3, GenJnlLine."Document No.", ApplyMethod);
 
@@ -550,12 +553,15 @@ report 50107 "RV Payment Voucher With Check"
                                     GenJnlLine3."Bal. Account No." := '';
                                     GenJnlLine3."Bank Payment Type" := GenJnlLine3."Bank Payment Type"::" ";
 
-                                    GenJnlLine3."RV_Cheque No." := GenJnlLine."RV_Cheque No.";
+                                    /* GenJnlLine3."RV_Cheque No." := GenJnlLine."RV_Cheque No.";
                                     GenJnlLine3."RV_APV No." := GenJnlLine."Document No.";
                                     if (GenJnlLine."Bal. Account Type" = "Gen. Journal Account Type"::"Bank Account") and (GenJnlLine."Bal. Account No." <> '') and BankAct.Get(GenJnlLine."Bal. Account No.") then
                                         GenJnlLine3."RV_Cheque No." := BankAct."Last Check No.";
 
-                                    GenJnlLine3."Document No." := UseCheckNo;
+                                    GenJnlLine3."Document No." := UseCheckNo; */
+
+                                    if (GenJnlLine2."Bal. Account Type" = "Gen. Journal Account Type"::"Bank Account") and (GenJnlLine2."Bal. Account No." <> '') and BankAct.Get(GenJnlLine2."Bal. Account No.") then
+                                        GenJnlLine3."RV_Cheque No." := IncStr(BankAct."Last Check No.");
 
                                     //OnAfterAssignGenJnlLineDocNoAndAccountType(GenJnlLine3, GenJnlLine."Document No.", ApplyMethod);
 
@@ -584,12 +590,15 @@ report 50107 "RV Payment Voucher With Check"
                             GenJnlLine3.Validate("Posting Date", GenJnlLine."Posting Date");
                             GenJnlLine3."Document Type" := GenJnlLine."Document Type";
 
-                            GenJnlLine3."RV_Cheque No." := GenJnlLine."RV_Cheque No.";
+                            /* GenJnlLine3."RV_Cheque No." := GenJnlLine."RV_Cheque No.";
                             GenJnlLine3."RV_APV No." := GenJnlLine."Document No.";
                             if (GenJnlLine."Bal. Account Type" = "Gen. Journal Account Type"::"Bank Account") and (GenJnlLine."Bal. Account No." <> '') and BankAct.Get(GenJnlLine."Bal. Account No.") then
                                 GenJnlLine3."RV_Cheque No." := BankAct."Last Check No.";
 
-                            GenJnlLine3."Document No." := UseCheckNo;
+                            GenJnlLine3."Document No." := UseCheckNo; */
+
+                            if (GenJnlLine."Bal. Account Type" = "Gen. Journal Account Type"::"Bank Account") and (GenJnlLine."Bal. Account No." <> '') and BankAct.Get(GenJnlLine."Bal. Account No.") then
+                                GenJnlLine3."RV_Cheque No." := IncStr(BankAct."Last Check No.");
 
                             //OnAfterAssignGenJnlLineDocumentNo(GenJnlLine3, GenJnlLine."Document No.");
 
@@ -878,12 +887,7 @@ report 50107 "RV Payment Voucher With Check"
                 }
             }
         }
-
-        actions
-        {
-        }
-
-        trigger OnOpenPage()
+        trigger OnInit()
         begin
             if BankAcc2."No." <> '' then
                 if BankAcc2.Get(BankAcc2."No.") then

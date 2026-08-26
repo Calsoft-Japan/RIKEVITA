@@ -6,8 +6,13 @@ codeunit 50106 "RV PaymentJournal Post"
 {
     [EventSubscriber(ObjectType::Table, Database::"Gen. Journal Line", OnAfterSetupNewLine, '', false, false)]
     local procedure "Gen. Journal Line_OnAfterSetupNewLine"(var GenJournalLine: Record "Gen. Journal Line"; GenJournalTemplate: Record "Gen. Journal Template"; GenJournalBatch: Record "Gen. Journal Batch"; LastGenJournalLine: Record "Gen. Journal Line"; Balance: Decimal; BottomLine: Boolean)
+    var
+        BankAcct: Record "Bank Account";
     begin
         GenJournalLine."RV_APV No." := GenJournalLine."Document No.";
+
+        if (GenJournalLine."Bal. Account Type" = "Gen. Journal Account Type"::"Bank Account") and (GenJournalLine."Bal. Account No." <> '') and BankAcct.Get(GenJournalLine."Bal. Account No.") then
+            GenJournalLine."RV_Cheque No." := IncStr(BankAcct."Last Check No.");
     end;
 
 
@@ -29,7 +34,7 @@ codeunit 50106 "RV PaymentJournal Post"
         //NoSeries.PeekNextNo(GenJnlBatch."No. Series", GenJournalLine."Posting Date");
     end;
 
-    [EventSubscriber(ObjectType::Report, Report::Check, OnAfterAssignGenJnlLineDocNoAndAccountType, '', false, false)]
+    /* [EventSubscriber(ObjectType::Report, Report::Check, OnAfterAssignGenJnlLineDocNoAndAccountType, '', false, false)]
     local procedure Check_OnAfterAssignGenJnlLineDocNoAndAccountType(var GenJnlLine: Record "Gen. Journal Line"; PreviousDocumentNo: Code[20]; ApplyMethod: Option)
     var
         GenLine: Record "Gen. Journal Line";
@@ -65,7 +70,7 @@ codeunit 50106 "RV PaymentJournal Post"
 
         if (GenJnlLine."Bal. Account Type" = "Gen. Journal Account Type"::"Bank Account") and (GenJnlLine."Bal. Account No." <> '') and BankAcct.Get(GenJnlLine."Bal. Account No.") then
             GenJnlLine."RV_Cheque No." := BankAcct."Last Check No.";
-    end;
+    end; */
 
 
     /* [EventSubscriber(ObjectType::Codeunit, Codeunit::CheckManagement, OnBeforeVoidCheckGenJnlLine2Modify, '', false, false)]
