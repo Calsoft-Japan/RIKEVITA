@@ -43,6 +43,7 @@ report 50603 "RV Order Listing Update"
                 OrderListing: Record "RV Order Listing";
                 ItemUnitOfMeasure: Record "Item Unit of Measure";
                 SLReserveEntry: Record "Reservation Entry";
+                SalesECRStatusInfo: Record "RV Sales ECR Status Info.";
             //ProdHeader:Record "Production Order";
 
             begin
@@ -88,7 +89,13 @@ report 50603 "RV Order Listing Update"
                 else
                     OrderListing."Order Lead Time (Days)" := SalesLine."Planned Delivery Date" - SalesHeader."Order Date";
 
-                OrderListing."ECR Date" := SalesLine."RV_ECR Date";
+                SalesECRStatusInfo.Reset();
+                SalesECRStatusInfo.SetRange("Sales Order No.", SalesLine."Document No.");
+                SalesECRStatusInfo.SetRange("SO Line No.", SalesLine."Line No.");
+                IF SalesECRStatusInfo.FindFirst() THEN
+                    OrderListing."ECR Date" := SalesECRStatusInfo."Latest ECR Date"
+                else
+                    OrderListing."ECR Date" := 0D;
                 OrderListing.ETA := SalesLine.RV_ETA;
                 OrderListing.ETD := SalesLine.RV_ETD;
                 OrderListing."Packing Date" := SalesLine."Shipment Date";

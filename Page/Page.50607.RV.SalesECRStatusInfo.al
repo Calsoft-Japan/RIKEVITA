@@ -104,6 +104,21 @@ page 50607 "RV Sales ECR Status Info."
                     Editable = false;
                     ToolTip = 'Specifies the value of the Original ECR Date field.', Comment = '%';
                 }
+                field("Stuffing Date"; Rec."Stuffing Date")
+                {
+                    Editable = false;
+                    ToolTip = 'Specifies the value of the Stuffing Date field.', Comment = '%';
+                }
+                field("ECR Aging Period"; Rec."ECR Aging Period")
+                {
+                    Editable = false;
+                    ToolTip = 'Specifies the value of the ECR Aging Period field.', Comment = '%';
+                }
+                field("Holding Period"; Rec."Holding Period")
+                {
+                    Editable = false;
+                    ToolTip = 'Specifies the value of the Holding Period field.', Comment = '%';
+                }
                 field(Delayed; Rec.Delayed)
                 {
                     Editable = false;

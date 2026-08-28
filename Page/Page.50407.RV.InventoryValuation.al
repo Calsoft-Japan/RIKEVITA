@@ -23,10 +23,6 @@ page 50407 "RV Inventory Valuation Name"
                 {
                     ToolTip = 'Specifies the value of the Description field.', Comment = '%';
                 }
-                field(Site; Rec.Site)
-                {
-                    ToolTip = 'Specifies the value of the Site field.', Comment = '%';
-                }
                 field("Starting Date"; Rec."Starting Date")
                 {
                     ToolTip = 'Specifies the value of the Starting Date field.', Comment = '%';
@@ -35,6 +31,30 @@ page 50407 "RV Inventory Valuation Name"
                 {
                     ToolTip = 'Specifies the value of the Ending Date field.', Comment = '%';
                 }
+                field(Site; Rec.Site)
+                {
+                    ToolTip = 'Specifies the value of the Site field.', Comment = '%';
+                }
+                field("Item Filter"; Rec."Item Filter")
+                {
+                    caption = 'Item Filter';
+                    ToolTip = 'Specifies the value of the Item Filter field.', Comment = '%';
+                    applicationarea = All;
+
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        ItemList: Page "Item List";
+                    begin
+                        Clear(ItemList);
+                        ItemList.LookupMode(true);
+                        if ItemList.RunModal() = Action::LookupOK then begin
+                            Text := ItemList.GetSelectionFilter();
+                            exit(true);
+                        end else
+                            exit(false);
+                    end;
+                }
+
             }
             Part(DeliverySchedulingLines; "RV Inventory Valuation Line")
             {
@@ -119,6 +139,8 @@ page 50407 "RV Inventory Valuation Name"
                         repeat
                             Item.reset;
                             Item.SetRange(Type, Item.type::Inventory);
+                            if Rec."Item Filter" <> '' then
+                                Item.SetFilter("No.", Rec."Item Filter");
                             If Item.findset then
                                 repeat
                                     item.SetFilter("Global Dimension 2 Filter", SITEDimValue.Code);

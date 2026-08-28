@@ -135,6 +135,21 @@ table 50607 "RV Sales ECR Status Info."
             Caption = 'Shipment Type';
             DataClassification = ToBeClassified;
         }
+        field(23; "Holding Period"; text[30])
+        {
+            Caption = 'Holding Period';
+            DataClassification = ToBeClassified;
+        }
+        field(24; "ECR Aging Period"; text[30])
+        {
+            Caption = 'ECR Aging Period';
+            DataClassification = ToBeClassified;
+        }
+        field(25; "Stuffing Date"; Date)
+        {
+            Caption = 'Stuffing Date';
+            DataClassification = ToBeClassified;
+        }
     }
 
     keys

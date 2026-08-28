@@ -233,6 +233,7 @@ page 50514 "RV COA Card Subform"
         FQCHeader: Record "RV QC Header";
         FQCLine: Record "RV QC Line";
         QCValueTable: Record "RV QC Value Table";
+        QCParameter: Record "RV QC Parameter";
     begin
         QAShipmentLotNo.reset;
         QAShipmentLotNo.SetRange(QAShipmentLotNo."COA No.", Rec."COA No.");
@@ -347,6 +348,9 @@ page 50514 "RV COA Card Subform"
                         QAExternalQCResults."QC External Spec. Line No." := ExternalSpecLineNo;
                         QAExternalQCResults.Validate("QC Parameter Name", QCSpecificationLine."QC Parameter Name");
                         QAExternalQCResults."QC Specification Name" := QCSpecificationLine."QC Specification Name";
+                        If QCParameter.Get(QCSpecificationLine."QC Parameter Name") then
+                            QAExternalQCResults."QC Parameter Description" := QCParameter."Parameter Description";
+                        //QAExternalQCResults."QC External Description" := QCSpecificationLine."Description";
                         QAexternalqcresults."Alpha. Min" := QCSpecificationLine."Minimum Value";
                         QAexternalqcresults."Alpha. Max" := QCSpecificationLine."Maximum Value";
                         QAExternalQCResults.Insert();

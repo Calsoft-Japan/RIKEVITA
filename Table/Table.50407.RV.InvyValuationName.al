@@ -37,6 +37,10 @@ table 50407 "RV Invy. Valuation Name"
         {
             Caption = 'Ending Date';
         }
+        field(7; "Item Filter"; Text[250])
+        {
+            Caption = 'Item Filter';
+        }
     }
 
     keys
@@ -62,6 +66,16 @@ table 50407 "RV Invy. Valuation Name"
                     Error('');
             DeliverySchedulingLine.DeleteAll();
         end;
+    end;
+
+    trigger OnInsert()
+    begin
+        rec.TestField(Name);
+    end;
+
+    trigger OnModify()
+    begin
+        rec.TestField(Name);
     end;
 
     var

@@ -32,6 +32,10 @@ table 50409 "RV Invy. Available Name"
         {
             Caption = 'Inventory Valuation Date';
         }
+        field(6; "Item Filter"; Text[250])
+        {
+            Caption = 'Item Filter';
+        }
 
     }
 
@@ -58,6 +62,16 @@ table 50409 "RV Invy. Available Name"
                     Error('');
             DeliverySchedulingLine.DeleteAll();
         end;
+    end;
+
+    trigger OnInsert()
+    begin
+        rec.TestField(Name);
+    end;
+
+    trigger OnModify()
+    begin
+        rec.TestField(Name);
     end;
 
     var

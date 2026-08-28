@@ -75,6 +75,10 @@ table 50511 "RV QA External QC Results"
         {
             Caption = 'Differ From QC Vaule';
         }
+        field(8; "QC Parameter Description"; Text[100])
+        {
+            Caption = 'QC Parameter Description';
+        }
         field(9; "Alpha. Min"; Text[50])
         {
             Caption = 'Alpha. Min';
@@ -82,6 +86,10 @@ table 50511 "RV QA External QC Results"
         field(10; "Alpha. Max"; Text[50])
         {
             Caption = 'Alpha. Max';
+        }
+        field(11; "QC External Description"; Text[100])
+        {
+            Caption = 'QC External Description';
         }
         field(13; "COA Lot No."; Code[30])
         {

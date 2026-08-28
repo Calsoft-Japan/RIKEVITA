@@ -228,6 +228,9 @@ page 50608 "RV Order Listing"
                 ApplicationArea = All;
                 Caption = 'Collect Data';
                 Image = Refresh;
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedOnly = false;
                 ToolTip = 'Collect the latest Order Listing data.';
                 trigger OnAction()
                 var

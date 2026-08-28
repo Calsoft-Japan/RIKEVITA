@@ -30,6 +30,25 @@ page 50409 "RV BackedDate Stock"
                 {
                     ToolTip = 'Specifies the value of the Starting Date field.', Comment = '%';
                 }
+                field("Item Filter"; Rec."Item Filter")
+                {
+                    caption = 'Item Filter';
+                    ToolTip = 'Specifies the value of the Item Filter field.', Comment = '%';
+                    applicationarea = All;
+
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        ItemList: Page "Item List";
+                    begin
+                        Clear(ItemList);
+                        ItemList.LookupMode(true);
+                        if ItemList.RunModal() = Action::LookupOK then begin
+                            Text := ItemList.GetSelectionFilter();
+                            exit(true);
+                        end else
+                            exit(false);
+                    end;
+                }
 
             }
             Part(DeliverySchedulingLines; "RV.Stock Balance Lines")
@@ -91,6 +110,8 @@ page 50409 "RV BackedDate Stock"
                     EntryNo := 1;
                     ItemLedgerEntry.Reset();
                     ItemLedgerEntry.SetRange("Posting Date", 0D, Rec."Inventory Valuation Date");
+                    if Rec."Item Filter" <> '' then
+                        ItemLedgerEntry.SetFilter("Item No.", Rec."Item Filter");
                     ItemLedgerEntry.SetCurrentKey("Item No.", "Location Code", "Lot No.");
                     /*if gLsetup."Global Dimension 1 Code" = RIKEVITASetup."SITE Dim. Code" then begin
                         ItemLedgerEntry.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Global Dimension 1 Code");

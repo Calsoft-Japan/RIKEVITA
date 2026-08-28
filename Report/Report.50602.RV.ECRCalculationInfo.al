@@ -70,6 +70,7 @@ report 50602 "RV ECR Calculation Info"
 
                 SalesECRStatusInfo."Reservation Quantity" := Salesline."Reserved Quantity";
                 SalesECRStatusInfo."Order Quantity" := Salesline."Quantity";
+                salesECRStatusInfo."Stuffing Date" := Salesline."RV_Stuffing Date";
                 if SalesECRStatusInfo."Prod. Due Date" = 0D then
                     SalesECRStatusInfo."Latest ECR Date" := Salesline."RV_ECR Date"
                 else begin
@@ -78,18 +79,21 @@ report 50602 "RV ECR Calculation Info"
                             Salesheader."RV_Shipment Type"::Air:
                                 begin
                                     Item.get(SalesECRStatusInfo."Item No.");
+                                    salesECRStatusInfo."ECR Aging Period" := FORMAT(Item."RV_ECR Ageing Period");
                                     if format(RVSetup."Holding Period for Air") <> '' then
                                         evaluate(tmpDataCal, '+' + format(RVSetup."Holding Period for Air"));
                                     tmpDate := CalcDate(tmpDataCal, SalesECRStatusInfo."Prod. Due Date");
                                     if format(Item."RV_ECR Ageing Period") <> '' then
                                         evaluate(tmpDataCal, '+' + format(Item."RV_ECR Ageing Period"));
                                     tmpDate := CalcDate(tmpDataCal, tmpDate);
+                                    salesECRStatusInfo."Holding Period" := FORMAT(RVSetup."Holding Period for Air");
                                     SalesECRStatusInfo."Latest ECR Date" := tmpDate;
                                 end;
                             Salesheader."RV_Shipment Type"::Land,
                             Salesheader."RV_Shipment Type"::Sea:
                                 begin
                                     Item.get(SalesECRStatusInfo."Item No.");
+                                    salesECRStatusInfo."ECR Aging Period" := FORMAT(Item."RV_ECR Ageing Period");
                                     ShiptoAddress.CalcFields("RV_Holding Period");
                                     if format(ShiptoAddress."RV_Holding Period") <> '' then
                                         evaluate(tmpDataCal, '+' + format(ShiptoAddress."RV_Holding Period"));
@@ -97,11 +101,14 @@ report 50602 "RV ECR Calculation Info"
                                     if format(Item."RV_ECR Ageing Period") <> '' then
                                         evaluate(tmpDataCal, '+' + format(Item."RV_ECR Ageing Period"));
                                     tmpDate := CalcDate(tmpDataCal, tmpDate);
+                                    salesECRStatusInfo."Holding Period" := FORMAT(ShiptoAddress."RV_Holding Period");
                                     SalesECRStatusInfo."Latest ECR Date" := tmpDate;
                                 end;
                         end;
                     end else begin
                         Item.get(SalesECRStatusInfo."Item No.");
+                        salesECRStatusInfo."ECR Aging Period" := '';
+                        salesECRStatusInfo."Holding Period" := '';
                         if format(Item."RV_ECR Ageing Period") <> '' then
                             evaluate(tmpDataCal, '+' + format(Item."RV_ECR Ageing Period"));
                         tmpDate := CalcDate(tmpDataCal, SalesECRStatusInfo."Prod. Due Date");

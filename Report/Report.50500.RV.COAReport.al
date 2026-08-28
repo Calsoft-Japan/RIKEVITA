@@ -564,7 +564,7 @@ report 50500 "RV_COA Report"
         ExternalSpecDescription.SetRange("QC Parameter Name", NewExternalQCResults."QC Parameter Name");
         if ExternalSpecDescription.FindFirst() then begin
 
-            Result[1] := ExternalSpecDescription."QC Parameter Name";
+            Result[1] := ExternalSpecDescription."Customer Description";
             Result[2] := ExternalSpecDescription.Method;
             Result[3] := ExternalSpecDescription."Characteristic Specification";
 
@@ -576,7 +576,7 @@ report 50500 "RV_COA Report"
             ExternalSpecDescription.SetRange("QC Parameter Name", NewExternalQCResults."QC Parameter Name");
             if ExternalSpecDescription.FindFirst() then begin
                 //DescriptionとSpecification
-                Result[1] := ExternalSpecDescription."QC Parameter Name";
+                Result[1] := ExternalSpecDescription."Customer Description";
                 Result[2] := ExternalSpecDescription.Method;
                 Result[3] := ExternalSpecDescription."Characteristic Specification";
             end;
