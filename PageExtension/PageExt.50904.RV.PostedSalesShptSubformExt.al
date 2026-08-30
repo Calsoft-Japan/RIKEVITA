@@ -8,6 +8,11 @@ pageextension 50904 "RV_PostedSalesShptSubform Ext" extends "Posted Sales Shpt. 
     {
         addafter("Shipment Date")
         {
+            field("RV_Posted Whse. Shipment No."; Rec."RV_Posted Whse. Shipment No.")
+            {
+                Caption = 'Posted Warehouse Shipment No.';
+                ApplicationArea = All;
+            }
             field("RV_Freight Charge"; Rec."RV_Freight Charge")
             {
                 Caption = 'Freight Charge';

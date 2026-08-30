@@ -48,9 +48,6 @@ page 50901 "RV Charge Calculation"
                 field(LOB; Rec.LOB)
                 {
                 }
-                field("Invoice Currency Code"; Rec."Invoice Currency Code")
-                {
-                }
                 field("Vendor No."; Rec."Vendor No.")
                 {
                 }
@@ -69,10 +66,13 @@ page 50901 "RV Charge Calculation"
                         PurchInvHdrView.SetRange("Buy-from Vendor No.", Rec."Vendor No.");
 
                         if Page.RunModal(Page::"Posted Purchase Invoices", PurchInvHdrView) = Action::LookupOK then begin
-                            Rec."Vendor Invoice No." := PurchInvHdrView."Vendor Invoice No.";
+                            Rec.Validate("Vendor Invoice No.", PurchInvHdrView."Vendor Invoice No.");
                         end;
 
                     end;
+                }
+                field("Invoice Currency Code"; Rec."Invoice Currency Code")
+                {
                 }
                 field("Calculation Date"; Rec."Calculation Date")
                 {

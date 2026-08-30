@@ -252,6 +252,20 @@ table 50900 "RV Charge Calc. Header"
         {
             Caption = 'Vendor Invoice No.';
             TableRelation = "Purch. Inv. Header"."Vendor Invoice No.";
+
+            trigger OnValidate()
+            var
+                recPurchInvHeader: Record "Purch. Inv. Header";
+            begin
+                if ("Vendor Invoice No." <> xRec."Vendor Invoice No.") and ("Vendor Invoice No." <> '') then begin
+                    TestField("Vendor No.");
+                    recPurchInvHeader.SetRange("Buy-from Vendor No.", "Vendor No.");
+                    recPurchInvHeader.SetRange("Vendor Invoice No.", "Vendor Invoice No.");
+                    if recPurchInvHeader.FindFirst() then begin
+                        Validate("Invoice Currency Code", recPurchInvHeader."Currency Code");
+                    end;
+                end;
+            end;
         }
 
     }

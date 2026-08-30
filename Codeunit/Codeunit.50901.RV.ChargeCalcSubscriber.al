@@ -19,4 +19,17 @@ codeunit 50901 "RV Charge Calc. Subscriber"
         end;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Shipment", OnCreatePostedShptLineOnBeforePostWhseJnlLine, '', false, false)]
+    local procedure DoOnCreatePostedShptLineOnBeforePostWhseJnlLine(var PostedWhseShipmentLine: Record "Posted Whse. Shipment Line"; var TempTrackingSpecification: Record "Tracking Specification" temporary; WarehouseShipmentLine: Record "Warehouse Shipment Line")
+    var
+        recSalesShptLine: Record "Sales Shipment Line";
+    begin
+        if PostedWhseShipmentLine."Posted Source Document" = PostedWhseShipmentLine."Posted Source Document"::"Posted Shipment" then begin
+            if recSalesShptLine.Get(PostedWhseShipmentLine."Posted Source No.", PostedWhseShipmentLine."Source Line No.") then begin
+                recSalesShptLine."RV_Warehouse Shipment No." := WarehouseShipmentLine."No.";
+                recSalesShptLine."RV_Posted Whse. Shipment No." := PostedWhseShipmentLine."No.";
+                recSalesShptLine.Modify();
+            end;
+        end;
+    end;
 }

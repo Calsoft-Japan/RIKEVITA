@@ -50,6 +50,8 @@ table 50901 "RV Charge Calc. Line"
                             Rec."Exch. Rate from Inv. Currency" := 1;
                         end;
                     end;
+                    "Quantity (KG)" := recSalesLine.Quantity;
+                    "Order Unit Price (KG)" := recSalesLine."Unit Price";
                 end;
             end;
         }
@@ -473,6 +475,7 @@ table 50901 "RV Charge Calc. Line"
             TestField("Exch. Rate from Inv. Currency");
         end;
 
+        /*
         //set KG-related fields.
         RVSetup.Get();
         RVSetup.TestField("Chg. Calc. UOM (KG)");
@@ -492,6 +495,7 @@ table 50901 "RV Charge Calc. Line"
             "Quantity (KG)" := "Sales Quantity" * ItemOUM.Weight;
             "Order Unit Price (KG)" := "Order Unit Price" / ItemOUM.Weight;
         end;
+        */
 
     end;
 

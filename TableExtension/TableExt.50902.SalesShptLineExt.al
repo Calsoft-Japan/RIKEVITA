@@ -23,5 +23,15 @@ tableextension 50902 "RV SalesShptLine Ext" extends "Sales Shipment Line"
             FieldClass = FlowField;
             CalcFormula = lookup(Customer."RV_Charge Type" where("No." = field("Sell-to Customer No.")));
         }
+        field(50911; "RV_Warehouse Shipment No."; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = 'Warehouse Shipment No.';
+        }
+        field(50912; "RV_Posted Whse. Shipment No."; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = 'Posted Warehouse Shipment No.';
+        }
     }
 }

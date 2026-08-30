@@ -1,6 +1,7 @@
 /// <summary>
 /// PageExtension RV Get Shipment Lines (ID 50215) extends "Get Shipment Lines"
 /// FDD018 2026/07/07: New. (Bobby.ji)
+/// FDD009 2026/08/30: Update to table field for page filtering. (Shawn)
 /// </summary>
 pageextension 50215 "RV Get Shipment Lines Ext" extends "Get Shipment Lines"
 {
@@ -8,13 +9,13 @@ pageextension 50215 "RV Get Shipment Lines Ext" extends "Get Shipment Lines"
     {
         addafter(YourReference)
         {
-            field("Warehouse Shipment No."; WarehouseShipmentNo)
+            field("Warehouse Shipment No."; Rec."RV_Warehouse Shipment No.")
             {
                 Caption = 'Warehouse Shipment No.';
                 ApplicationArea = All;
                 Description = 'FDD018';
             }
-            field("Posted Warehouse Shipment No."; PostedWarehouseShipmentNo)
+            field("Posted Warehouse Shipment No."; Rec."RV_Posted Whse. Shipment No.")
             {
                 Caption = 'Posted Warehouse Shipment No.';
                 ApplicationArea = All;
@@ -22,6 +23,7 @@ pageextension 50215 "RV Get Shipment Lines Ext" extends "Get Shipment Lines"
             }
         }
     }
+    /*
     var
         WarehouseShipmentNo: Code[20];
         PostedWarehouseShipmentNo: Code[20];
@@ -38,4 +40,5 @@ pageextension 50215 "RV Get Shipment Lines Ext" extends "Get Shipment Lines"
             PostedWarehouseShipmentNo := PostedWhseShipmentLine."No.";
         end;
     end;
+    */
 }
