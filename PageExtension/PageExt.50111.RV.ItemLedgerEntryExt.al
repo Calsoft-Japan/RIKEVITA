@@ -23,7 +23,13 @@ pageextension 50111 "RV Item Ledger Entry Ext" extends "Item Ledger Entries"
                 Description = 'FDD100';
                 ApplicationArea = All;
             }
-            field("RV_Quantity (KG)"; Rec."RV_Quantity (KG)")
+
+            field("RV_Supp. Unit of Measure Code"; Rec."RV_Supp. Unit of Measure Code")
+            {
+                Description = 'FDD100';
+                ApplicationArea = All;
+            }
+            field("RV_Quantity (KG)"; Rec."RV_Quantity (Supp. UOM)")
             {
                 Description = 'FDD100';
                 ApplicationArea = All;

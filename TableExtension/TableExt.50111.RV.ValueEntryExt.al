@@ -13,26 +13,33 @@ tableextension 50111 "RV Value Entry Ext" extends "Value Entry"
             FieldClass = FlowField;
             CalcFormula = Lookup(Item."Base Unit of Measure" where("No." = field("Item No.")));
         }
-        field(50101; "RV_Item Ledger Entry Qty (KG)"; Decimal)
+        field(50101; "RV_IL Entry Qty (Supp. UOM)"; Decimal)
         {
             Description = 'FDD100';
-            Caption = 'Item Ledger Entry Quantity (KG)';
+            Caption = 'RV_ILE Qty. (Supp. UOM)';//'Item Ledger Entry Quantity (KG)';
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
         }
-        field(50102; "RV_Value Quantity (KG)"; Decimal)
+        field(50102; "RV_Value Quantity (Supp. UOM)"; Decimal)
         {
             Description = 'FDD100';
-            Caption = 'Value Quantity (KG)';
+            Caption = 'RV_Value Quantity (Supp. UOM)';//'Value Quantity (KG)';
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
         }
-        field(50103; "RV_Invoiced Quantity (KG)"; Decimal)
+        field(50103; "RV_Invoiced Qty (Supp. UOM)"; Decimal)
         {
             Description = 'FDD100';
-            Caption = 'Invoiced Quantity (KG)';
+            Caption = 'RV_Invoiced Qty. (Supp. UOM)';//'Invoiced Quantity (KG)';
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
+        }
+        field(50104; "RV_Supp. Unit of Measure Code"; Code[20])
+        {
+            Description = 'FDD100';
+            Caption = 'Supp. Unit of Measure Code';//Supplementary Unit of Measure Code
+            FieldClass = FlowField;
+            CalcFormula = Lookup(Item."RV_Supp. Unit of Measure Code" where("No." = field("Item No.")));
         }
     }
 }

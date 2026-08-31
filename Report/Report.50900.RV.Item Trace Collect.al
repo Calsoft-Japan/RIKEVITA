@@ -203,7 +203,7 @@ report 50900 "RV Item Trace Collect"
                     ILE.CalcFields("RV_Base Unit of Measure Code", "Cost Amount (Actual)");
                     ItemDetail."Base Unit of Measure Code" := ILE."RV_Base Unit of Measure Code";
                     ItemDetail."Quantity (BUOM)" := ILE.Quantity;
-                    ItemDetail."Quantity (KG)" := ILE."RV_Quantity (KG)";
+                    ItemDetail."Quantity (KG)" := ILE."RV_Quantity (Supp. UOM)";
                     ItemDetail."Cost Amount (RM)" := ILE."Cost Amount (Actual)";
 
                 end;
@@ -236,7 +236,7 @@ report 50900 "RV Item Trace Collect"
                     ILE.CalcFields("RV_Base Unit of Measure Code", "Cost Amount (Actual)");
                     ItemDetail."Base Unit of Measure Code" := ILE."RV_Base Unit of Measure Code";
                     ItemDetail."Quantity (BUOM)" := ILE.Quantity;
-                    ItemDetail."Quantity (KG)" := ILE."RV_Quantity (KG)";
+                    ItemDetail."Quantity (KG)" := ILE."RV_Quantity (Supp. UOM)";
                     ItemDetail."Cost Amount (RM)" := ILE."Cost Amount (Actual)";
 
                     ILEFinder.Reset();
@@ -279,7 +279,7 @@ report 50900 "RV Item Trace Collect"
                     ILE.CalcFields("RV_Base Unit of Measure Code", "Cost Amount (Actual)");
                     ItemDetail."Base Unit of Measure Code" := ILE."RV_Base Unit of Measure Code";
                     ItemDetail."Quantity (BUOM)" := ILE.Quantity;
-                    ItemDetail."Quantity (KG)" := ILE."RV_Quantity (KG)";
+                    ItemDetail."Quantity (KG)" := ILE."RV_Quantity (Supp. UOM)";
                     ItemDetail."Cost Amount (RM)" := ILE."Cost Amount (Actual)";
 
                 end;
@@ -313,7 +313,7 @@ report 50900 "RV Item Trace Collect"
                     ILE.CalcFields("RV_Base Unit of Measure Code", "Cost Amount (Actual)");
                     ItemDetail."Base Unit of Measure Code" := ILE."RV_Base Unit of Measure Code";
                     ItemDetail."Quantity (BUOM)" := ILE.Quantity;
-                    ItemDetail."Quantity (KG)" := ILE."RV_Quantity (KG)";
+                    ItemDetail."Quantity (KG)" := ILE."RV_Quantity (Supp. UOM)";
                     ItemDetail."Cost Amount (RM)" := ILE."Cost Amount (Actual)";
 
                 end;

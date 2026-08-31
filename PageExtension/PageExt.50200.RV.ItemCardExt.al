@@ -17,7 +17,19 @@ pageextension 50200 "RV Item Card Ext" extends "Item Card"
                 Caption = 'Grade';
                 ApplicationArea = all;
             }
+
         }
+
+        addafter("Base Unit of Measure")
+        {
+            field("RV_Supp. Unit of Measure Code"; Rec."RV_Supp. Unit of Measure Code")
+            {
+                Caption = 'Supp. Unit of Measure Code';
+                ApplicationArea = all;
+                Description = 'FDD100';
+            }
+        }
+
         addafter("Expiration Calculation")
         {
             field("Expiration Base Date (RM)"; Rec."RV_Expiration Base Date (RM)")
