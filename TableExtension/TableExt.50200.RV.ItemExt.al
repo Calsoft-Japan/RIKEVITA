@@ -13,7 +13,7 @@ tableextension 50200 "RV ITEM" extends "Item"
         {
             Caption = 'Supp. Unit of Measure Code';
             Description = 'FDD100';
-            TableRelation = "Unit of Measure";
+            TableRelation = "Item Unit of Measure".Code where("Item No." = field("No."));
             ValidateTableRelation = false;
 
 

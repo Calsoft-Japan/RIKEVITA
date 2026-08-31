@@ -107,6 +107,7 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
         TempQtyPerUOM: Decimal;
         TempUOM: Code[10];
         PackingInfo: Record "RV Warehouse Packing Info.";
+        RikevitaSetup: Record "RV RIKEVITA Setup";
 
     local procedure CreatePackingInfo()
     var
@@ -159,6 +160,10 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
         SOHeader: Record "Sales Header";//FDD005
         PackingInfo: Record "RV Warehouse Packing Info.";
         ReservationEntry: Record "Reservation Entry";
+        AItemUnitofMeasure: Record "Item Unit of Measure";
+        BItemUnitofMeasure: Record "Item Unit of Measure";
+        CItemUnitofMeasure: Record "Item Unit of Measure";
+        RecItem: Record Item;
         LineNo: Integer;
         TempLotNo: Code[50];
         TempQuantity: Decimal;
@@ -176,6 +181,16 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
             TempLotNo := '';
             TempQuantity := 0;
             TempLotQuantity := 0;
+
+            RecItem.Get(TempItemNo);
+            AItemUnitofMeasure.Get(TempItemNo, TempUOM);
+            if RecItem."RV_Supp. Unit of Measure Code" <> '' then begin
+                BItemUnitofMeasure.Get(TempItemNo, RecItem."RV_Supp. Unit of Measure Code");
+            end else begin
+                Error(StrSubstNo('The Supp. Unit of Measure Code in Item(%1) cannot be empty.'), TempItemNo);
+            end;
+            CItemUnitofMeasure.Get(TempItemNo, RikevitaSetup."KG Unit Code");
+
             //FDD005
             SOHeader.Reset();
             SOHeader.SetRange("Document Type", "Sales Document Type"::Order);
@@ -194,11 +209,11 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
                     PackingInfo.Quantity := TempQuantity;//Abs(ReservationEntry."Quantity (Base)");
                     PackingInfo."Lot Quantity" := TempLotQuantity;//Abs(ReservationEntry."Quantity (Base)");
                     //PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
-                    PackingInfo.Validate("No. of Packages", TempQuantity);
-                    PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
-                    PackingInfo."Contents UOM" := TempUOM;
-                    PackingInfo."Net Weight" := TempQuantity;//TempQtyToShip;
-                    PackingInfo."Gross Weight UOM" := TempUOM;
+                    PackingInfo."Contents Per Package" := BItemUnitofMeasure."Qty. per Unit of Measure" / AItemUnitofMeasure."Qty. per Unit of Measure";
+                    PackingInfo.Validate("No. of Packages", PackingInfo.Quantity / PackingInfo."Contents Per Package");
+                    PackingInfo."Contents UOM" := RikevitaSetup."KG Unit Code";
+                    PackingInfo."Net Weight" := PackingInfo.Quantity * AItemUnitofMeasure."Qty. per Unit of Measure" / CItemUnitofMeasure."Qty. per Unit of Measure";//TempQtyToShip;
+                    PackingInfo."Gross Weight UOM" := RikevitaSetup."KG Unit Code";
                     PackingInfo."Line No." := LineNo;
                     PackingInfo."External Document No." := SOHeader."External Document No.";//FDD005
                     PackingInfo."Sell-to Customer No." := SOHeader."Sell-to Customer No.";//FDD005
@@ -225,11 +240,11 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
                 PackingInfo.Quantity := TempQuantity;
                 PackingInfo."Lot Quantity" := TempLotQuantity;
                 //PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
-                PackingInfo.Validate("No. of Packages", TempQuantity);
-                PackingInfo."Contents Per Package" := 1 / TempQtyPerUOM;
-                PackingInfo."Contents UOM" := TempUOM;
-                PackingInfo."Net Weight" := TempQuantity;//TempQtyToShip;
-                PackingInfo."Gross Weight UOM" := TempUOM;
+                PackingInfo."Contents Per Package" := BItemUnitofMeasure."Qty. per Unit of Measure" / AItemUnitofMeasure."Qty. per Unit of Measure";
+                PackingInfo.Validate("No. of Packages", PackingInfo.Quantity / PackingInfo."Contents Per Package");
+                PackingInfo."Contents UOM" := RikevitaSetup."KG Unit Code";
+                PackingInfo."Net Weight" := PackingInfo.Quantity * AItemUnitofMeasure."Qty. per Unit of Measure" / CItemUnitofMeasure."Qty. per Unit of Measure";//TempQtyToShip;
+                PackingInfo."Gross Weight UOM" := RikevitaSetup."KG Unit Code";
                 PackingInfo."Line No." := LineNo;
                 PackingInfo."External Document No." := SOHeader."External Document No.";//FDD005
                 PackingInfo."Sell-to Customer No." := SOHeader."Sell-to Customer No.";//FDD005
@@ -240,6 +255,11 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
 
             end;
         end;
+    end;
+
+    trigger OnOpenPage()
+    begin
+        RikevitaSetup.Get();
     end;
 }
 

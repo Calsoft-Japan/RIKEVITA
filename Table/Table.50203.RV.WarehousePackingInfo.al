@@ -66,9 +66,18 @@ table 50203 "RV Warehouse Packing Info."
             Description = 'FDD019';
             DecimalPlaces = 0 : 5;
             trigger OnValidate()
+            var
+                AItemUnitofMeasure: Record "Item Unit of Measure";
+                BItemUnitofMeasure: Record "Item Unit of Measure";
+                Item: Record Item;
+                RikevitaSetup: Record "RV RIKEVITA Setup";
             begin
-                Validate("No. of Packages", Quantity);
+                RikevitaSetup.Get();
+                AItemUnitofMeasure.Get("Item No.", "Contents UOM");
+                BItemUnitofMeasure.Get("Item No.", RikevitaSetup."KG Unit Code");
+                Validate("No. of Packages", Quantity / Rec."Contents Per Package");
                 Validate("Quantity (KG)", Quantity / "Qty. per Unit of Measure");
+                Rec."Net Weight" := Rec.Quantity * AItemUnitofMeasure."Qty. per Unit of Measure" / BItemUnitofMeasure."Qty. per Unit of Measure";
             end;
         }
         field(9; "Case No."; Text[20])
@@ -87,7 +96,6 @@ table 50203 "RV Warehouse Packing Info."
                 Item: Record Item;
             begin
                 Item.Get(Rec."Item No.");
-                Rec."Net Weight" := Rec.Quantity * Rec."Contents Per Package";
                 Rec."Gross Weight" := Rec."No. of Packages" * Item."Gross Weight";
                 Rec.Measurement := Rec."No. of Packages" * Item."Unit Volume";
             end;
@@ -103,7 +111,7 @@ table 50203 "RV Warehouse Packing Info."
         {
             Caption = 'Contents UOM';
             Description = 'FDD019';
-            TableRelation = "Item Unit of Measure".Code WHERE("Item No." = FIELD("Item No."));
+            TableRelation = "RV RIKEVITA Setup"."KG Unit Code";
         }
         field(13; "Net Weight"; Decimal)
         {
@@ -123,7 +131,7 @@ table 50203 "RV Warehouse Packing Info."
         {
             Caption = 'Gross Weight UOM';
             Description = 'FDD019';
-            TableRelation = "Item Unit of Measure".Code WHERE("Item No." = FIELD("Item No."));
+            TableRelation = "RV RIKEVITA Setup"."KG Unit Code";
         }
         field(16; "Measurement"; Decimal)
         {
