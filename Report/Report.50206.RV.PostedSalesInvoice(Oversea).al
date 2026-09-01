@@ -167,7 +167,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                             end;
 
                         end;
-                        BaseUnitofMeasure := RecItem."Base Unit of Measure";
+                        BaseUnitofMeasure := RecItem."RV_Supp. Unit of Measure Code";
                         CALCFIELDS("RV_Charge Type");
                         if ShowFOBPrice then begin
                             if "RV_Charge Type" = "RV_Charge Type"::FOB then begin

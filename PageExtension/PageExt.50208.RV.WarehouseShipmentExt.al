@@ -208,17 +208,20 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
                     //PackingInfo."Container No" := ReservationEntry."RV_Container No.";
                     PackingInfo.Quantity := TempQuantity;//Abs(ReservationEntry."Quantity (Base)");
                     PackingInfo."Lot Quantity" := TempLotQuantity;//Abs(ReservationEntry."Quantity (Base)");
-                    //PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
-                    PackingInfo."Contents Per Package" := BItemUnitofMeasure."Qty. per Unit of Measure" / AItemUnitofMeasure."Qty. per Unit of Measure";
-                    PackingInfo.Validate("No. of Packages", PackingInfo.Quantity / PackingInfo."Contents Per Package");
-                    PackingInfo."Contents UOM" := RikevitaSetup."KG Unit Code";
-                    PackingInfo."Net Weight" := PackingInfo.Quantity * AItemUnitofMeasure."Qty. per Unit of Measure" / CItemUnitofMeasure."Qty. per Unit of Measure";//TempQtyToShip;
-                    PackingInfo."Gross Weight UOM" := RikevitaSetup."KG Unit Code";
-                    PackingInfo."Line No." := LineNo;
+                                                                  //PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
+
                     PackingInfo."External Document No." := SOHeader."External Document No.";//FDD005
                     PackingInfo."Sell-to Customer No." := SOHeader."Sell-to Customer No.";//FDD005
                     PackingInfo."Qty. per Unit of Measure" := ReservationEntry."Qty. per Unit of Measure";//FDD005
                     PackingInfo."Quantity (KG)" := Abs(TempQuantity / ReservationEntry."Qty. per Unit of Measure");//FDD005
+
+                    PackingInfo."Contents Per Package" := BItemUnitofMeasure."Qty. per Unit of Measure" / AItemUnitofMeasure."Qty. per Unit of Measure";
+                    PackingInfo.Validate("No. of Packages", PackingInfo."Quantity (KG)" / PackingInfo."Contents Per Package");
+                    PackingInfo."Contents UOM" := RikevitaSetup."KG Unit Code";
+                    PackingInfo."Net Weight" := PackingInfo."Quantity (KG)" * AItemUnitofMeasure."Qty. per Unit of Measure" / CItemUnitofMeasure."Qty. per Unit of Measure";//TempQtyToShip;
+                    PackingInfo."Gross Weight UOM" := RikevitaSetup."KG Unit Code";
+                    PackingInfo."Line No." := LineNo;
+
                     PackingInfo.Insert();
                     LineNo += 10000;
 
@@ -240,16 +243,18 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
                 PackingInfo.Quantity := TempQuantity;
                 PackingInfo."Lot Quantity" := TempLotQuantity;
                 //PackingInfo.Validate("No. of Packages", TempQtyToShip * TempQtyPerUOM);
-                PackingInfo."Contents Per Package" := BItemUnitofMeasure."Qty. per Unit of Measure" / AItemUnitofMeasure."Qty. per Unit of Measure";
-                PackingInfo.Validate("No. of Packages", PackingInfo.Quantity / PackingInfo."Contents Per Package");
-                PackingInfo."Contents UOM" := RikevitaSetup."KG Unit Code";
-                PackingInfo."Net Weight" := PackingInfo.Quantity * AItemUnitofMeasure."Qty. per Unit of Measure" / CItemUnitofMeasure."Qty. per Unit of Measure";//TempQtyToShip;
-                PackingInfo."Gross Weight UOM" := RikevitaSetup."KG Unit Code";
-                PackingInfo."Line No." := LineNo;
+
                 PackingInfo."External Document No." := SOHeader."External Document No.";//FDD005
                 PackingInfo."Sell-to Customer No." := SOHeader."Sell-to Customer No.";//FDD005
                 PackingInfo."Qty. per Unit of Measure" := ReservationEntry."Qty. per Unit of Measure";//FDD005
                 PackingInfo."Quantity (KG)" := Abs(TempQuantity / ReservationEntry."Qty. per Unit of Measure");//FDD005
+
+                PackingInfo."Contents Per Package" := BItemUnitofMeasure."Qty. per Unit of Measure" / AItemUnitofMeasure."Qty. per Unit of Measure";
+                PackingInfo.Validate("No. of Packages", PackingInfo."Quantity (KG)" / PackingInfo."Contents Per Package");
+                PackingInfo."Contents UOM" := RikevitaSetup."KG Unit Code";
+                PackingInfo."Net Weight" := PackingInfo."Quantity (KG)" * AItemUnitofMeasure."Qty. per Unit of Measure" / CItemUnitofMeasure."Qty. per Unit of Measure";//TempQtyToShip;
+                PackingInfo."Gross Weight UOM" := RikevitaSetup."KG Unit Code";
+                PackingInfo."Line No." := LineNo;
                 PackingInfo.Insert();
                 LineNo += 10000;
 

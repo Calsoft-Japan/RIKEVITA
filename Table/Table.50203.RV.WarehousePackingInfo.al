@@ -75,9 +75,10 @@ table 50203 "RV Warehouse Packing Info."
                 RikevitaSetup.Get();
                 AItemUnitofMeasure.Get("Item No.", "Contents UOM");
                 BItemUnitofMeasure.Get("Item No.", RikevitaSetup."KG Unit Code");
-                Validate("No. of Packages", Quantity / Rec."Contents Per Package");
+
                 Validate("Quantity (KG)", Quantity / "Qty. per Unit of Measure");
-                Rec."Net Weight" := Rec.Quantity * AItemUnitofMeasure."Qty. per Unit of Measure" / BItemUnitofMeasure."Qty. per Unit of Measure";
+                Validate("No. of Packages", "Quantity (KG)" / Rec."Contents Per Package");
+                Rec."Net Weight" := "Quantity (KG)" * AItemUnitofMeasure."Qty. per Unit of Measure" / BItemUnitofMeasure."Qty. per Unit of Measure";
             end;
         }
         field(9; "Case No."; Text[20])
