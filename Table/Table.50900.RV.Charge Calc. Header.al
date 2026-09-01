@@ -254,7 +254,7 @@ table 50900 "RV Charge Calc. Header"
                     if Confirm('Vendor Invoice No. will be cleared. Are you sure to change?') then begin
                         Validate("Vendor Invoice No.", '');
                     end else begin
-                        Error('Change is cancelled.');
+                        Error(OperationCancelledErr);
                     end;
                 end;
             end;
@@ -274,13 +274,15 @@ table 50900 "RV Charge Calc. Header"
                         recPurchInvHeader.SetRange("Vendor Invoice No.", "Vendor Invoice No.");
                         if recPurchInvHeader.FindFirst() then begin
                             Validate("Invoice Currency Code", recPurchInvHeader."Currency Code");
+                        end else begin
+                            Error(NotValidVendInvNoErr);
                         end;
                     end else begin
                         if "Invoice Currency Code" <> '' then begin
-                            if Confirm('Invoice Currency Code will be cleared and Exchange Rate will be reset. Are you sure to change?') then begin
+                            if Confirm(ClearCurrCodeQst) then begin
                                 Validate("Invoice Currency Code", '');
                             end else begin
-                                Error('Change is cancelled.');
+                                Error(OperationCancelledErr);
                             end;
                         end;
                     end;
@@ -302,6 +304,9 @@ table 50900 "RV Charge Calc. Header"
         ModifyOnCompletedErr: Label 'Cannot modify or delete the compeleted data.';
         ChangeToCompletedErr: Label 'Status will be Completed after Carry Out.';
         ChargeTypeBlankErr: Label 'Charge Type is blank!';
+        ClearCurrCodeQst: Label 'Invoice Currency Code will be cleared and Exchange Rate will be reset. Are you sure to change?';
+        NotValidVendInvNoErr: Label 'Vendor Invoice No. is not valid for this Vendor.';
+        OperationCancelledErr: Label 'Operation is cancelled.';
 
 
     trigger OnInsert()
