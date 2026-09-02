@@ -54,6 +54,12 @@ page 50611 "RV Invy. Planning Name"
                             exit(false);
                     end;
                 }
+                field("PIC Filter"; Rec."PIC Filter")
+                {
+                    caption = 'PIC Filter';
+                    ToolTip = 'Specifies the value of the PIC Filter field.', Comment = '%';
+                    applicationarea = All;
+                }
             }
 
             Part(DeliverySchedulingLines; "RV Invy. Planning Lines")
