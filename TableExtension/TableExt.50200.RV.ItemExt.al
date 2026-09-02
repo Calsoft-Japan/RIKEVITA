@@ -107,6 +107,7 @@ tableextension 50200 "RV ITEM" extends "Item"
         {
             Caption = 'PIC';
             Description = 'FDDXXX';
+            TableRelation = "User Setup";
         }
     }
     trigger OnBeforeModify()

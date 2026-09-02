@@ -46,6 +46,10 @@ page 50610 "RV Invy. Planning Names"
                             exit(false);
                     end;
                 }
+                field("PIC Filter"; Rec."PIC Filter")
+                {
+                    ToolTip = 'Specifies the value of the PIC Filter field.', Comment = '%';
+                }
             }
         }
     }

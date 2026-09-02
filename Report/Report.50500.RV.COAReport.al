@@ -151,7 +151,6 @@ report 50500 "RV_COA Report"
                             begin
                                 ExternalQCResults.SetCurrentKey("COA No.", "COA Container No.", "COA Lot No.");
                                 ExternalQCResults.SetRange("COA No.", "RV QA Shipment Lot No."."COA No.");//COA Lot Line No.
-                                //ExternalQCResults.SetRange("COA Container No.", "RV QA Shipment Lot No."."Container No.");//COA Container No.
                                 ExternalQCResults.SetRange("COA Lot No.", "RV QA Shipment Lot No."."Lot No.");//COA Lot No.
                                 SETRANGE(Number, 1, ExternalQCResults.COUNT);
                             end;
@@ -172,13 +171,14 @@ report 50500 "RV_COA Report"
                                 clear(COAContainerNo);
                                 clear(COAlotNo);
                                 clear(QCSpecResult);
+                                clear(QCParameter);
 
                                 GetQCExternalSpecDesc("QA Header", ExternalQCResults, QCSpecResult);
-
                                 if QCSpecResult[1] <> '' then
                                     QCParameterName := QCSpecResult[1]
                                 else
-                                    QCParameterName := ExternalQCResults."QC Parameter Name";
+                                    if QCParameter.Get(ExternalQCResults."QC Parameter Name") then
+                                        QCParameterName := QCParameter."Parameter Description";
 
                                 CASE DisplayMethodCharsSpec OF
                                     DisplayMethodCharsSpec::Method:
@@ -404,33 +404,57 @@ report 50500 "RV_COA Report"
                             Format_DateText := Format(WorkDate(), 0, '<Day,2>-<Month Text,3>-<Year4>');
 
                     end else begin
-                        DisplayQuantityPerLot := false;
-                        Error('Please Setup RV Cust. COA Report Setting.');
-                    end;
-                end;
+                        if CustCOAReportSetting.get('', '') then begin //default setting
 
-                //DisplayMethodCharsSpec
-                CASE DisplayMethodCharsSpec OF
-                    DisplayMethodCharsSpec::Method:
-                        begin
-                            METHOD_Caption := 'METHOD';
-                            SPECIFICATION_Caption := '';
+                            DisplayQuantityPerLot := CustCOAReportSetting."Display Quantity Per Lot.";
+                            DisplayMethodCharsSpec := CustCOAReportSetting."Display Method&Chars Spec.";
+                            DateCalculation := CustCOAReportSetting."Date Calculation";
+                            ExpiredDateCalclogic := CustCOAReportSetting."Expired Date Calc. logic";
+
+                            //DateWording
+                            if (CustCOAReportSetting."Date Wording" = DateWording::"Best Before Date") then begin
+                                DateWordingText := 'BEST BEFORE DATE';
+                                DateWording_remarkText := 'Best Before Date';
+                            end else if (CustCOAReportSetting."Date Wording" = DateWording::"Expiry Date") then begin
+                                DateWordingText := 'EXPIRY DATE';
+                                DateWording_remarkText := 'Expiry Date';
+                            end;
+                            //"Display COA Date"
+                            if (CustCOAReportSetting."Display COA Date" = DisplayCOADate::"COA Created Date") then
+                                Format_DateText := Format("QA Header"."COA Created Date", 0, '<Day,2>-<Month Text,3>-<Year4>')
+                            else if (CustCOAReportSetting."Display COA Date" = DisplayCOADate::"COA Print Date") then
+                                Format_DateText := Format(WorkDate(), 0, '<Day,2>-<Month Text,3>-<Year4>');
+
+
+                        end else begin
+                            DisplayQuantityPerLot := false;
+                            Error('Please Setup RV Cust. COA Report Setting.');
                         end;
-                    DisplayMethodCharsSpec::"Chars Spec.":
-                        begin
-                            METHOD_Caption := '';
-                            SPECIFICATION_Caption := 'SPECIFICATION';
-                        end;
-                    DisplayMethodCharsSpec::"Method &Chars Spec.":
-                        begin
-                            METHOD_Caption := 'METHOD';
-                            SPECIFICATION_Caption := 'SPECIFICATION';
-                        end;
-                    DisplayMethodCharsSpec::"None":
-                        begin
-                            METHOD_Caption := '';
-                            SPECIFICATION_Caption := '';
-                        END;
+                    end;
+
+                    //DisplayMethodCharsSpec
+                    CASE DisplayMethodCharsSpec OF
+                        DisplayMethodCharsSpec::Method:
+                            begin
+                                METHOD_Caption := 'METHOD';
+                                SPECIFICATION_Caption := '';
+                            end;
+                        DisplayMethodCharsSpec::"Chars Spec.":
+                            begin
+                                METHOD_Caption := '';
+                                SPECIFICATION_Caption := 'SPECIFICATION';
+                            end;
+                        DisplayMethodCharsSpec::"Method &Chars Spec.":
+                            begin
+                                METHOD_Caption := 'METHOD';
+                                SPECIFICATION_Caption := 'SPECIFICATION';
+                            end;
+                        DisplayMethodCharsSpec::"None":
+                            begin
+                                METHOD_Caption := '';
+                                SPECIFICATION_Caption := '';
+                            END;
+                    end;
                 end;
             end;
         }
@@ -469,6 +493,7 @@ report 50500 "RV_COA Report"
         ExternalQCResults: Record "RV QA External QC Results";
         CompanyInfo: Record "Company Information";
         CustCOAReportSetting: Record "RV Cust. COA Report Setting";
+        QCParameter: Record "RV QC Parameter";
         DateWording: Enum "RV Date Wording";
         DisplayCOADate: Enum "RV Display COA Date";
         DisplayMethodCharsSpec: Enum "RV Display Method Chars Spec.";

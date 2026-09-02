@@ -13,7 +13,6 @@ table 50513 "RV Cust. COA Report Setting"
         {
             Caption = 'Customer No.';
             TableRelation = Customer;
-            NotBlank = true;
         }
         field(2; "Ship-to Code"; Code[10])
         {
@@ -52,21 +51,4 @@ table 50513 "RV Cust. COA Report Setting"
             Clustered = true;
         }
     }
-
-    /*
-    trigger OnInsert()
-    var
-        NoSeriesMgt: Codeunit "No. Series";
-        RIKEVITASetup: Record "RIKEVITA Setup";
-    begin
-
-        if "QC No." = '' then begin
-            RVVITASetup.Get();
-            RVVITASetup.TestField("QC No. Nos.");
-            "QC No." := NoSeriesMgt.GetNextNo(RVVITASetup."QC No. Nos.");
-        end;
-    end;
-    */
-
-    var
 }

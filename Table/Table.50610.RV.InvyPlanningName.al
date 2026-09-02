@@ -41,7 +41,11 @@ table 50610 "RV Invy. Planning Name"
         {
             Caption = 'Item Filter';
         }
-
+        field(7; "PIC Filter"; text[100])
+        {
+            Caption = 'PIC Filter';
+            tablerelation = "User Setup";
+        }
     }
 
     keys

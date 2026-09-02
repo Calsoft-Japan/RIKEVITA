@@ -52,7 +52,7 @@ page 50613 "RV Reservation Summary"
         QueryTransOrdReceipt: Query "RV Trans. Ord. Receipt";
         QueryQtyinTransit: Query "RV Qty. in Transit";
         QueryQtyOnSalesReturn: Query "RV Qty. on Sales Return";
-        QueryPlanningReceipt: Query "RV Planning Receipt";
+        // QueryPlanningReceipt: Query "RV Planning Receipt";
         QueryPlannedOrderReceipt: Query "RV Planned Order Receipt";
     begin
         Rec.DeleteAll();
@@ -61,42 +61,42 @@ page 50613 "RV Reservation Summary"
             QueryQtyOnComponentLines.SetRange(DueDate, StartingDate, EndDate);
             QueryQtyOnComponentLines.Open();
             while QueryQtyOnComponentLines.Read() do
-                AddSummaryLine('Prod. Order Component', 50602, QueryQtyOnComponentLines.Quantity, ItemNo, StartingDate);
+                AddSummaryLine('Prod. Order Component', 50602, QueryQtyOnComponentLines.Quantity, ItemNo, StartingDate, EndDate);
             QueryQtyOnComponentLines.Close();
 
             QueryPlanningIssues.SetRange(ItemNo, ItemNo);
             QueryPlanningIssues.SetRange(DueDate, StartingDate, EndDate);
             QueryPlanningIssues.Open();
             while QueryPlanningIssues.Read() do
-                AddSummaryLine('Planning Component', 50603, QueryPlanningIssues.Quantity, ItemNo, StartingDate);
+                AddSummaryLine('Planning Component', 50603, QueryPlanningIssues.Quantity, ItemNo, StartingDate, EndDate);
             QueryPlanningIssues.Close();
 
             QueryPlanningTranShip.SetRange(ItemNo, ItemNo);
             QueryPlanningTranShip.SetRange(TransferShipmentDate, StartingDate, EndDate);
             QueryPlanningTranShip.Open();
             while QueryPlanningTranShip.Read() do
-                AddSummaryLine('Requisition Line - Transfer', 50604, QueryPlanningTranShip.Quantity, ItemNo, StartingDate);
+                AddSummaryLine('Requisition Line - Transfer', 50604, QueryPlanningTranShip.Quantity, ItemNo, StartingDate, EndDate);
             QueryPlanningTranShip.Close();
 
             QueryQtyOnSalesOrder.SetRange(ItemNo, ItemNo);
             QueryQtyOnSalesOrder.SetRange(ShipmentDate, StartingDate, EndDate);
             QueryQtyOnSalesOrder.Open();
             while QueryQtyOnSalesOrder.Read() do
-                AddSummaryLine('Sales Line - Order', 50605, QueryQtyOnSalesOrder.Quantity, ItemNo, StartingDate);
+                AddSummaryLine('Sales Line - Order', 50605, QueryQtyOnSalesOrder.Quantity, ItemNo, StartingDate, EndDate);
             QueryQtyOnSalesOrder.Close();
 
             QueryTransOrdShipment.SetRange(ItemNo, ItemNo);
             QueryTransOrdShipment.SetRange(ShipmentDate, StartingDate, EndDate);
             QueryTransOrdShipment.Open();
             while QueryTransOrdShipment.Read() do
-                AddSummaryLine('Transfer Line - Shipment', 50606, QueryTransOrdShipment.Quantity, ItemNo, StartingDate);
+                AddSummaryLine('Transfer Line - Shipment', 50606, QueryTransOrdShipment.Quantity, ItemNo, StartingDate, EndDate);
             QueryTransOrdShipment.Close();
 
             QueryQtyOnPurchReturn.SetRange(ItemNo, ItemNo);
             QueryQtyOnPurchReturn.SetRange(ExpectedReceiptDate, StartingDate, EndDate);
             QueryQtyOnPurchReturn.Open();
             while QueryQtyOnPurchReturn.Read() do
-                AddSummaryLine('Purchase Line - Return Order', 50607, QueryQtyOnPurchReturn.Quantity, ItemNo, StartingDate);
+                AddSummaryLine('Purchase Line - Return Order', 50607, QueryQtyOnPurchReturn.Quantity, ItemNo, StartingDate, EndDate);
             QueryQtyOnPurchReturn.Close();
         end else
             if DataType = DataType::"Scheduled Receipt" then begin
@@ -104,55 +104,55 @@ page 50613 "RV Reservation Summary"
                 QueryScheduledReceipt.SetRange(DueDate, StartingDate, EndDate);
                 QueryScheduledReceipt.Open();
                 while QueryScheduledReceipt.Read() do
-                    AddSummaryLine('Prod. Order Line', 50608, QueryScheduledReceipt.Quantity, ItemNo, StartingDate);
+                    AddSummaryLine('Prod. Order Line', 50608, QueryScheduledReceipt.Quantity, ItemNo, StartingDate, EndDate);
                 QueryScheduledReceipt.Close();
 
                 QueryQtyOnPurchOrder.SetRange(ItemNo, ItemNo);
                 QueryQtyOnPurchOrder.SetRange(ExpectedReceiptDate, StartingDate, EndDate);
                 QueryQtyOnPurchOrder.Open();
                 while QueryQtyOnPurchOrder.Read() do
-                    AddSummaryLine('Purchase Line - Order', 50609, QueryQtyOnPurchOrder.Quantity, ItemNo, StartingDate);
+                    AddSummaryLine('Purchase Line - Order', 50609, QueryQtyOnPurchOrder.Quantity, ItemNo, StartingDate, EndDate);
                 QueryQtyOnPurchOrder.Close();
 
                 QueryTransOrdReceipt.SetRange(ItemNo, ItemNo);
                 QueryTransOrdReceipt.SetRange(ReceiptDate, StartingDate, EndDate);
                 QueryTransOrdReceipt.Open();
                 while QueryTransOrdReceipt.Read() do
-                    AddSummaryLine('Transfer Line - Receipt', 50610, QueryTransOrdReceipt.Quantity, ItemNo, StartingDate);
+                    AddSummaryLine('Transfer Line - Receipt', 50610, QueryTransOrdReceipt.Quantity, ItemNo, StartingDate, EndDate);
                 QueryTransOrdReceipt.Close();
 
                 QueryQtyinTransit.SetRange(ItemNo, ItemNo);
                 QueryQtyinTransit.SetRange(ReceiptDate, StartingDate, EndDate);
                 QueryQtyinTransit.Open();
                 while QueryQtyinTransit.Read() do
-                    AddSummaryLine('Transfer Line - In Transit', 50611, QueryQtyinTransit.Quantity, ItemNo, StartingDate);
+                    AddSummaryLine('Transfer Line - In Transit', 50611, QueryQtyinTransit.Quantity, ItemNo, StartingDate, EndDate);
                 QueryQtyinTransit.Close();
 
                 QueryQtyOnSalesReturn.SetRange(ItemNo, ItemNo);
                 QueryQtyOnSalesReturn.SetRange(ShipmentDate, StartingDate, EndDate);
                 QueryQtyOnSalesReturn.Open();
                 while QueryQtyOnSalesReturn.Read() do
-                    AddSummaryLine('Sales Line - Return Order', 50612, QueryQtyOnSalesReturn.Quantity, ItemNo, StartingDate);
+                    AddSummaryLine('Sales Line - Return Order', 50612, QueryQtyOnSalesReturn.Quantity, ItemNo, StartingDate, EndDate);
                 QueryQtyOnSalesReturn.Close();
 
-                QueryPlanningReceipt.SetRange(ItemNo, ItemNo);
-                QueryPlanningReceipt.SetRange(DueDate, StartingDate, EndDate);
-                QueryPlanningReceipt.Open();
-                while QueryPlanningReceipt.Read() do
-                    AddSummaryLine('Requisition Line', 50613, QueryPlanningReceipt.Quantity, ItemNo, StartingDate);
-                QueryPlanningReceipt.Close();
+                // QueryPlanningReceipt.SetRange(ItemNo, ItemNo);
+                // QueryPlanningReceipt.SetRange(DueDate, StartingDate, EndDate);
+                // QueryPlanningReceipt.Open();
+                // while QueryPlanningReceipt.Read() do
+                //     AddSummaryLine('Requisition Line', 50613, QueryPlanningReceipt.Quantity, ItemNo, StartingDate, EndDate);
+                // QueryPlanningReceipt.Close();
 
                 QueryPlannedOrderReceipt.SetRange(ItemNo, ItemNo);
                 QueryPlannedOrderReceipt.SetRange(DueDate, StartingDate, EndDate);
                 QueryPlannedOrderReceipt.Open();
                 while QueryPlannedOrderReceipt.Read() do
-                    AddSummaryLine('Prod. Order Line - Planned', 50614, QueryPlannedOrderReceipt.Quantity, ItemNo, StartingDate);
+                    AddSummaryLine('Prod. Order Line - Planned', 50614, QueryPlannedOrderReceipt.Quantity, ItemNo, StartingDate, EndDate);
                 QueryPlannedOrderReceipt.Close();
             end;
         CurrPage.Update(false);
     end;
 
-    local procedure AddSummaryLine(SummaryType: Text[100]; QueryNo: Integer; Quantity: Decimal; ItemNo: Code[20]; StartingDate: Date)
+    local procedure AddSummaryLine(SummaryType: Text[100]; QueryNo: Integer; Quantity: Decimal; ItemNo: Code[20]; StartingDate: Date; EndDate: Date)
     begin
         if Quantity = 0 then
             exit;
@@ -163,7 +163,7 @@ page 50613 "RV Reservation Summary"
         Rec."Query No." := QueryNo;
         Rec."Item No." := ItemNo;
         Rec."Starting Date" := StartingDate;
-        Rec."Ending Date" := StartingDate;
+        Rec."Ending Date" := EndDate;
         Rec.Insert();
     end;
 
