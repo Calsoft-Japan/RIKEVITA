@@ -54,12 +54,25 @@ table 50609 "RV Invy. Planning Line"
         }
         field(10; "Inventory Before Period"; decimal)
         {
-            Caption = 'Inventory Before Period';
+            Caption = 'Inventory';
             DecimalPlaces = 0 : 5;
         }
         field(11; PIC; Text[50])
         {
             Caption = 'PIC';
+        }
+        field(12; "Reserved Qty. on Inventory"; decimal)
+        {
+            Caption = 'Reserved Qty. on Inventory';
+            DecimalPlaces = 0 : 5;
+        }
+        field(13; "Inventory Display"; text[100])
+        {
+            Caption = 'Inventory';
+        }
+        field(14; "Reserved Display"; text[100])
+        {
+            Caption = 'Reserved Qty. on Inventory';
         }
         field(101; "Date1 Quantity"; decimal)
         {
