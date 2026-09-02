@@ -247,22 +247,44 @@ table 50900 "RV Charge Calc. Header"
         {
             Caption = 'Vendor No.';
             TableRelation = Vendor."No.";
+
+            trigger OnValidate()
+            begin
+                if "Vendor Invoice No." <> '' then begin
+                    if Confirm('Vendor Invoice No. will be cleared. Are you sure to change?') then begin
+                        Validate("Vendor Invoice No.", '');
+                    end else begin
+                        Error(OperationCancelledErr);
+                    end;
+                end;
+            end;
         }
         field(42; "Vendor Invoice No."; Code[35])
         {
             Caption = 'Vendor Invoice No.';
-            TableRelation = "Purch. Inv. Header"."Vendor Invoice No.";
 
             trigger OnValidate()
             var
                 recPurchInvHeader: Record "Purch. Inv. Header";
             begin
-                if ("Vendor Invoice No." <> xRec."Vendor Invoice No.") and ("Vendor Invoice No." <> '') then begin
-                    TestField("Vendor No.");
-                    recPurchInvHeader.SetRange("Buy-from Vendor No.", "Vendor No.");
-                    recPurchInvHeader.SetRange("Vendor Invoice No.", "Vendor Invoice No.");
-                    if recPurchInvHeader.FindFirst() then begin
-                        Validate("Invoice Currency Code", recPurchInvHeader."Currency Code");
+                if ("Vendor Invoice No." <> xRec."Vendor Invoice No.") then begin
+                    if ("Vendor Invoice No." <> '') then begin
+                        TestField("Vendor No.");
+                        recPurchInvHeader.SetRange("Buy-from Vendor No.", "Vendor No.");
+                        recPurchInvHeader.SetRange("Vendor Invoice No.", "Vendor Invoice No.");
+                        if recPurchInvHeader.FindFirst() then begin
+                            Validate("Invoice Currency Code", recPurchInvHeader."Currency Code");
+                        end else begin
+                            Error(NotValidVendInvNoErr);
+                        end;
+                    end else begin
+                        if "Invoice Currency Code" <> '' then begin
+                            if Confirm(ClearCurrCodeQst) then begin
+                                Validate("Invoice Currency Code", '');
+                            end else begin
+                                Error(OperationCancelledErr);
+                            end;
+                        end;
                     end;
                 end;
             end;
@@ -282,6 +304,9 @@ table 50900 "RV Charge Calc. Header"
         ModifyOnCompletedErr: Label 'Cannot modify or delete the compeleted data.';
         ChangeToCompletedErr: Label 'Status will be Completed after Carry Out.';
         ChargeTypeBlankErr: Label 'Charge Type is blank!';
+        ClearCurrCodeQst: Label 'Invoice Currency Code will be cleared and Exchange Rate will be reset. Are you sure to change?';
+        NotValidVendInvNoErr: Label 'Vendor Invoice No. is not valid for this Vendor.';
+        OperationCancelledErr: Label 'Operation is cancelled.';
 
 
     trigger OnInsert()

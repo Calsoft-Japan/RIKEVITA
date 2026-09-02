@@ -159,4 +159,20 @@ codeunit 50102 "RV Sales Price Based on Shpt."
     end;
 
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Get Shipment", OnAfterInsertLine, '', false, false)]
+    local procedure "Sales-Get Shipment_OnAfterInsertLine"(var SalesShptLine: Record "Sales Shipment Line"; var SalesLine: Record "Sales Line"; SalesShptLine2: Record "Sales Shipment Line"; TransferLine: Boolean; var SalesHeader: Record "Sales Header")
+    var
+        SOrderLine: Record "Sales Line";
+    begin
+        SOrderLine.Reset();
+        SOrderLine.SetRange("Document Type", "Sales Document Type"::Order);
+        SOrderLine.SetRange("Document No.", SalesShptLine2."Order No.");
+        SOrderLine.SetRange("Line No.", SalesShptLine2."Order Line No.");
+        if SOrderLine.FindFirst() then begin
+            SalesLine.Validate("Unit Price", SOrderLine."Unit Price");
+            SalesLine.Modify();
+        end;
+    end;
+
+
 }

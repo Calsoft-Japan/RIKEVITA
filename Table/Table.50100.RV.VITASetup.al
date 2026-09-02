@@ -311,6 +311,12 @@ table 50100 "RV RIKEVITA Setup"
             Description = 'FDD006';
             Caption = 'Holding Period for Air';
         }
+        field(50200; "KG Unit Code"; Code[10])
+        {
+            Description = 'FDD019';
+            Caption = 'KG Unit Code';
+            TableRelation = "Unit of Measure";
+        }
     }
     keys
     {

@@ -25,8 +25,8 @@ report 50104 "RV Quantity on KG JobQueue"
             trigger OnAfterGetRecord()
             begin
                 ItemUOM.Reset();
-                if ItemUOM.Get("Item No.", 'KG') then begin
-                    "RV_Quantity (KG)" := "Item Ledger Entry".Quantity / ItemUOM."Qty. per Unit of Measure";
+                if ItemUOM.Get("Item No.", "Item Ledger Entry"."RV_Supp. Unit of Measure Code") then begin//'KG'
+                    "RV_Quantity (Supp. UOM)" := "Item Ledger Entry".Quantity * ItemUOM."Qty. per Unit of Measure";
                     Modify();
                 end;
             end;
@@ -56,10 +56,10 @@ report 50104 "RV Quantity on KG JobQueue"
             trigger OnAfterGetRecord()
             begin
                 ItemUOM.Reset();
-                if ItemUOM.Get("Item No.", 'KG') then begin
-                    "RV_Item Ledger Entry Qty (KG)" := "Value Entry"."Item Ledger Entry Quantity" / ItemUOM."Qty. per Unit of Measure";
-                    "RV_Value Quantity (KG)" := "Value Entry"."Valued Quantity" / ItemUOM."Qty. per Unit of Measure";
-                    "RV_Invoiced Quantity (KG)" := "Value Entry"."Invoiced Quantity" / ItemUOM."Qty. per Unit of Measure";
+                if ItemUOM.Get("Item No.", "Value Entry"."RV_Supp. Unit of Measure Code") then begin//'KG'
+                    "RV_IL Entry Qty (Supp. UOM)" := "Value Entry"."Item Ledger Entry Quantity" * ItemUOM."Qty. per Unit of Measure";
+                    "RV_Value Quantity (Supp. UOM)" := "Value Entry"."Valued Quantity" * ItemUOM."Qty. per Unit of Measure";
+                    "RV_Invoiced Qty (Supp. UOM)" := "Value Entry"."Invoiced Quantity" * ItemUOM."Qty. per Unit of Measure";
                     Modify();
                 end;
             end;

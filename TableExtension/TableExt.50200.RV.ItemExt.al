@@ -9,6 +9,22 @@ tableextension 50200 "RV ITEM" extends "Item"
 {
     fields
     {
+        field(50100; "RV_Supp. Unit of Measure Code"; Code[20])
+        {
+            Caption = 'Supp. Unit of Measure Code';
+            Description = 'FDD100';
+            TableRelation = "Item Unit of Measure".Code where("Item No." = field("No."));
+            ValidateTableRelation = false;
+
+
+            trigger OnValidate()
+            begin
+                if Rec."RV_Supp. Unit of Measure Code" = 'KG' then begin
+                    error('The Supp. Unit of Measure Code cannot be KG.');
+                end;
+            end;
+        }
+
         field(50200; "RV_RSPO"; Boolean)
         {
             Caption = 'RSPO';

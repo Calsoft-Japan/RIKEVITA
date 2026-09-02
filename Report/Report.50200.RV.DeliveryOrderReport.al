@@ -127,7 +127,7 @@ report 50200 "RV Delivery Order Report"
                         Description2 := RecItem."Description 2";
                     end;
 
-                    ItemBUOM := RecItem."Base Unit of Measure";
+                    ItemBUOM := RecItem."RV_Supp. Unit of Measure Code";
 
                     RecItemLedgerEntry.Reset();
                     RecItemLedgerEntry.SetRange("Document No.", "Document No.");

@@ -194,7 +194,7 @@ report 50202 "RV Packing List Report"
                         if RecItem.Get("Item No.") then begin
                             Description := RecItem.Description;
                             Description2 := RecItem."Description 2";
-                            BaseUnitofMeasure := RecItem."Base Unit of Measure";
+                            BaseUnitofMeasure := RecItem."RV_Supp. Unit of Measure Code";
                             PackageInfo := StrSubstNo('(%1 %2 X %3 %4)',
                             "Contents Per Package", "Contents UOM", "No. of Packages", BaseUnitofMeasure);
                         end;
@@ -272,15 +272,15 @@ report 50202 "RV Packing List Report"
                                         LotNo2 += '<br><br><br>';
                                     end;
                                     LotNoNumber := 1;
-                                    LotNo1 += '<b>' + TempWarehousePackingInfo."Container No" + '</b><br>LOT NO. :<br>' + RecItem.Description + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."Base Unit of Measure" + '<br><br>';
+                                    LotNo1 += '<b>' + TempWarehousePackingInfo."Container No" + '</b><br>LOT NO. :<br>' + RecItem.Description + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."RV_Supp. Unit of Measure Code" + '<br><br>';
                                     LotNo2 += '<br><br>';
                                     oldContainerNo := TempWarehousePackingInfo."Container No";
                                 end else begin
                                     LotNoNumber := LotNoNumber + 1;
                                     if LotNoNumber mod 2 = 0 then begin
-                                        LotNo2 += RecItem.Description + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."Base Unit of Measure" + '<br><br>';
+                                        LotNo2 += RecItem.Description + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."RV_Supp. Unit of Measure Code" + '<br><br>';
                                     end else begin
-                                        LotNo1 += RecItem.Description + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."Base Unit of Measure" + '<br><br>';
+                                        LotNo1 += RecItem.Description + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."RV_Supp. Unit of Measure Code" + '<br><br>';
                                     end;
 
                                 end;

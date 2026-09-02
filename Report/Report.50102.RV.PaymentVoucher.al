@@ -65,7 +65,7 @@ report 50102 "RV Payment Voucher"
                 { }
                 column(Document_No_ByVID; "Document No.")
                 { }
-                column(Amount_to_Apply_ByVID; "Amount to Apply")
+                column(Amount_to_Apply_ByVID; Abs("Amount to Apply"))
                 {
                     AutoFormatExpression = VendorLedgerEntryApplyID."Currency Code";
                     AutoFormatType = 1;
@@ -89,7 +89,7 @@ report 50102 "RV Payment Voucher"
                 { }
                 column(Document_No_ByVDoc; "Document No.")
                 { }
-                column(Amount_to_Apply_ByVDoc; "Amount to Apply")
+                column(Amount_to_Apply_ByVDoc; Abs("Amount to Apply"))
                 {
                     AutoFormatExpression = VendorLedgerEntryApplyDoc."Currency Code";
                     AutoFormatType = 1;
@@ -112,7 +112,7 @@ report 50102 "RV Payment Voucher"
                 { }
                 column(Document_No_ByEID; "Document No.")
                 { }
-                column(Amount_to_Apply_ByEID; "Amount to Apply")
+                column(Amount_to_Apply_ByEID; Abs("Amount to Apply"))
                 {
                     AutoFormatExpression = EmployeeLedgerEntryApplyID."Currency Code";
                     AutoFormatType = 1;
@@ -135,7 +135,7 @@ report 50102 "RV Payment Voucher"
                 { }
                 column(Document_No_ByEDoc; "Document No.")
                 { }
-                column(Amount_to_Apply_ByEDoc; "Amount to Apply")
+                column(Amount_to_Apply_ByEDoc; Abs("Amount to Apply"))
                 {
                     AutoFormatExpression = EmployeeLedgerEntryApplyDoc."Currency Code";
                     AutoFormatType = 1;
@@ -157,7 +157,7 @@ report 50102 "RV Payment Voucher"
                 RptCheck: Report Check;
             begin
                 GenPostDate := Format("Posting Date", 0, '<Closing><Day,2>/<Month,2>/<Year>');
-                GenAmtLCY := Format(Abs("Amount (LCY)"), 0, '<Precision,2><Sign><Integer Thousand><Decimals>');
+                GenAmtLCY := Format(Abs("Amount"), 0, '<Precision,2><Sign><Integer Thousand><Decimals>');//"Amount (LCY)"
 
 
                 case GenJnlLine."Account Type" of

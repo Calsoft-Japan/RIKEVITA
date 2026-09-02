@@ -9,7 +9,7 @@ tableextension 50604 "RV Country/Region Ext" extends "Country/Region"
         field(50600; "RV_Sailing Category Code"; Code[20])
         {
             DataClassification = ToBeClassified;
-            Caption = 'Sailing Category Code';
+            Caption = 'Holding Category';//'Sailing Category Code';
             TableRelation = "RV Holding Category";
 
             trigger OnValidate()
@@ -25,7 +25,7 @@ tableextension 50604 "RV Country/Region Ext" extends "Country/Region"
         field(50601; "RV_Sailing Period"; DateFormula)
         {
             DataClassification = ToBeClassified;
-            Caption = 'Sailing Period';
+            Caption = 'Holding Period';//'Sailing Period';
         }
     }
 }

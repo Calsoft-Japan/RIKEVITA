@@ -118,7 +118,7 @@ report 50203 "RV Sales Invoice(Local)"
                     RecItem.Get("No.");
                     Description := RecItem.Description;
                     Description2 := RecItem."Description 2";
-                    BaseUnitofMeasure := RecItem."Base Unit of Measure";
+                    BaseUnitofMeasure := RecItem."RV_Supp. Unit of Measure Code";
                 end;
 
             }

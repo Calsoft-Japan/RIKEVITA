@@ -780,7 +780,7 @@ report 50107 "RV Payment Voucher With Check"
                 end;
 
                 GenPostDate := Format("Posting Date", 0, '<Closing><Day,2>/<Month,2>/<Year>');
-                GenAmtLCY := Format(Abs("Amount (LCY)"), 0, '<Precision,2><Sign><Integer Thousand><Decimals>');
+                GenAmtLCY := Format(Abs("Amount"), 0, '<Precision,2><Sign><Integer Thousand><Decimals>');//"Amount (LCY)"
 
 
                 case GenJnlLine."Account Type" of

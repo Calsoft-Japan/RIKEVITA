@@ -20,12 +20,20 @@ tableextension 50104 "RV Item Ledger Entry Ext" extends "Item Ledger Entry"
             FieldClass = FlowField;
             CalcFormula = Lookup(Item."Base Unit of Measure" where("No." = field("Item No.")));
         }
-        field(50102; "RV_Quantity (KG)"; Decimal)
+        field(50102; "RV_Quantity (Supp. UOM)"; Decimal)
         {
             Description = 'FDD100';
-            Caption = 'Quantity (KG)';
+            Caption = 'Quantity (Supp. UOM)';//'Quantity (KG)';
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
+        }
+
+        field(50103; "RV_Supp. Unit of Measure Code"; Code[20])
+        {
+            Description = 'FDD100';
+            Caption = 'Supp. Unit of Measure Code';////Supplementary Unit of Measure Code
+            FieldClass = FlowField;
+            CalcFormula = Lookup(Item."RV_Supp. Unit of Measure Code" where("No." = field("Item No.")));
         }
     }
 }

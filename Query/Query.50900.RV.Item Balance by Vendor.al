@@ -25,7 +25,7 @@ query 50900 "RV Item Balance by Vendor"
             {
                 Method = Sum;
             }
-            column(RV_Quantity__KG_; "RV_Quantity (KG)")
+            column(RV_Quantity__KG_; "RV_Quantity (Supp. UOM)")
             {
                 Method = Sum;
             }

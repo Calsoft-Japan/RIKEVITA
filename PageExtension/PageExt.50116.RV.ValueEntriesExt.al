@@ -13,17 +13,22 @@ pageextension 50116 "RV Value Entries Ext" extends "Value Entries"
                 Description = 'FDD100';
                 ApplicationArea = All;
             }
-            field("RV_Item Ledger Entry Qty (KG)"; Rec."RV_Item Ledger Entry Qty (KG)")
+            field("RV_Supp. Unit of Measure Code"; Rec."RV_Supp. Unit of Measure Code")
             {
                 Description = 'FDD100';
                 ApplicationArea = All;
             }
-            field("RV_Value Quantity (KG)"; Rec."RV_Value Quantity (KG)")
+            field("RV_Item Ledger Entry Qty (KG)"; Rec."RV_IL Entry Qty (Supp. UOM)")
             {
                 Description = 'FDD100';
                 ApplicationArea = All;
             }
-            field("RV_Invoiced Quantity (KG)"; Rec."RV_Invoiced Quantity (KG)")
+            field("RV_Value Quantity (KG)"; Rec."RV_Value Quantity (Supp. UOM)")
+            {
+                Description = 'FDD100';
+                ApplicationArea = All;
+            }
+            field("RV_Invoiced Quantity (KG)"; Rec."RV_Invoiced Qty (Supp. UOM)")
             {
                 Description = 'FDD100';
                 ApplicationArea = All;
