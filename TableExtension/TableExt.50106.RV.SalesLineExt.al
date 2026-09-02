@@ -14,6 +14,10 @@ tableextension 50106 "RV Sales Line Ext." extends "Sales Line"
                 SalesHeader: Record "Sales Header";
                 PriceCalculation: Interface "Price Calculation";
             begin
+                /* if RV_FromGetShipment then begin
+                    RV_FromGetShipment := false;
+                    exit;
+                end; */
                 // Only recalculate for Item lines that have an item number.
                 if (Type <> Type::Item) or ("No." = '') then
                     exit;
@@ -92,5 +96,14 @@ tableextension 50106 "RV Sales Line Ext." extends "Sales Line"
             //FieldClass = FlowField;
             //CalcFormula = lookup("Sales Header"."External Document No." where("Document Type" = field("Document Type"), "No." = field("Document No.")));
         }
+
+        field(50105; "RV_FromGetShipment"; boolean)
+        {
+            Caption = 'From Get Shipment';
+            Description = 'FDD007';
+            InitValue = false;
+            DataClassification = ToBeClassified;
+        }
+
     }
 }

@@ -63,10 +63,11 @@ codeunit 50102 "RV Sales Price Based on Shpt."
                     if PostedWhseShptLine.FindFirst() then
                         SalesLine."Shipment Date" := PostedWhseShptLine."Shipment Date";
 
+                    /* Comment out for last request. just use the unit price from sales order. Leon 09/03/2026
                     SalesLine.GetPriceCalculationHandler("Price Type"::Sale, SalesHeader, PriceCalculation);
 
                     SalesLine.ApplyPrice(SalesLine.FieldNo("Shipment Date"), PriceCalculation);
-                    SalesLine.Validate("Unit Price");
+                    SalesLine.Validate("Unit Price"); */
                     SalesLine.Modify();
                 end;
                 SalesLine.SetRange("Shipment No.");//cancel filter for report repeat
@@ -117,6 +118,7 @@ codeunit 50102 "RV Sales Price Based on Shpt."
                         if PostedWhseShptLine.FindFirst() then
                             SalesLine."Shipment Date" := PostedWhseShptLine."Shipment Date"; */
 
+
                         SalesLine.GetPriceCalculationHandler("Price Type"::Sale, SalesHeader, PriceCalculation);
 
                         SalesLine.ApplyPrice(SalesLine.FieldNo("Shipment Date"), PriceCalculation);
@@ -164,14 +166,15 @@ codeunit 50102 "RV Sales Price Based on Shpt."
     var
         SOrderLine: Record "Sales Line";
     begin
-        SOrderLine.Reset();
+        /* SOrderLine.Reset();
         SOrderLine.SetRange("Document Type", "Sales Document Type"::Order);
         SOrderLine.SetRange("Document No.", SalesShptLine2."Order No.");
         SOrderLine.SetRange("Line No.", SalesShptLine2."Order Line No.");
         if SOrderLine.FindFirst() then begin
-            SalesLine.Validate("Unit Price", SOrderLine."Unit Price");
+            //SalesLine.Validate("Unit Price", SOrderLine."Unit Price");
+            SalesLine.RV_FromGetShipment := true;
             SalesLine.Modify();
-        end;
+        end; */
     end;
 
 
