@@ -47,10 +47,10 @@ report 50603 "RV Order Listing Update"
             //ProdHeader:Record "Production Order";
 
             begin
-                //TransferOrderNo := '';
-                //TransferOrderLineNo := '';
-                //ProdOrderNo := '';
-                //ProdOrderLineNo := '';
+                TransferOrderNo := '';
+                TransferOrderLineNo := '';
+                ProdOrderNo := '';
+                ProdOrderLineNo := '';
                 Temtransferorder.deleteall;
                 Temtransferline.deleteall;
                 Temprodorder.deleteall;
