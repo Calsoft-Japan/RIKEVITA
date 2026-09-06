@@ -135,6 +135,12 @@ page 50100 "RIKEVITA Setup"///
                     Description = 'FDD006';
                     ApplicationArea = All;
                 }
+                field("KG Unit Code"; Rec."KG Unit Code")
+                {
+                    Caption = 'KG Unit Code';
+                    Description = 'FDD019';
+                    ApplicationArea = All;
+                }
             }
             group(BankInformation)
             {
@@ -364,12 +370,7 @@ page 50100 "RIKEVITA Setup"///
                     Description = 'FDD009';
                     ApplicationArea = All;
                 }
-                field("KG Unit Code"; Rec."KG Unit Code")
-                {
-                    Caption = 'KG Unit Code';
-                    Description = 'FDD019';
-                    ApplicationArea = All;
-                }
+
             }
 
         }

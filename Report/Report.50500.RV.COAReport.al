@@ -60,7 +60,7 @@ report 50500 "RV_COA Report"
                     column(CompanyInfo_Name; CompanyInfo.Name)
                     {
                     }
-                    column(CompanyInfo_Registration; 'Registration No. ' + CompanyInfo."Registration No.")
+                    column(CompanyInfo_Registration; 'Registration No. ' + CompanyInfo."RV_RESO Certificate No.")
                     {
                     }
                     column(DisplayQuantityPerLot; DisplayQuantityPerLot)

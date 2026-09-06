@@ -114,7 +114,8 @@ codeunit 50400 "RV Whse. Posting Subscriber"
         if ItemJournalLine2.FindSet() then begin
             repeat
                 if ItemJournalLine2."Reason Code" = '' then
-                    Error('Please set reason code for each record.');
+                    If ItemJournalLine2."Journal Template Name" <> 'PROD. ORDE' then
+                        Error('Please set reason code for each record.');
             until ItemJournalLine2.Next() = 0;
         end;
     end;
@@ -128,7 +129,8 @@ codeunit 50400 "RV Whse. Posting Subscriber"
         if ItemJournalLine2.FindSet() then begin
             repeat
                 if ItemJournalLine2."Reason Code" = '' then
-                    Error('Please set reason code for each record.');
+                    If ItemJournalLine2."Journal Template Name" <> 'PROD. ORDE' then
+                        Error('Please set reason code for each record.');
             until ItemJournalLine2.Next() = 0;
         end;
     end;
