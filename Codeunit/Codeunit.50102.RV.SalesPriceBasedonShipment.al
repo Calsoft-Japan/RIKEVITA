@@ -85,8 +85,8 @@ codeunit 50102 "RV Sales Price Based on Shpt."
         PriceCalculation: Interface "Price Calculation";//FDD007
         ReleaseSalesDoc: Codeunit "Release Sales Document";
         NeedReopen: Boolean;
+        CtxMarker: Codeunit "RV WhsePostEventHandler";
     begin
-
         NeedReopen := (SalesHeader.Status = SalesHeader.Status::Released);
         if NeedReopen then
             ReleaseSalesDoc.Reopen(SalesHeader);
@@ -119,10 +119,15 @@ codeunit 50102 "RV Sales Price Based on Shpt."
                             SalesLine."Shipment Date" := PostedWhseShptLine."Shipment Date"; */
 
 
-                        SalesLine.GetPriceCalculationHandler("Price Type"::Sale, SalesHeader, PriceCalculation);
+                        if CtxMarker.IsFromWhseShipment() then begin //POST FROM WHSE SHIPMENT, CHANGE PRICE
+                            CtxMarker.ClearMarker();//Clear the marker after use, to avoid affecting other sales post process
 
-                        SalesLine.ApplyPrice(SalesLine.FieldNo("Shipment Date"), PriceCalculation);
-                        SalesLine.Validate("Unit Price");
+                            SalesLine.GetPriceCalculationHandler("Price Type"::Sale, SalesHeader, PriceCalculation);
+
+                            SalesLine.ApplyPrice(SalesLine.FieldNo("Shipment Date"), PriceCalculation);
+                            SalesLine.Validate("Unit Price");
+                        end;
+
                         SalesLine.Modify();
                     end;
                 until SalesLine.Next() = 0;
@@ -131,6 +136,15 @@ codeunit 50102 "RV Sales Price Based on Shpt."
         //if NeedReopen then
         //    SalesHeader.PerformManualRelease();
     end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnAfterPostSalesDoc, '', false, false)]
+    local procedure "Sales-Post_OnAfterPostSalesDoc"(var SalesHeader: Record "Sales Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; SalesShptHdrNo: Code[20]; RetRcpHdrNo: Code[20]; SalesInvHdrNo: Code[20]; SalesCrMemoHdrNo: Code[20]; CommitIsSuppressed: Boolean; InvtPickPutaway: Boolean; var CustLedgerEntry: Record "Cust. Ledger Entry"; WhseShip: Boolean; WhseReceiv: Boolean; PreviewMode: Boolean)
+    var
+        CtxMarker: Codeunit "RV WhsePostEventHandler";
+    begin
+        CtxMarker.ClearMarker();//Clear the marker after use, to avoid affecting other sales post process
+    end;
+
 
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnBeforePostSalesLines, '', false, false)]

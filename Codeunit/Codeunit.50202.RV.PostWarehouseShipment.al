@@ -88,6 +88,7 @@ codeunit 50202 "RV Post Warehouse Shipment"
         PostedWhseShptLine."Shipment Date" := WhsShipment."Posting Date";
         WhseShptLine."Shipment Date" := WhsShipment."Posting Date";
         WhseShptLine.Modify();
+
         /*
         NeedReopen := (SalesHeader.Status = SalesHeader.Status::Released);
         if NeedReopen then
@@ -126,5 +127,15 @@ codeunit 50202 "RV Post Warehouse Shipment"
             Error('Before posting the warehouse shipment, please run the "Create Packing Information" function to generate packing information.');
         end;
     end;
+
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Whse.-Post Shipment", OnAfterCheckWhseShptLines, '', false, false)]
+    local procedure "Whse.-Post Shipment_OnAfterCheckWhseShptLines"(var WhseShptHeader: Record "Warehouse Shipment Header"; var WhseShptLine: Record "Warehouse Shipment Line"; Invoice: Boolean; var SuppressCommit: Boolean)
+    var
+        CtxMarker: Codeunit "RV WhsePostEventHandler";//FDD016
+    begin
+        CtxMarker.SetFromWhseShipment();  //set post from Whse Shipment FDD016
+    end;
+
 
 }
