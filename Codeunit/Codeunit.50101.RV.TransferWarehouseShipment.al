@@ -1,6 +1,7 @@
 /// <summary>
 /// Codeunit RIKE Transfer Warehouse Shipment (ID 50101)
 /// FDD008 2026/03/14: New. (Liuyang)
+/// On-demand request: add RV_Item Journal Comment by Bobby 09/11/2026
 /// </summary>
 codeunit 50101 "RV TransferWarehouseShipment"
 {
@@ -89,6 +90,7 @@ codeunit 50101 "RV TransferWarehouseShipment"
     local procedure "Item Jnl.-Post Line_OnBeforeInsertItemLedgEntry"(var ItemLedgerEntry: Record "Item Ledger Entry"; ItemJournalLine: Record "Item Journal Line"; TransferItem: Boolean; OldItemLedgEntry: Record "Item Ledger Entry"; ItemJournalLineOrigin: Record "Item Journal Line")
     begin
         ItemLedgerEntry."RV_Container No." := ItemJournalLine."RV_Container No.";
+        ItemLedgerEntry."RV_Item Journal Comment" := ItemJournalLine."RV_Item Journal Comment";//On-demand request
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnBeforeItemJnlPostLine, '', false, false)]

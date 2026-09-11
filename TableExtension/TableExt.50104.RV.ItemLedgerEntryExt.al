@@ -35,5 +35,10 @@ tableextension 50104 "RV Item Ledger Entry Ext" extends "Item Ledger Entry"
             FieldClass = FlowField;
             CalcFormula = Lookup(Item."RV_Supp. Unit of Measure Code" where("No." = field("Item No.")));
         }
+        field(50200; "RV_Item Journal Comment"; Text[150])
+        {
+            Caption = 'Item Journal Comment';
+            DataClassification = ToBeClassified;
+        }
     }
 }

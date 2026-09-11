@@ -11,5 +11,10 @@ tableextension 50105 "RV Item Journal Line Ext" extends "Item Journal Line"
             Caption = 'Container No.';
             DataClassification = ToBeClassified;
         }
+        field(50200; "RV_Item Journal Comment"; Text[150])
+        {
+            Caption = 'Item Journal Comment';
+            DataClassification = ToBeClassified;
+        }
     }
 }
