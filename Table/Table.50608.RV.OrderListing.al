@@ -61,9 +61,9 @@ table 50608 "RV Order Listing"
             Caption = 'Order Unit of Measure';
             DataClassification = ToBeClassified;
         }
-        field(11; "Order Qty. (Base)"; Decimal)
+        field(11; "Order Qty. (Supp. UOM)"; Decimal)
         {
-            Caption = 'Order Qty. (Base)';
+            Caption = 'Order Qty. (Supp. UOM)';
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
         }
@@ -73,9 +73,9 @@ table 50608 "RV Order Listing"
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
         }
-        field(13; "Reserved Qty. (UOM)"; Decimal)
+        field(13; "Reserved Qty. (Supp. UOM)"; Decimal)
         {
-            Caption = 'Reserved Qty. (UOM)';
+            Caption = 'Reserved Qty. (Supp. UOM)';
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
         }
@@ -244,6 +244,23 @@ table 50608 "RV Order Listing"
         {
             Caption = 'Bill-to Customer Name';
             DataClassification = ToBeClassified;
+        }
+        field(45; "Production Output (KG)"; Decimal)
+        {
+            Caption = 'Production Output (KG)';
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 5;
+        }
+        field(46; "Supp. Unit of Measure Code"; Code[10])
+        {
+            Caption = 'Supp. Unit of Measure Code';
+            DataClassification = ToBeClassified;
+        }
+        field(47; "Production Output (Supp. UOM)"; Decimal)
+        {
+            Caption = 'Production Output (Supp. UOM)';
+            DataClassification = ToBeClassified;
+            DecimalPlaces = 0 : 5;
         }
 
     }

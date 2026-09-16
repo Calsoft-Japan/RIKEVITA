@@ -1,10 +1,11 @@
 /// <summary>
-/// Query RV Item Inventory (ID 50601)
+/// Query RV Item Inventory Expired (ID 50617)
 /// FDD006 2026/05/17: New. (Stephen)
 /// </summary>
-query 50601 "RV Item Inventory"
+
+query 50617 "RV Item Inventory Expired"
 {
-    Caption = 'RV Item Inventory';
+    Caption = 'RV Item Inventory Expired';
     QueryType = Normal;
 
     elements
@@ -12,6 +13,9 @@ query 50601 "RV Item Inventory"
         dataitem(ItemLedgerEntry; "Item Ledger Entry")
         {
             column(ItemNo; "Item No.")
+            {
+            }
+            filter(ExpirationDate; "Expiration Date")
             {
             }
             filter(RV_TranistLocation; RV_TranistLocation)

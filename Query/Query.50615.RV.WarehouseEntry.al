@@ -1,28 +1,28 @@
 /// <summary>
-/// Query RV Planned Order Receipt (ID 50614)
+/// Query RV Warehouse Entry (ID 50615)
 /// FDD006 2026/05/17: New. (Stephen)
 /// </summary>
-query 50614 "RV Planned Order Receipt"
+query 50615 "RV Warehouse Entry"
 {
-    Caption = 'RV Planned Order Receipt';
+    Caption = 'RV Warehouse Entry';
     QueryType = Normal;
 
     elements
     {
-        dataitem(ProdLine; "Prod. Order Line")
+        dataitem(WarehouseEntry; "Warehouse Entry")
         {
-            DataItemTableFilter = Status = const(Planned);
             column(ItemNo; "Item No.")
-            {
-            }
-            filter(DueDate; "Due Date")
             {
             }
             filter(RV_TranistLocation; RV_TranistLocation)
             {
                 ColumnFilter = RV_TranistLocation = Const(RV_TranistLocation::Stock);
             }
-            column(Quantity; "Remaining Qty. (Base)")
+            filter(RV_TransitBin; RV_TranistBin)
+            {
+                ColumnFilter = RV_TransitBin = Const(RV_TransitBin::"Goods In Transit");
+            }
+            column(Quantity; "Qty. (Base)")
             {
                 method = Sum;
             }

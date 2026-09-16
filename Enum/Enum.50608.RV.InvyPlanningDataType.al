@@ -14,7 +14,15 @@ enum 50608 "RV Invy. Planning Data Type"
     {
         Caption = 'Scheduled Receipt';
     }
-    value(2; "Planned Inventory")
+    value(3; "Receipt from Transit")
+    {
+        Caption = 'Receipt from Transit';
+    }
+    value(4; "Expired Inventory")
+    {
+        Caption = 'Expired Inventory';
+    }
+    value(5; "Planned Inventory")
     {
         Caption = 'Planned Inventory';
     }

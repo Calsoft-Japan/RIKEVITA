@@ -34,5 +34,17 @@ tableextension 50606 "RV Sales Line" extends "Sales Line"
             DataClassification = ToBeClassified;
             description = 'FDD006';
         }
+        field(50605; RV_TranistLocation; enum "RV Inventory Status")
+        {
+            Caption = 'Transit Location';
+            fieldClass = FlowField;
+            CalcFormula = lookup(Location."RV_Invy. Status" WHERE(Code = field("Location Code")));
+        }
+        field(50606; RV_TranistBin; enum "RV Inventory Status")
+        {
+            Caption = 'Transit Bin';
+            fieldClass = FlowField;
+            CalcFormula = lookup("Bin"."RV_Invy. Status" WHERE("Location Code" = field("Location Code"), Code = field("Bin Code")));
+        }
     }
 }

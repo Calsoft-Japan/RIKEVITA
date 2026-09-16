@@ -44,6 +44,12 @@ report 50603 "RV Order Listing Update"
                 ItemUnitOfMeasure: Record "Item Unit of Measure";
                 SLReserveEntry: Record "Reservation Entry";
                 SalesECRStatusInfo: Record "RV Sales ECR Status Info.";
+                ItemUOM: Record "Item Unit of Measure";
+                Item1: Record Item;
+                RIKEVITASetup: Record "RV RIKEVITA Setup";
+                KGQtyPerUOM: Decimal;
+                SuppQtyPerUOM: Decimal;
+                ItemLedgerEntry: Record "Item Ledger Entry";
             //ProdHeader:Record "Production Order";
 
             begin
@@ -70,10 +76,43 @@ report 50603 "RV Order Listing Update"
                 OrderListing."Order Age (Days)" := Today - SalesHeader."Order Date";
                 OrderListing."Item No." := SalesLine."No.";
                 OrderListing."Item Description" := SalesLine."Description";
+                Item1.get(SalesLine."No.");
+                Item1.TestField("RV_Supp. Unit of Measure Code");
+                RIKEVITASetup.get();
+                ItemUOM.Reset();
+                ItemUOM.SetRange("Item No.", SalesLine."No.");
+                ItemUOM.SetRange(Code, Item1."RV_Supp. Unit of Measure Code");
+                IF ItemUOM.FindFirst() then
+                    SuppQtyPerUOM := ItemUOM."Qty. per Unit of Measure"
+                else
+                    SuppQtyPerUOM := 1;
+
+                ItemUOM.Reset();
+                ItemUOM.SetRange("Item No.", SalesLine."No.");
+                ItemUOM.SetRange(Code, RIKEVITASetup."KG Unit Code");
+                IF ItemUOM.FindFirst() then
+                    KGQtyPerUOM := ItemUOM."Qty. per Unit of Measure"
+                else
+                    KGQtyPerUOM := 1;
+                orderlisting."Supp. Unit of Measure Code" := Item1."RV_Supp. Unit of Measure Code";
                 OrderListing."Order Qty. (UOM)" := SalesLine."Quantity";
-                OrderListing."Reserved Qty. (UOM)" := SalesLine."Reserved Quantity";
+                OrderListing."Reserved Qty. (KG)" := SalesLine."Reserved Qty. (Base)" / KGQtyPerUOM;
+                orderlisting."Order Qty. (KG)" := salesline."Quantity (Base)" / KGQtyPerUOM;
+                OrderListing."Reserved Qty. (Supp. UOM)" := SalesLine."Reserved Qty. (Base)" / SuppQtyPerUOM;
+                OrderListing."Order Qty. (Supp. UOM)" := salesline."Quantity (Base)" / SuppQtyPerUOM;
+
+                //KG quantity calculation.
+                /*IF SalesLine."Unit of Measure Code" = 'KG' THEN begin
+                    OrderListing."Order Qty. (KG)" := SalesLine.Quantity;
+                    OrderListing."Reserved Qty. (KG)" := SalesLine."Reserved Quantity";
+                end else begin
+                    IF ItemUnitOfMeasure.Get(SalesLine."No.", 'KG') then begin
+                        OrderListing."Order Qty. (KG)" := Round(SalesLine."Quantity (Base)" / ItemUnitOfMeasure."Qty. per Unit of Measure", 0.00001);
+                        OrderListing."Reserved Qty. (KG)" := Round(SalesLine."Reserved Qty. (Base)" / ItemUnitOfMeasure."Qty. per Unit of Measure", 0.00001);
+                    end;
+                end;
+                */
                 OrderListing."Order Unit of Measure" := SalesLine."Unit of Measure Code";
-                OrderListing."Order Qty. (Base)" := SalesLine."Quantity (Base)";
                 OrderListing."Requested Delivery Date" := SalesLine."Requested Delivery Date";
                 OrderListing."Customer No." := SalesHeader."Sell-to Customer No.";
                 OrderListing."Ship-to Customer Name" := SalesHeader."Ship-to Name";
@@ -99,16 +138,6 @@ report 50603 "RV Order Listing Update"
                 OrderListing.ETA := SalesLine.RV_ETA;
                 OrderListing.ETD := SalesLine.RV_ETD;
                 OrderListing."Packing Date" := SalesLine."Shipment Date";
-                //KG quantity calculation.
-                IF SalesLine."Unit of Measure Code" = 'KG' THEN begin
-                    OrderListing."Order Qty. (KG)" := SalesLine.Quantity;
-                    OrderListing."Reserved Qty. (KG)" := SalesLine."Reserved Quantity";
-                end else begin
-                    IF ItemUnitOfMeasure.Get(SalesLine."No.", 'KG') then begin
-                        OrderListing."Order Qty. (KG)" := Round(SalesLine."Quantity (Base)" / ItemUnitOfMeasure."Qty. per Unit of Measure", 0.00001);
-                        OrderListing."Reserved Qty. (KG)" := Round(SalesLine."Reserved Qty. (Base)" / ItemUnitOfMeasure."Qty. per Unit of Measure", 0.00001);
-                    end;
-                end;
 
                 //Logistics Information
                 IF ShiptoAddress.get(SalesHeader."Sell-to Customer No.", SalesHeader."Ship-to Code") THEN BEGIN
@@ -183,13 +212,22 @@ report 50603 "RV Order Listing Update"
                 ProdHeader.SetFilter("No.", OrderListing."Prod. Order No.");
                 if ProdHeader.FindLast() then
                     OrderListing."Packing Date" := ProdHeader."Due Date";
+
                 //Status Update
-                if OrderListing."Reserved Qty. (UOM)" <= 0 then
+                if OrderListing."Reserved Qty. (KG)" <= 0 then
                     OrderListing.Status := OrderListing.Status::Ordered
                 else
                     OrderListing.Status := OrderListing.Status::"Partial Reserved";
-                if OrderListing."Reserved Qty. (UOM)" = OrderListing."Order Qty. (UOM)" then
+                if OrderListing."Reserved Qty. (KG)" = OrderListing."Order Qty. (KG)" then
                     OrderListing.Status := OrderListing.Status::Reserved;
+                //
+                ItemLedgerEntry.Reset();
+                itemLedgerEntry.SetRange(ItemLedgerEntry."Entry Type", ItemLedgerEntry."Entry Type"::Output);
+                ItemLedgerEntry.Setfilter("Order No.", OrderListing."Prod. Order No.");
+                ItemLedgerEntry.setrange("Item No.", OrderListing."Item No.");
+                ItemLedgerEntry.CalcSums(Quantity);
+                Orderlisting."Production Output (Supp. UOM)" := ROUND(ItemLedgerEntry.Quantity / SuppQtyPerUOM, 0.00001);
+                Orderlisting."Production Output (KG)" := ROUND(ItemLedgerEntry.Quantity / KGQtyPerUOM, 0.00001);
 
                 SalesCommentLine.SetRange("Document Type", SalesLine."Document Type");
                 SalesCommentLine.SetRange("No.", SalesLine."Document No.");
@@ -198,7 +236,6 @@ report 50603 "RV Order Listing Update"
                 IF not OrderListing.Insert() then
                     OrderListing.Modify();
                 Counts += 1;
-
 
             end;
 

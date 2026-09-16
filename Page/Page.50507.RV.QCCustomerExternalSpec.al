@@ -27,6 +27,7 @@ page 50507 "RV QC Customer External Spec."
                 field("Customer No."; Rec."Customer No.")
                 {
                     ApplicationArea = All;
+                    NotBlank = true;
                 }
                 field("Ship-to Code"; Rec."Ship-to Code")
                 {

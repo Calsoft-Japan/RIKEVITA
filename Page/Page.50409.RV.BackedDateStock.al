@@ -1,7 +1,7 @@
 page 50409 "RV BackedDate Stock"
 {
     ApplicationArea = All;
-    Caption = 'BackedDate Stock';
+    Caption = 'Inventory Monitoring';
     PageType = Card;
     //UsageCategory = tasks;
     SourceTable = "RV Invy. Available Name";

@@ -1,3 +1,7 @@
+/// <summary>
+/// Query RV Qty. on Sales Return (ID 50612)
+/// FDD006 2026/05/17: New. (Stephen)
+/// </summary>
 query 50612 "RV Qty. on Sales Return"
 {
     Caption = 'RV Qty. on Sales Return';
@@ -15,15 +19,14 @@ query 50612 "RV Qty. on Sales Return"
             filter(ShipmentDate; "Shipment Date")
             {
             }
+            filter(RV_TranistLocation; RV_TranistLocation)
+            {
+                ColumnFilter = RV_TranistLocation = const(RV_TranistLocation::Stock);
+            }
             column(Quantity; "Outstanding Qty. (Base)")
             {
                 method = Sum;
             }
         }
     }
-
-    trigger OnBeforeOpen()
-    begin
-
-    end;
 }

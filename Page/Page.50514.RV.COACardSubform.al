@@ -309,6 +309,7 @@ page 50514 "RV COA Card Subform"
                     CustomerExternalSpec.Reset();
                     CustomerExternalSpec.SetRange("QC Resource Group No.", QCResource."QC Resource Group No.");
                     CustomerExternalSpec.SetRange("Customer No.", rec."Ship-to Customer No.");
+                    CustomerExternalSpec.SetFilter("Ship-to Code", '=%1', ''); //blank ship-to code
                     if CustomerExternalSpec.FindLast() then
                         ExternalSpecNo := CustomerExternalSpec."External Specification";
                 end;

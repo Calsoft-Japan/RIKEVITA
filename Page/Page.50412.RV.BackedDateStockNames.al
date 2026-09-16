@@ -1,7 +1,7 @@
 page 50412 "RV BackedDate Stock Names"
 {
     ApplicationArea = All;
-    Caption = 'BackedDate Stock Balance';
+    Caption = 'Inventory Monitoring';
     PageType = List;
     usagecategory = Lists;
     SourceTable = "RV Invy. Available Name";
