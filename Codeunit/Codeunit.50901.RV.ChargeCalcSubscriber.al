@@ -24,16 +24,24 @@ codeunit 50901 "RV Charge Calc. Subscriber"
     local procedure DoOnAfterInsertShipmentLine(var SalesHeader: Record "Sales Header"; var SalesLine: Record "Sales Line"; var SalesShptLine: record "Sales Shipment Line"; PreviewMode: Boolean; xSalesLine: Record "Sales Line")
     var
         recPostedWhseShptLine: Record "Posted Whse. Shipment Line";
+        recPostedWhseShptHeader: Record "Posted Whse. Shipment Header";
     begin
 
         recPostedWhseShptLine.SetRange("Posted Source Document", recPostedWhseShptLine."Posted Source Document"::"Posted Shipment");
         recPostedWhseShptLine.SetRange("Posted Source No.", SalesShptLine."Document No.");
         recPostedWhseShptLine.SetRange("Source Line No.", SalesShptLine."Line No.");
         if recPostedWhseShptLine.FindFirst() then begin
-
-            SalesShptLine."RV_Warehouse Shipment No." := recPostedWhseShptLine."Whse. Shipment No.";
+            //Normal Item Line
             SalesShptLine."RV_Posted Whse. Shipment No." := recPostedWhseShptLine."No.";
-            SalesShptLine.Modify();
+            SalesShptLine."RV_Warehouse Shipment No." := recPostedWhseShptLine."Whse. Shipment No.";
+        end else begin
+            //Charge Allocated Line
+            SalesShptLine."RV_Posted Whse. Shipment No." := SalesLine."RV_Alloc PostedWhseNo";
+            if recPostedWhseShptHeader.Get(SalesShptLine."RV_Posted Whse. Shipment No.") then begin
+                SalesShptLine."RV_Warehouse Shipment No." := recPostedWhseShptHeader."Whse. Shipment No.";
+            end;
         end;
+
+        SalesShptLine.Modify();
     end;
 }

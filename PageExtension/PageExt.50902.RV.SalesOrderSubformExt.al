@@ -33,6 +33,12 @@ pageextension 50902 "RV_Sales Order Subform Ext" extends "Sales Order Subform"
                 Caption = 'Charge Allocated';
                 ApplicationArea = All;
             }
+            field("RV_Alloc PostedWhseNo"; Rec."RV_Alloc PostedWhseNo")
+            {
+                Caption = 'Posted Whse No. (Charge Allocate)';
+                ApplicationArea = All;
+                Visible = false;
+            }
         }
     }
 }

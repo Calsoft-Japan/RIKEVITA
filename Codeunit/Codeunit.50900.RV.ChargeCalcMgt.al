@@ -424,8 +424,11 @@ codeunit 50900 "RV Charge Calc. Mgt"
             pSalesLine.Validate("Shortcut Dimension 1 Code", recSalesLine_Alloc."Shortcut Dimension 1 Code");
             pSalesLine.Validate("Shortcut Dimension 2 Code", recSalesLine_Alloc."Shortcut Dimension 2 Code");
             pSalesLine.Validate("Dimension Set ID", recSalesLine_Alloc."Dimension Set ID");
-            pSalesLine.Modify(true);
         end;
+
+        pSalesLine."RV_Alloc PostedWhseNo" := CCLine."Posted Whse. Shipment No.";
+
+        pSalesLine.Modify(true);
     end;
 
     local procedure CarryOutCNF()

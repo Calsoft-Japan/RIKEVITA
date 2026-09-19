@@ -41,5 +41,10 @@ tableextension 50901 "RV SalesLine Ext" extends "Sales Line"
             CalcFormula = exist("RV Charge Calc. Line" where("Sales Order No." = field("Document No."),
                                                             "Sales Order Line No." = field("Line No.")));
         }
+        field(50905; "RV_Alloc PostedWhseNo"; Code[20])
+        {
+            Description = 'FDD009';
+            Caption = 'Posted Whse No. (Charge Allocate)';
+        }
     }
 }
