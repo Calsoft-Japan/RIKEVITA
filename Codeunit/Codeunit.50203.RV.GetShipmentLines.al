@@ -26,6 +26,8 @@ codeunit 50203 "RV Get Shipment Lines"
                 SalesHeader.RV_Destination := PostWhseShipmentHeader."RV_Final Destination";
                 SalesHeader."RV_Country of Origin" := PostWhseShipmentHeader."RV_Country of Origin";
                 SalesHeader."RV_SAILING ON OR ABOUT" := PostWhseShipmentHeader."RV_SAILING ON OR ABOUT";
+                SalesHeader.RV_ETD := PostWhseShipmentHeader.RV_ETD;
+                SalesHeader.RV_ETA := PostWhseShipmentHeader.RV_ETA;
                 SalesHeader.Modify();
             end;
         end;
