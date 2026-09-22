@@ -364,6 +364,7 @@ report 50205 "RV Sales Invoice(Oversea)"
                     {
                         Caption = 'Show FOB Price';
                         ApplicationArea = All;
+                        Editable = IfShowFOBPrice;
                     }
                     field(ShowExchangeRates; ShowExchangeRates)
                     {
@@ -406,6 +407,8 @@ report 50205 "RV Sales Invoice(Oversea)"
         SalesComment: Text;
         chr10: Char;
         SalesListComment: Text;
+        CustomerChargeType: Enum "RV Charge Type";
+        IfShowFOBPrice: Boolean;
 
     trigger OnPreReport()
     begin
@@ -425,6 +428,15 @@ report 50205 "RV Sales Invoice(Oversea)"
             barcodeSymbology := Enum::"Barcode Symbology 2D"::"QR-Code";
             barcodeStr := barcodeFontProvider.EncodeFont(Value, barcodeSymbology);
             exit(barcodeStr);
+        end;
+    end;
+
+    procedure GetCustomerChargeType(SetChargeType: Enum "RV Charge Type")
+    begin
+        CustomerChargeType := SetChargeType;
+        IfShowFOBPrice := true;
+        if CustomerChargeType = CustomerChargeType::CNF then begin
+            IfShowFOBPrice := false;
         end;
     end;
 }

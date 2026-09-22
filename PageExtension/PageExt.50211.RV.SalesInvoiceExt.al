@@ -89,11 +89,18 @@ pageextension 50211 "RV Sales Invoice Ext" extends "Sales Invoice"
                 trigger OnAction()
                 var
                     ReportRec: Record "Sales Header";
+                    CustomerRec: Record Customer;
+                    ReportSet: Report "RV Sales Invoice(Oversea)";
                 begin
+                    CustomerRec.Get(Rec."Sell-to Customer No.");
+                    ReportSet.GetCustomerChargeType(CustomerRec."RV_Charge Type");
+
                     ReportRec.Reset();
                     ReportRec.SetRange("No.", Rec."No.");
                     ReportRec.SetRange("Document Type", ReportRec."Document Type"::Invoice);
-                    Report.Run(50205, TRUE, FALSE, ReportRec);
+                    ReportSet.SetTableView(ReportRec);
+                    ReportSet.Run();
+                    //Report.Run(50205, TRUE, FALSE, ReportRec);
                 end;
             }
         }

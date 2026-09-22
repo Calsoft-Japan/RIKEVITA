@@ -1,11 +1,21 @@
 /// <summary>
 /// PageExtension RIKE Purchase Order Ext"(ID 50101) extends "Purchase Order" Page
 /// FDD003 2026/03/08: New. (Liuyang)
+/// On-demand request: add RV_Supplier Quotation No. by Bobby 09/16/2026
 /// </summary>
 pageextension 50101 "RV Purchase Order Ext" extends "Purchase Order"
 {
     layout
     {
+        addafter(Status)
+        {
+            field("RV_Supplier Quotation No."; Rec."RV_Supplier Quotation No.")
+            {
+                Caption = 'Supplier Quotation No.';
+                ApplicationArea = All;
+                Description = 'FDD003';
+            }
+        }
         addafter("Remit-to")
         {
             group("RIKE")

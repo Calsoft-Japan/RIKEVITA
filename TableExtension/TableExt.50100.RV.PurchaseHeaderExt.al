@@ -1,6 +1,7 @@
 /// <summary>
 /// TableExtension RIKE Purchase Header Ext (ID 50100) extends "Purchase Header" table
 /// FDD003 2026/03/08: New. (Liuyang)
+/// On-demand request: add RV_Supplier Quotation No. by Bobby 09/16/2026
 /// </summary>
 tableextension 50100 "RV Purchase Header Ext" extends "Purchase Header"
 {
@@ -41,7 +42,11 @@ tableextension 50100 "RV Purchase Header Ext" extends "Purchase Header"
             Caption = 'Contract No.';
             DataClassification = ToBeClassified;
         }
-
+        field(50200; "RV_Supplier Quotation No."; Code[20])// On-demand request
+        {
+            Caption = 'Supplier Quotation No.';
+            DataClassification = ToBeClassified;
+        }
     }
 
     /// <summary>

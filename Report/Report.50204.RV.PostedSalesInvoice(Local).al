@@ -225,7 +225,7 @@ report 50204 "RV Posted Sales Invoice(Local)"
     var
         CompanyInfo: Record "Company Information";
         RIKEVITASetup: Record "RV RIKEVITA Setup";
-        ReportTitle: Label 'Pro Forma Invoice';
+        ReportTitle: Label 'SALES INVOICE';
         ISODocumentNo: Text;
         ISODocVersion: Text;
         Description: Text;

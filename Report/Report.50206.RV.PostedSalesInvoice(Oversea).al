@@ -350,7 +350,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
     var
         CompanyInfo: Record "Company Information";
         RIKEVITASetup: Record "RV RIKEVITA Setup";
-        ReportTitle: Label 'PROFORMA INVOICE';
+        ReportTitle: Label 'SALES INVOICE';
         ISODocumentNo: Text;
         ISODocVersion: Text;
         Description: Text;

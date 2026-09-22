@@ -2,6 +2,7 @@
 /// pageextension RV Item Ledger Entry Ext (ID 50111) extends "Item Ledger Entries" page
 /// FDD008 2026/03/14: New. (Liuyang)
 /// FDD100 2026/05/06:  (Liuyang)
+/// On-demand request: add RV_Item Journal Comment by Bobby 09/11/2026
 /// </summary>
 pageextension 50111 "RV Item Ledger Entry Ext" extends "Item Ledger Entries"
 {
@@ -32,6 +33,11 @@ pageextension 50111 "RV Item Ledger Entry Ext" extends "Item Ledger Entries"
             field("RV_Quantity (KG)"; Rec."RV_Quantity (Supp. UOM)")
             {
                 Description = 'FDD100';
+                ApplicationArea = All;
+            }
+            field("Item Journal Comment"; Rec."RV_Item Journal Comment")//On-demand request
+            {
+                Editable = true;
                 ApplicationArea = All;
             }
         }
