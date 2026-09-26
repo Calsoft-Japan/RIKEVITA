@@ -78,4 +78,14 @@ codeunit 50106 "RV PaymentJournal Post"
     begin
     end;
  */
+
+
+    //VOID CHECK to set the check no. filter for check ledger entry
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::CheckManagement, OnVoidCheckOnAfterCheckLedgEntry2SetFilters, '', false, false)]
+    local procedure CheckManagement_OnVoidCheckOnAfterCheckLedgEntry2SetFilters(var CheckLedgerEntry: Record "Check Ledger Entry"; GenJournalLine: Record "Gen. Journal Line")
+    begin
+        CheckLedgerEntry.SetRange("Check No.", GenJournalLine."RV_Cheque No.");
+    end;
+
+    //VOID CHECK
 }
