@@ -18,8 +18,6 @@ codeunit 50203 "RV Get Shipment Lines"
         WarehouseEntry.SetRange("Source Line No.", SalesShipmentLine."Order Line No.");
         if WarehouseEntry.FindFirst() then begin
             if PostWhseShipmentHeader.Get(WarehouseEntry."Whse. Document No.") then begin
-                //SalesHeader.RV_ETA := WhseShipmentHeader.RV_ETA;
-                //SalesHeader.RV_ETD := WhseShipmentHeader.RV_ETD;
                 SalesHeader.RV_VIA := PostWhseShipmentHeader.RV_VIA;
                 SalesHeader."RV_Feeder Vessel" := PostWhseShipmentHeader."RV_Feeder Vessel";
                 SalesHeader."RV_Mother Vessel" := PostWhseShipmentHeader."RV_Mother Vessel";

@@ -17,9 +17,7 @@ pageextension 50214 "RV Whse Shipment Subform Ext" extends "Whse. Shipment Subfo
         WarehousePackingInfo.SetRange("Item No.", Rec."Item No.");
         WarehousePackingInfo.SetRange("Sales Order No.", Rec."Source No.");
         WarehousePackingInfo.SetRange("SO Line No.", Rec."Source Line No.");
-        if WarehousePackingInfo.FindFirst() then begin
-            WarehousePackingInfo.Delete();
-        end;
+        WarehousePackingInfo.DeleteAll();
     end;
 
 }
