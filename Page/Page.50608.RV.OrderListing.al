@@ -64,12 +64,12 @@ page 50608 "RV Order Listing"
                 {
                     ToolTip = 'Specifies the value of the Order Qty. (Supp. UOM) field.', Comment = '%';
                     Editable = false;
-                }*/
+                }
                 field("Order Qty. (KG)"; Rec."Order Qty. (KG)")
                 {
                     ToolTip = 'Specifies the value of the Order Qty. (KG) field.', Comment = '%';
                     Editable = false;
-                }
+                }*/
                 field("Reserved Qty. (UOM)"; Rec."Reserved Qty. (Supp. UOM)")
                 {
                     ToolTip = 'Specifies the value of the Reserved Qty. (Supp. UOM) field.', Comment = '%';
@@ -105,6 +105,11 @@ page 50608 "RV Order Listing"
                     ToolTip = 'Specifies the value of the Production Output (Supp. UOM) field.', Comment = '%';
                     Editable = false;
                 }
+                field("Production Output (KG)"; Rec."Production Output (KG)")
+                {
+                    ToolTip = 'Specifies the value of the Production Output (KG) field.', Comment = '%';
+                    Editable = false;
+                }
                 field("Requested Delivery Date"; Rec."Requested Delivery Date")
                 {
                     ToolTip = 'Specifies the value of the Requested Delivery Date field.', Comment = '%';
@@ -115,6 +120,12 @@ page 50608 "RV Order Listing"
                     ToolTip = 'Specifies the value of the Customer No. field.', Comment = '%';
                     Editable = false;
                 }
+                field("Customer Type"; Rec."RV_Customer Type")
+                {
+                    ToolTip = 'Specifies the value of the Customer Type field.', Comment = '%';
+                    Editable = false;
+                }
+
                 field("Ship-to Customer Name"; Rec."Ship-to Customer Name")
                 {
                     ToolTip = 'Specifies the value of the Ship-to Customer Name field.', Comment = '%';

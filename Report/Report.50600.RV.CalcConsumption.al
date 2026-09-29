@@ -28,7 +28,7 @@ report 50600 "RV Calc. Consumption"
                     CreateOutputJnlLine();
                 if PlannedConsumption then
                     CreateConsumpJnlLine(CalcBasedOn::"Expected Output");
-                if AdjustConsumption then
+                if ActualConsumption then
                     CreateConsumpJnlLine(CalcBasedOn::"Actual Output");
             end;
         }
@@ -45,6 +45,12 @@ report 50600 "RV Calc. Consumption"
                     {
                         ApplicationArea = Manufacturing;
                         Caption = 'Planned Output';
+                        trigger OnValidate()
+                        begin
+                            if PlannedOutput then begin
+                                ActualConsumption := not PlannedOutput;
+                            end;
+                        end;
                     }
                     field("Planned Consumption"; PlannedConsumption)
                     {
@@ -54,18 +60,20 @@ report 50600 "RV Calc. Consumption"
                         trigger OnValidate()
                         begin
                             if PlannedConsumption then
-                                AdjustConsumption := not PlannedConsumption;
+                                ActualConsumption := not PlannedConsumption;
                         end;
                     }
-                    field("Adjust Consumption"; AdjustConsumption)
+                    field("Actual Consumption"; ActualConsumption)
                     {
                         ApplicationArea = Manufacturing;
-                        Caption = 'Adjust Consumption';
+                        Caption = 'Actual Consumption';
 
                         trigger OnValidate()
                         begin
-                            if AdjustConsumption then
-                                PlannedConsumption := not AdjustConsumption;
+                            if ActualConsumption then begin
+                                PlannedConsumption := not ActualConsumption;
+                                PlannedOutput := not ActualConsumption;
+                            end;
                         end;
                     }
                 }
@@ -80,7 +88,7 @@ report 50600 "RV Calc. Consumption"
         trigger OnQueryClosePage(CloseAction: Action): Boolean
         begin
             if CloseAction = CloseAction::OK then
-                if not PlannedOutput and not PlannedConsumption and not AdjustConsumption then
+                if not PlannedOutput and not PlannedConsumption and not ActualConsumption then
                     Error('At least one option must be selected.');
         end;
     }
@@ -94,7 +102,7 @@ report 50600 "RV Calc. Consumption"
         RVProdResultJnlLine: Record "RV Prod. Result Journal Line";
         PlannedOutput: Boolean;
         PlannedConsumption: Boolean;
-        AdjustConsumption: Boolean;
+        ActualConsumption: Boolean;
         GBatchName: Code[20];
 
     procedure CreateConsumpJnlLine(parCalcBasedOn: Option "Actual Output","Expected Output")
@@ -121,6 +129,8 @@ report 50600 "RV Calc. Consumption"
                         RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Planned Consumption"
                     else
                         RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Adjust Consumption";
+                    //because calculated consumption should be based on planned
+                    RVProdResultJnlLine."Data Type" := RVProdResultJnlLine."Data Type"::"Planned Consumption";
                     RVProdResultJnlLine."Prod. Order No." := ProdOrderLine."Prod. Order No.";
                     RVProdResultJnlLine."Output Item No." := ProdOrderLine."Item No.";
                     RVProdResultJnlLine."Output Item Description" := ProdOrderLine.Description;

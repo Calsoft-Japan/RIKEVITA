@@ -55,7 +55,7 @@ pageextension 50211 "RV Sales Invoice Ext" extends "Sales Invoice"
                 }
                 field("SAILING ON OR ABOUT"; Rec."RV_SAILING ON OR ABOUT")
                 {
-                    Caption = 'SAILING ON OR ABOUT';
+                    Caption = 'Sailing on Board-SOB';
                     ApplicationArea = All;
                     Description = 'FDD021';
                 }

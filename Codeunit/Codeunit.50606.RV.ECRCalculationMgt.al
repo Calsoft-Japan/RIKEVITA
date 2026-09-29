@@ -59,9 +59,10 @@ codeunit 50606 "RV ECR Calculation Mgt"
         ShiptoAddress: Record "Ship-to Address";
     begin
         if (Rec."Ship-to Code" <> xRec."Ship-to Code") then begin
-            ShiptoAddress.Get(Rec."Sell-to Customer No.", Rec."Ship-to Code");
-            Rec."RV_Shipment Type" := ShiptoAddress."RV_Shipment Type";
-            ModifyECRInfo(rec."No.", 0, rec."RV_Stuffing Date", rec."Ship-to Code");
+            IF ShiptoAddress.Get(Rec."Sell-to Customer No.", Rec."Ship-to Code") then begin
+                Rec."RV_Shipment Type" := ShiptoAddress."RV_Shipment Type";
+                ModifyECRInfo(rec."No.", 0, rec."RV_Stuffing Date", rec."Ship-to Code");
+            end;
         end;
     end;
 
@@ -209,6 +210,8 @@ codeunit 50606 "RV ECR Calculation Mgt"
     begin
         SH.get(salesLine."Document Type", salesLine."Document No.");
         RVSetup.Get();
+        if salesLine.Type <> salesLine.Type::Item then
+            exit;
         Item.get(salesLine."No.");
 
         if fieldNo = salesLine.FieldNo("No.") then begin

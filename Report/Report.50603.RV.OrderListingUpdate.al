@@ -79,6 +79,7 @@ report 50603 "RV Order Listing Update"
                 Item1.get(SalesLine."No.");
                 Item1.TestField("RV_Supp. Unit of Measure Code");
                 RIKEVITASetup.get();
+                RIKEVITASetup.testField("KG Unit Code");
                 ItemUOM.Reset();
                 ItemUOM.SetRange("Item No.", SalesLine."No.");
                 ItemUOM.SetRange(Code, Item1."RV_Supp. Unit of Measure Code");

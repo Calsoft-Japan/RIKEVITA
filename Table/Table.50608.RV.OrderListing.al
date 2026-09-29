@@ -262,6 +262,13 @@ table 50608 "RV Order Listing"
             DataClassification = ToBeClassified;
             DecimalPlaces = 0 : 5;
         }
+        field(48; "RV_Customer Type"; Enum "RV Customer Type")
+        {
+            Description = 'FDD024';
+            Caption = 'Customer Type';
+            FieldClass = FlowField;
+            CalcFormula = Lookup(Customer."RV_Customer Type" WHERE("No." = FIELD("Customer No.")));
+        }
 
     }
 
