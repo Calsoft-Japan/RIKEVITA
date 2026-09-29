@@ -363,4 +363,44 @@ codeunit 50606 "RV ECR Calculation Mgt"
             rec."RV_Stuffing Date" := SalesHeader."RV_Stuffing Date";
         end;
     end;
+
+    [EventSubscriber(ObjectType::page, page::"Sales Order", OnBeforeValidateShipToOptions, '', false, false)]
+    procedure SalesOrderOnBeforeValidateShipToOptions(var SalesHeader: Record "Sales Header"; ShipToOptions: Option; var IsHandled: Boolean)
+    var
+
+    begin
+        if ShipToOptions <> 1 then begin
+            Error('For shipment information, Only the Alternate Shipping Address option is allowed.');
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::page, page::"Sales Invoice", OnBeforeValidateShipToOptions, '', false, false)]
+    procedure SalesInvoiceOnBeforeValidateShipToOptions(var SalesHeader: Record "Sales Header"; ShipToOptions: Option; var IsHandled: Boolean)
+    var
+
+    begin
+        if ShipToOptions <> 1 then begin
+            Error('For shipment information, Only the Alternate Shipping Address option is allowed.');
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::page, page::"Sales Quote", OnBeforeValidateShipToOptions, '', false, false)]
+    procedure SalesQuoteOnBeforeValidateShipToOptions(var SalesHeader: Record "Sales Header"; ShipToOptions: Option; var IsHandled: Boolean)
+    var
+
+    begin
+        if ShipToOptions <> 1 then begin
+            Error('For shipment information, Only the Alternate Shipping Address option is allowed.');
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::page, page::"Blanket Sales Order", OnBeforeValidateShipToOptions, '', false, false)]
+    procedure BlanketOrderOnBeforeValidateShipToOptions(var SalesHeader: Record "Sales Header"; ShipToOptions: Option)
+    var
+
+    begin
+        if ShipToOptions <> 1 then begin
+            Error('For shipment information, Only the Alternate Shipping Address option is allowed.');
+        end;
+    end;
 }
