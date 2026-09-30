@@ -15,6 +15,7 @@ report 50602 "RV ECR Calculation Info"
             trigger OnPreDataItem()
             begin
                 Salesline.SetFilter("Outstanding Quantity", '>0');
+                salesline.SetRange(Type, Salesline.Type::Item);
                 Salesline.SetAutoCalcFields("Reserved Quantity");
             end;
 

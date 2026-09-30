@@ -36,8 +36,10 @@ table 50511 "RV QA External QC Results"
                 QAInternalQCResults.SetRange("COA No.", "COA No.");
                 QAInternalQCResults.SetRange("COA Lot Line No.", "COA Lot Line No.");
                 QAInternalQCResults.SetRange("QC Parameter Name", "QC Parameter Name");
-                if QAInternalQCResults.FindLast() then
+                if QAInternalQCResults.FindLast() then begin
                     "QC Value" := QAInternalQCResults."QC Value";
+                    "COA Value" := QAInternalQCResults."QC Value";
+                end;
 
                 if QCParameter.Get("QC Parameter Name") then begin
                     QCValueTable.Reset();

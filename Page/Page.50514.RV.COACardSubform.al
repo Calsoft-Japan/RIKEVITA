@@ -63,11 +63,22 @@ page 50514 "RV COA Card Subform"
                         PostedWhShipLine: Record "Posted Whse. Shipment Line";
                         WhShipline: Record "Warehouse Shipment line";
                         RefOrderTypeQA: Enum "RV Ref. Order Type QA";
+                        QAHeader: Record "RV QA Header";
+                        DuplicateRecordQst: Label 'Duplicate QA Header record found for Ref. Order Type %1, Order No. %2, Line No. %3. Existing COA No. is %4. Do you want to continue?';
                     begin
 
                         if Rec."Ref. Order Type QA" = RefOrderTypeQA::"Posted Whse. Shipment" then begin
                             if Page.RunModal(Page::"Posted Whse. Shipment Lines", PostedWhShipLine) <> Action::LookupOK then
                                 exit(false);
+
+                            QAHeader.SetRange("Ref. Order Type QA", Rec."Ref. Order Type QA");
+                            QAHeader.SetRange("Order No.", PostedWhShipLine."No.");
+                            QAHeader.SetRange("Line No.", PostedWhShipLine."Line No.");
+                            QAHeader.SetFilter("COA No.", '<>%1', Rec."COA No.");
+                            if QAHeader.FindFirst() then
+                                if not Confirm(DuplicateRecordQst, false, Rec."Ref. Order Type QA", PostedWhShipLine."No.", PostedWhShipLine."Line No.", QAHeader."COA No.") then
+                                    exit(false);
+
                             Text := PostedWhShipLine."No.";
                             Rec."Item No." := PostedWhShipLine."Item No.";
                             Rec."Line No." := PostedWhShipLine."Line No.";
@@ -76,6 +87,15 @@ page 50514 "RV COA Card Subform"
                         end else if Rec."Ref. Order Type QA" = RefOrderTypeQA::"Warehouse Shipment" then begin
                             if Page.RunModal(Page::"Whse. Shipment Lines", WhShipline) <> Action::LookupOK then
                                 exit(false);
+
+                            QAHeader.SetRange("Ref. Order Type QA", Rec."Ref. Order Type QA");
+                            QAHeader.SetRange("Order No.", WhShipline."No.");
+                            QAHeader.SetRange("Line No.", WhShipline."Line No.");
+                            QAHeader.SetFilter("COA No.", '<>%1', Rec."COA No.");
+                            if QAHeader.FindFirst() then
+                                if not Confirm(DuplicateRecordQst, false, Rec."Ref. Order Type QA", WhShipline."No.", WhShipline."Line No.", QAHeader."COA No.") then
+                                    exit(false);
+
                             Text := WhShipline."No.";
                             Rec."Item No." := WhShipline."Item No.";
                             Rec."Line No." := WhShipline."Line No.";
@@ -104,7 +124,7 @@ page 50514 "RV COA Card Subform"
                 field("Item No."; Rec."Item No.")
                 {
                     ApplicationArea = All;
-                    Editable = SubCOACardEditable;
+                    Editable = false;
                 }
                 field("Item Description"; Rec."Item Description")
                 {

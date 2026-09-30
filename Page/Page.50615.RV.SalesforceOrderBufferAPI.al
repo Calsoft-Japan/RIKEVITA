@@ -6,8 +6,8 @@ page 50615 "RV Salesforce Order Buffer API"
 {
     PageType = API;
     SourceTable = "RV Salesforce Order Buffer";
-    APIPublisher = 'calsoft';
-    APIGroup = 'rikevita';
+    APIPublisher = 'calsoftJP';
+    APIGroup = 'rikevitaMalaysia';
     APIVersion = 'v1.0';
     EntityName = 'salesforceOrderBuffer';
     EntitySetName = 'salesforceOrderBuffers';
