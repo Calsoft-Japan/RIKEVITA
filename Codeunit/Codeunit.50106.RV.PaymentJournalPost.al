@@ -81,6 +81,14 @@ codeunit 50106 "RV PaymentJournal Post"
 
 
     //VOID CHECK to set the check no. filter for check ledger entry
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::CheckManagement, OnBeforeVoidCheckGenJnlLine2Modify, '', false, false)]
+    local procedure CheckManagement_OnBeforeVoidCheckGenJnlLine2Modify(var GenJournalLine2: Record "Gen. Journal Line"; GenJournalLine: Record "Gen. Journal Line")
+    begin
+        GenJournalLine2."Document No." := GenJournalLine."Document No.";
+    end;
+
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::CheckManagement, OnVoidCheckOnAfterCheckLedgEntry2SetFilters, '', false, false)]
     local procedure CheckManagement_OnVoidCheckOnAfterCheckLedgEntry2SetFilters(var CheckLedgerEntry: Record "Check Ledger Entry"; GenJournalLine: Record "Gen. Journal Line")
     begin
