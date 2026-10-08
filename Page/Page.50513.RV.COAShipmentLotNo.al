@@ -71,6 +71,11 @@ page 50513 "RV COA ShipmentLotNo"
                         ApplicationArea = All;
                         Editable = false;
                     }
+                    field("Expire Date for COA Report"; Rec."Expire Date for COA Report")
+                    {
+                        ApplicationArea = All;
+                        Editable = true;
+                    }
                     field("Sales Order No."; Rec."Sales Order No.")
                     {
                         ApplicationArea = All;

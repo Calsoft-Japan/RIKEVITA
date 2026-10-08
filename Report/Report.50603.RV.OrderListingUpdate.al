@@ -23,7 +23,9 @@ report 50603 "RV Order Listing Update"
             begin
                 SalesLine.SetRange("Document Type", SalesLine."Document Type"::Order);
                 SalesLine.SetFilter("Outstanding Quantity", '> 0');
+                SalesLine.SetRange(Salesline.Type, salesline.Type::Item);
                 SalesLine.SetAutoCalcFields("Reserved Quantity", "Reserved Qty. (Base)");
+
             end;
 
             trigger OnAfterGetRecord()

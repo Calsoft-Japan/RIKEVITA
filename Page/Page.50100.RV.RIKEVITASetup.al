@@ -130,6 +130,11 @@ page 50100 "RIKEVITA Setup"///
                     Description = 'SITE Dimension Code';
                     ApplicationArea = All;
                 }
+                field("Owner Dimension Code"; Rec."Owner Dim. Code")
+                {
+                    ApplicationArea = All;
+                    ToolTip = 'Specifies the global dimension code used for inventory ownership.';
+                }
                 field("Holding Period for Air"; Rec."Holding Period for Air")
                 {
                     Description = 'FDD006';

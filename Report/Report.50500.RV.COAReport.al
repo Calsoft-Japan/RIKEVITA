@@ -30,6 +30,9 @@ report 50500 "RV_COA Report"
             column(SalesOrderNoText; SalesOrderNoText)
             {
             }
+            column(ReportTitle; ReportTitle)
+            {
+            }
             dataitem(CopyLoop; "Integer")
             {
                 DataItemTableView = sorting(Number);
@@ -279,20 +282,20 @@ report 50500 "RV_COA Report"
                             end;
                             //FormatExpireDateText
                             if DateCalculation = DateCalculation::"Shelf Life By Months Without Days MMM-YYYY" then begin //Dec-2025
-                                FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date", 0, '<Month Text,3>-<Year4>');
+                                FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date for COA Report", 0, '<Month Text,3>-<Year4>');
                             end else if DateCalculation = DateCalculation::"Shelf Life By Months DD-MMM-YYYY" then begin //16-Sep-2025
                                 CASE ExpiredDateCalclogic of
                                     ExpiredDateCalclogic::"By days": //16-Sep-2025
                                         begin
-                                            FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date", 0, '<Day,2>-<Month Text,3>-<Year4>');
+                                            FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date for COA Report", 0, '<Day,2>-<Month Text,3>-<Year4>');
                                         end;
                                     ExpiredDateCalclogic::"By month": //Dec-2025
                                         begin
-                                            FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date", 0, '<Month Text,3>-<Year4>');
+                                            FormatExpireDateText := Format("RV QA Shipment Lot No."."Expire Date for COA Report", 0, '<Month Text,3>-<Year4>');
                                         end;
                                     ExpiredDateCalclogic::"By month + end of the month": //31-Sep-2025
                                         begin
-                                            FormatExpireDateText := Format(CalcDate('+CM', "RV QA Shipment Lot No."."Expire Date"), 0, '<Day,2>-<Month Text,3>-<Year4>');
+                                            FormatExpireDateText := Format(CalcDate('+CM', "RV QA Shipment Lot No."."Expire Date for COA Report"), 0, '<Day,2>-<Month Text,3>-<Year4>');
                                         end;
                                 end;
                             end;
@@ -320,6 +323,12 @@ report 50500 "RV_COA Report"
             begin
                 //ClearData
                 ClearData();
+
+                Clear(ReportTitle);
+                if "QA Status" = "QA Status"::Approved then
+                    ReportTitle := 'CERTIFICATE OF ANALYSIS'
+                else
+                    ReportTitle := 'CERTIFICATE OF ANALYSIS DRAFT';
 
                 CompanyInfo.Get();
                 CompanyInfo.CalcFields(Picture);
@@ -529,6 +538,7 @@ report 50500 "RV_COA Report"
         PRODUCTText: Text;
         Format_DateText: Text;
         MARKSCommentAll: Text;
+        ReportTitle: Text;
 
     procedure CollectUniqueSalesOrderNo(ParCOANO: Code[20])
     var
@@ -632,6 +642,7 @@ report 50500 "RV_COA Report"
         Clear(Format_DateText);
         Clear(UOM);
         Clear(MARKSCommentAll);
+        Clear(ReportTitle);
     end;
 }
 

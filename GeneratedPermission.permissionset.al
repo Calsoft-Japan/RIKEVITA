@@ -158,6 +158,7 @@ permissionset 50100 GeneratedPermission
         codeunit "RV User Permission Check"=X,
         codeunit "RV Whse. Posting Subscriber"=X,
         codeunit "RV WhsePostEventHandler"=X,
+        page "COA Internal Spec. List"=X,
         page "ISO Symbol Image FactBox"=X,
         page "ISO Symbol Setting"=X,
         page "RIKEVITA Setup"=X,

@@ -39,6 +39,11 @@ table 50100 "RV RIKEVITA Setup"
             Caption = 'ACC Site Analysis Code';
             Description = 'FDD034';
         }
+        field(6; "Updated Warehouse Entry No."; Integer)
+        {
+            Caption = 'Updated Warehouse Entry No.';
+            Description = 'CR002';
+        }
         field(112; "IQC No. Nos."; Code[20])
         {
             DataClassification = CustomerContent;
@@ -305,6 +310,20 @@ table 50100 "RV RIKEVITA Setup"
             Description = 'Common Function';
             Caption = 'SITE Dimension Code';
             TableRelation = Dimension;
+            trigger OnValidate()
+            begin
+                "Updated Warehouse Entry No." := 0;
+            end;
+        }
+        field(55; "Owner Dim. Code"; Code[20])
+        {
+            Caption = 'Owner Dimension Code';
+            TableRelation = Dimension;
+            trigger OnValidate()
+            begin
+                "Updated Warehouse Entry No." := 0;
+            end;
+
         }
         field(50600; "Holding Period for Air"; DateFormula)
         {

@@ -135,12 +135,12 @@ page 50514 "RV COA Card Subform"
                     ApplicationArea = All;
                     Editable = SubCOACardEditable;
                 }
-                field("Ship-to Customer Name"; Rec."Ship-to Customer Name")
+                field("Ship-to Code"; Rec."Ship-to Code")
                 {
                     ApplicationArea = All;
                     Editable = SubCOACardEditable;
                 }
-                field("Ship-to Code"; Rec."Ship-to Code")
+                field("Ship-to Customer Name"; Rec."Ship-to Customer Name")
                 {
                     ApplicationArea = All;
                     Editable = SubCOACardEditable;

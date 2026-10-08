@@ -18,7 +18,7 @@ table 50508 "RV QA Header"
         }
         field(3; "Order No."; Code[20])
         {
-            Caption = 'Order No.';
+            Caption = 'Warehouse Shipment No.';
         }
         field(4; "Item No."; Code[20])
         {
@@ -30,12 +30,12 @@ table 50508 "RV QA Header"
         }
         field(6; "Ship-to Customer No."; Code[20])
         {
-            Caption = 'Ship-to Customer No.';
+            Caption = 'Customer No.';
             TableRelation = Customer;
         }
         field(7; "Ship-to Customer Name"; Text[100])
         {
-            Caption = 'Ship-to Customer Name';
+            Caption = 'Customer Name';
         }
         field(8; "Ship-to Code"; Code[10])
         {
@@ -92,7 +92,7 @@ table 50508 "RV QA Header"
         }
         field(20; "Final Destination"; Text[50])
         {
-            Caption = 'Final Destination';
+            Caption = 'Final Destination-Port';
         }
         field(21; "Bill-to Customer No."; Code[20])
         {
@@ -469,6 +469,7 @@ table 50508 "RV QA Header"
                         ItemLedgEntry.SetFilter(Quantity, '>%1', 0);
                         if ItemLedgEntry.FindLast() then begin
                             QAShipmentLotNo."Expire Date" := ItemLedgEntry."Expiration Date";
+                            QAShipmentLotNo."Expire Date for COA Report" := ItemLedgEntry."Expiration Date";
                             QAShipmentLotNo."Manufacturing Date" := ItemLedgEntry."Posting Date";
                         end;
 
@@ -532,6 +533,7 @@ table 50508 "RV QA Header"
                         ItemLedgEntry.SetFilter(Quantity, '>%1', 0);
                         if ItemLedgEntry.FindFirst() then begin
                             QAShipmentLotNo."Expire Date" := ItemLedgEntry."Expiration Date";
+                            QAShipmentLotNo."Expire Date for COA Report" := ItemLedgEntry."Expiration Date";
                             QAShipmentLotNo."Manufacturing Date" := ItemLedgEntry."Posting Date";
                         end;
 

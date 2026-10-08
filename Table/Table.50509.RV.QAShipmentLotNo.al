@@ -84,6 +84,10 @@ table 50509 "RV QA Shipment Lot No."
             CalcFormula = sum("RV QA Shipment Lot No."."Qty. (Base)" where("COA No." = field("COA No."), "Container No." = field("Container No.")));
             Editable = false;
         }
+        field(21; "Expire Date for COA Report"; Date)
+        {
+            Caption = 'Expire Date for COA Report';
+        }
     }
     keys
     {

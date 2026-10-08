@@ -47,10 +47,14 @@ page 50410 "RV.Stock Balance Lines"
                 {
                     ToolTip = 'Specifies the value of the Site field.', Comment = '%';
                 }
-                /*field(Site; Rec.Site)
+                field(Site; Rec.Site)
                 {
                     ToolTip = 'Specifies the value of the Site field.', Comment = '%';
-                }*/
+                }
+                field("Owner Code"; Rec."Owner Code")
+                {
+                    ToolTip = 'Specifies the inventory owner dimension value.';
+                }
 
                 field(Location; Rec.Location)
                 {
@@ -61,10 +65,10 @@ page 50410 "RV.Stock Balance Lines"
                     ToolTip = 'Specifies the value of the Lot No. field.', Comment = '%';
                 }
 
-                field("Sub Lot No."; Rec."Sub Lot No.")
+                /*field("Sub Lot No."; Rec."Sub Lot No.")
                 {
                     ToolTip = 'Specifies the value of the Sub Lot No. field.', Comment = '%';
-                }
+                }*/
 
                 field("Bin Code"; Rec."Bin Code")
                 {

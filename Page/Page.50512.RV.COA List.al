@@ -34,7 +34,17 @@ page 50512 "RV COA List"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("Ship-to Customer No."; Rec."Ship-to Customer No.")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("Ship-to Code"; Rec."Ship-to Code")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Ship-to Customer Name"; Rec."Ship-to Customer Name")
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -57,18 +67,6 @@ page 50512 "RV COA List"
                 field("Final Destination"; Rec."Final Destination")
                 {
                     ApplicationArea = All;
-                    Editable = false;
-                }
-                field("Ship-to Customer No."; Rec."Ship-to Customer No.")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-
-                }
-                field("Ship-to Customer Name"; Rec."Ship-to Customer Name")
-                {
-                    ApplicationArea = All;
-                    Visible = false;
                     Editable = false;
                 }
                 field("QA Status"; Rec."QA Status")

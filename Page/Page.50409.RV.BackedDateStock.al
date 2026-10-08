@@ -5,6 +5,8 @@ page 50409 "RV BackedDate Stock"
     PageType = Card;
     //UsageCategory = tasks;
     SourceTable = "RV Invy. Available Name";
+    Permissions = tabledata "Warehouse Entry" = m;
+
 
     layout
     {
@@ -80,22 +82,21 @@ page 50409 "RV BackedDate Stock"
                     Vendor: Record Vendor;
                     Item: Record Item;
                     ItemLedgerEntry: Record "Item Ledger Entry";
-                    ItemLedgerEntry2: Record "Item Ledger Entry";
-                    gLsetup: Record "General Ledger Setup";
                     Location: Record Location;
                     ItemNo: Code[20];
                     LocationCode: Code[10];
-                    LotNo: Code[30];
-                    NewSITECODE: Code[20];
+                    LotNo: Code[50];
                     SITECODE: Code[20];
+                    OwnerCode: Code[20];
+                    ProcessedInventoryGroups: Dictionary of [Text, Boolean];
+                    ProcessedBinGroups: Dictionary of [Text, Boolean];
+                    GroupKey: Text;
+                    BinGroupKey: Text;
                     //Bin: Record Bin;
                     BinCode: Code[20];
                 begin
                     Rec.TestField("Inventory Valuation Date");
-                    AvailableInvyLine.Reset();
-                    AvailableInvyLine.SetRange("Available Invy. Name", Rec.Name);
-                    AvailableInvyLine.DeleteAll();
-                    RIKEVITASetup.Get();
+                    GlobalRIKEVITASetup.Get();
                     //Inventory Quantity and Amount Information
                     StandardCostPeriod.reset;
                     StandardCostPeriod.Setfilter("Effective Start Date", '<=%1', Rec."Inventory Valuation Date");
@@ -106,104 +107,76 @@ page 50409 "RV BackedDate Stock"
                         StandardCostPeriod.Init();
                     end;
 
+                    UpdateSITECODE;//update the SITE Dim. Code in Warehouse Entry table
+                    AvailableInvyLine.Reset();
+                    AvailableInvyLine.SetRange("Available Invy. Name", Rec.Name);
+                    AvailableInvyLine.DeleteAll();
                     AvailableInvyLine."Available Invy. Name" := Rec.Name;
                     EntryNo := 1;
                     ItemLedgerEntry.Reset();
                     ItemLedgerEntry.SetRange("Posting Date", 0D, Rec."Inventory Valuation Date");
                     if Rec."Item Filter" <> '' then
                         ItemLedgerEntry.SetFilter("Item No.", Rec."Item Filter");
-                    ItemLedgerEntry.SetCurrentKey("Item No.", "Location Code", "Lot No.");
-                    /*if gLsetup."Global Dimension 1 Code" = RIKEVITASetup."SITE Dim. Code" then begin
-                        ItemLedgerEntry.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Global Dimension 1 Code");
-                        if SITECODE <> '' then
-                            ItemLedgerEntry.SetRange("Global Dimension 1 Code", SITECODE);
-                    end else begin
-                        ItemLedgerEntry.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Global Dimension 2 Code");
-                        if SITECODE <> '' then
-                            ItemLedgerEntry.SetRange("Global Dimension 2 Code", SITECODE);
-                    end;*/
+                    ValidateConfiguredDimensions();
+
                     if ItemLedgerEntry.FindSet() then begin
                         repeat
-                            /*if gLsetup."Global Dimension 1 Code" = RIKEVITASetup."SITE Dim. Code" then
-                                NewSITECODE := ItemLedgerEntry."Global Dimension 1 Code"
-                            else
-                                NewSITECODE := ItemLedgerEntry."Global Dimension 2 Code";*/
-                            If (ItemNo <> ItemLedgerEntry."Item No.") OR
-                            (LocationCode <> ItemLedgerEntry."Location Code") OR
-                            (LotNo <> ItemLedgerEntry."Lot No.") then begin
-                                //(SITECODE <> NewSITECODE) then begin
+                            GroupKey := StrSubstNo('%1:%2%3:%4%5:%6%7:%8',
+                                StrLen(ItemLedgerEntry."Item No."), ItemLedgerEntry."Item No.",
+                                StrLen(ItemLedgerEntry."Location Code"), ItemLedgerEntry."Location Code",
+                                StrLen(ItemLedgerEntry."Lot No."), ItemLedgerEntry."Lot No.",
+                                StrLen(ItemLedgerEntry."Variant Code"), ItemLedgerEntry."Variant Code");
+                            if not ProcessedInventoryGroups.ContainsKey(GroupKey) then begin
+                                ProcessedInventoryGroups.Add(GroupKey, true);
                                 ItemNo := ItemLedgerEntry."Item No.";
                                 LocationCode := ItemLedgerEntry."Location Code";
                                 LotNo := ItemLedgerEntry."Lot No.";
-                                //SITECODE := NewSITECODE;
                                 IF Location.Get(LocationCode) then begin
                                     if Location."Bin Mandatory" = true Then begin
                                         WarehouseEntry.Reset();
-                                        WarehouseEntry.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Bin Code");
                                         WarehouseEntry.SetRange("Item No.", ItemLedgerEntry."Item No.");
                                         WarehouseEntry.SetRange("Location Code", ItemLedgerEntry."Location Code");
                                         WarehouseEntry.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
-                                        //WarehouseEntry.SetRange("RV_SITE Dim. Code", SITECODE);                                            
+                                        WarehouseEntry.SetRange("Variant Code", ItemLedgerEntry."Variant Code");
+                                        WarehouseEntry.SetRange("Registering Date", 0D, Rec."Inventory Valuation Date");
                                         if WarehouseEntry.FindSet() then begin
-                                            BinCode := '-';
                                             repeat
-                                                IF BinCode <> WarehouseEntry."Bin Code" then begin
-                                                    BinCode := WarehouseEntry."Bin Code";
+                                                BinCode := WarehouseEntry."Bin Code";
+                                                SITECODE := WarehouseEntry."RV_Inventory Owner Code";
+                                                OwnerCode := WarehouseEntry."RV Owner Code";
+                                                BinGroupKey := StrSubstNo('%1|%2:%3%4:%5%6:%7',
+                                                    GroupKey,
+                                                    StrLen(BinCode), BinCode,
+                                                    StrLen(SITECODE), SITECODE,
+                                                    StrLen(OwnerCode), OwnerCode);
+                                                if not ProcessedBinGroups.ContainsKey(BinGroupKey) then begin
+                                                    ProcessedBinGroups.Add(BinGroupKey, true);
                                                     WarehouseEntry1.Reset();
                                                     WarehouseEntry1.CopyFilters(WarehouseEntry);
-                                                    //Bin.Get(WarehouseEntry."Bin Code");
-                                                    //WarehouseEntry1.Reset();
-                                                    //WarehouseEntry1.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Zone Code", "Bin Code");
-                                                    //WarehouseEntry1.SetRange("Item No.", ItemLedgerEntry."Item No.");
-                                                    //WarehouseEntry1.SetRange("Location Code", ItemLedgerEntry."Location Code");
-                                                    //WarehouseEntry1.SetRange("Lot No.", ItemLedgerEntry."Lot No.");                                                        
                                                     WarehouseEntry1.SetRange("Bin Code", BinCode);
+                                                    WarehouseEntry1.SetRange("RV_Inventory Owner Code", SITECODE);
+                                                    WarehouseEntry1.SetRange("RV Owner Code", OwnerCode);
                                                     WarehouseEntry1.CalcSums("Qty. (Base)");
                                                     WarehouseEntry1."Bin Code" := BinCode;
                                                     if WarehouseEntry1."Qty. (Base)" <> 0 then
-                                                        InsertInvyAvailableLine(ItemLedgerEntry, WarehouseEntry1);
+                                                        InsertInvyAvailableLine(ItemLedgerEntry, WarehouseEntry1, SITECODE, OwnerCode);
                                                 end;
                                             until WarehouseEntry.Next() = 0;
                                         end;
                                     end else begin
-                                        ItemLedgerEntry2.CopyFilters(ItemLedgerEntry);
-                                        ItemLedgerEntry2.SetRange("Item No.", ItemLedgerEntry."Item No.");
-                                        ItemLedgerEntry2.SetRange("Location Code", ItemLedgerEntry."Location Code");
-                                        /*if gLsetup."Global Dimension 1 Code" = RIKEVITASetup."SITE Dim. Code" then begin
-                                            ItemLedgerEntry2.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Global Dimension 1 Code");
-                                        end else begin
-                                            ItemLedgerEntry2.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Global Dimension 2 Code");
-                                        end;*/
-                                        ItemLedgerEntry2.SetRange("Item No.", ItemLedgerEntry."Item No.");
-                                        ItemLedgerEntry2.CalcSums(Quantity);
-                                        Clear(WarehouseEntry1);
-                                        if ItemLedgerEntry2.Quantity <> 0 then
-                                            InsertInvyAvailableLine(ItemLedgerEntry, WarehouseEntry1);
+                                        CollectNonBinInventory(ItemLedgerEntry);
                                     end;
                                 end else begin
-                                    ItemLedgerEntry2.CopyFilters(ItemLedgerEntry);
-                                    ItemLedgerEntry2.SetRange("Location Code", ItemLedgerEntry."Location Code");
-                                    ItemLedgerEntry2.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
-                                    /*if gLsetup."Global Dimension 1 Code" = RIKEVITASetup."SITE Dim. Code" then begin
-                                        ItemLedgerEntry2.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Global Dimension 1 Code");
-                                    end else begin
-                                        ItemLedgerEntry2.SetCurrentKey("Item No.", "Location Code", "Lot No.", "Global Dimension 2 Code");
-                                    end;*/
-                                    ItemLedgerEntry2.SetRange("Item No.", ItemLedgerEntry."Item No.");
-                                    ItemLedgerEntry2.CalcSums(Quantity);
-                                    Clear(WarehouseEntry1);
-                                    if ItemLedgerEntry2.Quantity <> 0 then
-                                        InsertInvyAvailableLine(ItemLedgerEntry, WarehouseEntry1);
+                                    CollectNonBinInventory(ItemLedgerEntry);
                                 end;
                             end;
                         until ItemLedgerEntry.next = 0;
                     end;
                 end;
             }
-
         }
     }
-    procedure InsertInvyAvailableLine(ILE: Record "Item Ledger Entry"; WE: Record "Warehouse Entry")
+    procedure InsertInvyAvailableLine(ILE: Record "Item Ledger Entry"; WE: Record "Warehouse Entry"; SiteCode: Code[20]; OwnerCode: Code[20])
     var
         Item: Record Item;
         LotInfo: Record "Lot No. Information";
@@ -214,6 +187,7 @@ page 50409 "RV BackedDate Stock"
         ItemUOM: Record "Item Unit of Measure";
         DefaultDim: Record "Default Dimension";
     begin
+        GLSetup.Get();
         AvailableInvyLine.Init();
         //Filter infromation
         AvailableInvyLine."Available Invy. Name" := Rec.Name;
@@ -235,15 +209,16 @@ page 50409 "RV BackedDate Stock"
         DefaultDim.Reset();
         DefaultDim.SetRange("No.", ILE."Item No.");
         DefaultDim.SetRange("Table ID", 27);
-        DefaultDim.SetRange("Dimension Code", RIKEVITASetup."Item Type Dim. Code");
+        DefaultDim.SetRange("Dimension Code", GlobalRIKEVITASetup."Item Type Dim. Code");
         if DefaultDim.FindFirst() then
             AvailableInvyLine."Item Type" := DefaultDim."Dimension Value Code";
-        DefaultDim.SetRange("Dimension Code", RIKEVITASetup."Segment Dim. Code");
+        DefaultDim.SetRange("Dimension Code", GlobalRIKEVITASetup."Segment Dim. Code");
         if DefaultDim.FindFirst() then
             AvailableInvyLine.Segment := DefaultDim."Dimension Value Code";
 
         //Inventory Information
-        //AvailableInvyLine.Site := SITECODE;
+        AvailableInvyLine.Site := SiteCode;
+        AvailableInvyLine."Owner Code" := OwnerCode;
         //AvailableInvyLine.Segment := ILE
         AvailableInvyLine.Location := ILE."Location Code";
         AvailableInvyLine."Lot No." := ILE."Lot No.";
@@ -256,7 +231,7 @@ page 50409 "RV BackedDate Stock"
         end;
         ;
         If LotInfo.Get(ILE."Item No.", ILE."Variant Code", ILE."Lot No.") then begin
-            AvailableInvyLine."Sub Lot No." := LotInfo."RV_Sub Lot No.";
+            //AvailableInvyLine."Sub Lot No." := LotInfo."RV_Sub Lot No.";
             AvailableInvyLine."Mfg. Date" := LotInfo."RV_Manufacture Date";
         end;
         if we."Bin Code" <> '' then
@@ -333,10 +308,154 @@ page 50409 "RV BackedDate Stock"
         AvailableInvyLine.Insert();
     end;
 
+    local procedure UpdateSITECODE()
+    var
+        WarehouseEntry: Record "Warehouse Entry";
+        WarehouseEntry1: Record "Warehouse Entry";
+        ItemLedgerEntry: Record "Item Ledger Entry";
+        LastProcessedEntryNo: Integer;
+        AllEntriesResolved: Boolean;
+        SiteCode: Code[20];
+        OwnerCode: Code[20];
+        FoundItemLedgerEntry: Boolean;
+    begin
+        GlobalRIKEVITASetup.Get();
+        ValidateConfiguredDimensions();
+
+        AllEntriesResolved := true;
+        WarehouseEntry.SetFilter("Entry No.", '>%1', GlobalRIKEVITASetup."Updated Warehouse Entry No.");
+        if WarehouseEntry.FindSet(true) then begin
+            repeat
+                ItemLedgerEntry.Reset();
+                ItemLedgerEntry.SetRange("Document No.", WarehouseEntry."Whse. Document No.");
+                ItemLedgerEntry.SetRange("Item No.", WarehouseEntry."Item No.");
+                ItemLedgerEntry.SetRange("Location Code", WarehouseEntry."Location Code");
+                ItemLedgerEntry.SetRange("Variant Code", WarehouseEntry."Variant Code");
+                ItemLedgerEntry.SetRange("Lot No.", WarehouseEntry."Lot No.");
+                SiteCode := '';
+                OwnerCode := '';
+                FoundItemLedgerEntry := false;
+                if ItemLedgerEntry.FindSet() then
+                    repeat
+                        SiteCode := GetDimensionValue(ItemLedgerEntry, GlobalRIKEVITASetup."SITE Dim. Code");
+                        OwnerCode := GetDimensionValue(ItemLedgerEntry, GlobalRIKEVITASetup."Owner Dim. Code");
+                        FoundItemLedgerEntry := (SiteCode <> '') and (OwnerCode <> '');
+                    until (ItemLedgerEntry.Next() = 0) or FoundItemLedgerEntry;
+                if not FoundItemLedgerEntry then begin
+                    WarehouseEntry1.reset;
+                    WarehouseEntry1.setRange("Lot No.", WarehouseEntry."Lot No.");
+                    warehouseEntry1.setRange("Item No.", WarehouseEntry."Item No.");
+                    warehouseEntry1.setRange("Location Code", WarehouseEntry."Location Code");
+                    warehouseEntry1.SetRange("Variant Code", WarehouseEntry."Variant Code");
+                    warehouseEntry1.SetFilter("Entry No.", '<%1', WarehouseEntry."Entry No.");
+                    warehouseEntry1.SetFilter("RV_Inventory Owner Code", '<>%1', '');
+                    warehouseEntry1.SetFilter("RV Owner Code", '<>%1', '');
+                    if WarehouseEntry1.FindLast() then begin
+                        SiteCode := WarehouseEntry1."RV_Inventory Owner Code";
+                        OwnerCode := WarehouseEntry1."RV Owner Code";
+                    end;
+                end;
+
+                if (SiteCode <> '') and (OwnerCode <> '') then begin
+                    WarehouseEntry.Validate("RV_Inventory Owner Code", SiteCode);
+                    WarehouseEntry.Validate("RV Owner Code", OwnerCode);
+                    if (WarehouseEntry."RV_Inventory Owner Code" <> SiteCode) or
+                       (WarehouseEntry."RV Owner Code" <> OwnerCode)
+                    then
+                        WarehouseEntry.Modify(true);
+                end else
+                    AllEntriesResolved := false;
+                LastProcessedEntryNo := WarehouseEntry."Entry No.";
+            until WarehouseEntry.Next() = 0;
+
+            GlobalRIKEVITASetup."Updated Warehouse Entry No." := LastProcessedEntryNo;
+            GlobalRIKEVITASetup.Modify(true);
+            COMMIT;
+        end;
+    end;
+
+    local procedure ValidateConfiguredDimensions()
+    begin
+        GlobalRIKEVITASetup.TestField("SITE Dim. Code");
+        GlobalRIKEVITASetup.TestField("Owner Dim. Code");
+        GlobalGLSetup.Get();
+        if (GlobalRIKEVITASetup."SITE Dim. Code" <> GlobalGLSetup."Global Dimension 1 Code") and
+           (GlobalRIKEVITASetup."SITE Dim. Code" <> GlobalGLSetup."Global Dimension 2 Code")
+        then
+            Error('SITE Dimension Code must be configured as Global Dimension 1 or Global Dimension 2.');
+        if (GlobalRIKEVITASetup."Owner Dim. Code" <> GlobalGLSetup."Global Dimension 1 Code") and
+           (GlobalRIKEVITASetup."Owner Dim. Code" <> GlobalGLSetup."Global Dimension 2 Code")
+        then
+            Error('Owner Dimension Code must be configured as Global Dimension 1 or Global Dimension 2.');
+        if GlobalRIKEVITASetup."Owner Dim. Code" = GlobalRIKEVITASetup."SITE Dim. Code" then
+            Error('Owner Dimension Code and SITE Dimension Code must be different.');
+    end;
+
+    local procedure GetDimensionValue(ILE: Record "Item Ledger Entry"; DimensionCode: Code[20]): Code[20]
+    begin
+        if DimensionCode = GlobalGLSetup."Global Dimension 1 Code" then
+            exit(ILE."Global Dimension 1 Code");
+        if DimensionCode = GlobalGLSetup."Global Dimension 2 Code" then
+            exit(ILE."Global Dimension 2 Code");
+        Error('Dimension %1 is not configured as a global dimension.', DimensionCode);
+    end;
+
+    local procedure CollectNonBinInventory(ILE: Record "Item Ledger Entry")
+    var
+        ItemLedgerEntry2: Record "Item Ledger Entry";
+        ItemLedgerEntry3: Record "Item Ledger Entry";
+        WarehouseEntry: Record "Warehouse Entry";
+        SiteCode: Code[20];
+        OwnerCode: Code[20];
+        AggregatedQuantity: Decimal;
+        ProcessedDimensionPairs: Dictionary of [Text, Boolean];
+        DimensionPairKey: Text;
+    begin
+        ItemLedgerEntry2.CopyFilters(ILE);
+        ItemLedgerEntry2.SetRange("Item No.", ILE."Item No.");
+        ItemLedgerEntry2.SetRange("Location Code", ILE."Location Code");
+        ItemLedgerEntry2.SetRange("Lot No.", ILE."Lot No.");
+        ItemLedgerEntry2.SetRange("Variant Code", ILE."Variant Code");
+        if ItemLedgerEntry2.FindSet() then begin
+            repeat
+                SiteCode := GetDimensionValue(ItemLedgerEntry2, GlobalRIKEVITASetup."SITE Dim. Code");
+                OwnerCode := GetDimensionValue(ItemLedgerEntry2, GlobalRIKEVITASetup."Owner Dim. Code");
+                DimensionPairKey := StrSubstNo('%1:%2%3:%4',
+                    StrLen(SiteCode), SiteCode, StrLen(OwnerCode), OwnerCode);
+                if not ProcessedDimensionPairs.ContainsKey(DimensionPairKey) then begin
+                    ProcessedDimensionPairs.Add(DimensionPairKey, true);
+                    ItemLedgerEntry3.Reset();
+                    ItemLedgerEntry3.CopyFilters(ILE);
+                    ItemLedgerEntry3.SetRange("Item No.", ILE."Item No.");
+                    ItemLedgerEntry3.SetRange("Location Code", ILE."Location Code");
+                    ItemLedgerEntry3.SetRange("Lot No.", ILE."Lot No.");
+                    ItemLedgerEntry3.SetRange("Variant Code", ILE."Variant Code");
+                    if GlobalRIKEVITASetup."SITE Dim. Code" = GlobalGLSetup."Global Dimension 1 Code" then
+                        ItemLedgerEntry3.SetRange("Global Dimension 1 Code", SiteCode)
+                    else
+                        ItemLedgerEntry3.SetRange("Global Dimension 2 Code", SiteCode);
+                    if GlobalRIKEVITASetup."Owner Dim. Code" = GlobalGLSetup."Global Dimension 1 Code" then
+                        ItemLedgerEntry3.SetRange("Global Dimension 1 Code", OwnerCode)
+                    else
+                        ItemLedgerEntry3.SetRange("Global Dimension 2 Code", OwnerCode);
+                    ItemLedgerEntry3.CalcSums(Quantity);
+                    AggregatedQuantity := ItemLedgerEntry3.Quantity;
+                    if (AggregatedQuantity <> 0) and ItemLedgerEntry3.FindFirst() then begin
+                        ItemLedgerEntry3.Quantity := AggregatedQuantity;
+                        Clear(WarehouseEntry);
+                        InsertInvyAvailableLine(ItemLedgerEntry3, WarehouseEntry, SiteCode, OwnerCode);
+                    end;
+                end;
+            until ItemLedgerEntry2.Next() = 0;
+        end;
+    end;
+
+
     var
         AvailableInvyLine: record "RV.Available Invy. Line";
-        RIKEVITASetup: Record "RV RIKEVITA Setup";
+        GlobalRIKEVITASetup: Record "RV RIKEVITA Setup";
         StandardCostElent: Record "Standard Cost Element Details";
         StandardCostPeriod: Record "Standard Cost Element Period";
+        GlobalGLSetup: Record "General Ledger Setup";
         EntryNo: Integer;
 }

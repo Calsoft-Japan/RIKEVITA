@@ -11,7 +11,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.1.30001.02</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-08-05T06:04:49.3736532Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-10-05T07:09:01.1286930Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -3543,7 +3543,8 @@ Fields!QA_Header_No.Value</Value>
                                                                   <Value>=
 Fields!DateText.Value + Chr(255) + 
 Fields!QA_Header_No.Value + Chr(255) + 
-Fields!DateWording_remarkText.Value</Value>
+Fields!DateWording_remarkText.Value + Chr(255) + 
+Fields!ReportTitle.Value</Value>
                                                                   <Style>
                                                                     <FontSize>7pt</FontSize>
                                                                   </Style>
@@ -4553,10 +4554,11 @@ Fields!DateWording_remarkText.Value</Value>
                 <Paragraph>
                   <TextRuns>
                     <TextRun>
-                      <Value>CERTIFICATE OF ANALYSIS </Value>
+                      <Value>=code.GetData(4,4)</Value>
                       <Style>
                         <FontFamily>Meiryo</FontFamily>
                         <FontSize>18pt</FontSize>
+                        <FontWeight>Bold</FontWeight>
                       </Style>
                     </TextRun>
                   </TextRuns>
@@ -5172,6 +5174,9 @@ HjXjf4OeKPid4H8VaF4i8UQx3kutjVPDWoWVoqtpaROklsrrx5jKytuJPIbrWbo3wn+JnjLxVp2ofE7x
         </Field>
         <Field Name="SalesOrderNoText">
           <DataField>SalesOrderNoText</DataField>
+        </Field>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
         </Field>
         <Field Name="MARKSText_1">
           <DataField>MARKSText_1</DataField>

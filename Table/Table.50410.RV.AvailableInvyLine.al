@@ -38,7 +38,7 @@ table 50410 "RV.Available Invy. Line"
         field(7; "Site"; Code[20])
         {
             Caption = 'Site';
-            TableRelation = "Dimension Value" where("Global Dimension No." = const(2));
+            TableRelation = "Dimension Value";
         }
         field(8; "Segment"; Code[20])
         {
@@ -50,7 +50,7 @@ table 50410 "RV.Available Invy. Line"
             Caption = 'Location';
             TableRelation = "Location";
         }
-        field(11; "Bin Code"; Code[10])
+        field(11; "Bin Code"; Code[20])
         {
             Caption = 'Bin Code';
             TableRelation = "Bin" where("Location Code" = Field("Location"));
@@ -60,7 +60,7 @@ table 50410 "RV.Available Invy. Line"
         {
             Caption = 'Classification';
         }
-        field(13; "Lot No."; Code[30])
+        field(13; "Lot No."; Code[50])
         {
             Caption = 'Lot No.';
         }
@@ -255,6 +255,11 @@ table 50410 "RV.Available Invy. Line"
             Caption = 'Water Amt.';
             AutoFormatType = 1;
         }
+        field(131; "Owner Code"; Code[20])
+        {
+            Caption = 'Owner Code';
+            TableRelation = "Dimension Value".Code;
+        }
 
     }
     keys
@@ -266,4 +271,3 @@ table 50410 "RV.Available Invy. Line"
 
     }
 }
-

@@ -1,5 +1,6 @@
 /// <summary>
 /// COMMON 2026/05/02: New. (Stephen)
+/// 2026/10/06: Create a button function for opening sales order and run reservation operation (Stephen)
 /// </summary>
 page 50608 "RV Order Listing"
 {
@@ -262,6 +263,23 @@ page 50608 "RV Order Listing"
                     CurrPage.Update(false);
                 end;
 
+            }
+            action("Show Document")
+            {
+                ApplicationArea = Basic, Suite;
+                Caption = 'Show Document';
+                Image = View;
+                ShortCutKey = 'Shift+F7';
+                ToolTip = 'Open the document that the selected line exists on.';
+
+                trigger OnAction()
+                var
+                    PageManagement: Codeunit "Page Management";
+                    SalesHeader: Record "Sales Header";
+                begin
+                    SalesHeader.Get(SalesHeader."Document Type"::Order, Rec."Sales Order No.");
+                    PageManagement.PageRun(SalesHeader);
+                end;
             }
         }
     }

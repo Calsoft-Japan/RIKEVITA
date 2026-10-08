@@ -1,14 +1,14 @@
 /// <summary>
-/// PAge RV COA InterQCResult Subform (ID 50515)
-/// FDD039 2026/02/23: New. (Mike)
+/// Page COA Internal Specification List (ID 50538)
+/// FDD039 2026/10/05: New. (Mike)
 /// </summary>
-page 50515 "RV COA InterQCResult Subform"
+page 50538 "COA Internal Spec. List"
 {
-    PageType = ListPart;
+    Caption = 'COA Internal Specification List';
+    PageType = List;
     ApplicationArea = All;
-    UsageCategory = None;
+    UsageCategory = lists;
     SourceTable = "RV QA Internal QC Results";
-    AutoSplitKey = true;
     InsertAllowed = false;
     DeleteAllowed = false;
     Editable = false;
@@ -19,12 +19,10 @@ page 50515 "RV COA InterQCResult Subform"
         {
             repeater(Line)
             {
-
                 field("COA No."; Rec."COA No.")
                 {
                     ApplicationArea = All;
                     Editable = false;
-                    Visible = false;
                 }
                 field("COA Lot No."; Rec."COA Lot No.")
                 {
@@ -62,7 +60,6 @@ page 50515 "RV COA InterQCResult Subform"
                 {
                     ApplicationArea = All;
                     Editable = false;
-                    StyleExpr = CheckStatusStyleExpr;
                 }
                 field("Value Table Type"; Rec."Value Table Type")
                 {
@@ -95,7 +92,7 @@ page 50515 "RV COA InterQCResult Subform"
 
     trigger OnAfterGetRecord()
     begin
-        SetCheckStatusStyle();
+
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean)
@@ -104,13 +101,5 @@ page 50515 "RV COA InterQCResult Subform"
     end;
 
     var
-        CheckStatusStyleExpr: Text;
 
-    local procedure SetCheckStatusStyle()
-    begin
-        if Rec."Check Status" = Rec."Check Status"::FAILED then
-            CheckStatusStyleExpr := 'Unfavorable'
-        else
-            CheckStatusStyleExpr := 'Standard';
-    end;
 }
