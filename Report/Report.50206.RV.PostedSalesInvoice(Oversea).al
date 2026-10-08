@@ -80,9 +80,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                 column(Tranfportation; Tranfportation)
                 {
                 }
-                column(OrderNo; OrderNo)
-                {
-                }
+
                 column(FeederVessel; "RV_Feeder Vessel")
                 {
                 }
@@ -101,11 +99,17 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                 column(Terms; Terms)
                 {
                 }
+                column(OrderNo; OrderNo)
+                {
+                }
                 dataitem(SalesInvoiceLine; "Sales Invoice Line")
                 {
                     DataItemTableView = where(Type = const(Item));
                     DataItemLink = "Document No." = field("No.");
                     column(Item_No; "No.")
+                    {
+                    }
+                    column(Line_No; "Line No.")
                     {
                     }
                     column(Description; Description)
@@ -144,15 +148,15 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                         RecItem: Record Item;
                         RecSalesShipmentHeader: Record "Sales Shipment Header";
                         RecItemReference: Record "Item Reference";
+                        RecSalesShipmentLine: Record "Sales Shipment Line";
+                        RecPostedWhseShipmentLine: Record "Posted Whse. Shipment Line";
+                        RecWarehousePackingInfo: Record "RV Warehouse Packing Info.";
                     begin
                         SalesOrderNo := '';
                         CustomerPO := '';
                         FOBAmount := 0;
                         SalesListComment := '';
                         RecItem.Get("No.");
-                        if "No." = RIKEVITASetup."Freight Charge Item No" then begin
-                            TotalFreightCharges += "Line Amount";
-                        end;
 
                         if RecItem.Type = RecItem.Type::"Non-Inventory" then begin
                             CurrReport.Skip();
@@ -165,8 +169,8 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                                 SalesOrderNo := RecSalesShipmentHeader."Order No.";
                                 CustomerPO := RecSalesShipmentHeader."External Document No.";
                             end;
-
                         end;
+
                         BaseUnitofMeasure := RecItem."RV_Supp. Unit of Measure Code";
                         CALCFIELDS("RV_Charge Type");
                         if ShowFOBPrice then begin
@@ -189,6 +193,27 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                         end else begin
                             Description := SalesInvoiceLine.Description;
                             Description2 := SalesInvoiceLine."Description 2";
+                        end;
+
+                        RecSalesShipmentLine.Reset();
+                        RecSalesShipmentLine.SetRange("Document No.", "Shipment No.");
+                        RecSalesShipmentLine.SetRange("Line No.", "Shipment Line No.");
+                        if RecSalesShipmentLine.FindFirst() then begin
+                            RecPostedWhseShipmentLine.Reset();
+                            RecPostedWhseShipmentLine.SetRange("Source No.", RecSalesShipmentLine."Order No.");
+                            RecPostedWhseShipmentLine.SetRange("Source Line No.", RecSalesShipmentLine."Order Line No.");
+                            RecPostedWhseShipmentLine.SetRange("Posted Source No.", RecSalesShipmentLine."Document No.");
+                            if RecPostedWhseShipmentLine.FindFirst() then begin
+                                RecWarehousePackingInfo.Reset();
+                                RecWarehousePackingInfo.SetRange("Sales Order No.", RecPostedWhseShipmentLine."Source No.");
+                                RecWarehousePackingInfo.SetRange("SO Line No.", RecPostedWhseShipmentLine."Source Line No.");
+                                RecWarehousePackingInfo.SetRange("Posted Whse. Shipment No.", RecPostedWhseShipmentLine."No.");
+                                if RecWarehousePackingInfo.FindSet() then begin
+                                    repeat
+                                        SalesListComment += RecWarehousePackingInfo.Comment + Format(chr10);
+                                    until RecWarehousePackingInfo.Next() = 0;
+                                end;
+                            end;
                         end;
                     end;
 
@@ -226,7 +251,6 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                     PaymentTerms: Record "Payment Terms";
                     SalesShipmentLine: Record "Sales Shipment Line";
                     RecItemLedgerEntry: Record "Item Ledger Entry";
-                    TempNo: Integer;
                     RecItem: Record Item;
                     RecSalesShipmentHeader: Record "Sales Shipment Header";
                     TempSalesShipmentHeader: Record "Sales Shipment Header" temporary;
@@ -260,6 +284,11 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                     SalesInvoiceLine.SetRange(Type, SalesInvoiceLine.Type::Item);
                     if SalesInvoiceLine.FindSet() then begin
                         repeat
+
+                            if SalesInvoiceLine."No." = RIKEVITASetup."Freight Charge Item No" then begin
+                                TotalFreightCharges += SalesInvoiceLine."Line Amount";
+                            end;
+
                             RecItem.Get(SalesInvoiceLine."No.");
                             if RecItem."RV_Print RSPO No." then begin
                                 CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
@@ -332,6 +361,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                     {
                         Caption = 'Show FOB Price';
                         ApplicationArea = All;
+                        Editable = IfShowFOBPrice;
                     }
                     field(ShowExchangeRates; ShowExchangeRates)
                     {
@@ -374,9 +404,12 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
         ExchangeRate: Decimal;
         ShowWorkDescription: Text;
         WorkDescriptionInstream: InStream;
+        TempNo: Integer;
         SalesComment: Text;
         chr10: Char;
         SalesListComment: Text;
+        CustomerChargeType: Enum "RV Charge Type";
+        IfShowFOBPrice: Boolean;
 
     trigger OnPreReport()
     begin
@@ -396,6 +429,15 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
             barcodeSymbology := Enum::"Barcode Symbology 2D"::"QR-Code";
             barcodeStr := barcodeFontProvider.EncodeFont(Value, barcodeSymbology);
             exit(barcodeStr);
+        end;
+    end;
+
+    procedure GetCustomerChargeType(SetChargeType: Enum "RV Charge Type")
+    begin
+        CustomerChargeType := SetChargeType;
+        IfShowFOBPrice := true;
+        if CustomerChargeType = CustomerChargeType::CNF then begin
+            IfShowFOBPrice := false;
         end;
     end;
 }

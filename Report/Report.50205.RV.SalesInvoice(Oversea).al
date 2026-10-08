@@ -47,7 +47,7 @@ report 50205 "RV Sales Invoice(Oversea)"
                 column(ReportTitle; ReportTitle)
                 {
                 }
-                column(PrintDate; Format(Today, 0, '<Day,2>/<Month,2>/<Year4>'))
+                column(PrintDate; Format(Today(), 0, '<Day,2>/<Month,2>/<Year4>'))
                 {
                 }
                 column(Sales_Header_No; "No.")
@@ -112,7 +112,6 @@ report 50205 "RV Sales Invoice(Oversea)"
                     column(Line_No; "Line No.")
                     {
                     }
-
                     column(Description; Description)
                     {
                     }
@@ -159,13 +158,10 @@ report 50205 "RV Sales Invoice(Oversea)"
                         SalesListComment := '';
                         RecItem.Get("No.");
 
-                        if "No." = RIKEVITASetup."Freight Charge Item No" then begin
-                            TotalFreightCharges += "Line Amount";
-                        end;
-
                         if RecItem.Type = RecItem.Type::"Non-Inventory" then begin
                             CurrReport.Skip();
                         end;
+
                         if RecItem.Type = RecItem.Type::Inventory then begin
                             RecSalesShipmentHeader.Reset();
                             RecSalesShipmentHeader.SetRange("No.", "Shipment No.");
@@ -173,9 +169,7 @@ report 50205 "RV Sales Invoice(Oversea)"
                                 SalesOrderNo := RecSalesShipmentHeader."Order No.";
                                 CustomerPO := RecSalesShipmentHeader."External Document No.";
                             end;
-
                         end;
-
 
                         BaseUnitofMeasure := RecItem."RV_Supp. Unit of Measure Code";
                         CALCFIELDS("RV_Charge Type");
@@ -221,8 +215,6 @@ report 50205 "RV Sales Invoice(Oversea)"
                                 end;
                             end;
                         end;
-
-
                     end;
 
                 }
@@ -292,6 +284,11 @@ report 50205 "RV Sales Invoice(Oversea)"
                     SalesLine.SetRange(Type, SalesLine.Type::Item);
                     if SalesLine.FindSet() then begin
                         repeat
+
+                            if SalesLine."No." = RIKEVITASetup."Freight Charge Item No" then begin
+                                TotalFreightCharges += SalesLine."Line Amount";
+                            end;
+
                             RecItem.Get(SalesLine."No.");
                             if RecItem."RV_Print RSPO No." then begin
                                 CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
@@ -378,7 +375,6 @@ report 50205 "RV Sales Invoice(Oversea)"
     var
         CompanyInfo: Record "Company Information";
         RIKEVITASetup: Record "RV RIKEVITA Setup";
-        PaymentTerms: Record "Payment Terms";
         ReportTitle: Label 'PROFORMA INVOICE';
         ISODocumentNo: Text;
         ISODocVersion: Text;
