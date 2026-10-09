@@ -9,7 +9,7 @@
 /// </summary>
 page 50107 "RV Vendor ISO Certificate List"
 {
-    Caption = 'Vendor ISO Certificate List';
+    Caption = 'Vendor Certificate List';
     PageType = List;
     SourceTable = "RV Vendor ISO Certificate Line";
     ApplicationArea = All;

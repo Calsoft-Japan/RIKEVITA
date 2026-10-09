@@ -57,7 +57,7 @@ pageextension 50109 "RV Vendor Card Ext" extends "Vendor Card"
             action(ISOCertificates)
             {
                 ApplicationArea = All;
-                Caption = 'ISO Certificates';
+                Caption = 'Vendor Certificate';
                 Image = Certificate;
                 ToolTip = 'View and manage ISO certificates registered for this vendor.';
 

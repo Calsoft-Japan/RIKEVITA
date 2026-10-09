@@ -34,7 +34,7 @@ pageextension 50110 "RV Vendor List Ext" extends "Vendor List"
             action(ISOCertificates)
             {
                 ApplicationArea = All;
-                Caption = 'ISO Certificates';
+                Caption = 'Vendor Certificate';
                 Image = Certificate;
                 ToolTip = 'View and manage ISO certificates registered for the selected vendor.';
                 RunObject = Page "RV Vendor ISO Certificate List";

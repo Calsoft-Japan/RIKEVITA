@@ -6,7 +6,7 @@
 /// </summary>
 page 50106 "RV ISO Certificate Code"
 {
-    Caption = 'ISO Certificate Code';
+    Caption = 'ISO Certificate';
     PageType = List;
     SourceTable = "RV ISO Certificate Code";
     ApplicationArea = All;
