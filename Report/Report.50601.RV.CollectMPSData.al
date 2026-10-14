@@ -56,7 +56,6 @@ report 50601 "RV Collect MPS Data"
                             if SalesLine.Findfirst() then
                                 if MPSReschedulingLine."Sales Order Line No." <> SalesLine."Line No." then
                                     MPSReschedulingLine."Sales Order Line No." := SalesLine."Line No.";
-
                         until TemSalesOrder.Next() = 0;
 
                     tempProdOrderLine.Reset();
@@ -65,28 +64,33 @@ report 50601 "RV Collect MPS Data"
                     if tempProdOrderLine.findfirst() then
                         MPSReschedulingLine."FG Prod. Order No." := tempProdOrderLine."Prod. Order No.";
 
+                    MPSReschedulingLine."Production BOM" := "Prod. Order Line"."Production BOM No.";
+                    if RVSetup."SITE Dim. Code" = GLSetup."Shortcut Dimension 1 Code" then
+                        MPSReschedulingLine."Site Code" := "Prod. Order Line"."Shortcut Dimension 1 Code"
+                    else
+                        MPSReschedulingLine."Site Code" := "Prod. Order Line"."Shortcut Dimension 2 Code";
                     MPSReschedulingLine.Insert();
 
-                    ProdOrderRoutingLine.Reset();
-                    ProdOrderRoutingLine.SetRange(Status, "Prod. Order Line"."Status");
-                    ProdOrderRoutingLine.SetRange("Prod. Order No.", "Prod. Order Line"."Prod. Order No.");
-                    ProdOrderRoutingLine.SetRange("Routing Reference No.", "Prod. Order Line"."Line No.");
-                    if ProdOrderRoutingLine.FindSet() then begin
-                        repeat
-                            RountCounter += 1;
-                            case RountCounter of
-                                1:
-                                    MPSReschedulingLine."Work Center No. 1" := ProdOrderRoutingLine."No.";
-                                2:
-                                    MPSReschedulingLine."Work Center No. 2" := ProdOrderRoutingLine."No.";
-                                3:
-                                    MPSReschedulingLine."Work Center No. 3" := ProdOrderRoutingLine."No.";
-                                else
-                                    ProdOrderRoutingLine.FindLast();
-                            end;
-                        until ProdOrderRoutingLine.Next() = 0;
-                        MPSReschedulingLine.Modify();
-                    end;
+                    // ProdOrderRoutingLine.Reset();
+                    // ProdOrderRoutingLine.SetRange(Status, "Prod. Order Line"."Status");
+                    // ProdOrderRoutingLine.SetRange("Prod. Order No.", "Prod. Order Line"."Prod. Order No.");
+                    // ProdOrderRoutingLine.SetRange("Routing Reference No.", "Prod. Order Line"."Line No.");
+                    // if ProdOrderRoutingLine.FindSet() then begin
+                    //     repeat
+                    //         RountCounter += 1;
+                    //         case RountCounter of
+                    //             1:
+                    //                 MPSReschedulingLine."Work Center No. 1" := ProdOrderRoutingLine."No.";
+                    //             2:
+                    //                 MPSReschedulingLine."Work Center No. 2" := ProdOrderRoutingLine."No.";
+                    //             3:
+                    //                 MPSReschedulingLine."Work Center No. 3" := ProdOrderRoutingLine."No.";
+                    //             else
+                    //                 ProdOrderRoutingLine.FindLast();
+                    //         end;
+                    //     until ProdOrderRoutingLine.Next() = 0;
+                    //     MPSReschedulingLine.Modify();
+                    // end;
                 end;
             }
             trigger OnPreDataItem()
@@ -98,9 +102,10 @@ report 50601 "RV Collect MPS Data"
                 end else
                     if (StartingDate <> 0D) then
                         SetFilter("Starting Date", '%1..', StartingDate)
-                    else if (EndingDate <> 0D) then
-                        //setFilter("Ending Date", '..%1', EndingDate);
-                        setFilter("Starting Date", '..%1', EndingDate);
+                    else
+                        if (EndingDate <> 0D) then
+                            //setFilter("Ending Date", '..%1', EndingDate);
+                            setFilter("Starting Date", '..%1', EndingDate);
 
                 MPSReschedulingLine.Reset();
                 MPSReschedulingLine.SetRange("Batch Name", GBatch);
@@ -151,6 +156,12 @@ report 50601 "RV Collect MPS Data"
             end;
         end;
     }
+    trigger OnPreReport()
+    begin
+        // Add any pre-report logic here if needed
+        RVSetup.Get();
+        GLSetup.Get();
+    end;
 
     trigger OnPostReport()
     begin
@@ -173,6 +184,8 @@ report 50601 "RV Collect MPS Data"
         TempProdOrderLine: Record "Prod. Order Line" temporary;
         LevelNo: Integer;
         SalesLine: Record "Sales Line";
+        RVSetup: record "RV RIKEVITA Setup";
+        GLSetup: record "General Ledger Setup";
 
     procedure SetBatchName(BatchName: Code[10])
     begin
@@ -271,7 +284,6 @@ report 50601 "RV Collect MPS Data"
                     ResEntryPlus.setrange("Source ID", TransResEntryMinus."Source ID");
                     ResEntryPlus.SetRange("Source Batch Name", TransResEntryMinus."Source Batch Name");
                     ResEntryPlus.SetRange("Source Ref. No.", TransResEntryMinus."Source Prod. Order Line");
-
                     if ReqLineDataType.get(ResEntryMinus."Source ID", ResEntryMinus."Source Batch Name", ResEntryMinus."Source Ref. No.") then begin
                         case ReqLineDataType."Ref. Order Type" of
                             ReqLineDataType."Ref. Order Type"::"Prod. Order":
@@ -290,7 +302,6 @@ report 50601 "RV Collect MPS Data"
                     ResEntryPlus.setrange("Source Type", 5406);
                     ResEntryPlus.setrange("Source ID", TransResEntryMinus."Source ID");
                     ResEntryPlus.SetRange("Source Prod. Order Line", TransResEntryMinus."Source Prod. Order Line");
-
                     if ProdOrderLine.get(TransResEntryMinus."Source Subtype",
                                             TransResEntryMinus."Source ID",
                                             TransResEntryMinus."Source Prod. Order Line") then begin

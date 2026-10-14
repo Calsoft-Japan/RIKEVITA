@@ -82,6 +82,8 @@ page 50601 "RV Prod. Result Journal Line"
                 field("Scrap Quantity"; Rec."Scrap Quantity")
                 {
                     ToolTip = 'Specifies the value of the Scrap Quantity field.', Comment = '%';
+                    HideValue = HideScrapQty;
+                    Editable = ScrapCanEdit;
                 }
                 field(UOM; Rec.UOM)
                 {
@@ -163,12 +165,27 @@ page 50601 "RV Prod. Result Journal Line"
                     end;
 
                     trigger OnValidate()
+                    var
+                        LotNoInfo: Record "Lot No. Information";
+                        ItemTrackingMgt: Codeunit "Item Tracking Management";
+                        ItemTrackingSetup: Record "Item Tracking Setup";
+                        EntriesExist: Boolean;
                     begin
                         if rec."Lot No." = '' then begin
                             Rec."Manufacturing Date" := 0D;
                             rec."Expire Date" := 0D;
                         end else begin
                             rec.UpdateExpireDate();
+                            if rec."Data Type" IN [rec."Data Type"::"Adjust Consumption",
+                                                    rec."Data Type"::"Planned Consumption",
+                                                    rec."Data Type"::"Recycle Consumption"] then
+                                if LotNoInfo.get(Rec."Item No.",
+                                                Rec."Variant Code",
+                                                Rec."Lot No.") then begin
+                                    Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date";
+                                    ItemTrackingSetup."Lot No." := Rec."Lot No.";
+                                    Rec."Expire Date" := ItemTrackingMgt.ExistingExpirationDate(Rec."Item No.", Rec."Variant Code", ItemTrackingSetup, false, EntriesExist);
+                                end;
                         end;
                     end;
                 }
@@ -334,10 +351,15 @@ page 50601 "RV Prod. Result Journal Line"
 
     procedure SetPageEditable()
     begin
-        if rec."Data Type" IN [rec."Data Type"::"Adjust Output", rec."Data Type"::"Planned Output"] then
-            OutputCanEdit := false
-        else
+        if rec."Data Type" IN [rec."Data Type"::"Adjust Output", rec."Data Type"::"Planned Output"] then begin
+            OutputCanEdit := false;
+            HideScrapQty := false;
+            ScrapCanEdit := true;
+        end else begin
             OutputCanEdit := true;
+            HideScrapQty := true;
+            ScrapCanEdit := false;
+        end;
     end;
 
     var
@@ -403,6 +425,8 @@ page 50601 "RV Prod. Result Journal Line"
         Inbound: Boolean;
         OutputCanEdit: Boolean;
         ChangeStatusMsg: Label 'Status changed to Ready Post';
+        HideScrapQty: Boolean;
+        ScrapCanEdit: Boolean;
 
     local procedure CurrentJnlBatchNameOnAfterVali()
     begin
@@ -415,10 +439,8 @@ page 50601 "RV Prod. Result Journal Line"
     begin
         if not IsInvtDocumentCorrection then
             exit(SearchSupply);
-
         if InsertIsBlocked then
             exit(false);
-
         if recTrackingSpec."Source Type" <> DATABASE::"Invt. Document Line" then
             exit(SearchSupply);
 
@@ -464,7 +486,6 @@ page 50601 "RV Prod. Result Journal Line"
                     TrackingSpecification.SetItemData(
                         ProdResultLine."Item No.", ProdBomLine.Description, ProdBomLine."Location Code", ProdBomLine."Variant Code",
                         ProdBomLine."Bin Code", ProdBomLine."Qty. per Unit of Measure", ProdBomLine."Qty. Rounding Precision (Base)");
-
                 end;
             ProdResultLine."Data Type"::"Adjust Output",
             ProdResultLine."Data Type"::"Planned Output":
@@ -541,10 +562,8 @@ page 50601 "RV Prod. Result Journal Line"
                 ToBatchName := CopyStr(ItemJnlLine."Journal Batch Name", 1, MaxStrLen(ItemJnlLine."Journal Batch Name") - 1) + 'A'
             else
                 ToBatchName := DelChr(CopyStr(User, 1, MaxStrLen(ItemJnlLine."Journal Batch Name")), '>', '0123456789');
-
         if ToBatchName = '' then
             ToBatchName := Text003;
-
         if not ItemJnlBatch.Get(ToTemplateName, ToBatchName) then begin
             ItemJnlBatch.Init();
             ItemJnlBatch."Journal Template Name" := ItemJnlTemplate.Name;
@@ -580,7 +599,6 @@ page 50601 "RV Prod. Result Journal Line"
             CurrentEntryStatus := CurrentEntryStatus::Surplus
         else
             CurrentEntryStatus := CurrentEntryStatus::Prospect;
-
         if (TrackingSpecification."Source Type" = Database::"Transfer Line") and (CurrentRunMode = CurrentRunMode::Reclass) then
             CurrentEntryStatus := CurrentEntryStatus::Prospect;
 
@@ -594,7 +612,6 @@ page 50601 "RV Prod. Result Journal Line"
             CurrentSignFactor := CreateReservEntry.SignFactor(ReservEntry);
         CurrentSourceCaption := ReservEntry.TextCaption();
         CurrentSourceType := ReservEntry."Source Type";
-
         if CurrentSignFactor < 0 then begin
             ExpectedReceiptDate := 0D;
             ShipmentDate := AvailabilityDate;
@@ -627,7 +644,6 @@ page 50601 "RV Prod. Result Journal Line"
           TrackingSpecification."Source ID", TrackingSpecification."Source Ref. No.", true);
         TrackingSpecification.SetSourceFilter(
           TrackingSpecification."Source Batch Name", TrackingSpecification."Source Prod. Order Line");
-
         if TrackingSpecification.FindSet() then
             repeat
                 TempTrackingSpecification := TrackingSpecification;
@@ -706,7 +722,6 @@ page 50601 "RV Prod. Result Journal Line"
         EntriesExist: Boolean;
     begin
         TempTrackingSpecification.SetTrackingKey();
-
         if TempTrackingSpecification.Find('-') then
             repeat
                 if ItemLedgerEntryFilter = '' then begin
@@ -715,7 +730,6 @@ page 50601 "RV Prod. Result Journal Line"
                         "Quantity (Base)", "Qty. to Handle (Base)", "Qty. to Invoice (Base)",
                         "Quantity Handled (Base)", "Quantity Invoiced (Base)");
                 end;
-
                 if TempTrackingSpecification."Quantity (Base)" <> 0 then begin
                     recTrackingSpec := TempTrackingSpecification;
                     recTrackingSpec."Quantity (Base)" *= CurrentSignFactor;
@@ -740,13 +754,11 @@ page 50601 "RV Prod. Result Journal Line"
                     end;
 
                     recTrackingSpec.Insert();
-
                     if recTrackingSpec."Buffer Status" = 0 then begin
                         TempTrackingSpecification2 := recTrackingSpec;
                         TempTrackingSpecification2.Insert();
                     end;
                 end;
-
                 if ItemLedgerEntryFilter = '' then begin
                     TempTrackingSpecification.Find('+');
                     TempTrackingSpecification.ClearTrackingFilter();
@@ -786,14 +798,12 @@ page 50601 "RV Prod. Result Journal Line"
         ItemEntryRelation.SetCurrentKey("Order No.", "Order Line No.");
         ItemEntryRelation.SetRange("Order No.", TrackingSpecification."Source ID");
         ItemEntryRelation.SetRange("Order Line No.", TrackingSpecification."Source Ref. No.");
-
         case TrackingSpecification."Source Subtype" of
             0: // Outbound
                 ItemEntryRelation.SetRange("Source Type", Database::"Transfer Shipment Line");
             1: // Inbound
                 ItemEntryRelation.SetRange("Source Type", Database::"Transfer Receipt Line");
         end;
-
         if ItemEntryRelation.Find('-') then
             repeat
                 ItemLedgerEntry.Get(ItemEntryRelation."Item Entry No.");
@@ -848,7 +858,6 @@ page 50601 "RV Prod. Result Journal Line"
     begin
         if not ((TrackingSpecification."Source Type" = Database::"Sales Line") and (TrackingSpecification."Source Subtype" = TrackingSpecification."Source Subtype"::"1")) then
             exit(true);
-
         if ((TrackingSpecification."Source Type" = Database::"Sales Line") and (TrackingSpecification."Source Subtype" = TrackingSpecification."Source Subtype"::"1") and
            (TrackingSpecification."Lot No." <> '')) then
             exit(true)
@@ -896,7 +905,6 @@ page 50601 "RV Prod. Result Journal Line"
                             AddTracking := (FromReservEntry."Source Type" = 900) = IsAssembleToOrder // Database::"Assembly Header"
                         else
                             AddTracking := not IsAssembleToOrder;
-
                     if AddTracking then begin
                         TempTrackingSpecification.TransferFields(ReservEntry);
                         TempTrackingSpecification."Qty. Rounding Precision (Base)" := SrcQtyRoundingPrecision;
@@ -927,7 +935,14 @@ page 50601 "RV Prod. Result Journal Line"
         end;
     end;
 
-    local procedure InitItemTrackingSummaryForm(var ItemTrackingSummaryForm: Page "Item Tracking Summary"; var TempTrackingSpecification: Record "Tracking Specification" temporary; SearchForSupply: Boolean; CurrentSignFactor: Integer; LookupMode: Enum "Item Tracking Type"; MaxQuantity: Decimal)
+    local procedure InitItemTrackingSummaryForm(var ItemTrackingSummaryForm: Page "Item Tracking Summary";
+
+    var
+        TempTrackingSpecification: Record "Tracking Specification" temporary;
+        SearchForSupply: Boolean;
+        CurrentSignFactor: Integer;
+        LookupMode: Enum "Item Tracking Type";
+        MaxQuantity: Decimal)
     var
         Window: Dialog;
         IsHandled: Boolean;
@@ -1028,7 +1043,6 @@ page 50601 "RV Prod. Result Journal Line"
                 repeat
                     ItemLedgEntry.ClearTrackingFilter();
                     TempReservEntry.ClearTrackingFilter();
-
                     if (TempTrackingSpecification."Lot No." <> '') and (TempTrackingSpecification."Lot No." <> LotNo) then begin
                         LotNo := TempTrackingSpecification."Lot No.";
                         ItemLedgEntry.SetRange("Lot No.", TempTrackingSpecification."Lot No.");
@@ -1046,7 +1060,6 @@ page 50601 "RV Prod. Result Journal Line"
                         TransferReservEntryToTempRec(TempReservEntry, TempTrackingSpecification);
                         TransferItemLedgToTempRec(ItemLedgEntry, TempTrackingSpecification);
                     end;
-
                     if (TempTrackingSpecification."Lot No." = '') and (TempTrackingSpecification."Package No." = '') and (TempTrackingSpecification."Serial No." <> '') then begin
                         ItemLedgEntry.SetTrackingFilterFromSpec(TempTrackingSpecification);
                         TempReservEntry.SetTrackingFilterFromSpec(TempTrackingSpecification);
@@ -1147,12 +1160,10 @@ page 50601 "RV Prod. Result Journal Line"
         ReservEntry.TestField("Source Type", Database::"Item Journal Line");
         if not (ReservEntry."Source Subtype" in [5, 6]) then
             ReservEntry.FieldError("Source Subtype");
-
         if not ItemJnlLine.Get(ReservEntry."Source ID",
              ReservEntry."Source Batch Name", ReservEntry."Source Ref. No.")
         then
             exit;
-
         if (ItemJnlLine."Order Type" <> ItemJnlLine."Order Type"::Production) or
            (ItemJnlLine."Order No." = '') or
            (ItemJnlLine."Order Line No." = 0)
@@ -1169,7 +1180,6 @@ page 50601 "RV Prod. Result Journal Line"
             QtyOnJnlLine := ReservEntry."Quantity (Base)";
             ReservEntry."Transferred from Entry No." := Abs(TempTrackingSpecification."Entry No.");
             ReservEntry.Modify();
-
             if (RemainingQty <> 0) and (RemainingQty * QtyOnJnlLine > 0) then
                 if Abs(QtyOnJnlLine) <= Abs(RemainingQty) then
                     AdjustQty := -QtyOnJnlLine
@@ -1247,7 +1257,6 @@ page 50601 "RV Prod. Result Journal Line"
         TempGlobalReservEntry.SetRange("Reservation Status", TempGlobalReservEntry."Reservation Status"::Prospect);
         TempGlobalReservEntry.SetRange("Source Type", Database::"Job Journal Line");
         TempGlobalReservEntry.SetRange("Source Subtype", 0);
-
         if TempGlobalReservEntry.FindSet() then
             repeat
                 // Sum up per qty. line per lot/sn
@@ -1270,7 +1279,6 @@ page 50601 "RV Prod. Result Journal Line"
         ReservEntry.TestField("Source Type", Database::"Job Journal Line");
         if not (ReservEntry."Source Subtype" = 0) then
             ReservEntry.FieldError("Source Subtype");
-
         if not JobJnlLine.Get(ReservEntry."Source ID",
              ReservEntry."Source Batch Name", ReservEntry."Source Ref. No.")
         then
@@ -1286,7 +1294,6 @@ page 50601 "RV Prod. Result Journal Line"
             QtyOnJnlLine := ReservEntry."Quantity (Base)";
             ReservEntry."Transferred from Entry No." := Abs(TempTrackingSpecification."Entry No.");
             ReservEntry.Modify();
-
             if (RemainingQty <> 0) and (RemainingQty * QtyOnJnlLine > 0) then
                 if Abs(QtyOnJnlLine) <= Abs(RemainingQty) then
                     AdjustQty := -QtyOnJnlLine
@@ -1373,7 +1380,6 @@ page 50601 "RV Prod. Result Journal Line"
                 TempGlobalEntrySummary.UpdateAvailable();
                 TempGlobalEntrySummary.Insert();
             end;
-
             if TempChangedEntrySummary.HasNonSerialTracking() and not SkipLot then begin
                 TempGlobalEntrySummary.SetFilter("Serial No.", '<>%1', '');
                 TempGlobalEntrySummary.SetNonSerialTrackingFilterFromEntrySummary(TempChangedEntrySummary);
@@ -1382,16 +1388,13 @@ page 50601 "RV Prod. Result Journal Line"
                 SumOfSNRequestedQuantity := TempGlobalEntrySummary."Current Requested Quantity";
             end;
         end;
-
         if TempChangedEntrySummary.HasNonSerialTracking() and not SkipLot then begin
             TempGlobalEntrySummary.SetRange("Serial No.", '');
             TempGlobalEntrySummary.SetNonSerialTrackingFilterFromEntrySummary(TempChangedEntrySummary);
-
             if TempChangedEntrySummary."Serial No." <> '' then
                 TempGlobalEntrySummary.SetRange("Table ID", 0)
             else
                 TempGlobalEntrySummary.SetFilter("Table ID", '<>%1', 0);
-
             if TempGlobalEntrySummary.FindFirst() then begin
                 if TempChangedEntrySummary."Serial No." <> '' then begin
                     TempGlobalEntrySummary."Current Pending Quantity" := SumOfSNPendingQuantity;
@@ -1446,7 +1449,6 @@ page 50601 "RV Prod. Result Journal Line"
                     TempGlobalReservEntry := TempReservEntry;
                     TempGlobalReservEntry."Transferred from Entry No." := 0;
                     IsHandled := false;
-
                     if not IsHandled then begin
                         TempGlobalReservEntry.Insert();
                         CreateEntrySummary(TrackingSpecification, TempGlobalReservEntry);
@@ -1468,7 +1470,6 @@ page 50601 "RV Prod. Result Journal Line"
     begin
         TempGlobalEntrySummary.Reset();
         TempGlobalEntrySummary.SetTrackingKey();
-
         if SerialNoLookup then begin
             if TempReservEntry."Serial No." = '' then
                 exit;
@@ -1491,7 +1492,6 @@ page 50601 "RV Prod. Result Journal Line"
             TempGlobalEntrySummary.Init();
             TempGlobalEntrySummary."Entry No." := LastSummaryEntryNo + 1;
             LastSummaryEntryNo := TempGlobalEntrySummary."Entry No.";
-
             if not SerialNoLookup and (TempReservEntry."Serial No." <> '') then
                 TempGlobalEntrySummary."Table ID" := 0 // Mark as summation
             else
@@ -1575,10 +1575,8 @@ page 50601 "RV Prod. Result Journal Line"
     begin
         if not (TempItemTrackLineChanged."Source Type" = Database::"Item Journal Line") then
             exit;
-
         if not (TempItemTrackLineChanged."Source Subtype" in [5, 6]) then
             exit;
-
         if not ItemJnlLine.Get(TempItemTrackLineChanged."Source ID",
              TempItemTrackLineChanged."Source Batch Name", TempItemTrackLineChanged."Source Ref. No.")
         then
@@ -1651,13 +1649,11 @@ page 50601 "RV Prod. Result Journal Line"
             AvailableQty := TempGlobalEntrySummary."Total Available Quantity";
         QtyHandledOnLine := TempTrackingSpecification."Quantity Handled (Base)";
         QtyOnLine := TempTrackingSpecification."Quantity (Base)" - QtyHandledOnLine;
-
         if CurrentSignFactor > 0 then begin
             AvailableQty := -AvailableQty;
             QtyHandledOnLine := -QtyHandledOnLine;
             QtyOnLine := -QtyOnLine;
         end;
-
         if MaxQuantity < 0 then begin
             AdjustmentQty := MaxQuantity;
             if AvailableQty < 0 then

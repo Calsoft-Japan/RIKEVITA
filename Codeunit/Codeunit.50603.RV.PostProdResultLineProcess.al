@@ -34,6 +34,8 @@ codeunit 50603 "RV Post Prod Result Line Proc."
     procedure CreateProdJournal()
     var
         ItemJnlPostBatch: CODEUNIT "Item Jnl.-Post Batch";
+        JournalErrorsMgt: codeunit "Journal Errors Mgt.";
+        ItemJnlCreated: Boolean;
     begin
         ProdResultJournalLineTmp.Reset();
         ProdResultJournalLineTmp.DeleteAll();
@@ -44,28 +46,34 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         ProdOrderLine.get(ProdOrderLine.Status::Released,
                 ProdResultJournalLine."Prod. Order No.",
                 ProdResultJournalLine."Prod. Order Line No.");
-
-
         repeat
             case ProdResultJournalLine."Data Type" of
                 ProdResultJournalLine."Data Type"::"Adjust Output",
                 ProdResultJournalLine."Data Type"::"Planned Output":
                     begin
-                        CreateOutputJnlLine();
+                        if (ProdResultJournalLine.Quantity <> 0)
+                        or (ProdResultJournalLine."Scrap Quantity" <> 0) then begin
+                            CreateOutputJnlLine();
+                            ItemJnlCreated := true;
+                        end;
                     end;
                 ProdResultJournalLine."Data Type"::"Adjust Consumption",
                 ProdResultJournalLine."Data Type"::"Planned Consumption",
                 ProdResultJournalLine."Data Type"::"Recycle Consumption":
                     begin
-                        CreateConsumptionJnlLine();
+                        if ProdResultJournalLine.Quantity <> 0 then begin
+                            CreateConsumptionJnlLine();
+                            ItemJnlCreated := true;
+                        end;
                     end;
             end;
 
             ProdResultJournalLineTmp.Init();
             ProdResultJournalLineTmp.TransferFields(ProdResultJournalLine);
             ProdResultJournalLineTmp.Insert();
-
         until ProdResultJournalLine.Next() = 0;
+        if not ItemJnlCreated then
+            error(JournalErrorsMgt.GetNothingToPostErrorMsg());
 
         Clear(ItemJnlPostBatch);
         ItemJnlPostBatch.SetSuppressCommit(true);
@@ -83,7 +91,6 @@ codeunit 50603 "RV Post Prod Result Line Proc."
                 ProdResultJournalLine.Delete();
             until ProdResultJournalLineTmp.Next() = 0;
         end;
-
     end;
 
     procedure SetTemplateAndBatchName()
@@ -119,10 +126,8 @@ codeunit 50603 "RV Post Prod Result Line Proc."
                 ToBatchName := CopyStr(ItemJnlLine."Journal Batch Name", 1, MaxStrLen(ItemJnlLine."Journal Batch Name") - 1) + 'A'
             else
                 ToBatchName := DelChr(CopyStr(User, 1, MaxStrLen(ItemJnlLine."Journal Batch Name")), '>', '0123456789');
-
         if ToBatchName = '' then
             ToBatchName := Text003;
-
         if not ItemJnlBatch.Get(ToTemplateName, ToBatchName) then begin
             ItemJnlBatch.Init();
             ItemJnlBatch."Journal Template Name" := ItemJnlTemplate.Name;
@@ -143,9 +148,9 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         ItemJnlLine2.SetRange("Journal Template Name", TemplateName);
         ItemJnlLine2.SetRange("Journal Batch Name", BatchName);
         ItemJnlLine2.SetRange("Order Type", ItemJnlLine2."Order Type"::Production);
-        ItemJnlLine2.SetRange("Order No.", ProdOrderNo);
-        if ProdOrderLineNo <> 0 then
-            ItemJnlLine2.SetRange("Order Line No.", ProdOrderLineNo);
+        // ItemJnlLine2.SetRange("Order No.", ProdOrderNo);
+        // if ProdOrderLineNo <> 0 then
+        // ItemJnlLine2.SetRange("Order Line No.", ProdOrderLineNo);
         if ItemJnlLine2.Find('-') then begin
             repeat
                 if ReservEntryExist(ItemJnlLine2, ReservEntry) then
@@ -218,7 +223,6 @@ codeunit 50603 "RV Post Prod Result Line Proc."
             ItemJnlLine."Flushing Method" := ProdOrderRtngLine."Flushing Method";
         ItemJnlLine.Insert();
         NextLineNo += 10000;
-
         if ProdResultJournalLine."Lot No." <> '' then begin
             TempReservEntry.Init();
             TempReservEntry."Lot No." := ProdResultJournalLine."Lot No.";
@@ -254,7 +258,6 @@ codeunit 50603 "RV Post Prod Result Line Proc."
             0,
             Enum::"Reservation Status"::Prospect
             );
-
             if not LotNoInfo.Get(ItemJnlLine."Item No.", ItemJnlLine."Variant Code", ProdResultJournalLine."Lot No.") then begin
                 LotNoInfo.Init();
                 LotNoInfo."Item No." := ItemJnlLine."Item No.";
@@ -340,7 +343,6 @@ codeunit 50603 "RV Post Prod Result Line Proc."
 
     procedure CreateArchive()
     begin
-
     end;
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"WMS Management", 'OnBeforeConfirmExceededCapacity', '', false, false)]

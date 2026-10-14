@@ -59,32 +59,56 @@ table 50604 "RV MPS Rescheduling Line"
         {
             Caption = 'New Ending Date';
         }
-        field(13; "Work Center No. 1"; Code[20])
+        // field(13; "Work Center No. 1"; Code[20])
+        // {
+        //     Caption = 'Work Center No. 1';
+        // }
+        // field(14; "Work Center No. 2"; Code[20])
+        // {
+        //     Caption = 'Work Center No. 2';
+        // }
+        // field(15; "Work Center No. 3"; Code[20])
+        // {
+        //     Caption = 'Work Center No. 3';
+        // }
+        // field(16; "New Work Center No. 1"; Code[20])
+        // {
+        //     Caption = 'New Work Center No. 1';
+        //     TableRelation = "Work Center";
+        // }
+        // field(17; "New Work Center No. 2"; Code[20])
+        // {
+        //     Caption = 'New Work Center No. 2';
+        //     TableRelation = "Work Center";
+        // }
+        // field(18; "New Work Center No. 3"; Code[20])
+        // {
+        //     Caption = 'New Work Center No. 3';
+        //     TableRelation = "Work Center";
+        // }
+        field(13; "New Routing No."; Code[20])
         {
-            Caption = 'Work Center No. 1';
+            Caption = 'New Routing No.';
+            TableRelation = "Routing Header";
         }
-        field(14; "Work Center No. 2"; Code[20])
+        field(14; "Production BOM"; Code[20])
         {
-            Caption = 'Work Center No. 2';
+            Caption = 'Production BOM';
+            //tableRelation = "Production BOM Header";
         }
-        field(15; "Work Center No. 3"; Code[20])
+        field(15; "New Production BOM"; Code[20])
         {
-            Caption = 'Work Center No. 3';
+            Caption = 'New Production BOM';
+            TableRelation = "Production BOM Header";
         }
-        field(16; "New Work Center No. 1"; Code[20])
+        field(16; "Site Code"; Code[20])
         {
-            Caption = 'New Work Center No. 1';
-            TableRelation = "Work Center";
+            Caption = 'Site Code';
         }
-        field(17; "New Work Center No. 2"; Code[20])
+        field(17; "New Site Code"; Code[20])
         {
-            Caption = 'New Work Center No. 2';
-            TableRelation = "Work Center";
-        }
-        field(18; "New Work Center No. 3"; Code[20])
-        {
-            Caption = 'New Work Center No. 3';
-            TableRelation = "Work Center";
+            Caption = 'New Site Code';
+            TableRelation = "Dimension Value".code where("Dimension Code" = FIELD("RV Site"));
         }
         field(19; "Planning Status"; Enum "RV Planning Status")
         {
@@ -138,6 +162,11 @@ table 50604 "RV MPS Rescheduling Line"
         {
             Caption = 'FG Prod. Order No.';
         }
+        field(33; "RV Site"; Code[20])
+        {
+            fieldclass = flowfield;
+            CalcFormula = Lookup("RV RIKEVITA Setup"."SITE Dim. Code");
+        }
     }
 
     keys
@@ -147,4 +176,6 @@ table 50604 "RV MPS Rescheduling Line"
             Clustered = true;
         }
     }
+
+
 }

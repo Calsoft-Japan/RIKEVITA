@@ -68,7 +68,6 @@ table 50601 "RV Prod. Result Journal Line"
                     "Prod. Order Line No." := ProdOrderLine."Line No.";
                     "Routing No." := ProdOrderLine."Routing No.";
                     "location code" := ProdOrderLine."Location Code";
-
                     if rec.uom = '' then
                         case "Data Type" of
                             "RV Prod. Results Data Type"::"Planned Output",
@@ -104,7 +103,6 @@ table 50601 "RV Prod. Result Journal Line"
                 ProdOrderLineList.LookupMode(true);
                 ProdOrderLineList.SetTableView(ProdOrderLine);
                 ProdOrderLineList.SetRecord(ProdOrderLine);
-
                 if ProdOrderLineList.RunModal() = ACTION::LookupOK then begin
                     ProdOrderLineList.GetRecord(ProdOrderLine);
                     rec.Validate("Output Item No.", ProdOrderLine."Item No.");
@@ -165,7 +163,6 @@ table 50601 "RV Prod. Result Journal Line"
                         rec."Location Code" := '';
                         rec."Bin Code" := '';
                     end;
-
                     if rec.uom = '' then
                         case "Data Type" of
                             "RV Prod. Results Data Type"::"Adjust Consumption",
@@ -176,12 +173,10 @@ table 50601 "RV Prod. Result Journal Line"
                                         Validate(rec."UOM", UOM.Code);
                                 end;
                         end;
-
                     if rec.UOM = '' then begin
                         if item.Get(Rec."Item No.") then
                             Validate(rec."UOM", item."Base Unit of Measure");
                     end;
-
                     if item.Get(Rec."Item No.") then
                         rec."Item Description" := item."Description";
                 end;
@@ -196,21 +191,25 @@ table 50601 "RV Prod. Result Journal Line"
         {
             Caption = 'Quantity';
             DecimalPlaces = 0 : 5;
-            BlankZero = true;
+            // BlankZero = true;
         }
         field(11; "Scrap Quantity"; Decimal)
         {
             Caption = 'Scrap Quantity';
             DecimalPlaces = 0 : 5;
-            BlankZero = true;
+            // BlankZero = true;
         }
         field(12; "UOM"; Code[10])
         {
             Caption = 'UOM';
-            TableRelation = IF ("Data Type" = CONST("Planned Output")) "Item Unit of Measure".code where("Item No." = FIELD("Output Item No."))
-            ELSE IF ("Data Type" = CONST("Adjust Output")) "Item Unit of Measure".Code WHERE("Item No." = FIELD("Output Item No."))
-            ELSE IF ("Data Type" = CONST("Planned Consumption")) "Item Unit of Measure".Code WHERE("Item No." = FIELD("Item No."))
-            ELSE IF ("Data Type" = CONST("Adjust Consumption")) "Item Unit of Measure".Code WHERE("Item No." = FIELD("Item No."));
+            TableRelation =
+            IF ("Data Type" = CONST("Planned Output")) "Item Unit of Measure".code where("Item No." = FIELD("Output Item No."))
+            ELSE
+            IF ("Data Type" = CONST("Adjust Output")) "Item Unit of Measure".Code WHERE("Item No." = FIELD("Output Item No."))
+            ELSE
+            IF ("Data Type" = CONST("Planned Consumption")) "Item Unit of Measure".Code WHERE("Item No." = FIELD("Item No."))
+            ELSE
+            IF ("Data Type" = CONST("Adjust Consumption")) "Item Unit of Measure".Code WHERE("Item No." = FIELD("Item No."));
         }
         field(13; "Lot No."; Code[30])
         {
@@ -279,7 +278,6 @@ table 50601 "RV Prod. Result Journal Line"
                 ProdOrderCompLineList.LookupMode(true);
                 ProdOrderCompLineList.SetTableView(ProdOrderComp);
                 ProdOrderCompLineList.SetRecord(ProdOrderComp);
-
                 if ProdOrderCompLineList.RunModal() = ACTION::LookupOK then begin
                     ProdOrderCompLineList.GetRecord(ProdOrderComp);
                     if "Prod. Order Comp. Line No." <> ProdOrderComp."Line No." then begin
@@ -306,7 +304,8 @@ table 50601 "RV Prod. Result Journal Line"
         field(23; "Bin Code"; Code[20])
         {
             Caption = 'Bin Code';
-            TableRelation = if ("Data Type" = filter("Planned Output" | "Adjust Output"),
+            TableRelation =
+            if ("Data Type" = filter("Planned Output" | "Adjust Output"),
                                 Quantity = filter(>= 0)) Bin.Code
                                 where("Location Code" = field("Location Code"),
                                 "Item Filter" = field("Item No."))

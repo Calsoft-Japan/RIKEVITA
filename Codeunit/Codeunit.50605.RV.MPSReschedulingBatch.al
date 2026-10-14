@@ -7,6 +7,7 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
     TableNo = 50604;
     trigger OnRun()
     begin
+        Database.CurrentTransactionType(TransactionType::Update);
         MPSReschedulingLine := Rec;
         UpdateMOData();
     end;
@@ -24,89 +25,138 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
         oldMoveTime: Decimal;
         RoutingCount: Integer;
         OldDueDate: Date;
+        NeedReschedulingRouting: Boolean;
+        NeedReschedulingBOM: Boolean;
+        RefreshProductionOrder: Report "Refresh Production Order";
+        Direction2: Option Forward,Backward;
     begin
         MfgSetup.get();
-        ProdOrderRoutingLine.Reset();
-        ProdOrderRoutingLine.SetRange("Status", ProdOrderRoutingLine.Status::"Firm Planned");
-        ProdOrderRoutingLine.SetRange("Prod. Order No.", MPSReschedulingLine."Production No.");
-        ProdOrderRoutingLine.SetRange("Routing No.", MPSReschedulingLine."Routing No.");
-        ProdOrderRoutingLine.SetRange("Routing Reference No.", MPSReschedulingLine."Prod. Line No.");
+        RVSetup.get();
+        GLSetup.Get();
+        NeedReschedulingRouting := false;
+        NeedReschedulingBOM := false;
+        // ProdOrderRoutingLine.Reset();
+        // ProdOrderRoutingLine.SetRange("Status", ProdOrderRoutingLine.Status::"Firm Planned");
+        // ProdOrderRoutingLine.SetRange("Prod. Order No.", MPSReschedulingLine."Production No.");
+        // ProdOrderRoutingLine.SetRange("Routing No.", MPSReschedulingLine."Routing No.");
+        // ProdOrderRoutingLine.SetRange("Routing Reference No.", MPSReschedulingLine."Prod. Line No.");
 
-        RoutingCount := ProdOrderRoutingLine.Count();
-        case RoutingCount of
-            0:
-                begin
-                    if (MPSReschedulingLine."New Work Center No. 1" <> '')
-                    or (MPSReschedulingLine."New Work Center No. 2" <> '')
-                    or (MPSReschedulingLine."New Work Center No. 3" <> '') then
-                        Error(ErrNotHaveRouting);
-                end;
-            1:
-                if (MPSReschedulingLine."New Work Center No. 2" <> '')
-                or (MPSReschedulingLine."New Work Center No. 3" <> '') then
-                    Error(ErrNotHaveRouting);
-            2:
-                if MPSReschedulingLine."New Work Center No. 3" <> '' then
-                    Error(ErrNotHaveRouting);
+        // RoutingCount := ProdOrderRoutingLine.Count();
+        // case RoutingCount of
+        //     0:
+        //         begin
+        //             if (MPSReschedulingLine."New Work Center No. 1" <> '')
+        //             or (MPSReschedulingLine."New Work Center No. 2" <> '')
+        //             or (MPSReschedulingLine."New Work Center No. 3" <> '') then
+        //                 Error(ErrNotHaveRouting);
+        //         end;
+        //     1:
+        //         if (MPSReschedulingLine."New Work Center No. 2" <> '')
+        //         or (MPSReschedulingLine."New Work Center No. 3" <> '') then
+        //             Error(ErrNotHaveRouting);
+        //     2:
+        //         if MPSReschedulingLine."New Work Center No. 3" <> '' then
+        //             Error(ErrNotHaveRouting);
+        // end;
+
+        // if ProdOrderRoutingLine.FindSet() then
+        //     repeat
+        //         RountCount += 1;
+        //         oldSetupTime := ProdOrderRoutingLine."Setup Time";
+        //         oldRunningTime := ProdOrderRoutingLine."Run Time";
+        //         oldWaitTime := ProdOrderRoutingLine."Wait Time";
+        //         oldMoveTime := ProdOrderRoutingLine."Move Time";
+        //         case RountCount of
+        //             1:
+        //                 begin
+        //                     if MPSReschedulingLine."new Work Center No. 1" <> '' then
+        //                         if ProdOrderRoutingLine."No." <> MPSReschedulingLine."new Work Center No. 1" then begin
+        //                             ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."new Work Center No. 1");
+        //                             ProdOrderRoutingLine.Validate("Setup Time", oldSetupTime);
+        //                             ProdOrderRoutingLine.Validate("Run Time", oldRunningTime);
+        //                             ProdOrderRoutingLine.Validate("Wait Time", oldWaitTime);
+        //                             ProdOrderRoutingLine.Validate("Move Time", oldMoveTime);
+        //                             ProdOrderRoutingLine.Modify();
+        //                         end;
+        //                 end;
+        //             2:
+        //                 begin
+        //                     if MPSReschedulingLine."new Work Center No. 2" <> '' then
+        //                         if ProdOrderRoutingLine."No." <> MPSReschedulingLine."new Work Center No. 2" then begin
+        //                             ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."new Work Center No. 2");
+        //                             ProdOrderRoutingLine.Validate("Setup Time", oldSetupTime);
+        //                             ProdOrderRoutingLine.Validate("Run Time", oldRunningTime);
+        //                             ProdOrderRoutingLine.Validate("Wait Time", oldWaitTime);
+        //                             ProdOrderRoutingLine.Validate("Move Time", oldMoveTime);
+        //                             ProdOrderRoutingLine.Modify();
+        //                         end;
+        //                 end;
+        //             3:
+        //                 begin
+        //                     if MPSReschedulingLine."new Work Center No. 3" <> '' then
+        //                         if ProdOrderRoutingLine."No." <> MPSReschedulingLine."new Work Center No. 3" then begin
+        //                             ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."new Work Center No. 3");
+        //                             ProdOrderRoutingLine.Validate("Setup Time", oldSetupTime);
+        //                             ProdOrderRoutingLine.Validate("Run Time", oldRunningTime);
+        //                             ProdOrderRoutingLine.Validate("Wait Time", oldWaitTime);
+        //                             ProdOrderRoutingLine.Validate("Move Time", oldMoveTime);
+        //                             ProdOrderRoutingLine.Modify();
+        //                         end;
+        //                 end;
+        //             else
+        //                 ProdOrderRoutingLine.FindLast();
+        //         end;
+        //     until ProdOrderRoutingLine.Next() = 0;
+
+        if (MPSReschedulingLine."New Routing No." <> '') then begin
+            ProdOrderLine.get(ProdOrderLine.Status::"Firm Planned", MPSReschedulingLine."Production No.", MPSReschedulingLine."Prod. Line No.");
+            if ProdOrderLine."Routing No." <> MPSReschedulingLine."New Routing No." then begin
+                ProdOrderLine.Validate("Routing No.", MPSReschedulingLine."New Routing No.");
+                ProdOrderLine.Modify();
+                NeedReschedulingRouting := true;
+            end;
         end;
-
-        if ProdOrderRoutingLine.FindSet() then
-            repeat
-                RountCount += 1;
-                oldSetupTime := ProdOrderRoutingLine."Setup Time";
-                oldRunningTime := ProdOrderRoutingLine."Run Time";
-                oldWaitTime := ProdOrderRoutingLine."Wait Time";
-                oldMoveTime := ProdOrderRoutingLine."Move Time";
-                case RountCount of
-                    1:
-                        begin
-                            if MPSReschedulingLine."new Work Center No. 1" <> '' then
-                                if ProdOrderRoutingLine."No." <> MPSReschedulingLine."new Work Center No. 1" then begin
-                                    ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."new Work Center No. 1");
-                                    ProdOrderRoutingLine.Validate("Setup Time", oldSetupTime);
-                                    ProdOrderRoutingLine.Validate("Run Time", oldRunningTime);
-                                    ProdOrderRoutingLine.Validate("Wait Time", oldWaitTime);
-                                    ProdOrderRoutingLine.Validate("Move Time", oldMoveTime);
-                                    ProdOrderRoutingLine.Modify();
-                                end;
-                        end;
-                    2:
-                        begin
-                            if MPSReschedulingLine."new Work Center No. 2" <> '' then
-                                if ProdOrderRoutingLine."No." <> MPSReschedulingLine."new Work Center No. 2" then begin
-                                    ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."new Work Center No. 2");
-                                    ProdOrderRoutingLine.Validate("Setup Time", oldSetupTime);
-                                    ProdOrderRoutingLine.Validate("Run Time", oldRunningTime);
-                                    ProdOrderRoutingLine.Validate("Wait Time", oldWaitTime);
-                                    ProdOrderRoutingLine.Validate("Move Time", oldMoveTime);
-                                    ProdOrderRoutingLine.Modify();
-                                end;
-                        end;
-                    3:
-                        begin
-                            if MPSReschedulingLine."new Work Center No. 3" <> '' then
-                                if ProdOrderRoutingLine."No." <> MPSReschedulingLine."new Work Center No. 3" then begin
-                                    ProdOrderRoutingLine.Validate("No.", MPSReschedulingLine."new Work Center No. 3");
-                                    ProdOrderRoutingLine.Validate("Setup Time", oldSetupTime);
-                                    ProdOrderRoutingLine.Validate("Run Time", oldRunningTime);
-                                    ProdOrderRoutingLine.Validate("Wait Time", oldWaitTime);
-                                    ProdOrderRoutingLine.Validate("Move Time", oldMoveTime);
-                                    ProdOrderRoutingLine.Modify();
-                                end;
-                        end;
-                    else
-                        ProdOrderRoutingLine.FindLast();
+        if (MPSReschedulingLine."New Production BOM" <> '') then begin
+            ProdOrderLine.get(ProdOrderLine.Status::"Firm Planned", MPSReschedulingLine."Production No.", MPSReschedulingLine."Prod. Line No.");
+            if ProdOrderLine."Production BOM No." <> MPSReschedulingLine."New Production BOM" then begin
+                ProdOrderLine.Validate("Production BOM No.", MPSReschedulingLine."New Production BOM");
+                ProdOrderLine.Modify();
+                NeedReschedulingBOM := true;
+            end;
+        end;
+        if MPSReschedulingLine."New Site Code" <> '' then begin
+            ProdOrderLine.get(ProdOrderLine.Status::"Firm Planned", MPSReschedulingLine."Production No.", MPSReschedulingLine."Prod. Line No.");
+            if RVSetup."SITE Dim. Code" = GLSetup."Shortcut Dimension 1 Code" then begin
+                if ProdOrderLine."Shortcut Dimension 1 Code" <> MPSReschedulingLine."New Site Code" then begin
+                    ProdOrderLine.Validate("Shortcut Dimension 1 Code", MPSReschedulingLine."New Site Code");
+                    ProdOrderLine.Modify();
                 end;
-            until ProdOrderRoutingLine.Next() = 0;
+            end else
+                if ProdOrderLine."Shortcut Dimension 2 Code" <> MPSReschedulingLine."New Site Code" then begin
+                    ProdOrderLine.Validate("Shortcut Dimension 2 Code", MPSReschedulingLine."New Site Code");
+                    ProdOrderLine.Modify();
+                end;
+        end;
+        if NeedReschedulingRouting or NeedReschedulingBOM then begin
+            ProdOrder.Reset();
+            ProdOrder.SetRange(Status, ProdOrder.Status::"Firm Planned");
+            ProdOrder.SetRange("No.", MPSReschedulingLine."Production No.");
+
+            RefreshProductionOrder.UseRequestPage(false);
+            RefreshProductionOrder.InitializeRequest(Direction2::Backward, false, NeedReschedulingRouting, NeedReschedulingBOM, false);
+            RefreshProductionOrder.SetHideValidationDialog(true);
+            RefreshProductionOrder.SetTableView(ProdOrder);
+            RefreshProductionOrder.Run();
+        end;
         if MPSReschedulingLine."New Ending Date" <> 0D then begin
             ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
             IF MPSReschedulingLine."New Ending Date" > ProdOrder."Due Date" then
                 error(Text006, ProdOrder."No.");
             ProdOrder.Validate("RV_Rescheduling Ending Date", MPSReschedulingLine."New Ending Date");
+            ProdOrder.Validate("Manual Scheduling", true);
             ProdOrder.Validate("Ending Date-Time", CreateDateTime(MPSReschedulingLine."New Ending Date", MfgSetup."Normal Ending Time"));
             ProdOrder.Modify();
         end;
-
         if MPSReschedulingLine."New Starting Date" <> 0D then begin
             ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
             if ProdOrder."Starting Date" <> MPSReschedulingLine."New Starting Date" then begin
@@ -119,14 +169,12 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
                 ProdOrder.Modify();
             end;
         end;
-
         ProdOrder.get(ProdOrder.Status::"Firm Planned", MPSReschedulingLine."Production No.");
         if ProdOrder."RV_Planning Status" <> MPSReschedulingLine."Planning Status" then begin
             ProdOrder.Validate("RV_Planning Status", MPSReschedulingLine."Planning Status");
             ProdOrder."RV_Planning Controller" := UserId();
             ProdOrder."RV_Planning Date" := Today();
             ProdOrder.Modify();
-
             if ProdOrder."RV_Planning Status" = ProdOrder."RV_Planning Status"::Planning then begin
                 ProdOrderLine.get(ProdOrderLine.Status::"Firm Planned", MPSReschedulingLine."Production No.", MPSReschedulingLine."Prod. Line No.");
                 if ProdOrderLine."Planning Flexibility" <> ProdOrderLine."Planning Flexibility"::Unlimited then begin
@@ -134,7 +182,6 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
                     ProdOrderLine.Modify();
                 end;
             end;
-
             if ProdOrder."RV_Planning Status" = ProdOrder."RV_Planning Status"::Fixed then begin
                 ProdOrderLine.get(ProdOrderLine.Status::"Firm Planned", MPSReschedulingLine."Production No.", MPSReschedulingLine."Prod. Line No.");
                 if ProdOrderLine."Planning Flexibility" <> ProdOrderLine."Planning Flexibility"::None then begin
@@ -154,4 +201,6 @@ codeunit 50605 "RV MPS Reschedul Update Batch"
         text007: Label 'The due date will be late for the new starting date for production order %1.';
         MfgSetup: Record "Manufacturing Setup";
         ErrNotHaveRouting: Label 'Not found the production order routing line.';
+        RVSetup: Record "RV RIKEVITA Setup";
+        GLSetup: Record "General Ledger Setup";
 }

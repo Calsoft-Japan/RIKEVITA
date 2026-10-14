@@ -57,6 +57,85 @@ page 50604 "RV MPS Rescheduling Worksheet"
                 {
                     Editable = false;
                 }
+                field("Production BOM"; Rec."Production BOM")
+                {
+                    Editable = false;
+                }
+                field("Site Code"; Rec."Site Code")
+                {
+                    Editable = false;
+                }
+                field("New Site Code"; Rec."New Site Code")
+                {
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        PageItemSiteProdMaster: Page "RV Item Site Production Master";
+                        ItemSiteProdMaster: record "RV Item Site Production Master";
+                    begin
+                        ItemSiteProdMaster.SetRange("Item No.", Rec."Item No.");
+                        PageItemSiteProdMaster.SetTableView(ItemSiteProdMaster);
+                        PageItemSiteProdMaster.LookupMode(true);
+                        if PageItemSiteProdMaster.RunModal() = action::LookupOK then begin
+                            PageItemSiteProdMaster.GetRecord(ItemSiteProdMaster);
+                            Text := ItemSiteProdMaster."Site Code";
+                            exit(true);
+                        end;
+                        exit(false);
+                    end;
+
+                    trigger OnValidate()
+                    begin
+                        if rec."New Site Code" <> xrec."New Site Code" then begin
+                            ItemSiteProdMaster.Reset();
+                            ItemSiteProdMaster.SetRange("Item No.", rec."Item No.");
+                            ItemSiteProdMaster.SetRange("Site Code", rec."New Site Code");
+                            if ItemSiteProdMaster.findfirst() then begin
+                                rec.validate("New Routing No.", ItemSiteProdMaster."Routing No.");
+                                rec.validate("New Production BOM", ItemSiteProdMaster."BOM No.");
+                            end;
+                        end;
+                    end;
+                }
+                field("New Routing No."; Rec."New Routing No.")
+                {
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        PageItemSiteProdMaster: Page "RV Item Site Production Master";
+                        ItemSiteProdMaster: record "RV Item Site Production Master";
+                    begin
+                        ItemSiteProdMaster.SetRange("Item No.", Rec."Item No.");
+                        PageItemSiteProdMaster.SetTableView(ItemSiteProdMaster);
+                        PageItemSiteProdMaster.LookupMode(true);
+                        if PageItemSiteProdMaster.RunModal() = action::LookupOK then begin
+                            PageItemSiteProdMaster.GetRecord(ItemSiteProdMaster);
+                            rec."New Site Code" := ItemSiteProdMaster."Site Code";
+                            Text := ItemSiteProdMaster."Routing No.";
+                            rec."New Production BOM" := ItemSiteProdMaster."BOM No.";
+                            exit(true);
+                        end;
+                        exit(false);
+                    end;
+                }
+                field("New Production BOM"; Rec."New Production BOM")
+                {
+                    /*trigger OnLookup(var Text: Text): Boolean
+                     var
+                         PageItemSiteProdMaster: Page "RV Item Site Production Master";
+                         ItemSiteProdMaster: record "RV Item Site Production Master";
+                     begin
+                         ItemSiteProdMaster.SetRange("Item No.", Rec."Item No.");
+                         PageItemSiteProdMaster.SetTableView(ItemSiteProdMaster);
+                         PageItemSiteProdMaster.LookupMode(true);
+                         if PageItemSiteProdMaster.RunModal() = action::LookupOK then begin
+                             PageItemSiteProdMaster.GetRecord(ItemSiteProdMaster);
+                             rec."New Site Code" := ItemSiteProdMaster."Site Code";
+                             rec."New Routing No." := ItemSiteProdMaster."Routing No.";
+                             Text := ItemSiteProdMaster."BOM No.";
+                             exit(true);
+                         end;
+                         exit(false);
+                     end;*/
+                }
                 field("Starting Date"; Rec."Starting Date")
                 {
                     Editable = false;
@@ -71,27 +150,27 @@ page 50604 "RV MPS Rescheduling Worksheet"
                 field("New Ending Date"; Rec."New Ending Date")
                 {
                 }
-                field("Work Center No. 1"; Rec."Work Center No. 1")
-                {
-                    Editable = false;
-                }
-                field("Work Center No. 2"; Rec."Work Center No. 2")
-                {
-                    Editable = false;
-                }
-                field("Work Center No. 3"; Rec."Work Center No. 3")
-                {
-                    Editable = false;
-                }
-                field("New Work Center No. 1"; Rec."New Work Center No. 1")
-                {
-                }
-                field("New Work Center No. 2"; Rec."New Work Center No. 2")
-                {
-                }
-                field("New Work Center No. 3"; Rec."New Work Center No. 3")
-                {
-                }
+                // field("Work Center No. 1"; Rec."Work Center No. 1")
+                // {
+                //     Editable = false;
+                // }
+                // field("Work Center No. 2"; Rec."Work Center No. 2")
+                // {
+                //     Editable = false;
+                // }
+                // field("Work Center No. 3"; Rec."Work Center No. 3")
+                // {
+                //     Editable = false;
+                // }
+                // field("New Work Center No. 1"; Rec."New Work Center No. 1")
+                // {
+                // }
+                // field("New Work Center No. 2"; Rec."New Work Center No. 2")
+                // {
+                // }
+                // field("New Work Center No. 3"; Rec."New Work Center No. 3")
+                // {
+                // }
                 field("Planning Status"; Rec."Planning Status")
                 {
                 }
@@ -213,12 +292,18 @@ page 50604 "RV MPS Rescheduling Worksheet"
         MPSReschedulingMgt.OpenJnl(CurrentJnlBatchName, Rec);
     end;
 
+    trigger OnAfterGetRecord()
+    begin
+        Rec.CalcFields("RV Site");
+    end;
+
     var
         CurrentJnlBatchName: Code[10];
         MPSReschedulingMgt: Codeunit "RV MPS Rescheduling Management";
         OpenedFromBatch: Boolean;
         TempExcelBuffer: Record "Excel Buffer" temporary;
         ConfirmDeleteMsg: Label 'There is existing MPS Rescheduling data for this batch. Do you want to delete it and collect new data?';
+        ItemSiteProdMaster: Record "RV Item Site Production Master";
 
     local procedure CurrentJnlBatchNameOnAfterVali()
     begin
@@ -248,14 +333,20 @@ page 50604 "RV MPS Rescheduling Worksheet"
             TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Ending Date"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
             TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Due Date"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
             TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Routing No."), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Work Center No. 1"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Work Center No. 2"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Work Center No. 3"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Production BOM"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Site Code"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+
+            // TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Work Center No. 1"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+            // TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Work Center No. 2"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+            // TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Work Center No. 3"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Routing No."), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Production BOM"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Site Code"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
             TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Starting Date"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
             TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Ending Date"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Work Center No. 1"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Work Center No. 2"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-            TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Work Center No. 3"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+            // TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Work Center No. 1"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+            // TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Work Center No. 2"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+            // TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("New Work Center No. 3"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
             TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Planning Status"), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
             TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("Sales Order No."), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
             TempExcelBuffer.AddColumn(MPSReschedulingLine.FieldCaption("FG Prod. Order No."), false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
@@ -271,14 +362,19 @@ page 50604 "RV MPS Rescheduling Worksheet"
                 TempExcelBuffer.AddColumn(MPSReschedulingLine."Ending Date", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Date);
                 TempExcelBuffer.AddColumn(MPSReschedulingLine."Due Date", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Date);
                 TempExcelBuffer.AddColumn(MPSReschedulingLine."Routing No.", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(MPSReschedulingLine."Work Center No. 1", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(MPSReschedulingLine."Work Center No. 2", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(MPSReschedulingLine."Work Center No. 3", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                // TempExcelBuffer.AddColumn(MPSReschedulingLine."Work Center No. 1", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                // TempExcelBuffer.AddColumn(MPSReschedulingLine."Work Center No. 2", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                // TempExcelBuffer.AddColumn(MPSReschedulingLine."Work Center No. 3", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                TempExcelBuffer.AddColumn(MPSReschedulingLine."Production BOM", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                TempExcelBuffer.AddColumn(MPSReschedulingLine."Site Code", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                TempExcelBuffer.AddColumn(MPSReschedulingLine."New Routing No.", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                TempExcelBuffer.AddColumn(MPSReschedulingLine."New Production BOM", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                TempExcelBuffer.AddColumn(MPSReschedulingLine."New Site Code", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
                 TempExcelBuffer.AddColumn(MPSReschedulingLine."New Starting Date", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Date);
                 TempExcelBuffer.AddColumn(MPSReschedulingLine."New Ending Date", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Date);
-                TempExcelBuffer.AddColumn(MPSReschedulingLine."New Work Center No. 1", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(MPSReschedulingLine."New Work Center No. 2", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-                TempExcelBuffer.AddColumn(MPSReschedulingLine."New Work Center No. 3", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                // TempExcelBuffer.AddColumn(MPSReschedulingLine."New Work Center No. 1", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                // TempExcelBuffer.AddColumn(MPSReschedulingLine."New Work Center No. 2", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+                // TempExcelBuffer.AddColumn(MPSReschedulingLine."New Work Center No. 3", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
                 TempExcelBuffer.AddColumn(MPSReschedulingLine."Planning Status", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
                 TempExcelBuffer.AddColumn(MPSReschedulingLine."Sales Order No.", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
                 TempExcelBuffer.AddColumn(MPSReschedulingLine."FG Prod. Order No.", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
@@ -335,10 +431,8 @@ page 50604 "RV MPS Rescheduling Worksheet"
         if TempExcelBuffer.FindLast() then begin
             MaxRowNo := TempExcelBuffer."Row No.";
         end;
-
         for RowNo := 2 to MaxRowNo do begin
             Evaluate(ImportGUID, GetValueAtCell(RowNo, 3));
-
             if MPSReschedulingLine.GetBySystemId(ImportGUID) then begin
                 ImportBatchName := GetValueAtCell(RowNo, 1);
                 Evaluate(ImportBatchLineNo, GetValueAtCell(RowNo, 2));
@@ -360,35 +454,41 @@ page 50604 "RV MPS Rescheduling Worksheet"
                     Error(NonEditMsg, ImportBatchName, ImportBatchLineNo);
                 if MPSReschedulingLine."Routing No." <> GetValueAtCell(RowNo, 10) then
                     Error(NonEditMsg, ImportBatchName, ImportBatchLineNo);
-                if MPSReschedulingLine."Work Center No. 1" <> GetValueAtCell(RowNo, 11) then
+                // if MPSReschedulingLine."Work Center No. 1" <> GetValueAtCell(RowNo, 11) then
+                //     Error(NonEditMsg, ImportBatchName, ImportBatchLineNo);
+                // if MPSReschedulingLine."Work Center No. 2" <> GetValueAtCell(RowNo, 12) then
+                //     Error(NonEditMsg, ImportBatchName, ImportBatchLineNo);
+                // if MPSReschedulingLine."Work Center No. 3" <> GetValueAtCell(RowNo, 13) then
+                //     Error(NonEditMsg, ImportBatchName, ImportBatchLineNo);
+                if MPSReschedulingLine."Production BOM" <> GetValueAtCell(RowNo, 11) then
                     Error(NonEditMsg, ImportBatchName, ImportBatchLineNo);
-                if MPSReschedulingLine."Work Center No. 2" <> GetValueAtCell(RowNo, 12) then
+                if MPSReschedulingLine."Site Code" <> GetValueAtCell(RowNo, 12) then
                     Error(NonEditMsg, ImportBatchName, ImportBatchLineNo);
-                if MPSReschedulingLine."Work Center No. 3" <> GetValueAtCell(RowNo, 13) then
-                    Error(NonEditMsg, ImportBatchName, ImportBatchLineNo);
-                Evaluate(MPSReschedulingLine."New Starting Date", GetValueAtCell(RowNo, 14));
-                Evaluate(MPSReschedulingLine."New Ending Date", GetValueAtCell(RowNo, 15));
+                MPSReschedulingLine."New Routing No." := GetValueAtCell(RowNo, 13);
+                MPSReschedulingLine."New Production BOM" := GetValueAtCell(RowNo, 14);
+                MPSReschedulingLine."New Site Code" := GetValueAtCell(RowNo, 15);
+                Evaluate(MPSReschedulingLine."New Starting Date", GetValueAtCell(RowNo, 16));
+                Evaluate(MPSReschedulingLine."New Ending Date", GetValueAtCell(RowNo, 17));
                 if MPSReschedulingLine."New Starting Date" > MPSReschedulingLine."New Ending Date" then
                     Error(InvalidStartDateMsg, ImportBatchName, ImportBatchLineNo);
                 if MPSReschedulingLine."New Ending Date" > MPSReschedulingLine."Due Date" then
                     Error(InvalidEndDateMsg, ImportBatchName, ImportBatchLineNo);
 
-                NewWK1 := GetValueAtCell(RowNo, 16);
-                NewWK2 := GetValueAtCell(RowNo, 17);
-                NewWK3 := GetValueAtCell(RowNo, 18);
+                // NewWK1 := GetValueAtCell(RowNo, 16);
+                // NewWK2 := GetValueAtCell(RowNo, 17);
+                // NewWK3 := GetValueAtCell(RowNo, 18);
+                // if NewWK1 = '' then
+                //     if (NewWK2 <> '')
+                //     or (NewWK3 <> '') then
+                //         Error(ErrNewWK1Blank, ImportBatchName, ImportBatchLineNo);
+                // if NewWK2 = '' then
+                //     if NewWK3 <> '' then
+                //         Error(ErrNewWK2Blank, ImportBatchName, ImportBatchLineNo);
 
-                if NewWK1 = '' then
-                    if (NewWK2 <> '')
-                    or (NewWK3 <> '') then
-                        Error(ErrNewWK1Blank, ImportBatchName, ImportBatchLineNo);
-                if NewWK2 = '' then
-                    if NewWK3 <> '' then
-                        Error(ErrNewWK2Blank, ImportBatchName, ImportBatchLineNo);
-
-                MPSReschedulingLine."New Work Center No. 1" := NewWK1;
-                MPSReschedulingLine."New Work Center No. 2" := NewWK2;
-                MPSReschedulingLine."New Work Center No. 3" := NewWK3;
-                Evaluate(MPSReschedulingLine."Planning Status", GetValueAtCell(RowNo, 19));
+                // MPSReschedulingLine."New Work Center No. 1" := NewWK1;
+                // MPSReschedulingLine."New Work Center No. 2" := NewWK2;
+                // MPSReschedulingLine."New Work Center No. 3" := NewWK3;
+                Evaluate(MPSReschedulingLine."Planning Status", GetValueAtCell(RowNo, 18));
                 MPSReschedulingLine.Modify();
             end else
                 Error(NoFindMsg, GetValueAtCell(RowNo, 1), GetValueAtCell(RowNo, 2));
@@ -415,6 +515,7 @@ page 50604 "RV MPS Rescheduling Worksheet"
         if MPSReschedulingLine.FindSet() then
             repeat
                 Commit();
+                ClearLastError();
                 if not MPSReschedulingUpdateBatch.Run(MPSReschedulingLine) then begin
                     MPSReschedulingLine.Status := MPSReschedulingLine.Status::Error;
                     MPSReschedulingLine."Error Message" := getLastErrorText();
