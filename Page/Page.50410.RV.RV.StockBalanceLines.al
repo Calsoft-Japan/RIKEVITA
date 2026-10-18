@@ -47,11 +47,11 @@ page 50410 "RV.Stock Balance Lines"
                 {
                     ToolTip = 'Specifies the value of the Site field.', Comment = '%';
                 }
-                field(Site; Rec.Site)
+                field(Site; Rec."Shortcut Dimension 1 Code")
                 {
                     ToolTip = 'Specifies the value of the Site field.', Comment = '%';
                 }
-                field("Owner Code"; Rec."Owner Code")
+                field("Owner Code"; Rec."Shortcut Dimension 2 Code")
                 {
                     ToolTip = 'Specifies the inventory owner dimension value.';
                 }

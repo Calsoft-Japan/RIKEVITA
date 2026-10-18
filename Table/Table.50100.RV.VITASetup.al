@@ -315,9 +315,9 @@ table 50100 "RV RIKEVITA Setup"
                 "Updated Warehouse Entry No." := 0;
             end;
         }
-        field(55; "Owner Dim. Code"; Code[20])
+        field(55; "Internal Use Dim. Code"; Code[20])
         {
-            Caption = 'Owner Dimension Code';
+            Caption = 'Internal Use Dimension Code';
             TableRelation = Dimension;
             trigger OnValidate()
             begin

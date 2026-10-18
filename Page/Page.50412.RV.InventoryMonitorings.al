@@ -1,4 +1,4 @@
-page 50412 "RV BackedDate Stock Names"
+page 50412 "RV Inventory Monitorings"
 {
     ApplicationArea = All;
     Caption = 'Inventory Monitoring';
@@ -48,7 +48,7 @@ page 50412 "RV BackedDate Stock Names"
 
                 trigger OnAction()
                 var
-                    InventoryAvailble: Page "RV BackedDate Stock";
+                    InventoryAvailble: Page "RV Inventory Monitoring";
                 begin
                     InventoryAvailble.SetRecord(Rec);
                     InventoryAvailble.Run();

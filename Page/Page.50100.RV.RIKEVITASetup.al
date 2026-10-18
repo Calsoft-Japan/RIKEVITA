@@ -18,7 +18,7 @@ page 50100 "RIKEVITA Setup"///
     DeleteAllowed = false;
     InsertAllowed = false;
     Editable = true;
-
+    Permissions = tabledata "Warehouse Entry" = m;
     layout
     {
         area(Content)
@@ -130,10 +130,10 @@ page 50100 "RIKEVITA Setup"///
                     Description = 'SITE Dimension Code';
                     ApplicationArea = All;
                 }
-                field("Owner Dimension Code"; Rec."Owner Dim. Code")
+                field("Internal Use Dimension Code"; Rec."Internal Use Dim. Code")
                 {
                     ApplicationArea = All;
-                    ToolTip = 'Specifies the global dimension code used for inventory ownership.';
+                    ToolTip = 'Specifies the global dimension code used for internal use.';
                 }
                 field("Holding Period for Air"; Rec."Holding Period for Air")
                 {
@@ -385,6 +385,20 @@ page 50100 "RIKEVITA Setup"///
     {
         area(Processing)
         {
+
+            action("Refresh WE Dimensions")
+            {
+                ApplicationArea = All;
+                Caption = 'Refresh WE Dimensions  ';
+                Description = 'Reupdate Warehouse Entries Dimension information';
+                Image = RefreshLines;
+
+                trigger OnAction()
+                var
+                begin
+                    UpdateSITECODE
+                end;
+            }
             group(ExportExcel)
             {
                 Description = 'FDD017';
@@ -498,5 +512,81 @@ page 50100 "RIKEVITA Setup"///
             Message('Template %1 was successfully uploaded and saved.', FileName);
         end else
             Message('The upload was cancelled.');
+    end;
+
+    local procedure UpdateSITECODE()
+    var
+        WarehouseEntry: Record "Warehouse Entry";
+        WarehouseEntry1: Record "Warehouse Entry";
+        WhseItemEntryRelation: Record "Whse. Item Entry Relation";
+        ItemLedgerEntry: Record "Item Ledger Entry";
+        LastProcessedEntryNo: Integer;
+        DimensionValue1: Code[20];
+        DimensionValue2: Code[20];
+        FoundItemLedgerEntry: Boolean;
+    begin
+        //ValidateConfiguredDimensions();
+        WarehouseEntry.Reset();
+        if WarehouseEntry.FindSet(true) then begin
+            repeat
+                DimensionValue1 := '';
+                DimensionValue2 := '';
+                FoundItemLedgerEntry := false;
+                ItemLedgerEntry.Reset();
+                ItemLedgerEntry.SetRange("Document No.", warehouseentry."Reference No.");
+                ItemLedgerEntry.SetRange("Item No.", WarehouseEntry."Item No.");
+                ItemLedgerEntry.SetRange("Location Code", WarehouseEntry."Location Code");
+                ItemLedgerEntry.SetRange("Variant Code", WarehouseEntry."Variant Code");
+                ItemLedgerEntry.SetRange("Lot No.", WarehouseEntry."Lot No.");
+                ItemLedgerEntry.SetRange("Quantity", WarehouseEntry."Qty. (Base)");
+                if ItemLedgerEntry.FindSet() then
+                    repeat
+                        DimensionValue1 := ItemLedgerEntry."Global Dimension 1 Code";
+                        DimensionValue2 := ItemLedgerEntry."Global Dimension 2 Code";
+                        FoundItemLedgerEntry := true;
+                    until (ItemLedgerEntry.Next() = 0) or FoundItemLedgerEntry;
+                if not FoundItemLedgerEntry then begin
+                    if warehouseentry."Qty. (Base)" > 0 then begin
+                        WarehouseEntry1.reset;
+                        WarehouseEntry1.SetRange("Reference No.", WarehouseEntry."Reference No.");
+                        WarehouseEntry1.setRange("Lot No.", WarehouseEntry."Lot No.");
+                        warehouseEntry1.setRange("Item No.", WarehouseEntry."Item No.");
+                        warehouseEntry1.setRange("Location Code", WarehouseEntry."Location Code");
+                        warehouseEntry1.SetRange("Variant Code", WarehouseEntry."Variant Code");
+                        if WarehouseEntry1.FindFirst() then begin
+                            DimensionValue1 := WarehouseEntry1."RV_Dimension 1 Code";
+                            DimensionValue2 := WarehouseEntry1."RV_Dimension 2 Code";
+                            FoundItemLedgerEntry := true;
+                        end;
+                    end else begin
+                        WarehouseEntry1.reset;
+                        WarehouseEntry1.setRange("Lot No.", WarehouseEntry."Lot No.");
+                        warehouseEntry1.setRange("Item No.", WarehouseEntry."Item No.");
+                        warehouseEntry1.setRange("Location Code", WarehouseEntry."Location Code");
+                        warehouseEntry1.SetRange("Variant Code", WarehouseEntry."Variant Code");
+                        warehouseEntry1.setRange("Bin Code", WarehouseEntry."Bin Code");
+                        warehouseEntry1.SetFilter("Entry No.", '<%1', WarehouseEntry."Entry No.");
+                        warehouseEntry1.SetFilter("Quantity", '>0');
+                        if WarehouseEntry1.FindLast() then begin
+                            DimensionValue1 := WarehouseEntry1."RV_Dimension 1 Code";
+                            DimensionValue2 := WarehouseEntry1."RV_Dimension 2 Code";
+                            FoundItemLedgerEntry := true;
+                        end;
+                    end;
+                end;
+
+                if FoundItemLedgerEntry then begin
+                    WarehouseEntry."RV_Dimension 1 Code" := DimensionValue1;
+                    WarehouseEntry."RV_Dimension 2 Code" := DimensionValue2;
+                    WarehouseEntry.Modify(true);
+                end;
+                LastProcessedEntryNo := WarehouseEntry."Entry No.";
+            until WarehouseEntry.Next() = 0;
+
+            Rec."Updated Warehouse Entry No." := LastProcessedEntryNo;
+            Rec.Modify(true);
+            COMMIT;
+            message('Warehouse Entries have been updated with the latest dimension values. Last processed Entry No.: %1', LastProcessedEntryNo);
+        end;
     end;
 }

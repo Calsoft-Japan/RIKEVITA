@@ -35,10 +35,12 @@ table 50410 "RV.Available Invy. Line"
             Caption = 'Item Description 2';
         }
 
-        field(7; "Site"; Code[20])
+        field(7; "Shortcut Dimension 1 Code"; Code[20])
         {
-            Caption = 'Site';
-            TableRelation = "Dimension Value";
+            CaptionClass = '1,2,1';
+            ToolTip = 'Specifies the code for Shortcut Dimension 1, which is one of two global dimension codes that you set up in the General Ledger Setup window.';
+            TableRelation = "Dimension Value".Code where("Global Dimension No." = const(1),
+                                                          Blocked = const(false));
         }
         field(8; "Segment"; Code[20])
         {
@@ -255,10 +257,12 @@ table 50410 "RV.Available Invy. Line"
             Caption = 'Water Amt.';
             AutoFormatType = 1;
         }
-        field(131; "Owner Code"; Code[20])
+        field(131; "Shortcut Dimension 2 Code"; Code[20])
         {
-            Caption = 'Owner Code';
-            TableRelation = "Dimension Value".Code;
+            CaptionClass = '1,2,2';
+            Caption = 'Shortcut Dimension 2 Code';
+            TableRelation = "Dimension Value".Code where("Global Dimension No." = const(2),
+                                                          Blocked = const(false));
         }
 
     }

@@ -197,7 +197,10 @@ report 50601 "RV Collect MPS Data"
         ResEntryPlus: Record "Reservation Entry";
         ResEntryMinus: Record "Reservation Entry";
         TransferLine: Record "Transfer Line";
+        VisitedReservationEntry: Record "Reservation Entry" temporary;
     begin
+        VisitedReservationEntry.Reset();
+        VisitedReservationEntry.DeleteAll();
         ResEntryPlus.Reset();
         ResEntryPlus.setrange("Source Type", 5406);
         ResEntryPlus.SetRange("source subtype", ProdLine.Status);
@@ -218,19 +221,19 @@ report 50601 "RV Collect MPS Data"
                     case ResEntryMinus."Source Type" of
                         Database::"Requisition Line":
                             begin
-                                FindTransferLineReservationEntry(ResEntryMinus);
+                                FindTransferLineReservationEntry(ResEntryMinus, VisitedReservationEntry);
                             end;
                         Database::"Transfer Line":
                             begin
-                                FindTransferLineReservationEntry(ResEntryMinus);
+                                FindTransferLineReservationEntry(ResEntryMinus, VisitedReservationEntry);
                             end;
                         Database::"Prod. Order Component":
                             begin
-                                FindTransferLineReservationEntry(ResEntryMinus);
+                                FindTransferLineReservationEntry(ResEntryMinus, VisitedReservationEntry);
                             end;
                         database::"Planning Component":
                             begin
-                                FindTransferLineReservationEntry(ResEntryMinus);
+                                FindTransferLineReservationEntry(ResEntryMinus, VisitedReservationEntry);
                             end;
                         Database::"Sales Line":
                             begin
@@ -255,7 +258,9 @@ report 50601 "RV Collect MPS Data"
         end;
     end;
 
-    procedure FindTransferLineReservationEntry(var TransResEntryMinus: Record "Reservation Entry")
+    procedure FindTransferLineReservationEntry(
+        var TransResEntryMinus: Record "Reservation Entry";
+        var VisitedReservationEntry: Record "Reservation Entry" temporary)
     var
         ResEntryPlus: Record "Reservation Entry";
         ResEntryMinus: Record "Reservation Entry";
@@ -263,6 +268,14 @@ report 50601 "RV Collect MPS Data"
         TransferLine: Record "Transfer Line";
         ProdOrderLine: Record "Prod. Order Line";
     begin
+        if VisitedReservationEntry.Get(TransResEntryMinus."Entry No.", TransResEntryMinus.Positive) then
+            exit;
+
+        VisitedReservationEntry.Init();
+        VisitedReservationEntry."Entry No." := TransResEntryMinus."Entry No.";
+        VisitedReservationEntry.Positive := TransResEntryMinus.Positive;
+        VisitedReservationEntry.Insert();
+
         ResEntryPlus.Reset();
         case TransResEntryMinus."Source Type" of
             5741://Transfer Order Line
@@ -328,21 +341,21 @@ report 50601 "RV Collect MPS Data"
                                         case ReqLineDataType."Ref. Order Type" of
                                             //just do tranfer order case, because may be the production order has been created but transfer order is not created.
                                             ReqLineDataType."Ref. Order Type"::Transfer:
-                                                FindTransferLineReservationEntry(ResEntryMinus);
+                                                FindTransferLineReservationEntry(ResEntryMinus, VisitedReservationEntry);
                                         end;
                                     end;
                                 end;
                             Database::"Transfer Line":
                                 begin
-                                    FindTransferLineReservationEntry(ResEntryMinus);
+                                    FindTransferLineReservationEntry(ResEntryMinus, VisitedReservationEntry);
                                 end;
                             Database::"Prod. Order Component":
                                 begin
-                                    FindTransferLineReservationEntry(ResEntryMinus);
+                                    FindTransferLineReservationEntry(ResEntryMinus, VisitedReservationEntry);
                                 end;
                             database::"Planning Component":
                                 begin
-                                    FindTransferLineReservationEntry(ResEntryMinus);
+                                    FindTransferLineReservationEntry(ResEntryMinus, VisitedReservationEntry);
                                 end;
                             Database::"Sales Line":
                                 begin

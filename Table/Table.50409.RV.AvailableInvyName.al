@@ -1,8 +1,8 @@
 table 50409 "RV Invy. Available Name"
 {
     Caption = 'Invy. Available Name';
-    DrillDownPageId = "RV BackedDate Stock Names";
-    LookupPageId = "RV BackedDate Stock Names";
+    DrillDownPageId = "RV Inventory Monitorings";
+    LookupPageId = "RV Inventory Monitorings";
     DataCaptionFields = Name, Description;
     DataClassification = CustomerContent;
 
@@ -22,12 +22,6 @@ table 50409 "RV Invy. Available Name"
             Caption = 'View By';
         }
 
-        field(4; "Site"; Code[20])
-        {
-            Caption = 'Site';
-            tableRelation = "Dimension Value" where("Global Dimension No." = const(2));
-        }
-
         field(5; "Inventory Valuation Date"; Date)
         {
             Caption = 'Inventory Valuation Date';
@@ -36,6 +30,33 @@ table 50409 "RV Invy. Available Name"
         {
             Caption = 'Item Filter';
         }
+        field(7; "Location Filter"; Text[250])
+        {
+            Caption = 'Location Filter';
+        }
+        field(8; "Stock Status"; Text[250])
+        {
+            Caption = 'Stock Status';
+        }
+
+        field(10; "Shortcut Dimension 1 Code"; Text[250])
+        {
+            CaptionClass = '1,2,1';
+            Caption = 'Shortcut Dimension 1 Code';
+            ToolTip = 'Specifies the code for Shortcut Dimension 1, which is one of two global dimension codes that you set up in the General Ledger Setup window.';
+            TableRelation = "Dimension Value".Code where("Global Dimension No." = const(1),
+                                                          Blocked = const(false));
+        }
+        field(11; "Shortcut Dimension 2 Code"; Text[250])
+        {
+            CaptionClass = '1,2,2';
+            Caption = 'Shortcut Dimension 2 Code';
+            ToolTip = 'Specifies the code for Shortcut Dimension 2, which is one of two global dimension codes that you set up in the General Ledger Setup window.';
+            TableRelation = "Dimension Value".Code where("Global Dimension No." = const(2),
+                                                          Blocked = const(false));
+
+        }
+
 
     }
 
