@@ -117,11 +117,36 @@ report 50204 "RV Posted Sales Invoice(Local)"
                 trigger OnAfterGetRecord()
                 var
                     RecItem: Record Item;
+                    ItemReference: Record "Item Reference";
                 begin
                     RecItem.Get("No.");
                     Description := RecItem.Description;
                     Description2 := RecItem."Description 2";
                     BaseUnitofMeasure := RecItem."RV_Supp. Unit of Measure Code";
+
+                    if ItemDescriptionOption = 1 then begin
+                        ItemReference.Reset();
+                        ItemReference.SetRange("Item No.", "No.");
+                        ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                        ItemReference.SetFilter("Reference Type No.", '');
+                        if ItemReference.FindFirst() then begin
+                            Description := ItemReference.Description;
+                            Description2 := ItemReference."Description 2";
+                        end else begin
+                            Error(StrSubstNo(ErrorMessage, "No.", ''));
+                        end;
+                    end else if ItemDescriptionOption = 2 then begin
+                        ItemReference.Reset();
+                        ItemReference.SetRange("Item No.", "No.");
+                        ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                        ItemReference.SetRange("Reference Type No.", "Sell-to Customer No.");
+                        if ItemReference.FindFirst() then begin
+                            Description := ItemReference.Description;
+                            Description2 := ItemReference."Description 2";
+                        end else begin
+                            Error(StrSubstNo(ErrorMessage, "No.", "Sell-to Customer No."));
+                        end;
+                    end;
                 end;
 
             }
@@ -218,6 +243,12 @@ report 50204 "RV Posted Sales Invoice(Local)"
                         Caption = 'Show UUID as QR Code';
                         ApplicationArea = All;
                     }
+                    field(ItemDescriptionOption; ItemDescriptionOption)
+                    {
+                        Caption = 'Item Description';
+                        ApplicationArea = All;
+                        OptionCaption = 'Default,Product standard,Customer Specification';
+                    }
                 }
             }
         }
@@ -236,6 +267,8 @@ report 50204 "RV Posted Sales Invoice(Local)"
         OrderNo: Text;
         QRCode: Boolean;
         QRCodeText: Text;
+        ItemDescriptionOption: Option;
+        ErrorMessage: Label 'Please add Description and Description 2 in Item Reference for Item: %1 with Reference Type: Customer, Reference Type No.: %2.';
 
     trigger OnPreReport()
     begin

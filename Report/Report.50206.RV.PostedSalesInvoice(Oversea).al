@@ -147,7 +147,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                     var
                         RecItem: Record Item;
                         RecSalesShipmentHeader: Record "Sales Shipment Header";
-                        RecItemReference: Record "Item Reference";
+                        ItemReference: Record "Item Reference";
                         RecSalesShipmentLine: Record "Sales Shipment Line";
                         RecPostedWhseShipmentLine: Record "Posted Whse. Shipment Line";
                         RecWarehousePackingInfo: Record "RV Warehouse Packing Info.";
@@ -184,15 +184,31 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                             LineAmount := Amount;
                         end;
 
-                        RecItemReference.Reset();
-                        RecItemReference.SetRange("Item No.", "No.");
-                        RecItemReference.SetRange("Reference Type No.", SalesInvoiceHeader."Sell-to Customer No.");
-                        if RecItemReference.FindFirst() then begin
-                            Description := RecItemReference.Description;
-                            Description2 := RecItemReference."Description 2";
-                        end else begin
-                            Description := SalesInvoiceLine.Description;
-                            Description2 := SalesInvoiceLine."Description 2";
+                        Description := SalesInvoiceLine.Description;
+                        Description2 := SalesInvoiceLine."Description 2";
+
+                        if ItemDescriptionOption = 1 then begin
+                            ItemReference.Reset();
+                            ItemReference.SetRange("Item No.", "No.");
+                            ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                            ItemReference.SetFilter("Reference Type No.", '');
+                            if ItemReference.FindFirst() then begin
+                                Description := ItemReference.Description;
+                                Description2 := ItemReference."Description 2";
+                            end else begin
+                                Error(StrSubstNo(ErrorMessage, "No.", ''));
+                            end;
+                        end else if ItemDescriptionOption = 2 then begin
+                            ItemReference.Reset();
+                            ItemReference.SetRange("Item No.", "No.");
+                            ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                            ItemReference.SetRange("Reference Type No.", "Sell-to Customer No.");
+                            if ItemReference.FindFirst() then begin
+                                Description := ItemReference.Description;
+                                Description2 := ItemReference."Description 2";
+                            end else begin
+                                Error(StrSubstNo(ErrorMessage, "No.", "Sell-to Customer No."));
+                            end;
                         end;
 
                         RecSalesShipmentLine.Reset();
@@ -373,6 +389,12 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                         Caption = 'Show UUID as QR Code';
                         ApplicationArea = All;
                     }
+                    field(ItemDescriptionOption; ItemDescriptionOption)
+                    {
+                        Caption = 'Item Description';
+                        ApplicationArea = All;
+                        OptionCaption = 'Default,Product standard,Customer Specification';
+                    }
                 }
             }
         }
@@ -410,6 +432,8 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
         SalesListComment: Text;
         CustomerChargeType: Enum "RV Charge Type";
         IfShowFOBPrice: Boolean;
+        ItemDescriptionOption: Option;
+        ErrorMessage: Label 'Please add Description and Description 2 in Item Reference for Item: %1 with Reference Type: Customer, Reference Type No.: %2.';
 
     trigger OnPreReport()
     begin

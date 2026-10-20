@@ -113,6 +113,7 @@ report 50200 "RV Delivery Order Report"
                     RecItem: Record Item;
                     ItemUOM: Record "Item Unit of Measure";
                     QtyperUnitofMeasure: Decimal;
+                    ItemReference: Record "Item Reference";
                 begin
                     LotNo := '';
                     QuantityKGValue := '';
@@ -125,6 +126,30 @@ report 50200 "RV Delivery Order Report"
                         end;
                         Description := RecItem.Description;
                         Description2 := RecItem."Description 2";
+                    end;
+
+                    if ItemDescriptionOption = 1 then begin
+                        ItemReference.Reset();
+                        ItemReference.SetRange("Item No.", SalesShipmentLine."No.");
+                        ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                        ItemReference.SetFilter("Reference Type No.", '');
+                        if ItemReference.FindFirst() then begin
+                            Description := ItemReference.Description;
+                            Description2 := ItemReference."Description 2";
+                        end else begin
+                            Error(StrSubstNo(ErrorMessage, SalesShipmentLine."No.", ''));
+                        end;
+                    end else if ItemDescriptionOption = 2 then begin
+                        ItemReference.Reset();
+                        ItemReference.SetRange("Item No.", SalesShipmentLine."No.");
+                        ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                        ItemReference.SetRange("Reference Type No.", "Sell-to Customer No.");
+                        if ItemReference.FindFirst() then begin
+                            Description := ItemReference.Description;
+                            Description2 := ItemReference."Description 2";
+                        end else begin
+                            Error(StrSubstNo(ErrorMessage, SalesShipmentLine."No.", "Sell-to Customer No."));
+                        end;
                     end;
 
                     ItemBUOM := RecItem."RV_Supp. Unit of Measure Code";
@@ -194,7 +219,12 @@ report 50200 "RV Delivery Order Report"
                 group(Options)
                 {
                     Caption = 'Options';
-
+                    field(ItemDescriptionOption; ItemDescriptionOption)
+                    {
+                        Caption = 'Item Description';
+                        ApplicationArea = All;
+                        OptionCaption = 'Default,Product standard,Customer Specification';
+                    }
                 }
             }
         }
@@ -213,6 +243,8 @@ report 50200 "RV Delivery Order Report"
         PackageInfo: Text;
         ItemBUOM: Text;
         CerfiticateNo: Text;
+        ItemDescriptionOption: Option;
+        ErrorMessage: Label 'Please add Description and Description 2 in Item Reference for Item: %1 with Reference Type: Customer, Reference Type No.: %2.';
 
     trigger OnPreReport()
     begin

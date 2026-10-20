@@ -180,6 +180,7 @@ report 50202 "RV Packing List Report"
                         TempNo: Integer;
                         oldContainerNo: Text;
                         TempOrderNo: Integer;
+                        ItemReference: Record "Item Reference";
                     begin
                         chr10 := 10;
                         LotNoNumber := 0;
@@ -197,6 +198,30 @@ report 50202 "RV Packing List Report"
                             BaseUnitofMeasure := RecItem."RV_Supp. Unit of Measure Code";
                             PackageInfo := StrSubstNo('(%1 %2 X %3 %4)',
                             "Contents Per Package", "Contents UOM", "No. of Packages", BaseUnitofMeasure);
+                        end;
+
+                        if ItemDescriptionOption = 1 then begin
+                            ItemReference.Reset();
+                            ItemReference.SetRange("Item No.", "Item No.");
+                            ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                            ItemReference.SetFilter("Reference Type No.", '');
+                            if ItemReference.FindFirst() then begin
+                                Description := ItemReference.Description;
+                                Description2 := ItemReference."Description 2";
+                            end else begin
+                                Error(StrSubstNo(ErrorMessage, "Item No.", ''));
+                            end;
+                        end else if ItemDescriptionOption = 2 then begin
+                            ItemReference.Reset();
+                            ItemReference.SetRange("Item No.", "Item No.");
+                            ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                            ItemReference.SetRange("Reference Type No.", "Sell-to Customer No.");
+                            if ItemReference.FindFirst() then begin
+                                Description := ItemReference.Description;
+                                Description2 := ItemReference."Description 2";
+                            end else begin
+                                Error(StrSubstNo(ErrorMessage, "Item No.", "Sell-to Customer No."));
+                            end;
                         end;
 
                         ItemSymbolSetting.Reset();
@@ -363,7 +388,12 @@ report 50202 "RV Packing List Report"
                 group(Options)
                 {
                     Caption = 'Options';
-
+                    field(ItemDescriptionOption; ItemDescriptionOption)
+                    {
+                        Caption = 'Item Description';
+                        ApplicationArea = All;
+                        OptionCaption = 'Default,Product standard,Customer Specification';
+                    }
                 }
             }
         }
@@ -396,6 +426,8 @@ report 50202 "RV Packing List Report"
         OrderNo: Text;
         WarehouseComment: Text;
         chr10: Char;
+        ItemDescriptionOption: Option;
+        ErrorMessage: Label 'Please add Description and Description 2 in Item Reference for Item: %1 with Reference Type: Customer, Reference Type No.: %2.';
 
     trigger OnPreReport()
     begin
