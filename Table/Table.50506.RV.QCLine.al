@@ -288,7 +288,7 @@ table 50506 "RV QC Line"
     var
         RemainingText: Text;
     begin
-        RemainingText := DelChr(InputValue, '=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789');
+        RemainingText := DelChr(InputValue, '=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.-');
         if RemainingText <> '' then
             Error('Please enter a Alphanumeric.');
     end;

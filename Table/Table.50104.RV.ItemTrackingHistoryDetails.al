@@ -17,7 +17,7 @@ table 50104 "RV Item Tracking History Dtl."
         {
             Caption = 'Sales Order Line No.';
         }
-        field(3; "Lot No."; Code[30])
+        field(3; "Lot No."; Code[50])
         {
             Caption = 'Lot No.';
         }

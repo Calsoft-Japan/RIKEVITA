@@ -80,10 +80,25 @@ table 50502 "RV QC Specification Line"
         field(7; "Minimum Value"; Text[50])
         {
             Caption = 'Minimum Value';
+
+            trigger OnValidate()
+            begin
+                if "Type" = "Type"::Alphanumeric then
+                    ValidateAlphanumeric("Minimum Value")
+                else if "Type" = "Type"::Numeric then
+                    ValidateNumeric("Minimum Value");
+            end;
         }
         field(8; "Maximum Value"; Text[50])
         {
             Caption = 'Maximum Value';
+            trigger OnValidate()
+            begin
+                if "Type" = "Type"::Alphanumeric then
+                    ValidateAlphanumeric("Maximum Value")
+                else if "Type" = "Type"::Numeric then
+                    ValidateNumeric("Maximum Value");
+            end;
         }
     }
     keys
@@ -139,6 +154,28 @@ table 50502 "RV QC Specification Line"
                 SpecValueSetting."Check Status" := QCListValue."Check Status";
                 SpecValueSetting.Insert();
             until QCListValue.Next() = 0;
+    end;
+
+    procedure ValidateAlphanumeric(InputValue: Text)
+    var
+        RemainingText: Text;
+    begin
+        RemainingText := DelChr(InputValue, '=', 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.-');
+        if RemainingText <> '' then
+            Error('Please enter a Alphanumeric.');
+    end;
+
+
+    procedure ValidateNumeric(InputText: Text)
+    var
+        ResultDecimal: Decimal;
+    begin
+        if Evaluate(ResultDecimal, InputText) then begin
+            if ResultDecimal < 0 then
+                Error('The input value cannot be negative.');
+        end else begin
+            Error('Please enter a Numeric.');
+        end;
     end;
 
 }

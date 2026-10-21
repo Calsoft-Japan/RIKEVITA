@@ -59,6 +59,11 @@ page 50512 "RV COA List"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("Lot No."; Rec."Lot No.")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("Item Description"; Rec."Item Description")
                 {
                     ApplicationArea = All;

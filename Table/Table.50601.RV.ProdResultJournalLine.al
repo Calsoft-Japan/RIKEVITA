@@ -211,7 +211,7 @@ table 50601 "RV Prod. Result Journal Line"
             ELSE
             IF ("Data Type" = CONST("Adjust Consumption")) "Item Unit of Measure".Code WHERE("Item No." = FIELD("Item No."));
         }
-        field(13; "Lot No."; Code[30])
+        field(13; "Lot No."; Code[50])
         {
             Caption = 'Lot No.';
         }

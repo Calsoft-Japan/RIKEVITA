@@ -65,7 +65,22 @@ page 50521 "RV PQC Card"
                     ApplicationArea = All;
                     Editable = QCCardEnable;
                 }
+                field("Quantity"; Rec."Quantity")
+                {
+                    ApplicationArea = All;
+                    Editable = QCCardEnable;
+                }
+                field("UOM"; Rec."UOM")
+                {
+                    ApplicationArea = All;
+                    Editable = QCCardEnable;
+                }
                 field("Manufacturing Date"; Rec."Manufacturing Date")
+                {
+                    ApplicationArea = All;
+                    Editable = QCCardEnable;
+                }
+                field("Expiration Date"; Rec."Expiration Date")
                 {
                     ApplicationArea = All;
                     Editable = QCCardEnable;
@@ -76,6 +91,11 @@ page 50521 "RV PQC Card"
                     Editable = QCCardEnable;
                 }
                 field("Bin Code"; Rec."Bin Code")
+                {
+                    ApplicationArea = All;
+                    Editable = QCCardEnable;
+                }
+                field("Storage Bin Code"; Rec."Storage Bin Code")
                 {
                     ApplicationArea = All;
                     Editable = QCCardEnable;
@@ -205,7 +225,7 @@ page 50521 "RV PQC Card"
                     Rec.CheckRemark_Input();
 
                     //Enable
-                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
                 end;
             }
             action("QC Approve")
@@ -231,7 +251,9 @@ page 50521 "RV PQC Card"
                     Rec.ApprovedRemark_Input();
 
                     //Enable
-                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+
+                    Rec.PostItemReclassJournal(Rec."Location Code", Rec."Location Code", Rec."Bin Code", Rec."Storage Bin Code", Rec.Quantity, Rec."Expiration Date");
                 end;
             }
             action("QC Reverse")
@@ -248,7 +270,37 @@ page 50521 "RV PQC Card"
                     Rec."QC Status" := Rec."QC Status"::Checked;
                     Rec.Modify();
                     //Enable
-                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+                end;
+            }
+            action("QC Reject")
+            {
+                Caption = 'QC Reject';
+                ApplicationArea = All;
+                Image = Approval;
+                Enabled = QCRejectEnable;
+
+                trigger OnAction()
+                begin
+                    //IsQCRejectAllowed
+                    Rec.IsQCRejectAllowed();
+
+                    Rec."QC Status" := Rec."QC Status"::Rejected;
+                    Rec.Modify();
+                    //Enable
+                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+                end;
+            }
+            action("NC Result")
+            {
+                Caption = 'NC Result';
+                ApplicationArea = All;
+                Image = ViewDetails;
+                Enabled = NCResultEnable;
+                trigger OnAction()
+                begin
+                    //CreateNCHeader
+                    Rec.CreateNCHeader();
                 end;
             }
         }
@@ -266,7 +318,13 @@ page 50521 "RV PQC Card"
                 actionref("QC Approve_Promoted"; "QC Approve")
                 {
                 }
+                actionref("QC Reject_Promoted"; "QC Reject")
+                {
+                }
                 actionref("QC Reverse_Promoted"; "QC Reverse")
+                {
+                }
+                actionref("NC Result_Promoted"; "NC Result")
                 {
                 }
             }
@@ -284,12 +342,12 @@ page 50521 "RV PQC Card"
 
     trigger OnOpenPage()
     begin
-        Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+        Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
     end;
 
     trigger OnAfterGetCurrRecord()
     begin
-        Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+        Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
     end;
 
     var
@@ -300,6 +358,8 @@ page 50521 "RV PQC Card"
         QCCheckEnable: Boolean;
         QCApproveEnable: Boolean;
         QCReverseEnable: Boolean;
+        QCRejectEnable: Boolean;
+        NCResultEnable: Boolean;
         SubQCLineEnable: Boolean;
         SubInventoryResultEnable: Boolean;
 }

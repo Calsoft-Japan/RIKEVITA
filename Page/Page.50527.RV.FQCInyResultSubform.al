@@ -43,7 +43,19 @@ page 50527 "RV FQC Iny. Result Subform"
                 {
                     ApplicationArea = All;
                 }
+                field("UOM"; Rec."UOM")
+                {
+                    ApplicationArea = All;
+                }
                 field("Classification"; Rec."Classification")
+                {
+                    ApplicationArea = All;
+                }
+                field("NC Location Code"; Rec."NC Location Code")
+                {
+                    ApplicationArea = All;
+                }
+                field("NC Bin Code"; Rec."NC Bin Code")
                 {
                     ApplicationArea = All;
                 }
@@ -51,7 +63,6 @@ page 50527 "RV FQC Iny. Result Subform"
                 {
                     ApplicationArea = All;
                 }
-
             }
         }
     }
@@ -62,10 +73,13 @@ page 50527 "RV FQC Iny. Result Subform"
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean)
-    begin
-
-    end;
-
     var
+        NCHeader: Record "RV NC Header";
+    begin
+        if NCHeader.Get(Rec."QC No.", Rec."QC Type") then begin
+            Rec."NC Location Code" := NCHeader."NC Location Code";
+            Rec."UOM" := NCHeader."Unit of Measure";
+        end;
+    end;
 
 }

@@ -52,17 +52,25 @@ table 50505 "RV QC Header"
                     Purchaseline.Reset();
                     Purchaseline.SetRange("Document Type", Purchaseline."Document Type"::Order);
                     if (Page.RunModal(Page::"Purchase Lines", Purchaseline) = Action::LookupOK) then begin
+
+                        if Purchaseline."Quantity received" > 0 then
+                            error('The purchase has already been received. please use the Posted Purchase Receipt for IQC.');
+
                         "Order No." := Purchaseline."Document No.";
                         "Line No." := Purchaseline."Line No.";
                         "Item No." := Purchaseline."No.";
                         "Item Description" := Purchaseline.Description;
-                        "Vendor No." := Purchaseline."Buy-from Vendor No.";
+                        "Vendor No." := PurchaseHeader."Buy-from Vendor No.";
                         "Location Code" := Purchaseline."Location Code";
+                        "Bin Code" := Purchaseline."Bin Code";
                         PurchaseHeader.get(Purchaseline."Document Type"::Order, Purchaseline."Document No.");
                         "Vendor Name" := PurchaseHeader."Buy-from Vendor Name";
                         "Customer No." := PurchaseHeader."Sell-to Customer No.";
                         "Ship-to Code" := PurchaseHeader."Ship-to Code";
                         "Ship-to Country" := PurchaseHeader."Ship-to Country/Region Code";
+                        "Quantity" := Purchaseline."Quantity";
+                        "UOM" := Purchaseline."unit of Measure Code";
+                        "Quantity (Base)" := Purchaseline."Quantity (Base)";
                         Modify();
                     end;
                 end else if Rec."Ref. Order Type" = RefOrderType::"Posted Purchase Receipt" then begin
@@ -75,11 +83,15 @@ table 50505 "RV QC Header"
                         "Item Description" := PurchRcptLine.Description;
                         "Vendor No." := PurchRcptLine."Buy-from Vendor No.";
                         "Location Code" := PurchRcptLine."Location Code";
+                        "Bin Code" := PurchRcptLine."Bin Code";
                         PurchRcptHeader.get(PurchRcptLine."Document No.");
                         "Vendor Name" := PurchRcptHeader."Buy-from Vendor Name";
                         "Customer No." := PurchRcptHeader."Sell-to Customer No.";
                         "Ship-to Code" := PurchRcptHeader."Ship-to Code";
                         "Ship-to Country" := PurchRcptHeader."Ship-to Country/Region Code";
+                        "Quantity" := PurchRcptLine."Quantity";
+                        "UOM" := PurchRcptLine."unit of Measure Code";
+                        "Quantity (Base)" := PurchRcptLine."Quantity (Base)";
                         Modify();
                     end;
                 end else if Rec."Ref. Order Type" = RefOrderType::"Production Order" then begin
@@ -102,6 +114,9 @@ table 50505 "RV QC Header"
                         "Item Description" := ProdOrderLine.Description;
                         "Location Code" := ProdOrderLine."Location Code";
                         "Bin Code" := ProdOrderLine."Bin Code";
+                        "Quantity" := ProdOrderLine."Quantity";
+                        "UOM" := ProdOrderLine."unit of Measure Code";
+                        "Quantity (Base)" := ProdOrderLine."Quantity (Base)";
                         ProductionOrder.get(ProductionOrder.Status::Released, ProdOrderLine."Prod. Order No.");
                         Modify();
                     end;
@@ -115,7 +130,7 @@ table 50505 "RV QC Header"
             end;
         }
 
-        field(5; "Lot No."; Code[20])
+        field(5; "Lot No."; Code[50])
         {
             Caption = 'Lot No.';
             trigger OnLookup()
@@ -152,6 +167,7 @@ table 50505 "RV QC Header"
 
                     if (Page.RunModal(Page::"RV Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
                         Validate("Lot No.", ItemLedgerEntry."Lot No.");
+                        "Expiration Date" := ItemLedgerEntry."Expiration Date";
                     end;
                 end;
             end;
@@ -268,6 +284,38 @@ table 50505 "RV QC Header"
         {
             Caption = 'QC Approved Date';
         }
+        field(24; "QC Rejected Remark"; Text[150])
+        {
+            Caption = 'QC Rejected Remark';
+        }
+        field(25; "QC Rejected Date"; Date)
+        {
+            Caption = 'QC Rejected Date';
+        }
+        field(26; "QC Rejected By"; Text[50])
+        {
+            Caption = 'QC Rejected By';
+        }
+        field(27; Quantity; Decimal)
+        {
+            DecimalPlaces = 0 : 5;
+            Caption = 'Quantity';
+        }
+        field(28; "UOM"; Code[10])
+        {
+            Caption = 'UOM';
+            TableRelation = "Unit of Measure";
+        }
+        field(29; "Storage Bin Code"; Code[20])
+        {
+            Caption = 'Storage Bin Code';
+            TableRelation = Bin.Code where("Location Code" = field("Location Code"));
+        }
+        field(30; "Quantity (Base)"; Decimal)
+        {
+            Caption = 'Quantity (Base)';
+            DecimalPlaces = 0 : 5;
+        }
         field(100; "Line No."; Integer)
         {
             Caption = 'Line No.';
@@ -334,6 +382,7 @@ table 50505 "RV QC Header"
         DocumentAttachment: Record "Document Attachment";
         QCline: Record "RV QC line";
         QCInyResultLine: Record "RV QC Iny. Result Line";
+        NCHeader: Record "RV NC Header";
     begin
         DocumentAttachment.SetRange("Table ID", Database::"RV QC Header");
         DocumentAttachment.SetRange("No.", Rec."QC No.");
@@ -341,16 +390,19 @@ table 50505 "RV QC Header"
             DocumentAttachment.DeleteAll();
 
         QCline.Reset();
-        QCline.LockTable();
         QCline.SetRange("QC No.", Rec."QC No.");
         QCline.SetRange("QC Type", Rec."QC Type");
         QCline.DeleteAll(true);
 
         QCInyResultLine.Reset();
-        QCInyResultLine.LockTable();
         QCInyResultLine.SetRange("QC No.", Rec."QC No.");
         QCInyResultLine.SetRange("QC Type", Rec."QC Type");
         QCInyResultLine.DeleteAll(true);
+
+        NCHeader.Reset();
+        NCHeader.SetRange("QC No.", Rec."QC No.");
+        NCHeader.SetRange("QC Type", Rec."QC Type");
+        NCHeader.DeleteAll(true);
     end;
 
     procedure IsQCCheckAllowed(): Boolean
@@ -394,6 +446,21 @@ table 50505 "RV QC Header"
 
         if "QC Status" in ["QC Status"::Analyzing, "QC Status"::Checked] then
             Error('You can not Reverse, because you need approval or Reject.')
+    end;
+
+    procedure IsQCRejectAllowed()
+    var
+        UserSetup: Record "User Setup";
+        TextRejectErr: Label 'You don''t have permission to Reject!';
+    begin
+        if UserSetup.Get(UserId) then begin
+            if not UserSetup."RV_Allow QC Reject" then
+                Error(TextRejectErr);
+        end else
+            Error(TextRejectErr);
+
+        if "QC Checked By" = '' then
+            Error('You need to Check before Reject.');
     end;
 
     procedure CheckRemark_Input()
@@ -443,7 +510,33 @@ table 50505 "RV QC Header"
             Rec."QC Status" := Rec."QC Status"::Approved;
             Rec."QC Approved Remark" := RemarkText[1];// set Remark
             rec."QC Approved By" := UserId;
-            "QC Approved Date" := WorkDate();
+            rec."QC Approved Date" := WorkDate();
+            Modify();
+        end;
+    end;
+
+    procedure RejectedRemark_Input()
+    var
+        UserSetup: Record "User Setup";
+        RVQCRemarkInput: Page "RV QC Remark Input";
+        RemarkText: array[2] of Text;
+    begin
+        //Page
+        Clear(RVQCRemarkInput);
+        Clear(RemarkText);
+        RemarkText[1] := Rec."QC Rejected Remark";// MarkText
+        RemarkText[2] := 'QC Rejected Remark'; //Caption       
+
+        RVQCRemarkInput.Caption := 'QC Rejected Remark';
+        RVQCRemarkInput.SetParameter(RemarkText);
+
+        IF RVQCRemarkInput.RUNMODAL = ACTION::OK then begin
+
+            CopyArray(RemarkText, RVQCRemarkInput.GetParameter(), 1, 2);
+            Rec."QC Status" := Rec."QC Status"::Rejected;
+            Rec."QC Rejected Remark" := RemarkText[1];// set Remark
+            rec."QC Rejected By" := UserId;
+            rec."QC Rejected Date" := WorkDate();
             Modify();
         end;
     end;
@@ -566,8 +659,51 @@ table 50505 "RV QC Header"
             until QCSpecificationLine.Next() = 0;
     end;
 
+    procedure CreateNCHeader()
+    var
+        NCHeader: Record "RV NC Header";
+    begin
+        CreateNCHeaderRecord(NCHeader);
 
-    procedure SetQCEnable(var CreateQCLineEnable: Boolean; var QCCheckEnable: Boolean; var QCApproveEnable: Boolean; var QCReverseEnable: Boolean;
+        Page.Run(Page::"RV NC Card", NCHeader);
+    end;
+
+    procedure CreateNCHeaderRecord(var NCHeader: Record "RV NC Header")
+    var
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
+    begin
+        RIKEVITASetup.Get();
+        RIKEVITASetup.TestField("NC Location Code");
+        if not NCHeader.Get(Rec."QC No.", Rec."QC Type") then begin
+            NCHeader.Init();
+            NCHeader."QC No." := Rec."QC No.";
+            NCHeader."QC Type" := Rec."QC Type";
+            NCHeader."Ref. Order Type" := Rec."Ref. Order Type";
+            NCHeader."Order No." := Rec."Order No.";
+            NCHeader."Lot No." := Rec."Lot No.";
+            NCHeader."Item No." := Rec."Item No.";
+            NCHeader."Quantity" := Rec."Quantity";
+            NCHeader."Expiration Date" := Rec."Expiration Date";
+            NCHeader."QC Date" := Rec."QC Date";
+            NCHeader."Location Code" := Rec."Location Code";
+            NCHeader."Inspect Bin Code" := Rec."Bin Code";
+            NCHeader."Storage Bin Code" := Rec."Storage Bin Code";
+            NCHeader."Unit of Measure" := Rec."UOM";
+            NCHeader."NC Location Code" := RIKEVITASetup."NC Location Code";
+            NCHeader."QC Checked By" := Rec."QC Checked By";
+            NCHeader."QC Checked Remark" := Rec."QC Checked Remark";
+            NCHeader."QC Checked Date" := Rec."QC Checked Date";
+            NCHeader."QC Rejected By" := Rec."QC Rejected By";
+            NCHeader."QC Rejected Remark" := Rec."QC Rejected Remark";
+            NCHeader."QC Rejected Date" := Rec."QC Rejected Date";
+            NCHeader."QC Comment" := Rec."QC Comment";
+            NCHeader."NC Status" := NCHeader."NC Status"::Analyzing;
+            NCHeader.Insert();
+        end;
+    end;
+
+
+    procedure SetQCEnable(var CreateQCLineEnable: Boolean; var QCCheckEnable: Boolean; var QCApproveEnable: Boolean; var QCReverseEnable: Boolean; var QCRejectEnable: Boolean; var NCResultEnable: Boolean;
                             var SubQCLineEnable: Boolean; var SubInventoryResultEnable: Boolean; var QCCardEnable: Boolean)
     begin
 
@@ -579,7 +715,9 @@ table 50505 "RV QC Header"
                     QCCheckEnable := true;
                     QCApproveEnable := false;
                     QCReverseEnable := false;
+                    NCResultEnable := false;
 
+                    QCRejectEnable := false;
                     SubQCLineEnable := true;
                     SubInventoryResultEnable := true;
                     QCCardEnable := true;
@@ -590,6 +728,8 @@ table 50505 "RV QC Header"
                     QCCheckEnable := false;
                     QCApproveEnable := true;
                     QCReverseEnable := false;
+                    QCRejectEnable := true;
+                    NCResultEnable := false;
 
                     SubQCLineEnable := true;
                     SubInventoryResultEnable := true;
@@ -601,6 +741,8 @@ table 50505 "RV QC Header"
                     QCCheckEnable := false;
                     QCApproveEnable := false;
                     QCReverseEnable := true;
+                    QCRejectEnable := false;
+                    NCResultEnable := false;
 
                     SubQCLineEnable := false;
                     SubInventoryResultEnable := false;
@@ -612,6 +754,8 @@ table 50505 "RV QC Header"
                     QCCheckEnable := false;
                     QCApproveEnable := false;
                     QCReverseEnable := true;
+                    QCRejectEnable := false;
+                    NCResultEnable := true;
 
                     SubQCLineEnable := false;
                     SubInventoryResultEnable := false;
@@ -667,5 +811,89 @@ table 50505 "RV QC Header"
         QCline.SetRange("Check Status", QCline."Check Status"::Init);
         if not QCline.IsEmpty() then
             Error(ErrorCheckInit);
+    end;
+
+    procedure PostItemReclassJournal(var FromLocation: Code[10]; var ToLocation: Code[10]; var FromBin: Code[20]; var ToBin: Code[20]; var Quantity: Decimal; var NewExpirationDate: Date)
+    var
+        ItemJnlLine: Record "Item Journal Line";
+        LineNo: Integer;
+        ItemTrackingSetup: Record "Item Tracking Setup";
+        EntriesExist: Boolean;
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
+        ItemJnlTemplate: Record "Item Journal Template";
+        ItemJournalBatch: Record "Item Journal Batch";
+        CreateReservEntry: Codeunit "Create Reserv. Entry";
+        ReservEntry: Record "Reservation Entry";
+        ItemTrackingMgt: Codeunit "Item Tracking Management";
+        NoSeriesBatch: Codeunit "No. Series - Batch";
+        ItemJnlPostBatch: Codeunit "Item Jnl.-Post Batch";
+    begin
+        RIKEVITASetup.Get();
+        //Deletes the new Item Reclass Journal that is generated after the Item Reclass Journal posting.
+        ItemJnlLine.Reset();
+        ItemJnlLine.SetRange("Journal Template Name", RIKEVITASetup."QC Reclass Jnl Template Name");
+        ItemJnlLine.SetRange("Journal Batch Name", RIKEVITASetup."QC Reclass Jnl Batch Name");
+        if ItemJnlLine.FindSet() then
+            ItemJnlLine.DeleteAll();
+
+        //Mark Item Journal Line
+        ItemJnlTemplate.Get(RIKEVITASetup."QC Reclass Jnl Template Name");
+        ItemJournalBatch.Get(RIKEVITASetup."QC Reclass Jnl Template Name", RIKEVITASetup."QC Reclass Jnl Batch Name");
+        ItemJournalBatch.TestField("Reason Code");
+        ItemJournalBatch.TestField("No. Series");
+
+        ItemJnlLine.Init();
+        ItemJnlLine."Journal Template Name" := RIKEVITASetup."QC Reclass Jnl Template Name";
+        ItemJnlLine."Journal Batch Name" := RIKEVITASetup."QC Reclass Jnl Batch Name";
+
+        clear(LineNo);
+        LineNo += 10000;
+
+        ItemJnlLine."Line No." := LineNo;
+        ItemJnlLine."Entry Type" := Enum::"Item Ledger Entry Type"::Transfer;
+        ItemJnlLine."Source Code" := ItemJnlTemplate."Source Code";
+        ItemJnlLine."Value Entry Type" := Enum::"Cost Entry Type"::"Direct Cost";
+        //ItemJnlLine.Type := Enum::"Capacity Type"::"Work Center";
+        ItemJnlLine.Validate("Posting Date", WorkDate());
+        ItemJnlLine.Validate("Document Date", WorkDate());
+        ItemJnlLine."Document No." := NoSeriesBatch.GetNextNo(ItemJournalBatch."No. Series", ItemJnlLine."Posting Date");
+        ItemJnlLine.Validate("Item No.", Rec."Item No.");
+        ItemJnlLine.Validate("Location Code", FromLocation);
+        ItemJnlLine.Validate("New Location Code", ToLocation);
+        ItemJnlLine.Validate("Bin Code", FromBin);
+        ItemJnlLine.Validate("New Bin Code", ToBin);
+        if Rec."Lot No." <> '' then
+            ItemJnlLine."Lot No." := Rec."Lot No.";
+        ItemJnlLine.Validate("Unit of Measure Code", Rec."UOM");
+        ItemJnlLine.Validate("Quantity", Rec."Quantity");
+        ItemJnlLine."reason Code" := ItemJournalBatch."Reason Code";
+        ItemJnlLine.Insert(true);
+
+        //ReservationEntry
+        ReservEntry."Lot No." := Rec."Lot No.";
+        CreateReservEntry.SetNewTrackingFromItemJnlLine(ItemJnlLine);
+        CreateReservEntry.CreateReservEntryFor(Database::"Item Journal Line", ItemJnlLine."Entry Type".AsInteger(),
+                                           ItemJnlLine."Journal Template Name", ItemJnlLine."Journal Batch Name",
+                                           0, ItemJnlLine."Line No.", ItemJnlLine."Qty. per Unit of Measure",
+                                           ItemJnlLine.Quantity, ItemJnlLine."Quantity (Base)", ReservEntry);
+        ItemTrackingSetup."Lot No." := Rec."Lot No.";
+        NewExpirationDate := ItemTrackingMgt.ExistingExpirationDate(Rec."Item No.", ItemJnlLine."Variant Code", ItemTrackingSetup, false, EntriesExist);
+        CreateReservEntry.SetNewExpirationDate(NewExpirationDate);
+        CreateReservEntry.CreateEntry(ItemJnlLine."Item No.", ItemJnlLine."Variant Code",
+                                      ItemJnlLine."Location Code", '',
+                                      ItemJnlLine."Posting Date", 0D, 0, ReservEntry."Reservation Status"::Prospect);
+        if ItemJnlLine."Lot No." <> '' then begin
+            ItemJnlLine."Lot No." := '';
+            ItemJnlLine.Modify();
+        end;
+
+        //Post Item Reclass Journal
+        ItemJnlLine.Reset();
+        ItemJnlLine.SetRange("Journal Template Name", RIKEVITASetup."QC Reclass Jnl Template Name");
+        ItemJnlLine.SetRange("Journal Batch Name", RIKEVITASetup."QC Reclass Jnl Batch Name");
+
+        Clear(ItemJnlPostBatch);
+        ItemJnlPostBatch.SetSuppressCommit(true);
+        ItemJnlPostBatch.Run(ItemJnlLine);
     end;
 }

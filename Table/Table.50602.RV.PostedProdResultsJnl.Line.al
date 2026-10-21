@@ -75,7 +75,7 @@ table 50602 "RV Pst. Prod. Res. Jnl. Line"
             ELSE IF ("Data Type" = CONST("Planned Consumption")) "Item Unit of Measure".Code WHERE("Item No." = FIELD("Output Item No."))
             ELSE IF ("Data Type" = CONST("Adjust Consumption")) "Item Unit of Measure".Code WHERE("Item No." = FIELD("Output Item No."));
         }
-        field(13; "Lot No."; Code[30])
+        field(13; "Lot No."; Code[50])
         {
             Caption = 'Lot No.';
         }

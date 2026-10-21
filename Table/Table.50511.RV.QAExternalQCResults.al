@@ -93,7 +93,7 @@ table 50511 "RV QA External QC Results"
         {
             Caption = 'QC External Description';
         }
-        field(13; "COA Lot No."; Code[30])
+        field(13; "COA Lot No."; Code[50])
         {
             Caption = 'COA Lot No.';
         }

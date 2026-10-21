@@ -60,11 +60,16 @@ page 50510 "RV IQC Subform"
                 field("QC Value"; Rec."QC Value")
                 {
                     ApplicationArea = All;
+                    trigger OnValidate()
+                    begin
+                        SetCheckStatusStyle();
+                    end;
                 }
                 field("Check Status"; Rec."Check Status")
                 {
                     ApplicationArea = All;
                     Editable = false;
+                    StyleExpr = CheckStatusStyleExpr;
                 }
                 field("Minimum Value"; Rec."Minimum Value")
                 {
@@ -100,11 +105,13 @@ page 50510 "RV IQC Subform"
     trigger OnAfterGetRecord()
     begin
         Rec.SetQCLineEnable(TypeEnable, ValueTableTypeEnable);
+        SetCheckStatusStyle();
     end;
 
     trigger OnAfterGetCurrRecord()
     begin
         Rec.SetQCLineEnable(TypeEnable, ValueTableTypeEnable);
+        SetCheckStatusStyle();
     end;
 
     trigger OnNewRecord(BelowxRec: Boolean)
@@ -115,5 +122,13 @@ page 50510 "RV IQC Subform"
     var
         TypeEnable: Boolean;
         ValueTableTypeEnable: Boolean;
+        CheckStatusStyleExpr: Text;
 
+    local procedure SetCheckStatusStyle()
+    begin
+        if Rec."Check Status" = Rec."Check Status"::FAILED then
+            CheckStatusStyleExpr := 'Unfavorable'
+        else
+            CheckStatusStyleExpr := 'Standard';
+    end;
 }

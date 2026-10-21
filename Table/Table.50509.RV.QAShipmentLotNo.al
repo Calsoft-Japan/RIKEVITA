@@ -18,7 +18,7 @@ table 50509 "RV QA Shipment Lot No."
         {
             Caption = 'COA Lot Line No.';
         }
-        field(3; "Lot No."; Code[30])
+        field(3; "Lot No."; Code[50])
         {
             Caption = 'Lot No.';
         }

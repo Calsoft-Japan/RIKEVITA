@@ -103,6 +103,10 @@ table 50508 "RV QA Header"
         {
             Caption = 'Bill-to Customer Name';
         }
+        field(23; "Lot No."; Code[250])
+        {
+            Caption = 'Lot No.';
+        }
         field(100; "Line No."; Integer)
         {
             Caption = 'Line No.';
@@ -411,8 +415,15 @@ table 50508 "RV QA Header"
         //ReservMgt: Codeunit "Reservation Management";
         UOMMgt: Codeunit "Unit of Measure Management";
         WarehousePackingInfo: Record "RV Warehouse Packing Info.";
+        i: Integer;
+        LotNoList: List of [Code[50]];
+        LotNo: Code[50];
 
     begin
+        clear(Rec."Lot No.");
+        clear(i);
+        clear(LotNoList);
+        clear(LotNo);
         if Rec."Ref. Order Type QA" = RefOrderTypeQA::"Posted Whse. Shipment" then begin
 
             PostedWhShipLine.SetRange("No.", Rec."Order No.");
@@ -452,6 +463,10 @@ table 50508 "RV QA Header"
                         QAShipmentLotNo."COA No." := Rec."COA No.";
                         QAShipmentLotNo."COA Lot Line No." := COALotLineNo;
                         QAShipmentLotNo."Lot No." := WarehousePackingInfo."Lot No.";
+                        //Collect unique Lot
+                        if not LotNoList.Contains(WarehousePackingInfo."Lot No.") then
+                            LotNoList.Add(WarehousePackingInfo."Lot No.");
+
                         QAShipmentLotNo."Sales Order No." := PostedWhShipLine."Source No.";
 
                         QAShipmentLotNo.Quantity := WarehousePackingInfo.Quantity * WarehousePackingInfo."Contents Per Package";
@@ -517,6 +532,11 @@ table 50508 "RV QA Header"
                         QAShipmentLotNo."COA Lot Line No." := COALotLineNo;
 
                         QAShipmentLotNo."Lot No." := WarehousePackingInfo."Lot No.";
+
+                        //Collect unique Lot
+                        if not LotNoList.Contains(WarehousePackingInfo."Lot No.") then
+                            LotNoList.Add(WarehousePackingInfo."Lot No.");
+
                         QAShipmentLotNo."Sales Order No." := WhShipline."Source No.";
 
                         QAShipmentLotNo.Quantity := WarehousePackingInfo.Quantity * WarehousePackingInfo."Contents Per Package";
@@ -541,5 +561,13 @@ table 50508 "RV QA Header"
                     until WarehousePackingInfo.Next() = 0;
             end;
         end;
+        foreach LotNo in LotNoList do begin
+            i += 1;
+            if i = 1 then
+                rec."Lot No." := LotNo
+            else
+                rec."Lot No." += ',' + LotNo;
+        end;
+        Rec.Modify();
     end;
 }

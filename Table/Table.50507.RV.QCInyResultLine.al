@@ -39,6 +39,21 @@ table 50507 "RV QC Iny. Result Line"
         {
             Caption = 'Comment';
         }
+        field(8; "UOM"; Code[10])
+        {
+            Caption = 'UOM';
+            TableRelation = "Unit of Measure";
+        }
+        field(9; "NC Location Code"; Code[10])
+        {
+            Caption = 'NC Location Code';
+            TableRelation = Location;
+        }
+        field(10; "NC Bin Code"; Code[20])
+        {
+            Caption = 'NC Bin Code';
+            TableRelation = Bin.Code where("Location Code" = Field("NC Location Code"));
+        }
     }
     keys
     {
@@ -47,6 +62,4 @@ table 50507 "RV QC Iny. Result Line"
             Clustered = true;
         }
     }
-
-    var
 }

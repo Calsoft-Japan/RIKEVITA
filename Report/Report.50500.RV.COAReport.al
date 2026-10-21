@@ -63,7 +63,7 @@ report 50500 "RV_COA Report"
                     column(CompanyInfo_Name; CompanyInfo.Name)
                     {
                     }
-                    column(CompanyInfo_Registration; 'Registration No. ' + CompanyInfo."RV_RESO Certificate No.")
+                    column(CompanyInfo_Registration; RegistrationNo)
                     {
                     }
                     column(DisplayQuantityPerLot; DisplayQuantityPerLot)
@@ -76,6 +76,15 @@ report 50500 "RV_COA Report"
                     {
                     }
                     column(MARKSCommentAll; MARKSCommentAll)
+                    {
+                    }
+                    column(QACommentText; QACommentText)
+                    {
+                    }
+                    column(QAColonText; QAColonText)
+                    {
+                    }
+                    column(QAComment; QAComment)
                     {
                     }
                     column(OutputNo; OutputNo)
@@ -320,6 +329,8 @@ report 50500 "RV_COA Report"
             }
 
             trigger OnAfterGetRecord()
+            var
+                recItem: Record Item;
             begin
                 //ClearData
                 ClearData();
@@ -332,6 +343,15 @@ report 50500 "RV_COA Report"
 
                 CompanyInfo.Get();
                 CompanyInfo.CalcFields(Picture);
+
+                //RegistrationNo
+                if recItem.Get("QA Header"."Item No.") then begin
+                    if recItem."RV_Print RSPO No." then
+                        RegistrationNo := 'Registration No. ' + CompanyInfo."RV_Registration No."
+                    else
+                        RegistrationNo := '';
+                end else
+                    RegistrationNo := '';
 
                 QAShipmentLotNo.SetRange("COA No.", "COA No.");
 
@@ -358,6 +378,19 @@ report 50500 "RV_COA Report"
                 //MARKSText[2] := 'INGREDIENTS';
                 //MARKSText[3] := 'BANGKOK';
                 //MARKSText[4] := 'MADE IN MALAYSIA';
+
+                Clear(QACommentText);
+                Clear(QAColonText);
+                Clear(QAComment);
+                //QAComment
+                if "QA Header"."QA Comment" = '' then begin
+                    QACommentText := '';
+                    QAColonText := '';
+                end else begin
+                    QACommentText := 'QA Comment';
+                    QAColonText := ':';
+                    QAComment := "QA Header"."QA Comment";
+                end;
 
                 Clear(DisplayQuantityPerLot);
                 Clear(DateCalculation);
@@ -538,7 +571,11 @@ report 50500 "RV_COA Report"
         PRODUCTText: Text;
         Format_DateText: Text;
         MARKSCommentAll: Text;
+        QACommentText: Text;
+        QAColonText: Text;
+        QAComment: Text;
         ReportTitle: Text;
+        RegistrationNo: Text;
 
     procedure CollectUniqueSalesOrderNo(ParCOANO: Code[20])
     var

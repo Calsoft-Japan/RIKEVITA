@@ -43,6 +43,21 @@ tableextension 50600 "RV User Setup" extends "User Setup"
             Caption = 'Allow QC Reverse';
             Description = 'FDD039';
         }
+        field(50507; "RV_Allow QC Reject"; Boolean)
+        {
+            Caption = 'Allow QC Reject';
+            Description = 'FDD039';
+        }
+        field(50508; "RV_Allow NC Check"; Boolean)
+        {
+            Caption = 'Allow NC Check';
+            Description = 'FDD039';
+        }
+        field(50509; "RV_Allow NC Approve"; Boolean)
+        {
+            Caption = 'Allow NC Approve';
+            Description = 'FDD039';
+        }
         field(50600; "RV_Acc Highly Restricted BOM"; Boolean)
         {
             Caption = 'Access Highly Restricted BOM';

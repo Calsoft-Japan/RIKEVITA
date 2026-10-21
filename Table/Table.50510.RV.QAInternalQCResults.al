@@ -59,7 +59,7 @@ table 50510 "RV QA Internal QC Results"
         {
             Caption = 'QC Approved Remark';
         }
-        field(13; "COA Lot No."; Code[30])
+        field(13; "COA Lot No."; Code[50])
         {
             Caption = 'COA Lot No.';
         }
