@@ -35,10 +35,16 @@ pageextension 50212 "RV Posted Sales Invoice Ext" extends "Posted Sales Invoice"
                 trigger OnAction()
                 var
                     ReportRec: Record "Sales Invoice Header";
+                    CustomerRec: Record Customer;
+                    ReportSet: Report "RV PostedSalesInvoice(Oversea)";
                 begin
+                    CustomerRec.Get(Rec."Sell-to Customer No.");
+                    ReportSet.GetCustomerChargeType(CustomerRec."RV_Charge Type");
                     ReportRec.Reset();
                     ReportRec.SetRange("No.", Rec."No.");
-                    Report.Run(50206, TRUE, FALSE, ReportRec);
+                    ReportSet.SetTableView(ReportRec);
+                    ReportSet.Run();
+                    //Report.Run(50206, TRUE, FALSE, ReportRec);
                 end;
             }
         }
