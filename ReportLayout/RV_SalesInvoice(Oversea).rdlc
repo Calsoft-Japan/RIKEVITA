@@ -2179,7 +2179,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.6963in</Height>
+                  <Height>0.39422in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -2191,7 +2191,9 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!SalesListComment.Value</Value>
-                                  <Style />
+                                  <Style>
+                                    <FontSize>8pt</FontSize>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
@@ -3515,7 +3517,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
             <Top>0.05155in</Top>
-            <Height>3.75396in</Height>
+            <Height>3.45188in</Height>
             <Width>7.04971in</Width>
             <Style>
               <Border>

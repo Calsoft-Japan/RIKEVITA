@@ -227,7 +227,9 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                                 RecWarehousePackingInfo.SetRange("Posted Whse. Shipment No.", RecPostedWhseShipmentLine."No.");
                                 if RecWarehousePackingInfo.FindSet() then begin
                                     repeat
-                                        SalesListComment += RecWarehousePackingInfo.Comment + Format(chr10);
+                                        if RecWarehousePackingInfo.Comment <> '' then begin
+                                            SalesListComment += RecWarehousePackingInfo.Comment + Format(chr10);
+                                        end;
                                     until RecWarehousePackingInfo.Next() = 0;
                                 end;
                             end;
@@ -344,11 +346,13 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
 
                     SalesCommentLine.Reset();
                     SalesCommentLine.SetRange("No.", "No.");
-                    SalesCommentLine.SetRange("Document Type", SalesCommentLine."Document Type"::Invoice);
+                    SalesCommentLine.SetRange("Document Type", SalesCommentLine."Document Type"::"Posted Invoice");
                     SalesCommentLine.SetCurrentKey("Line No.");
                     if SalesCommentLine.FindSet() then begin
                         repeat
-                            SalesComment += SalesCommentLine.Comment + Format(chr10);
+                            if SalesCommentLine.Comment <> '' then begin
+                                SalesComment += SalesCommentLine.Comment + Format(chr10);
+                            end;
                         until SalesCommentLine.Next() = 0;
                     end;
                 end;
