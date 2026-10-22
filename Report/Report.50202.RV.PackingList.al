@@ -362,11 +362,11 @@ report 50202 "RV Packing List Report"
 
                     WarehouseCommentLine.Reset();
                     WarehouseCommentLine.SetRange("No.", "No.");
-                    WarehouseCommentLine.SetRange("Table Name", WarehouseCommentLine."Table Name"::"Whse. Shipment");
+                    WarehouseCommentLine.SetRange("Table Name", WarehouseCommentLine."Table Name"::"Posted Whse. Shipment");
                     WarehouseCommentLine.SetCurrentKey("Line No.");
                     if WarehouseCommentLine.FindSet() then begin
                         repeat
-                            WarehouseComment += WarehouseCommentLine.Comment + '<br>';
+                            WarehouseComment += WarehouseCommentLine.Comment + Format(chr10);
                         until WarehouseCommentLine.Next() = 0;
                     end;
                 end;

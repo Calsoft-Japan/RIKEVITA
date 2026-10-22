@@ -11,6 +11,172 @@
       <rd:DataSourceID>954c61a0-5311-4824-910c-a6d8a50edaad</rd:DataSourceID>
     </DataSource>
   </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+      <Fields>
+        <Field Name="Number">
+          <DataField>Number</DataField>
+        </Field>
+        <Field Name="CompanyLogo">
+          <DataField>CompanyLogo</DataField>
+        </Field>
+        <Field Name="CompanyName">
+          <DataField>CompanyName</DataField>
+        </Field>
+        <Field Name="RegistrationNo">
+          <DataField>RegistrationNo</DataField>
+        </Field>
+        <Field Name="SSTRegNo">
+          <DataField>SSTRegNo</DataField>
+        </Field>
+        <Field Name="CerfiticateNo">
+          <DataField>CerfiticateNo</DataField>
+        </Field>
+        <Field Name="ISODocumentNo">
+          <DataField>ISODocumentNo</DataField>
+        </Field>
+        <Field Name="ISODocVersion">
+          <DataField>ISODocVersion</DataField>
+        </Field>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
+        </Field>
+        <Field Name="PrintDate">
+          <DataField>PrintDate</DataField>
+        </Field>
+        <Field Name="Sales_Header_No">
+          <DataField>Sales_Header_No</DataField>
+        </Field>
+        <Field Name="External_Document_No">
+          <DataField>External_Document_No</DataField>
+        </Field>
+        <Field Name="Sell_to_Customer_Name">
+          <DataField>Sell_to_Customer_Name</DataField>
+        </Field>
+        <Field Name="Sell_to_Address">
+          <DataField>Sell_to_Address</DataField>
+        </Field>
+        <Field Name="Sell_to_Address2">
+          <DataField>Sell_to_Address2</DataField>
+        </Field>
+        <Field Name="Sell_to_City">
+          <DataField>Sell_to_City</DataField>
+        </Field>
+        <Field Name="Sell_to_Post_Code">
+          <DataField>Sell_to_Post_Code</DataField>
+        </Field>
+        <Field Name="Sell_to_Country_Region_Code">
+          <DataField>Sell_to_Country_Region_Code</DataField>
+        </Field>
+        <Field Name="Currency_Code">
+          <DataField>Currency_Code</DataField>
+        </Field>
+        <Field Name="Tranfportation">
+          <DataField>Tranfportation</DataField>
+        </Field>
+        <Field Name="FeederVessel">
+          <DataField>FeederVessel</DataField>
+        </Field>
+        <Field Name="MotherVessel">
+          <DataField>MotherVessel</DataField>
+        </Field>
+        <Field Name="VIA">
+          <DataField>VIA</DataField>
+        </Field>
+        <Field Name="FromValue">
+          <DataField>FromValue</DataField>
+        </Field>
+        <Field Name="SailingOnOrAbout">
+          <DataField>SailingOnOrAbout</DataField>
+        </Field>
+        <Field Name="Terms">
+          <DataField>Terms</DataField>
+        </Field>
+        <Field Name="OrderNo">
+          <DataField>OrderNo</DataField>
+        </Field>
+        <Field Name="TotalFreightCharges">
+          <DataField>TotalFreightCharges</DataField>
+        </Field>
+        <Field Name="TotalFreightChargesFormat">
+          <DataField>TotalFreightChargesFormat</DataField>
+        </Field>
+        <Field Name="Ship_to_Name">
+          <DataField>Ship_to_Name</DataField>
+        </Field>
+        <Field Name="ShowFOBPrice">
+          <DataField>ShowFOBPrice</DataField>
+        </Field>
+        <Field Name="ShowExchangeRates">
+          <DataField>ShowExchangeRates</DataField>
+        </Field>
+        <Field Name="QRCode">
+          <DataField>QRCode</DataField>
+        </Field>
+        <Field Name="QRCodeText">
+          <DataField>QRCodeText</DataField>
+        </Field>
+        <Field Name="CurrencyInformation">
+          <DataField>CurrencyInformation</DataField>
+        </Field>
+        <Field Name="WorkDescription">
+          <DataField>WorkDescription</DataField>
+        </Field>
+        <Field Name="SalesComment">
+          <DataField>SalesComment</DataField>
+        </Field>
+        <Field Name="Item_No">
+          <DataField>Item_No</DataField>
+        </Field>
+        <Field Name="Line_No">
+          <DataField>Line_No</DataField>
+        </Field>
+        <Field Name="Description">
+          <DataField>Description</DataField>
+        </Field>
+        <Field Name="Description2">
+          <DataField>Description2</DataField>
+        </Field>
+        <Field Name="Quantity">
+          <DataField>Quantity</DataField>
+        </Field>
+        <Field Name="Quantity_Base">
+          <DataField>Quantity_Base</DataField>
+        </Field>
+        <Field Name="Unit_Price">
+          <DataField>Unit_Price</DataField>
+        </Field>
+        <Field Name="Unit_PriceFormat">
+          <DataField>Unit_PriceFormat</DataField>
+        </Field>
+        <Field Name="Line_Discount_Amount">
+          <DataField>Line_Discount_Amount</DataField>
+        </Field>
+        <Field Name="Line_Discount_AmountFormat">
+          <DataField>Line_Discount_AmountFormat</DataField>
+        </Field>
+        <Field Name="Line_Amount">
+          <DataField>Line_Amount</DataField>
+        </Field>
+        <Field Name="Line_AmountFormat">
+          <DataField>Line_AmountFormat</DataField>
+        </Field>
+        <Field Name="SalesOrderNo">
+          <DataField>SalesOrderNo</DataField>
+        </Field>
+        <Field Name="CustomerPO">
+          <DataField>CustomerPO</DataField>
+        </Field>
+        <Field Name="SalesListComment">
+          <DataField>SalesListComment</DataField>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -3530,7 +3696,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
       <Width>7.37472in</Width>
       <Page>
         <PageHeader>
-          <Height>3.92937in</Height>
+          <Height>4.14812in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -3879,7 +4045,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Top>2.0618in</Top>
               <Left>1.17973in</Left>
               <Height>11pt</Height>
-              <Width>2.43938in</Width>
+              <Width>2.79355in</Width>
               <ZIndex>8</ZIndex>
               <Style>
                 <Border>
@@ -3908,7 +4074,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Top>2.36735in</Top>
               <Left>1.17973in</Left>
               <Height>11pt</Height>
-              <Width>2.43938in</Width>
+              <Width>2.79355in</Width>
               <ZIndex>9</ZIndex>
               <Style>
                 <Border>
@@ -3937,7 +4103,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Top>2.21458in</Top>
               <Left>1.17972in</Left>
               <Height>11pt</Height>
-              <Width>2.43939in</Width>
+              <Width>2.79356in</Width>
               <ZIndex>10</ZIndex>
               <Style>
                 <Border>
@@ -3966,7 +4132,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Top>2.52013in</Top>
               <Left>1.17973in</Left>
               <Height>11pt</Height>
-              <Width>2.43938in</Width>
+              <Width>2.79355in</Width>
               <ZIndex>11</ZIndex>
               <Style>
                 <Border>
@@ -3995,7 +4161,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Top>2.67291in</Top>
               <Left>1.17973in</Left>
               <Height>11pt</Height>
-              <Width>2.43938in</Width>
+              <Width>2.79355in</Width>
               <ZIndex>12</ZIndex>
               <Style>
                 <Border>
@@ -4269,7 +4435,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Top>3.26974in</Top>
               <Left>1.21009in</Left>
               <Height>11pt</Height>
-              <Width>2.43938in</Width>
+              <Width>2.76319in</Width>
               <ZIndex>21</ZIndex>
               <Style>
                 <Border>
@@ -4530,7 +4696,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Top>3.42252in</Top>
               <Left>1.21008in</Left>
               <Height>11pt</Height>
-              <Width>2.43938in</Width>
+              <Width>2.7632in</Width>
               <ZIndex>30</ZIndex>
               <Style>
                 <Border>
@@ -4559,7 +4725,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Top>3.5753in</Top>
               <Left>1.20606in</Left>
               <Height>11pt</Height>
-              <Width>2.43938in</Width>
+              <Width>2.76722in</Width>
               <ZIndex>31</ZIndex>
               <Style>
                 <Border>
@@ -4831,6 +4997,12 @@ Cstr(Fields!QRCodeText.Value)</Value>
       </Page>
     </ReportSection>
   </ReportSections>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>4</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
@@ -4917,167 +5089,4 @@ lDUxiTqFPVrtT6v1NHtOro4HLDlLaep+zhfx/s+RKiMR0bNs5Tq5oGczoUztzYFJJnTU35DgCBTbHNnc
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Fields>
-        <Field Name="Number">
-          <DataField>Number</DataField>
-        </Field>
-        <Field Name="CompanyLogo">
-          <DataField>CompanyLogo</DataField>
-        </Field>
-        <Field Name="CompanyName">
-          <DataField>CompanyName</DataField>
-        </Field>
-        <Field Name="RegistrationNo">
-          <DataField>RegistrationNo</DataField>
-        </Field>
-        <Field Name="SSTRegNo">
-          <DataField>SSTRegNo</DataField>
-        </Field>
-        <Field Name="CerfiticateNo">
-          <DataField>CerfiticateNo</DataField>
-        </Field>
-        <Field Name="ISODocumentNo">
-          <DataField>ISODocumentNo</DataField>
-        </Field>
-        <Field Name="ISODocVersion">
-          <DataField>ISODocVersion</DataField>
-        </Field>
-        <Field Name="ReportTitle">
-          <DataField>ReportTitle</DataField>
-        </Field>
-        <Field Name="PrintDate">
-          <DataField>PrintDate</DataField>
-        </Field>
-        <Field Name="Sales_Header_No">
-          <DataField>Sales_Header_No</DataField>
-        </Field>
-        <Field Name="External_Document_No">
-          <DataField>External_Document_No</DataField>
-        </Field>
-        <Field Name="Sell_to_Customer_Name">
-          <DataField>Sell_to_Customer_Name</DataField>
-        </Field>
-        <Field Name="Sell_to_Address">
-          <DataField>Sell_to_Address</DataField>
-        </Field>
-        <Field Name="Sell_to_Address2">
-          <DataField>Sell_to_Address2</DataField>
-        </Field>
-        <Field Name="Sell_to_City">
-          <DataField>Sell_to_City</DataField>
-        </Field>
-        <Field Name="Sell_to_Post_Code">
-          <DataField>Sell_to_Post_Code</DataField>
-        </Field>
-        <Field Name="Sell_to_Country_Region_Code">
-          <DataField>Sell_to_Country_Region_Code</DataField>
-        </Field>
-        <Field Name="Currency_Code">
-          <DataField>Currency_Code</DataField>
-        </Field>
-        <Field Name="Tranfportation">
-          <DataField>Tranfportation</DataField>
-        </Field>
-        <Field Name="OrderNo">
-          <DataField>OrderNo</DataField>
-        </Field>
-        <Field Name="FeederVessel">
-          <DataField>FeederVessel</DataField>
-        </Field>
-        <Field Name="MotherVessel">
-          <DataField>MotherVessel</DataField>
-        </Field>
-        <Field Name="VIA">
-          <DataField>VIA</DataField>
-        </Field>
-        <Field Name="FromValue">
-          <DataField>FromValue</DataField>
-        </Field>
-        <Field Name="SailingOnOrAbout">
-          <DataField>SailingOnOrAbout</DataField>
-        </Field>
-        <Field Name="Terms">
-          <DataField>Terms</DataField>
-        </Field>
-        <Field Name="TotalFreightCharges">
-          <DataField>TotalFreightCharges</DataField>
-        </Field>
-        <Field Name="TotalFreightChargesFormat">
-          <DataField>TotalFreightChargesFormat</DataField>
-        </Field>
-        <Field Name="Ship_to_Name">
-          <DataField>Ship_to_Name</DataField>
-        </Field>
-        <Field Name="ShowFOBPrice">
-          <DataField>ShowFOBPrice</DataField>
-        </Field>
-        <Field Name="ShowExchangeRates">
-          <DataField>ShowExchangeRates</DataField>
-        </Field>
-        <Field Name="QRCode">
-          <DataField>QRCode</DataField>
-        </Field>
-        <Field Name="QRCodeText">
-          <DataField>QRCodeText</DataField>
-        </Field>
-        <Field Name="CurrencyInformation">
-          <DataField>CurrencyInformation</DataField>
-        </Field>
-        <Field Name="WorkDescription">
-          <DataField>WorkDescription</DataField>
-        </Field>
-        <Field Name="SalesComment">
-          <DataField>SalesComment</DataField>
-        </Field>
-        <Field Name="Item_No">
-          <DataField>Item_No</DataField>
-        </Field>
-        <Field Name="Description">
-          <DataField>Description</DataField>
-        </Field>
-        <Field Name="Description2">
-          <DataField>Description2</DataField>
-        </Field>
-        <Field Name="Quantity">
-          <DataField>Quantity</DataField>
-        </Field>
-        <Field Name="Quantity_Base">
-          <DataField>Quantity_Base</DataField>
-        </Field>
-        <Field Name="Unit_Price">
-          <DataField>Unit_Price</DataField>
-        </Field>
-        <Field Name="Unit_PriceFormat">
-          <DataField>Unit_PriceFormat</DataField>
-        </Field>
-        <Field Name="Line_Discount_Amount">
-          <DataField>Line_Discount_Amount</DataField>
-        </Field>
-        <Field Name="Line_Discount_AmountFormat">
-          <DataField>Line_Discount_AmountFormat</DataField>
-        </Field>
-        <Field Name="Line_Amount">
-          <DataField>Line_Amount</DataField>
-        </Field>
-        <Field Name="Line_AmountFormat">
-          <DataField>Line_AmountFormat</DataField>
-        </Field>
-        <Field Name="SalesOrderNo">
-          <DataField>SalesOrderNo</DataField>
-        </Field>
-        <Field Name="CustomerPO">
-          <DataField>CustomerPO</DataField>
-        </Field>
-        <Field Name="SalesListComment">
-          <DataField>SalesListComment</DataField>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-    </DataSet>
-  </DataSets>
 </Report>

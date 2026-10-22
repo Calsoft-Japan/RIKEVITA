@@ -48,15 +48,17 @@ table 50203 "RV Warehouse Packing Info."
             var
                 WarehousePackingInfo: Record "RV Warehouse Packing Info.";
             begin
-                WarehousePackingInfo.Reset();
-                WarehousePackingInfo.SetRange("Warehouse Shipment No.", Rec."Warehouse Shipment No.");
-                WarehousePackingInfo.SetRange("Sales Order No.", Rec."Sales Order No.");
-                WarehousePackingInfo.SetRange("SO Line No.", Rec."SO Line No.");
-                WarehousePackingInfo.SetRange("Item No.", Rec."Item No.");
-                WarehousePackingInfo.SetRange("Lot No.", Rec."Lot No.");
-                WarehousePackingInfo.SetRange("Container No", Rec."Container No");
-                if WarehousePackingInfo.FindFirst() then begin
-                    Error('For the same shipment Line, the same Lot No. and Container No. should be consolidated into a single packaging line.');
+                if Rec."Container No" <> xRec."Container No" then begin
+                    WarehousePackingInfo.Reset();
+                    WarehousePackingInfo.SetRange("Warehouse Shipment No.", Rec."Warehouse Shipment No.");
+                    WarehousePackingInfo.SetRange("Sales Order No.", Rec."Sales Order No.");
+                    WarehousePackingInfo.SetRange("SO Line No.", Rec."SO Line No.");
+                    WarehousePackingInfo.SetRange("Item No.", Rec."Item No.");
+                    WarehousePackingInfo.SetRange("Lot No.", Rec."Lot No.");
+                    WarehousePackingInfo.SetRange("Container No", Rec."Container No");
+                    if WarehousePackingInfo.FindFirst() then begin
+                        Error('For the same shipment Line, the same Lot No. and Container No. should be consolidated into a single packaging line.');
+                    end;
                 end;
             end;
         }
@@ -74,7 +76,12 @@ table 50203 "RV Warehouse Packing Info."
             begin
                 RikevitaSetup.Get();
                 AItemUnitofMeasure.Get("Item No.", "Contents UOM");
-                BItemUnitofMeasure.Get("Item No.", RikevitaSetup."KG Unit Code");
+                if RikevitaSetup."KG Unit Code" <> '' then begin
+                    BItemUnitofMeasure.Get("Item No.", RikevitaSetup."KG Unit Code");
+                end else begin
+                    Error('Please configure the KG Unit Code in RIKEVITA Setup.');
+                end;
+
 
                 Validate("Quantity (KG)", Quantity / "Qty. per Unit of Measure");
                 Validate("No. of Packages", "Quantity (KG)" / Rec."Contents Per Package");
