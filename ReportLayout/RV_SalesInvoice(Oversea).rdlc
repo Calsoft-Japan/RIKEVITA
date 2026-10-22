@@ -11,172 +11,6 @@
       <rd:DataSourceID>954c61a0-5311-4824-910c-a6d8a50edaad</rd:DataSourceID>
     </DataSource>
   </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet_Result">
-      <Query>
-        <DataSourceName>DataSource</DataSourceName>
-        <CommandText />
-      </Query>
-      <Fields>
-        <Field Name="Number">
-          <DataField>Number</DataField>
-        </Field>
-        <Field Name="CompanyLogo">
-          <DataField>CompanyLogo</DataField>
-        </Field>
-        <Field Name="CompanyName">
-          <DataField>CompanyName</DataField>
-        </Field>
-        <Field Name="RegistrationNo">
-          <DataField>RegistrationNo</DataField>
-        </Field>
-        <Field Name="SSTRegNo">
-          <DataField>SSTRegNo</DataField>
-        </Field>
-        <Field Name="CerfiticateNo">
-          <DataField>CerfiticateNo</DataField>
-        </Field>
-        <Field Name="ISODocumentNo">
-          <DataField>ISODocumentNo</DataField>
-        </Field>
-        <Field Name="ISODocVersion">
-          <DataField>ISODocVersion</DataField>
-        </Field>
-        <Field Name="ReportTitle">
-          <DataField>ReportTitle</DataField>
-        </Field>
-        <Field Name="PrintDate">
-          <DataField>PrintDate</DataField>
-        </Field>
-        <Field Name="Sales_Header_No">
-          <DataField>Sales_Header_No</DataField>
-        </Field>
-        <Field Name="External_Document_No">
-          <DataField>External_Document_No</DataField>
-        </Field>
-        <Field Name="Sell_to_Customer_Name">
-          <DataField>Sell_to_Customer_Name</DataField>
-        </Field>
-        <Field Name="Sell_to_Address">
-          <DataField>Sell_to_Address</DataField>
-        </Field>
-        <Field Name="Sell_to_Address2">
-          <DataField>Sell_to_Address2</DataField>
-        </Field>
-        <Field Name="Sell_to_City">
-          <DataField>Sell_to_City</DataField>
-        </Field>
-        <Field Name="Sell_to_Post_Code">
-          <DataField>Sell_to_Post_Code</DataField>
-        </Field>
-        <Field Name="Sell_to_Country_Region_Code">
-          <DataField>Sell_to_Country_Region_Code</DataField>
-        </Field>
-        <Field Name="Currency_Code">
-          <DataField>Currency_Code</DataField>
-        </Field>
-        <Field Name="Tranfportation">
-          <DataField>Tranfportation</DataField>
-        </Field>
-        <Field Name="FeederVessel">
-          <DataField>FeederVessel</DataField>
-        </Field>
-        <Field Name="MotherVessel">
-          <DataField>MotherVessel</DataField>
-        </Field>
-        <Field Name="VIA">
-          <DataField>VIA</DataField>
-        </Field>
-        <Field Name="FromValue">
-          <DataField>FromValue</DataField>
-        </Field>
-        <Field Name="SailingOnOrAbout">
-          <DataField>SailingOnOrAbout</DataField>
-        </Field>
-        <Field Name="Terms">
-          <DataField>Terms</DataField>
-        </Field>
-        <Field Name="OrderNo">
-          <DataField>OrderNo</DataField>
-        </Field>
-        <Field Name="TotalFreightCharges">
-          <DataField>TotalFreightCharges</DataField>
-        </Field>
-        <Field Name="TotalFreightChargesFormat">
-          <DataField>TotalFreightChargesFormat</DataField>
-        </Field>
-        <Field Name="Ship_to_Name">
-          <DataField>Ship_to_Name</DataField>
-        </Field>
-        <Field Name="ShowFOBPrice">
-          <DataField>ShowFOBPrice</DataField>
-        </Field>
-        <Field Name="ShowExchangeRates">
-          <DataField>ShowExchangeRates</DataField>
-        </Field>
-        <Field Name="QRCode">
-          <DataField>QRCode</DataField>
-        </Field>
-        <Field Name="QRCodeText">
-          <DataField>QRCodeText</DataField>
-        </Field>
-        <Field Name="CurrencyInformation">
-          <DataField>CurrencyInformation</DataField>
-        </Field>
-        <Field Name="WorkDescription">
-          <DataField>WorkDescription</DataField>
-        </Field>
-        <Field Name="SalesComment">
-          <DataField>SalesComment</DataField>
-        </Field>
-        <Field Name="Item_No">
-          <DataField>Item_No</DataField>
-        </Field>
-        <Field Name="Line_No">
-          <DataField>Line_No</DataField>
-        </Field>
-        <Field Name="Description">
-          <DataField>Description</DataField>
-        </Field>
-        <Field Name="Description2">
-          <DataField>Description2</DataField>
-        </Field>
-        <Field Name="Quantity">
-          <DataField>Quantity</DataField>
-        </Field>
-        <Field Name="Quantity_Base">
-          <DataField>Quantity_Base</DataField>
-        </Field>
-        <Field Name="Unit_Price">
-          <DataField>Unit_Price</DataField>
-        </Field>
-        <Field Name="Unit_PriceFormat">
-          <DataField>Unit_PriceFormat</DataField>
-        </Field>
-        <Field Name="Line_Discount_Amount">
-          <DataField>Line_Discount_Amount</DataField>
-        </Field>
-        <Field Name="Line_Discount_AmountFormat">
-          <DataField>Line_Discount_AmountFormat</DataField>
-        </Field>
-        <Field Name="Line_Amount">
-          <DataField>Line_Amount</DataField>
-        </Field>
-        <Field Name="Line_AmountFormat">
-          <DataField>Line_AmountFormat</DataField>
-        </Field>
-        <Field Name="SalesOrderNo">
-          <DataField>SalesOrderNo</DataField>
-        </Field>
-        <Field Name="CustomerPO">
-          <DataField>CustomerPO</DataField>
-        </Field>
-        <Field Name="SalesListComment">
-          <DataField>SalesListComment</DataField>
-        </Field>
-      </Fields>
-    </DataSet>
-  </DataSets>
   <ReportSections>
     <ReportSection>
       <Body>
@@ -3696,7 +3530,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
       <Width>7.37472in</Width>
       <Page>
         <PageHeader>
-          <Height>4.14812in</Height>
+          <Height>4.43979in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -3768,8 +3602,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox4</rd:DefaultName>
-              <Top>0.89042in</Top>
-              <Left>5.32785in</Left>
+              <Top>1.255in</Top>
+              <Left>5.33376in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
               <ZIndex>2</ZIndex>
@@ -3823,8 +3657,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox5</rd:DefaultName>
-              <Top>0.89042in</Top>
-              <Left>6.32785in</Left>
+              <Top>1.255in</Top>
+              <Left>6.33376in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
               <ZIndex>3</ZIndex>
@@ -3876,8 +3710,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox6</rd:DefaultName>
-              <Top>1.14042in</Top>
-              <Left>5.32785in</Left>
+              <Top>1.505in</Top>
+              <Left>5.33376in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
               <ZIndex>4</ZIndex>
@@ -3931,8 +3765,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox7</rd:DefaultName>
-              <Top>1.14042in</Top>
-              <Left>6.32785in</Left>
+              <Top>1.505in</Top>
+              <Left>6.33376in</Left>
               <Height>0.25in</Height>
               <Width>1in</Width>
               <ZIndex>5</ZIndex>
@@ -3984,8 +3818,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>1.45986in</Top>
-              <Left>3.84622in</Left>
+              <Top>1.82444in</Top>
+              <Left>3.85213in</Left>
               <Height>11pt</Height>
               <Width>1in</Width>
               <ZIndex>6</ZIndex>
@@ -4013,8 +3847,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox9</rd:DefaultName>
-              <Top>2.0618in</Top>
-              <Left>0.03439in</Left>
+              <Top>2.42638in</Top>
+              <Left>0.0403in</Left>
               <Height>0.15278in</Height>
               <Width>1in</Width>
               <ZIndex>7</ZIndex>
@@ -4042,8 +3876,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>2.0618in</Top>
-              <Left>1.17973in</Left>
+              <Top>2.42638in</Top>
+              <Left>1.18564in</Left>
               <Height>11pt</Height>
               <Width>2.79355in</Width>
               <ZIndex>8</ZIndex>
@@ -4071,8 +3905,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>2.36735in</Top>
-              <Left>1.17973in</Left>
+              <Top>2.73193in</Top>
+              <Left>1.18564in</Left>
               <Height>11pt</Height>
               <Width>2.79355in</Width>
               <ZIndex>9</ZIndex>
@@ -4100,8 +3934,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>2.21458in</Top>
-              <Left>1.17972in</Left>
+              <Top>2.57916in</Top>
+              <Left>1.18563in</Left>
               <Height>11pt</Height>
               <Width>2.79356in</Width>
               <ZIndex>10</ZIndex>
@@ -4129,8 +3963,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>2.52013in</Top>
-              <Left>1.17973in</Left>
+              <Top>2.88471in</Top>
+              <Left>1.18564in</Left>
               <Height>11pt</Height>
               <Width>2.79355in</Width>
               <ZIndex>11</ZIndex>
@@ -4158,8 +3992,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>2.67291in</Top>
-              <Left>1.17973in</Left>
+              <Top>3.03749in</Top>
+              <Left>1.18564in</Left>
               <Height>11pt</Height>
               <Width>2.79355in</Width>
               <ZIndex>12</ZIndex>
@@ -4187,8 +4021,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>1.45986in</Top>
-              <Left>4.84622in</Left>
+              <Top>1.82444in</Top>
+              <Left>4.85213in</Left>
               <Height>11pt</Height>
               <Width>1in</Width>
               <ZIndex>13</ZIndex>
@@ -4222,8 +4056,8 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox45</rd:DefaultName>
-              <Top>0.78in</Top>
-              <Left>2.44667in</Left>
+              <Top>1.14458in</Top>
+              <Left>2.45258in</Left>
               <Height>0.36042in</Height>
               <Width>2.76312in</Width>
               <ZIndex>14</ZIndex>
@@ -4236,37 +4070,6 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 <PaddingRight>2pt</PaddingRight>
                 <PaddingTop>2pt</PaddingTop>
                 <PaddingBottom>2pt</PaddingBottom>
-              </Style>
-            </Textbox>
-            <Textbox Name="Textbox26">
-              <CanGrow>true</CanGrow>
-              <KeepTogether>true</KeepTogether>
-              <Paragraphs>
-                <Paragraph>
-                  <TextRuns>
-                    <TextRun>
-                      <Value>=First(Fields!CerfiticateNo.Value, "DataSet_Result")</Value>
-                      <Style>
-                        <FontSize>8pt</FontSize>
-                      </Style>
-                    </TextRun>
-                  </TextRuns>
-                  <Style>
-                    <TextAlign>Center</TextAlign>
-                  </Style>
-                </Paragraph>
-              </Paragraphs>
-              <rd:DefaultName>Textbox26</rd:DefaultName>
-              <Top>0.49527in</Top>
-              <Left>1.57167in</Left>
-              <Height>11pt</Height>
-              <Width>4.78819in</Width>
-              <ZIndex>15</ZIndex>
-              <Style>
-                <Border>
-                  <Style>None</Style>
-                </Border>
-                <VerticalAlign>Middle</VerticalAlign>
               </Style>
             </Textbox>
             <Textbox Name="Textbox16">
@@ -4286,11 +4089,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>1.45986in</Top>
-              <Left>0.03036in</Left>
+              <Top>1.82444in</Top>
+              <Left>0.03627in</Left>
               <Height>11pt</Height>
               <Width>1.03036in</Width>
-              <ZIndex>16</ZIndex>
+              <ZIndex>15</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4315,11 +4118,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>1.46033in</Top>
-              <Left>1.20605in</Left>
+              <Top>1.82491in</Top>
+              <Left>1.21196in</Left>
               <Height>11pt</Height>
               <Width>2.43938in</Width>
-              <ZIndex>17</ZIndex>
+              <ZIndex>16</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4344,11 +4147,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>1.68209in</Top>
-              <Left>0.03439in</Left>
+              <Top>2.04667in</Top>
+              <Left>0.0403in</Left>
               <Height>11pt</Height>
               <Width>1.03036in</Width>
-              <ZIndex>18</ZIndex>
+              <ZIndex>17</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4374,11 +4177,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>1.68209in</Top>
-              <Left>1.21008in</Left>
+              <Top>2.04667in</Top>
+              <Left>1.21599in</Left>
               <Height>11pt</Height>
               <Width>4.63614in</Width>
-              <ZIndex>19</ZIndex>
+              <ZIndex>18</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4403,11 +4206,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>3.26974in</Top>
-              <Left>0.03439in</Left>
+              <Top>3.63432in</Top>
+              <Left>0.0403in</Left>
               <Height>11pt</Height>
               <Width>1.1757in</Width>
-              <ZIndex>20</ZIndex>
+              <ZIndex>19</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4432,11 +4235,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>3.26974in</Top>
-              <Left>1.21009in</Left>
+              <Top>3.63432in</Top>
+              <Left>1.216in</Left>
               <Height>11pt</Height>
               <Width>2.76319in</Width>
-              <ZIndex>21</ZIndex>
+              <ZIndex>20</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4461,11 +4264,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>3.42252in</Top>
-              <Left>0.03036in</Left>
+              <Top>3.7871in</Top>
+              <Left>0.03627in</Left>
               <Height>11pt</Height>
               <Width>1.1757in</Width>
-              <ZIndex>22</ZIndex>
+              <ZIndex>21</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4490,11 +4293,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>3.5753in</Top>
-              <Left>0.03036in</Left>
+              <Top>3.93988in</Top>
+              <Left>0.03627in</Left>
               <Height>11pt</Height>
               <Width>1.1757in</Width>
-              <ZIndex>23</ZIndex>
+              <ZIndex>22</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4519,11 +4322,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>3.26974in</Top>
-              <Left>4.22368in</Left>
+              <Top>3.63432in</Top>
+              <Left>4.22959in</Left>
               <Height>11pt</Height>
               <Width>1.61099in</Width>
-              <ZIndex>24</ZIndex>
+              <ZIndex>23</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4548,11 +4351,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>3.42252in</Top>
-              <Left>4.22368in</Left>
+              <Top>3.7871in</Top>
+              <Left>4.22959in</Left>
               <Height>11pt</Height>
               <Width>1.61099in</Width>
-              <ZIndex>25</ZIndex>
+              <ZIndex>24</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4577,11 +4380,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>3.74186in</Top>
-              <Left>4.22368in</Left>
+              <Top>4.10644in</Top>
+              <Left>4.22959in</Left>
               <Height>11pt</Height>
               <Width>0.37151in</Width>
-              <ZIndex>26</ZIndex>
+              <ZIndex>25</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4606,11 +4409,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>3.26974in</Top>
-              <Left>5.83467in</Left>
+              <Top>3.63432in</Top>
+              <Left>5.84058in</Left>
               <Height>11pt</Height>
               <Width>1.27978in</Width>
-              <ZIndex>27</ZIndex>
+              <ZIndex>26</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4635,11 +4438,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>3.42252in</Top>
-              <Left>5.83467in</Left>
+              <Top>3.7871in</Top>
+              <Left>5.84058in</Left>
               <Height>11pt</Height>
               <Width>1.27978in</Width>
-              <ZIndex>28</ZIndex>
+              <ZIndex>27</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4664,11 +4467,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>3.74186in</Top>
-              <Left>4.59519in</Left>
+              <Top>4.10644in</Top>
+              <Left>4.6011in</Left>
               <Height>11pt</Height>
               <Width>2.51926in</Width>
-              <ZIndex>29</ZIndex>
+              <ZIndex>28</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4693,11 +4496,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>3.42252in</Top>
-              <Left>1.21008in</Left>
+              <Top>3.7871in</Top>
+              <Left>1.21599in</Left>
               <Height>11pt</Height>
               <Width>2.7632in</Width>
-              <ZIndex>30</ZIndex>
+              <ZIndex>29</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4722,11 +4525,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>3.5753in</Top>
-              <Left>1.20606in</Left>
+              <Top>3.93988in</Top>
+              <Left>1.21197in</Left>
               <Height>11pt</Height>
               <Width>2.76722in</Width>
-              <ZIndex>31</ZIndex>
+              <ZIndex>30</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4738,11 +4541,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
               <Source>Embedded</Source>
               <Value>QQ_1779871389219</Value>
               <Sizing>FitProportional</Sizing>
-              <Top>2.21458in</Top>
-              <Left>5.83467in</Left>
+              <Top>2.57916in</Top>
+              <Left>5.84058in</Left>
               <Height>0.76389in</Height>
               <Width>0.78542in</Width>
-              <ZIndex>32</ZIndex>
+              <ZIndex>31</ZIndex>
               <Visibility>
                 <Hidden>=iif(First(Fields!QRCode.Value, "DataSet_Result"),false,true)</Hidden>
               </Visibility>
@@ -4768,11 +4571,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                   <Style />
                 </Paragraph>
               </Paragraphs>
-              <Top>2.21458in</Top>
-              <Left>4.9598in</Left>
+              <Top>2.57916in</Top>
+              <Left>4.96571in</Left>
               <Height>0.76389in</Height>
               <Width>0.80543in</Width>
-              <ZIndex>33</ZIndex>
+              <ZIndex>32</ZIndex>
               <Visibility>
                 <Hidden>=iif(First(Fields!QRCode.Value, "DataSet_Result"),false,true)</Hidden>
               </Visibility>
@@ -4803,11 +4606,11 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox8</rd:DefaultName>
-              <Top>3.58909in</Top>
-              <Left>4.22368in</Left>
+              <Top>3.95367in</Top>
+              <Left>4.22959in</Left>
               <Height>11pt</Height>
               <Width>0.37151in</Width>
-              <ZIndex>34</ZIndex>
+              <ZIndex>33</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
@@ -4832,16 +4635,82 @@ Cstr(Fields!QRCodeText.Value)</Value>
                 </Paragraph>
               </Paragraphs>
               <rd:DefaultName>Textbox10</rd:DefaultName>
-              <Top>3.58909in</Top>
-              <Left>4.59519in</Left>
+              <Top>3.95367in</Top>
+              <Left>4.6011in</Left>
               <Height>11pt</Height>
               <Width>2.51926in</Width>
+              <ZIndex>34</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox26">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!CerfiticateNo.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox26</rd:DefaultName>
+              <Top>0.85639in</Top>
+              <Left>1.57167in</Left>
+              <Height>11pt</Height>
+              <Width>4.78819in</Width>
               <ZIndex>35</ZIndex>
               <Style>
                 <Border>
                   <Style>None</Style>
                 </Border>
                 <VerticalAlign>Middle</VerticalAlign>
+              </Style>
+            </Textbox>
+            <Textbox Name="Textbox3">
+              <CanGrow>true</CanGrow>
+              <KeepTogether>true</KeepTogether>
+              <Paragraphs>
+                <Paragraph>
+                  <TextRuns>
+                    <TextRun>
+                      <Value>=First(Fields!RegistrationNo.Value, "DataSet_Result")</Value>
+                      <Style>
+                        <FontSize>8pt</FontSize>
+                      </Style>
+                    </TextRun>
+                  </TextRuns>
+                  <Style>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </Paragraph>
+              </Paragraphs>
+              <rd:DefaultName>Textbox3</rd:DefaultName>
+              <Top>0.48139in</Top>
+              <Left>1.57167in</Left>
+              <Height>0.25in</Height>
+              <Width>4.78819in</Width>
+              <ZIndex>36</ZIndex>
+              <Style>
+                <Border>
+                  <Style>None</Style>
+                </Border>
+                <VerticalAlign>Middle</VerticalAlign>
+                <PaddingLeft>2pt</PaddingLeft>
+                <PaddingRight>2pt</PaddingRight>
+                <PaddingTop>2pt</PaddingTop>
+                <PaddingBottom>2pt</PaddingBottom>
               </Style>
             </Textbox>
           </ReportItems>
@@ -4997,12 +4866,6 @@ Cstr(Fields!QRCodeText.Value)</Value>
       </Page>
     </ReportSection>
   </ReportSections>
-  <ReportParametersLayout>
-    <GridLayoutDefinition>
-      <NumberOfColumns>4</NumberOfColumns>
-      <NumberOfRows>2</NumberOfRows>
-    </GridLayoutDefinition>
-  </ReportParametersLayout>
   <Code>Public Function BlankZero(ByVal Value As Decimal)
     if Value = 0 then
         Return ""
@@ -5089,4 +4952,170 @@ lDUxiTqFPVrtT6v1NHtOro4HLDlLaep+zhfx/s+RKiMR0bNs5Tq5oGczoUztzYFJJnTU35DgCBTbHNnc
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
   <rd:ReportID>0eeb6585-38ae-40f1-885b-8d50088d51b4</rd:ReportID>
+  <DataSets>
+    <DataSet Name="DataSet_Result">
+      <Fields>
+        <Field Name="Number">
+          <DataField>Number</DataField>
+        </Field>
+        <Field Name="CompanyLogo">
+          <DataField>CompanyLogo</DataField>
+        </Field>
+        <Field Name="CompanyName">
+          <DataField>CompanyName</DataField>
+        </Field>
+        <Field Name="RegistrationNo">
+          <DataField>RegistrationNo</DataField>
+        </Field>
+        <Field Name="SSTRegNo">
+          <DataField>SSTRegNo</DataField>
+        </Field>
+        <Field Name="CerfiticateNo">
+          <DataField>CerfiticateNo</DataField>
+        </Field>
+        <Field Name="ISODocumentNo">
+          <DataField>ISODocumentNo</DataField>
+        </Field>
+        <Field Name="ISODocVersion">
+          <DataField>ISODocVersion</DataField>
+        </Field>
+        <Field Name="ReportTitle">
+          <DataField>ReportTitle</DataField>
+        </Field>
+        <Field Name="PrintDate">
+          <DataField>PrintDate</DataField>
+        </Field>
+        <Field Name="Sales_Header_No">
+          <DataField>Sales_Header_No</DataField>
+        </Field>
+        <Field Name="External_Document_No">
+          <DataField>External_Document_No</DataField>
+        </Field>
+        <Field Name="Sell_to_Customer_Name">
+          <DataField>Sell_to_Customer_Name</DataField>
+        </Field>
+        <Field Name="Sell_to_Address">
+          <DataField>Sell_to_Address</DataField>
+        </Field>
+        <Field Name="Sell_to_Address2">
+          <DataField>Sell_to_Address2</DataField>
+        </Field>
+        <Field Name="Sell_to_City">
+          <DataField>Sell_to_City</DataField>
+        </Field>
+        <Field Name="Sell_to_Post_Code">
+          <DataField>Sell_to_Post_Code</DataField>
+        </Field>
+        <Field Name="Sell_to_Country_Region_Code">
+          <DataField>Sell_to_Country_Region_Code</DataField>
+        </Field>
+        <Field Name="Currency_Code">
+          <DataField>Currency_Code</DataField>
+        </Field>
+        <Field Name="Tranfportation">
+          <DataField>Tranfportation</DataField>
+        </Field>
+        <Field Name="FeederVessel">
+          <DataField>FeederVessel</DataField>
+        </Field>
+        <Field Name="MotherVessel">
+          <DataField>MotherVessel</DataField>
+        </Field>
+        <Field Name="VIA">
+          <DataField>VIA</DataField>
+        </Field>
+        <Field Name="FromValue">
+          <DataField>FromValue</DataField>
+        </Field>
+        <Field Name="SailingOnOrAbout">
+          <DataField>SailingOnOrAbout</DataField>
+        </Field>
+        <Field Name="Terms">
+          <DataField>Terms</DataField>
+        </Field>
+        <Field Name="OrderNo">
+          <DataField>OrderNo</DataField>
+        </Field>
+        <Field Name="SalesListComment">
+          <DataField>SalesListComment</DataField>
+        </Field>
+        <Field Name="TotalFreightCharges">
+          <DataField>TotalFreightCharges</DataField>
+        </Field>
+        <Field Name="TotalFreightChargesFormat">
+          <DataField>TotalFreightChargesFormat</DataField>
+        </Field>
+        <Field Name="Ship_to_Name">
+          <DataField>Ship_to_Name</DataField>
+        </Field>
+        <Field Name="ShowFOBPrice">
+          <DataField>ShowFOBPrice</DataField>
+        </Field>
+        <Field Name="ShowExchangeRates">
+          <DataField>ShowExchangeRates</DataField>
+        </Field>
+        <Field Name="QRCode">
+          <DataField>QRCode</DataField>
+        </Field>
+        <Field Name="QRCodeText">
+          <DataField>QRCodeText</DataField>
+        </Field>
+        <Field Name="CurrencyInformation">
+          <DataField>CurrencyInformation</DataField>
+        </Field>
+        <Field Name="WorkDescription">
+          <DataField>WorkDescription</DataField>
+        </Field>
+        <Field Name="SalesComment">
+          <DataField>SalesComment</DataField>
+        </Field>
+        <Field Name="Item_No">
+          <DataField>Item_No</DataField>
+        </Field>
+        <Field Name="Line_No">
+          <DataField>Line_No</DataField>
+        </Field>
+        <Field Name="Description">
+          <DataField>Description</DataField>
+        </Field>
+        <Field Name="Description2">
+          <DataField>Description2</DataField>
+        </Field>
+        <Field Name="Quantity">
+          <DataField>Quantity</DataField>
+        </Field>
+        <Field Name="Quantity_Base">
+          <DataField>Quantity_Base</DataField>
+        </Field>
+        <Field Name="Unit_Price">
+          <DataField>Unit_Price</DataField>
+        </Field>
+        <Field Name="Unit_PriceFormat">
+          <DataField>Unit_PriceFormat</DataField>
+        </Field>
+        <Field Name="Line_Discount_Amount">
+          <DataField>Line_Discount_Amount</DataField>
+        </Field>
+        <Field Name="Line_Discount_AmountFormat">
+          <DataField>Line_Discount_AmountFormat</DataField>
+        </Field>
+        <Field Name="Line_Amount">
+          <DataField>Line_Amount</DataField>
+        </Field>
+        <Field Name="Line_AmountFormat">
+          <DataField>Line_AmountFormat</DataField>
+        </Field>
+        <Field Name="SalesOrderNo">
+          <DataField>SalesOrderNo</DataField>
+        </Field>
+        <Field Name="CustomerPO">
+          <DataField>CustomerPO</DataField>
+        </Field>
+      </Fields>
+      <Query>
+        <DataSourceName>DataSource</DataSourceName>
+        <CommandText />
+      </Query>
+    </DataSet>
+  </DataSets>
 </Report>
