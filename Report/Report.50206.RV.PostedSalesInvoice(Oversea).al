@@ -102,6 +102,9 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                 column(OrderNo; OrderNo)
                 {
                 }
+                column(SalesListComment; SalesListComment)
+                {
+                }
                 dataitem(SalesInvoiceLine; "Sales Invoice Line")
                 {
                     DataItemTableView = where(Type = const(Item));
@@ -140,9 +143,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                     column(CustomerPO; CustomerPO)
                     {
                     }
-                    column(SalesListComment; SalesListComment)
-                    {
-                    }
+
                     trigger OnAfterGetRecord()
                     var
                         RecItem: Record Item;
