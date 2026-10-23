@@ -48,6 +48,13 @@ tableextension 50109 "RV Payment Journal Line Ext" extends "Gen. Journal Line"
             //TableRelation = Vendor."RV_ID No./Passport No.";
             Editable = false;
         }
+        field(50106; "RV_Account Name"; Text[100])
+        {
+            Description = 'FDD017';
+            Caption = 'RV Account Name';
+            DataClassification = ToBeClassified;
+            Editable = true;
+        }
 
         modify("Account No.")
         {
@@ -62,12 +69,14 @@ tableextension 50109 "RV Payment Journal Line Ext" extends "Gen. Journal Line"
                 "Recipient Bank Account" := '';
                 "RV_Partner Type" := Vend."Partner Type"::" ";
                 //"RV_Cheque No." := '';
+                "RV_Account Name" := '';
 
                 if (Rec."Account Type" = "Account Type"::Employee) and (Rec."Account No." <> '') then begin
                     if Emp.Get("Account No.") then begin
                         "RV_Expat Employee" := Emp."RV_Expat Employee";
                         "RV_ID No./Passport No." := Emp."RV_ID No./Passport No.";
                         "Recipient Bank Account" := Emp."RV_Bank Account Code";
+                        "RV_Account Name" := Emp.FullName();
                     end;
                 end
                 else
@@ -76,6 +85,7 @@ tableextension 50109 "RV Payment Journal Line Ext" extends "Gen. Journal Line"
                             "RV_Partner Type" := Vend."Partner Type";
                             "RV_ID No./Passport No." := Vend."RV_ID No./Passport No.";
                             "Recipient Bank Account" := Vend."Preferred Bank Account Code";
+                            "RV_Account Name" := Vend.Name;
                         end;
                     end;
 

@@ -6,6 +6,14 @@ pageextension 50113 "RV Payment Journal Ext" extends "Payment Journal"
 {
     layout
     {
+        addafter("Account No.")
+        {
+            field("RV Account Name"; Rec."RV_Account Name")
+            {
+                Description = 'FDD017';
+                ApplicationArea = All;
+            }
+        }
         addafter(Description)
         {
             field("RV_Description 2"; Rec."RV_Description 2")

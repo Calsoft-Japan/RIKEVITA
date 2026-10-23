@@ -314,6 +314,7 @@ codeunit 50104 "RV Bank Payment to Excel"
         VndBank: Record "Vendor Bank Account";
         EmplLedgEntry: Record "Employee Ledger Entry";
         BankAcctNo, RegNo, PassportNo, Name1, Name2, Name3, Email, Advice, NewNIRC : Text;
+        AcctName: Text;
         CustRefNo: Integer;
     begin
         PassportNo := '';
@@ -348,6 +349,11 @@ codeunit 50104 "RV Bank Payment to Excel"
             if Empl."RV_Expat Employee" then
                 PassportNo := Empl."RV_ID No./Passport No.";
         end;
+
+        AcctName := GenJnlLine."RV_Account Name";//FDD017 2026/04/22: Client will change the Acct Name in case of temporary vendor/employee.
+        Name1 := CopyStr(AcctName, 1, 40);
+        Name2 := CopyStr(AcctName, 41, 80);
+        Name3 := CopyStr(AcctName, 81, 100);
 
         if Advice = '' then
             Advice := GenJnlLine.Description;
@@ -463,6 +469,8 @@ codeunit 50104 "RV Bank Payment to Excel"
             Ref2 := Empl.FullName();
         end;
 
+        Ref2 := GenJnlLine."RV_Account Name";//FDD017 2026/04/22: Client will change the Acct Name in case of temporary vendor/employee.
+
         VenInvNo := GenJnlLine.Description;
         AppliedAmt := GenJnlLine."Amount (LCY)";
         if (GenJnlLine."Account Type" = GenJnlLine."Account Type"::Vendor) and (VLE."Document No." <> '') then begin
@@ -521,6 +529,7 @@ codeunit 50104 "RV Bank Payment to Excel"
         RVSetup: Record "RV RIKEVITA Setup";
         Vend: Record Vendor;
         VnBank: Record "Vendor Bank Account";
+        VenName: Text;
         CompanyName: Text;
         CompanyBankAccountNo: Text;
         BankAcctNo, Email, SegCode : Text;
@@ -556,6 +565,9 @@ codeunit 50104 "RV Bank Payment to Excel"
         SegCode := GetDimensionValueCode(GenJnlLine, RVSetup."Segment Dim. Code");//'ACC_SEGMNT');
         //SegCode := RVSetup."Segment Dim. Code";
 
+        Vend.Name := Vend.Name;//FDD017 2026/04/22: Client will change the Acct Name in case of temporary vendor/employee.
+        VenName := GenJnlLine."RV_Account Name";//FDD017 2026/04/22: Client will change the Acct Name in case of temporary vendor/employee.
+
         TempExcelBuffer.NewRow();
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(CompanyBankAccountNo, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
@@ -564,7 +576,7 @@ codeunit 50104 "RV Bank Payment to Excel"
         TempExcelBuffer.AddColumn(SegCode, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);//<Segment Code> dimension code setting to RIKEVITA Setup
         TempExcelBuffer.AddColumn(BankAcctNo, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(VnBank."Bank Account No.", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
-        TempExcelBuffer.AddColumn(Vend.Name, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
+        TempExcelBuffer.AddColumn(VenName, false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);//Vend.Name
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn('', false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
         TempExcelBuffer.AddColumn(RVSetup."Recipient Ref. Code", false, '', false, false, false, '', TempExcelBuffer."Cell Type"::Text);
