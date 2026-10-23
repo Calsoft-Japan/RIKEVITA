@@ -6,9 +6,9 @@ tableextension 50205 "RV Company Information" extends "Company Information"
 {
     fields
     {
-        field(50200; "RV_RESO Certificate No."; Code[50])
+        field(50200; "RV_RSPU Certificate No."; Code[50])
         {
-            Caption = 'RESO Certificate No.';
+            Caption = 'RSPU Certificate No.';
             Description = 'FDD020';
         }
 

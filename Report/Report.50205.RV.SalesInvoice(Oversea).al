@@ -310,7 +310,7 @@ report 50205 "RV Sales Invoice(Oversea)"
 
                             RecItem.Get(SalesLine."No.");
                             if RecItem."RV_Print RSPO No." then begin
-                                CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
+                                CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RSPU Certificate No.";
                             end;
                             if ((TempNo < 10) and (SalesLine."Shipment No." <> '') and (RecItem.Type = RecItem.Type::Inventory)) then begin
                                 RecSalesShipmentHeader.Reset();

@@ -206,7 +206,7 @@ report 50203 "RV Sales Invoice(Local)"
                     repeat
                         RecItem.Get(SalesLine."No.");
                         if RecItem."RV_Print RSPO No." then begin
-                            CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
+                            CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RSPU Certificate No.";
                         end;
                     until SalesLine.Next() = 0;
                 end;

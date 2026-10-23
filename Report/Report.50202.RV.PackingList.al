@@ -235,7 +235,7 @@ report 50202 "RV Packing List Report"
                             repeat
                                 if RecItem.Get(RecPostedWhseShipmentLine."Item No.") then begin
                                     if RecItem."RV_Print RSPO No." then begin
-                                        CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
+                                        CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RSPU Certificate No.";
                                     end;
                                 end;
                             until RecPostedWhseShipmentLine.Next() = 0;

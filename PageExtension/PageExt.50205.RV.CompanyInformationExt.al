@@ -13,9 +13,9 @@ pageextension 50205 "RV Company Information Ext" extends "Company Information"
                 Caption = 'SST Reg No.';
                 ApplicationArea = all;
             }
-            field("RESO Certificate No."; Rec."RV_RESO Certificate No.")
+            field("RSPU Certificate No."; Rec."RV_RSPU Certificate No.")
             {
-                Caption = 'RESO Certificate No.';
+                Caption = 'RSPU Certificate No.';
                 ApplicationArea = all;
             }
             field("Register. No. for Rikevita"; Rec."RV_Registration No.")

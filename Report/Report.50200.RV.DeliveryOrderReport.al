@@ -122,7 +122,7 @@ report 50200 "RV Delivery Order Report"
 
                     if RecItem.Get(SalesShipmentLine."No.") then begin
                         if RecItem."RV_Print RSPO No." then begin
-                            CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RESO Certificate No.";
+                            CerfiticateNo := 'CERFITICATE NO. ' + CompanyInfo."RV_RSPU Certificate No.";
                         end;
                         Description := RecItem.Description;
                         Description2 := RecItem."Description 2";
