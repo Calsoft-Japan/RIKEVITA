@@ -1,6 +1,6 @@
 /// <summary>
 /// Page RV Whse Rcpt Line Details (ID 50911)
-/// FDD009 2026/10/25: New. (Shawn)
+/// FDD101 2026/10/25: New. (Shawn)
 /// </summary>
 page 50911 "RV Whse Rcpt Line Details"
 {
@@ -128,14 +128,14 @@ page 50911 "RV Whse Rcpt Line Details"
         Clear(strConcat);
 
         if (Rec."Source Type" = 39) and (Rec."Source Subtype" = 1) then begin
-            // Source is Purchase Order
+            // Source is Purchase Order Line
             if PurchHeader.Get(PurchHeader."Document Type"::Order, Rec."Source No.") then begin
                 VendorNo := PurchHeader."Buy-from Vendor No.";
                 VendorName := PurchHeader."Buy-from Vendor Name";
             end;
         end;
 
-        ReserveEntry.SetRange("Source Type", 39); //Purchase Document
+        ReserveEntry.SetRange("Source Type", 39); //Purchase Line
         ReserveEntry.SetRange("Source Subtype", 1); //Order
         ReserveEntry.SetRange("Source ID", Rec."Source No."); // Purchase Order No.
         ReserveEntry.SetRange("Source Ref. No.", Rec."Source Line No."); // Purchase Order Line No.
