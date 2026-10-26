@@ -99,7 +99,7 @@ page 50509 "RV IQC Card"
                 field("Expiration Date"; Rec."Expiration Date")
                 {
                     ApplicationArea = All;
-                    Editable = false;
+                    Editable = QCCardEnable;
                 }
                 field("QC Date"; Rec."QC Date")
                 {
@@ -164,10 +164,20 @@ page 50509 "RV IQC Card"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("QC Rejected By"; Rec."QC Rejected By")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("QC Rejected Remark"; Rec."QC Rejected Remark")
                 {
                     ApplicationArea = All;
                     MultiLine = true;
+                    Editable = false;
+                }
+                field("QC Rejected Date"; Rec."QC Rejected Date")
+                {
+                    ApplicationArea = All;
                     Editable = false;
                 }
                 field("Line No."; Rec."Line No.")
@@ -294,22 +304,24 @@ page 50509 "RV IQC Card"
 
                     //CheckInit
                     Rec.CheckInit();
-
+                    //check setting for post
+                    Rec.TestField("Location Code");
+                    Rec.TestField("Bin Code");
+                    Rec.TestField("Storage Bin Code");
+                    Rec.TestField("Quantity");
+                    //Rec.TestField("Expiration Date");
                     //ApprovedRemark_Input
                     Rec.ApprovedRemark_Input();
+                    //Post Item Reclass Journal
+                    if Rec."Ref. Order Type" = Rec."Ref. Order Type"::"Posted Purchase Receipt" then begin
+                        Rec.PostItemReclassJournal(Rec."Location Code", Rec."Location Code", Rec."Bin Code", Rec."Storage Bin Code", Rec.Quantity, Rec."Expiration Date");
+                    end;
+                    Rec.UpdatePostedReceiptIQCProgress();
 
                     //Enable
                     Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
 
-                    //Post Item Reclass Journal
-                    if Rec."Ref. Order Type" = Rec."Ref. Order Type"::"Posted Purchase Receipt" then begin
-                        Rec.TestField("Location Code");
-                        Rec.TestField("Bin Code");
-                        Rec.TestField("Storage Bin Code");
-                        Rec.TestField("Quantity");
-                        Rec.TestField("Expiration Date");
-                        Rec.PostItemReclassJournal(Rec."Location Code", Rec."Location Code", Rec."Bin Code", Rec."Storage Bin Code", Rec.Quantity, Rec."Expiration Date");
-                    end;
+
                 end;
             }
             action("QC Reverse")
@@ -319,10 +331,28 @@ page 50509 "RV IQC Card"
                 Image = Approval;
                 Enabled = QCReverseEnable;
                 trigger OnAction()
+                var
+                    oldStatus: Enum "RV QC Status";
                 begin
                     //IsQCReverseAllowed
                     Rec.IsQCReverseAllowed();
-
+                    //Post Item Reclass Journal
+                    if Rec."Ref. Order Type" = Rec."Ref. Order Type"::"Posted Purchase Receipt" then begin
+                        oldStatus := Rec."QC Status";
+                        Rec.TestField("Location Code");
+                        Rec.TestField("Bin Code");
+                        Rec.TestField("Storage Bin Code");
+                        Rec.TestField("Quantity");
+                        //Rec.TestField("Expiration Date");
+                        if oldStatus = oldStatus::Approved then
+                            Rec.PostItemReclassJournal(Rec."Location Code", Rec."Location Code", Rec."Storage Bin Code", Rec."Bin Code", Rec.Quantity, Rec."Expiration Date");
+                        if oldStatus = oldStatus::Rejected then begin
+                            RIKEVITASetup.Get();
+                            RIKEVITASetup.TestField("NC Location Code");
+                            RIKEVITASetup.TestField("NC Bin Code");
+                            Rec.PostItemReclassJournal(RIKEVITASetup."NC Location Code", Rec."Location Code", RIKEVITASetup."NC Bin Code", rec."Bin Code", Rec.Quantity, Rec."Expiration Date");
+                        end;
+                    end;
                     Rec."QC Status" := Rec."QC Status"::Checked;
                     Rec.Modify();
                     //Enable
@@ -336,14 +366,33 @@ page 50509 "RV IQC Card"
                 Image = Approval;
                 Enabled = QCRejectEnable;
                 trigger OnAction()
+                var
+                    RIKEVITASetup: Record "RV RIKEVITA Setup";
                 begin
                     //IsQCRejectAllowed
                     Rec.IsQCRejectAllowed();
+                    //Check setting for reject posting
+                    RIKEVITASetup.Get();
+                    RIKEVITASetup.TestField("NC Location Code");
+                    RIKEVITASetup.TestField("NC Bin Code");
+                    Rec.TestField("Location Code");
+                    Rec.TestField("Bin Code");
+                    // Rec.TestField("Storage Bin Code");
+                    Rec.TestField("Quantity");
+
+                    //RejectedRemark_Input
+                    Rec.RejectedRemark_Input();
 
                     Rec."QC Status" := Rec."QC Status"::Rejected;
                     Rec.Modify();
+                    Rec.UpdatePostedReceiptIQCProgress();
                     //Enable
                     Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+                    //Post Item Reclass Journal
+                    if Rec."Ref. Order Type" = Rec."Ref. Order Type"::"Posted Purchase Receipt" then begin
+                        //Rec.TestField("Expiration Date");
+                        Rec.PostItemReclassJournal(Rec."Location Code", RIKEVITASetup."NC Location Code", Rec."Bin Code", RIKEVITASetup."NC Bin Code", Rec.Quantity, Rec."Expiration Date");
+                    end;
                 end;
             }
             action("NC Result")

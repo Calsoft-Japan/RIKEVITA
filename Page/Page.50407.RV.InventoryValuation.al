@@ -31,7 +31,7 @@ page 50407 "RV Inventory Valuation Name"
                 {
                     ToolTip = 'Specifies the value of the Ending Date field.', Comment = '%';
                 }
-                field(Site; Rec.Site)
+                field("Shortcut Dimension 1 Code"; Rec."Shortcut Dimension 1 Code")
                 {
                     ToolTip = 'Specifies the value of the Site field.', Comment = '%';
                 }
@@ -132,9 +132,9 @@ page 50407 "RV Inventory Valuation Name"
                     GLSetup.get();
                     EntryNo := 1;
                     SITEDimValue.reset;
-                    SITEDimValue.SetRange("Dimension Code", GLSetup."Global Dimension 2 Code");
-                    If Rec.Site <> '' then
-                        SITEDimValue.SetRange(Code, Rec.Site);
+                    SITEDimValue.SetRange("Dimension Code", GLSetup."Global Dimension 1 Code");
+                    If Rec."Shortcut Dimension 1 Code" <> '' then
+                        SITEDimValue.SetFilter(Code, Rec."Shortcut Dimension 1 Code");
                     if SITEDimValue.FindSet() then
                         repeat
                             Item.reset;
@@ -143,7 +143,7 @@ page 50407 "RV Inventory Valuation Name"
                                 Item.SetFilter("No.", Rec."Item Filter");
                             If Item.findset then
                                 repeat
-                                    item.SetFilter("Global Dimension 2 Filter", SITEDimValue.Code);
+                                    item.SetFilter("Global Dimension 1 Filter", SITEDimValue.Code);
                                     CalculateItem(Item)
                                 until Item.Next = 0;
                         until SITEDimValue.next = 0;
@@ -187,7 +187,7 @@ page 50407 "RV Inventory Valuation Name"
         RIKEVITASetup.get();
         ValueEntry.Reset();
         ValueEntry.SetRange("Item No.", Item."No.");
-        ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+        ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
         ValueEntry.SetRange("Posting Date", 0D, EndDate);
         IsEmptyLine := ValueEntry.IsEmpty();
         if not IsEmptyLine then begin
@@ -200,7 +200,7 @@ page 50407 "RV Inventory Valuation Name"
             IsEmptyLine := true;
             if StartDate > 0D then begin
                 ValueEntry.SetRange("Posting Date", 0D, CalcDate('<-1D>', StartDate));
-                ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+                ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
                 ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
                 AssignAmounts(ValueEntry, StartingInvoicedQty, StartingExpectedQty, 1);
                 IsEmptyLine := IsEmptyLine and ((StartingInvoicedQty = 0));
@@ -215,7 +215,7 @@ page 50407 "RV Inventory Valuation Name"
                 "Item Ledger Entry Type", '%1',
                 ValueEntry."Item Ledger Entry Type"::Purchase);
             ValueEntry.SetFilter("Invoiced Quantity", '>0');
-            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
             ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
             AssignAmounts(ValueEntry, IncreaseInvoicedQty, IncreaseExpectedQty, 1);
 
@@ -224,7 +224,7 @@ page 50407 "RV Inventory Valuation Name"
                 "Item Ledger Entry Type", '%1|%2',
                 ValueEntry."Item Ledger Entry Type"::Output,
                 ValueEntry."Item Ledger Entry Type"::"Assembly Output");
-            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
             ValueEntry.Setrange("Invoiced Quantity");
             ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
             AssignAmounts(ValueEntry, IncreaseInvoicedQty, IncreaseExpectedQty, 1);
@@ -236,7 +236,7 @@ page 50407 "RV Inventory Valuation Name"
                 ValueEntry."Item Ledger Entry Type"::"Positive Adjmt.");
             ValueEntry.SetRange("Reason Code", InvyAdjustRC);
             ValueEntry.Setrange("Invoiced Quantity");
-            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
             ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
             AssignAmounts(ValueEntry, IncreaseInvoicedQty, IncreaseExpectedQty, -1);
 
@@ -247,7 +247,7 @@ page 50407 "RV Inventory Valuation Name"
                 "Item Ledger Entry Type", ValueEntry."Item Ledger Entry Type"::Sale);
             ValueEntry.SetFilter("Invoiced Quantity", '<0');
             ValueEntry.SetRange("Reason Code");
-            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
             ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
             AssignAmounts(ValueEntry, DecreaseInvoicedQty, DecreaseExpectedQty, -1);
 
@@ -258,7 +258,7 @@ page 50407 "RV Inventory Valuation Name"
                 ValueEntry."Item Ledger Entry Type"::"Assembly Consumption");
             ValueEntry.SetRange("Invoiced Quantity");
             ValueEntry.SetRange("Reason Code");
-            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
             ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
             AssignAmounts(ValueEntry, DecreaseInvoicedQty, DecreaseExpectedQty, -1);
 
@@ -269,7 +269,7 @@ page 50407 "RV Inventory Valuation Name"
                 ValueEntry."Item Ledger Entry Type"::Purchase);
             ValueEntry.SetFilter("Invoiced Quantity", '<0');
             ValueEntry.SetRange("Reason Code");
-            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
             ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
             AssignAmounts(ValueEntry, CreditInvoicedQty, CreditExpectedQty, -1);
 
@@ -279,7 +279,7 @@ page 50407 "RV Inventory Valuation Name"
                 "Item Ledger Entry Type", ValueEntry."Item Ledger Entry Type"::Sale);
             ValueEntry.SetFilter("Invoiced Quantity", '>0');
             ValueEntry.SetRange("Reason Code");
-            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
             ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
             AssignAmounts(ValueEntry, CreditInvoicedQty, CreditExpectedQty, 1);
 
@@ -291,7 +291,7 @@ page 50407 "RV Inventory Valuation Name"
                 ValueEntry."Item Ledger Entry Type"::"Positive Adjmt.");
             ValueEntry.SetRange("Reason Code", SamDisposeRC);
             ValueEntry.Setrange("Invoiced Quantity");
-            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
             ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
             AssignAmounts(ValueEntry, DisposeInvoicedQty, DisposeExpectedQty, -1);
 
@@ -303,7 +303,7 @@ page 50407 "RV Inventory Valuation Name"
                 ValueEntry."Item Ledger Entry Type"::"Positive Adjmt.");
             ValueEntry.SetRange("Reason Code", WScrapRC);
             ValueEntry.Setrange("Invoiced Quantity");
-            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
             ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
             AssignAmounts(ValueEntry, WasteInvoicedQty, WasteExpectedQty, -1);
 
@@ -315,7 +315,7 @@ page 50407 "RV Inventory Valuation Name"
                 ValueEntry."Item Ledger Entry Type"::"Positive Adjmt.");
             ValueEntry.SetRange("Reason Code", VarianceRC);
             ValueEntry.Setrange("Invoiced Quantity");
-            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
             ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
             AssignAmounts(ValueEntry, VarianceInvoicedQty, VarianceExpectedQty, -1);
 
@@ -324,7 +324,7 @@ page 50407 "RV Inventory Valuation Name"
             ValueEntry.SetRange("Item Ledger Entry Type", ValueEntry."Item Ledger Entry Type"::Transfer);
             ValueEntry.SetRange("Reason Code", SiteTransferRC);
             ValueEntry.Setrange("Invoiced Quantity");
-            ValueEntry.SetFilter("Global Dimension 2 Code", Item.GetFilter("Global Dimension 2 Filter"));
+            ValueEntry.SetFilter("Global Dimension 1 Code", Item.GetFilter("Global Dimension 1 Filter"));
             ValueEntry.CalcSums("Item Ledger Entry Quantity", "Invoiced Quantity");
             AssignAmounts(ValueEntry, TransferExpectedQty, TransferInvoicedQty, -1);
             /*

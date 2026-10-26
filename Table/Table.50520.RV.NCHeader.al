@@ -151,6 +151,10 @@ table 50520 "RV NC Header"
         {
             Caption = 'NC Analyzed by';
         }
+        field(192; "NC Date"; Date)
+        {
+            Caption = 'NC Date';
+        }
         field(200; "NC Remark"; Text[150])
         {
             Caption = 'NC Remark';
@@ -320,6 +324,20 @@ table 50520 "RV NC Header"
             Error('The total quantity of NC lines (%1) must equal the Quantity of NC Header (%2).', TotalNCQuantity, Rec.Quantity);
     end;
 
+    procedure CheckTestField()
+    var
+        NCResultLine: Record "RV QC Iny. Result Line";
+    begin
+        rec.TestField("NC Location Code");
+        NCResultLine.SetRange("QC No.", Rec."QC No.");
+        NCResultLine.SetRange("QC Type", Rec."QC Type");
+        if NCResultLine.FindSet() then
+            repeat
+                NCResultLine.TestField("Transfer-to Location");
+                NCResultLine.TestField("Transfer-to Bin");
+            until NCResultLine.Next() = 0;
+    end;
+
     procedure ClearQCLine()
     var
         QCLine: Record "RV QC Line";
@@ -376,6 +394,7 @@ table 50520 "RV NC Header"
         ItemJournalBatch: Record "Item Journal Batch";
         CreateReservEntry: Codeunit "Create Reserv. Entry";
         ReservEntry: Record "Reservation Entry";
+        TempTrackingSpec: Record "Tracking Specification" temporary;
         ItemTrackingMgt: Codeunit "Item Tracking Management";
         FromLocation: Code[10];
         ToLocation: Code[10];
@@ -386,94 +405,176 @@ table 50520 "RV NC Header"
         ItemJnlPostBatch: Codeunit "Item Jnl.-Post Batch";
     begin
         RIKEVITASetup.Get();
-        RIKEVITASetup.TestField("QC Reclass Jnl Template Name");
-        RIKEVITASetup.TestField("QC Reclass Jnl Batch Name");
+        // RIKEVITASetup.TestField("QC Reclass Jnl Template Name");
+        // RIKEVITASetup.TestField("QC Reclass Jnl Batch Name");
         RIKEVITASetup.TestField("NC Location Code");
         RIKEVITASetup.TestField("NC Bin Code");
-        FromLocation := Rec."Location Code";
-        FromBin := Rec."Inspect Bin Code";
+        FromLocation := Rec."NC Location Code";
+        FromBin := RIKEVITASetup."NC Bin Code";
 
-        //Deletes the new Item Reclass Journal that is generated after the Item Reclass Journal posting.
-        //need to correct the delete logic since multiple users can use the same journal template and batch name.
-        ItemJnlLine.Reset();
-        ItemJnlLine.SetRange("Journal Template Name", RIKEVITASetup."QC Reclass Jnl Template Name");
-        ItemJnlLine.SetRange("Journal Batch Name", RIKEVITASetup."QC Reclass Jnl Batch Name");
-        if ItemJnlLine.FindSet() then
-            ItemJnlLine.DeleteAll();
-
-        //Mark Item Journal Line
-        ItemJnlTemplate.Get(RIKEVITASetup."QC Reclass Jnl Template Name");
-        ItemJournalBatch.Get(RIKEVITASetup."QC Reclass Jnl Template Name", RIKEVITASetup."QC Reclass Jnl Batch Name");
-        ItemJournalBatch.TestField("Reason Code");
-        ItemJournalBatch.TestField("No. Series");
-
+        SetTemplateAndBatchName();
+        DeleteJnlLines(ToTemplateName, ToBatchName);
         clear(LineNo);
         QCInyResultLine.Reset();
         QCInyResultLine.SetRange("QC No.", Rec."QC No.");
         QCInyResultLine.SetRange("QC Type", Rec."QC Type");
         if QCInyResultLine.FindSet() then
             repeat
-                QCInyResultLine.TestField("NC Location Code");
-                QCInyResultLine.TestField("NC Bin Code");
+                QCInyResultLine.TestField("Transfer-to Location");
+                QCInyResultLine.TestField("Transfer-to Bin");
 
-                ToLocation := QCInyResultLine."NC Location Code";
-                ToBin := QCInyResultLine."NC Bin Code";
+                ToLocation := QCInyResultLine."Transfer-to Location";
+                ToBin := QCInyResultLine."Transfer-to Bin";
+                if (FromLocation <> ToLocation) or (FromBin <> ToBin) then begin
+                    ItemJnlLine.Init();
+                    // ItemJnlLine."Journal Template Name" := RIKEVITASetup."QC Reclass Jnl Template Name";
+                    // ItemJnlLine."Journal Batch Name" := RIKEVITASetup."QC Reclass Jnl Batch Name";
+                    ItemJnlLine."Journal Template Name" := ToTemplateName;
+                    ItemJnlLine."Journal Batch Name" := ToBatchName;
 
-                ItemJnlLine.Init();
-                ItemJnlLine."Journal Template Name" := RIKEVITASetup."QC Reclass Jnl Template Name";
-                ItemJnlLine."Journal Batch Name" := RIKEVITASetup."QC Reclass Jnl Batch Name";
+                    LineNo += 10000;
+                    ItemJnlLine."Line No." := LineNo;
+                    ItemJnlLine.Insert();
 
-                LineNo += 10000;
-                ItemJnlLine."Line No." := LineNo;
-                ItemJnlLine."Entry Type" := Enum::"Item Ledger Entry Type"::Transfer;
-                ItemJnlLine."Source Code" := ItemJnlTemplate."Source Code";
-                ItemJnlLine."Value Entry Type" := Enum::"Cost Entry Type"::"Direct Cost";
+                    ItemJnlLine."Entry Type" := Enum::"Item Ledger Entry Type"::Transfer;
+                    ItemJnlLine."Source Code" := ItemJnlTemplate."Source Code";
+                    ItemJnlLine."Value Entry Type" := Enum::"Cost Entry Type"::"Direct Cost";
 
-                ItemJnlLine.Validate("Posting Date", WorkDate());
-                ItemJnlLine."Document Date" := WorkDate();
-                ItemJnlLine."Document No." := NoSeriesBatch.GetNextNo(ItemJournalBatch."No. Series", ItemJnlLine."Posting Date");
-                ItemJnlLine.Validate("Item No.", Rec."Item No.");
-                ItemJnlLine.Validate("Location Code", FromLocation);
-                ItemJnlLine.Validate("New Location Code", ToLocation);
-                ItemJnlLine.Validate("Bin Code", FromBin);
-                ItemJnlLine.Validate("New Bin Code", ToBin);
-                if Rec."Lot No." <> '' then
-                    ItemJnlLine."Lot No." := Rec."Lot No.";
-                ItemJnlLine.Validate("Unit of Measure Code", Rec."Unit of Measure");
-                ItemJnlLine.Validate("Quantity", QCInyResultLine."Quantity");
-                ItemJnlLine."reason Code" := ItemJournalBatch."Reason Code";
-                ItemJnlLine.Insert(true);
-                //Dimension code 1 and dimension code 2 need to be copied from the inventory ILE
+                    ItemJnlLine.Validate("Posting Date", WorkDate());
+                    ItemJnlLine."Document Date" := WorkDate();
+                    // ItemJnlLine."Document No." := NoSeriesBatch.GetNextNo(ItemJournalBatch."No. Series", ItemJnlLine."Posting Date");
+                    ItemJnlLine."Document No." := Rec."QC No.";
+                    ItemJnlLine.Validate("Item No.", Rec."Item No.");
+                    ItemJnlLine.Validate("Location Code", FromLocation);
+                    ItemJnlLine.Validate("New Location Code", ToLocation);
+                    ItemJnlLine.Validate("Bin Code", FromBin);
+                    ItemJnlLine.Validate("New Bin Code", ToBin);
+                    // if Rec."Lot No." <> '' then
+                    //     ItemJnlLine."Lot No." := Rec."Lot No.";
+                    ItemJnlLine.Validate("Unit of Measure Code", Rec."Unit of Measure");
+                    ItemJnlLine.Validate("Quantity", QCInyResultLine."Quantity");
+                    ItemJnlLine."reason Code" := ItemJournalBatch."Reason Code";
+                    ItemJnlLine.modify(true);
 
-                //ReservationEntry
-                ReservEntry."Lot No." := Rec."Lot No.";
-                CreateReservEntry.SetNewTrackingFromItemJnlLine(ItemJnlLine);
-                CreateReservEntry.CreateReservEntryFor(Database::"Item Journal Line", ItemJnlLine."Entry Type".AsInteger(),
-                                                   ItemJnlLine."Journal Template Name", ItemJnlLine."Journal Batch Name",
-                                                   0, ItemJnlLine."Line No.", ItemJnlLine."Qty. per Unit of Measure",
-                                                   ItemJnlLine.Quantity, ItemJnlLine."Quantity (Base)", ReservEntry);
-                ItemTrackingSetup."Lot No." := Rec."Lot No.";
-                NewExpirationDate := ItemTrackingMgt.ExistingExpirationDate(Rec."Item No.", ItemJnlLine."Variant Code", ItemTrackingSetup, false, EntriesExist);
-                CreateReservEntry.SetNewExpirationDate(NewExpirationDate);
-                CreateReservEntry.CreateEntry(ItemJnlLine."Item No.", ItemJnlLine."Variant Code",
-                                              ItemJnlLine."Location Code", '',
-                                              ItemJnlLine."Posting Date", 0D, 0, ReservEntry."Reservation Status"::Prospect);
-                if ItemJnlLine."Lot No." <> '' then begin
-                    ItemJnlLine."Lot No." := '';
-                    ItemJnlLine.Modify();
+                    //ReservationEntry
+                    if Rec."Lot No." <> '' then begin
+                        ReservEntry."Lot No." := Rec."Lot No.";
+                        TempTrackingSpec."New Lot No." := Rec."Lot No.";
+                        CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TempTrackingSpec);
+                        CreateReservEntry.CreateReservEntryFor(Database::"Item Journal Line", ItemJnlLine."Entry Type".AsInteger(),
+                                                           ItemJnlLine."Journal Template Name", ItemJnlLine."Journal Batch Name",
+                                                           0, ItemJnlLine."Line No.", ItemJnlLine."Qty. per Unit of Measure",
+                                                           ItemJnlLine.Quantity, ItemJnlLine."Quantity (Base)", ReservEntry);
+                        ItemTrackingSetup."Lot No." := Rec."Lot No.";
+                        NewExpirationDate := ItemTrackingMgt.ExistingExpirationDate(Rec."Item No.", ItemJnlLine."Variant Code", ItemTrackingSetup, false, EntriesExist);
+                        CreateReservEntry.SetNewExpirationDate(NewExpirationDate);
+                        CreateReservEntry.CreateEntry(ItemJnlLine."Item No.", ItemJnlLine."Variant Code",
+                                                      ItemJnlLine."Location Code", '',
+                                                      ItemJnlLine."Posting Date", 0D, 0, ReservEntry."Reservation Status"::Prospect);
+                        // if ItemJnlLine."Lot No." <> '' then begin
+                        //     ItemJnlLine."Lot No." := '';
+                        //     ItemJnlLine.Modify();
+                        // end;
+                    end;
                 end;
-
             until QCInyResultLine.Next() = 0;
-
-        //Post Item Reclass Journal
-
-        ItemJnlLine.Reset();
-        ItemJnlLine.SetRange("Journal Template Name", RIKEVITASetup."QC Reclass Jnl Template Name");
-        ItemJnlLine.SetRange("Journal Batch Name", RIKEVITASetup."QC Reclass Jnl Batch Name");
         Clear(ItemJnlPostBatch);
         ItemJnlPostBatch.SetSuppressCommit(true);
         ItemJnlPostBatch.Run(ItemJnlLine);
-
     end;
 
+    procedure SetTemplateAndBatchName()
+    var
+        PageTemplate: Option Item,Transfer,"Phys. Inventory",Revaluation,Consumption,Output,Capacity,"Prod. Order";
+        User: Text;
+        IsHandled: Boolean;
+        PageID: Integer;
+        ItemJnlLine2: Record "Item Journal Line";
+    begin
+        PageID := Page::"Item Reclass. Journal";
+        PageTemplate := PageTemplate::Transfer;
+
+        ItemJnlTemplate.Reset();
+        ItemJnlTemplate.SetRange("Page ID", PageID);
+        ItemJnlTemplate.SetRange(Recurring, false);
+        ItemJnlTemplate.SetRange(Type, PageTemplate);
+        if not ItemJnlTemplate.FindFirst() then begin
+            ItemJnlTemplate.Init();
+            ItemJnlTemplate.Recurring := false;
+            ItemJnlTemplate.Validate(Type, PageTemplate);
+            ItemJnlTemplate.Validate("Page ID");
+
+            ItemJnlTemplate.Name := Format(ItemJnlTemplate.Type, MaxStrLen(ItemJnlTemplate.Name));
+            ItemJnlTemplate.Description := StrSubstNo(Text000, ItemJnlTemplate.Type);
+            ItemJnlTemplate.Insert();
+        end;
+
+        ToTemplateName := ItemJnlTemplate.Name;
+        ToBatchName := '';
+        User := UpperCase(UserId); // Uppercase in case of Windows Login
+        if User <> '' then
+            // if (StrLen(User) < MaxStrLen(ItemJnlLine2."Journal Batch Name")) and (ItemJnlLine2."Journal Batch Name" <> '') then
+            //     ToBatchName := CopyStr(ItemJnlLine2."Journal Batch Name", 1, MaxStrLen(ItemJnlLine2."Journal Batch Name") - 1) + 'A'
+            // else
+                ToBatchName := DelChr(CopyStr(User, 1, MaxStrLen(ItemJnlLine2."Journal Batch Name")), '>', '0123456789');
+        if ToBatchName = '' then
+            ToBatchName := Text003;
+        if not ItemJnlBatch.Get(ToTemplateName, ToBatchName) then begin
+            ItemJnlBatch.Init();
+            ItemJnlBatch."Journal Template Name" := ItemJnlTemplate.Name;
+            ItemJnlBatch.SetupNewBatch();
+            ItemJnlBatch.Name := ToBatchName;
+            ItemJnlBatch.Description := Text004;
+            ItemJnlBatch.Insert(true);
+        end;
+    end;
+
+    procedure DeleteJnlLines(TemplateName: Code[10]; BatchName: Code[10])
+    var
+        ItemJnlLine2: Record "Item Journal Line";
+        ReservEntry: Record "Reservation Entry";
+        IsHandled: Boolean;
+    begin
+        ItemJnlLine2.Reset();
+        ItemJnlLine2.SetRange("Journal Template Name", TemplateName);
+        ItemJnlLine2.SetRange("Journal Batch Name", BatchName);
+        // ItemJnlLine2.SetRange("Order Type", ItemJnlLine2."Order Type"::Production);
+        // ItemJnlLine2.SetRange("Order No.", ProdOrderNo);
+        // if ProdOrderLineNo <> 0 then
+        // ItemJnlLine2.SetRange("Order Line No.", ProdOrderLineNo);
+        if ItemJnlLine2.Find('-') then begin
+            repeat
+                if ReservEntryExist(ItemJnlLine2, ReservEntry) then
+                    ReservEntry.DeleteAll(true);
+            until ItemJnlLine2.Next() = 0;
+
+            ItemJnlLine2.DeleteAll(true);
+        end;
+    end;
+
+    procedure ReservEntryExist(ItemJnlLine2: Record "Item Journal Line"; var ReservEntry: Record "Reservation Entry"): Boolean
+    begin
+        ReservEntry.Reset();
+        ReservEntry.SetCurrentKey(
+          "Source ID", "Source Ref. No.", "Source Type", "Source Subtype", "Source Batch Name", "Source Prod. Order Line");
+        ReservEntry.SetRange("Source ID", ItemJnlLine2."Journal Template Name");
+        ReservEntry.SetRange("Source Ref. No.", ItemJnlLine2."Line No.");
+        ReservEntry.SetRange("Source Type", DATABASE::"Item Journal Line");
+        ReservEntry.SetRange("Source Subtype", ItemJnlLine2."Entry Type");
+        ReservEntry.SetRange("Source Batch Name", ItemJnlLine2."Journal Batch Name");
+        ReservEntry.SetRange("Source Prod. Order Line", 0);
+        if not ReservEntry.IsEmpty() then
+            exit(true);
+
+        exit(false);
+    end;
+
+    var
+        ItemJnlTemplate: Record "Item Journal Template";
+        ItemJnlBatch: Record "Item Journal Batch";
+        ToTemplateName: Code[10];
+        ToBatchName: Code[10];
+        Text000: Label '%1 journal';
+        Text003: Label 'DEFAULT';
+        Text004: Label 'Item Reclass Journal';
 }

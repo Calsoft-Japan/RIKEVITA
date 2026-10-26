@@ -51,11 +51,11 @@ page 50527 "RV FQC Iny. Result Subform"
                 {
                     ApplicationArea = All;
                 }
-                field("NC Location Code"; Rec."NC Location Code")
+                field("NC Location Code"; Rec."Transfer-to Location")
                 {
                     ApplicationArea = All;
                 }
-                field("NC Bin Code"; Rec."NC Bin Code")
+                field("NC Bin Code"; Rec."Transfer-to Bin")
                 {
                     ApplicationArea = All;
                 }
@@ -75,10 +75,25 @@ page 50527 "RV FQC Iny. Result Subform"
     trigger OnNewRecord(BelowxRec: Boolean)
     var
         NCHeader: Record "RV NC Header";
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
     begin
         if NCHeader.Get(Rec."QC No.", Rec."QC Type") then begin
-            Rec."NC Location Code" := NCHeader."NC Location Code";
+            RIKEVITASetup.Get();
             Rec."UOM" := NCHeader."Unit of Measure";
+            case rec."Inventory Type" of
+                rec."Inventory Type"::BLCK,
+                rec."Inventory Type"::DISP,
+                rec."Inventory Type"::DMGE:
+                    begin
+                        Rec."Transfer-to Location" := NCHeader."NC Location Code";
+                        Rec."Transfer-to Bin" := RIKEVITASetup."NC Bin Code";
+                    end;
+                rec."Inventory Type"::STCK:
+                    begin
+                        Rec."Transfer-to Location" := NCHeader."Location Code";
+                        Rec."Transfer-to Bin" := NCHeader."Storage Bin Code";
+                    end;
+            end;
         end;
     end;
 

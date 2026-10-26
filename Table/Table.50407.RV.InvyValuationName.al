@@ -26,7 +26,7 @@ table 50407 "RV Invy. Valuation Name"
         field(4; "Site"; Code[20])
         {
             Caption = 'Site';
-            tableRelation = "Dimension Value".Code where("Global Dimension No." = const(2));
+            tableRelation = "Dimension Value".Code where("Global Dimension No." = const(1));
         }
 
         field(5; "Starting Date"; Date)
@@ -40,6 +40,23 @@ table 50407 "RV Invy. Valuation Name"
         field(7; "Item Filter"; Text[250])
         {
             Caption = 'Item Filter';
+        }
+        field(10; "Shortcut Dimension 1 Code"; Text[250])
+        {
+            CaptionClass = '1,2,1';
+            Caption = 'Shortcut Dimension 1 Code';
+            ToolTip = 'Specifies the code for Shortcut Dimension 1, which is one of two global dimension codes that you set up in the General Ledger Setup window.';
+            TableRelation = "Dimension Value".Code where("Global Dimension No." = const(1),
+                                                          Blocked = const(false));
+        }
+        field(11; "Shortcut Dimension 2 Code"; Text[250])
+        {
+            CaptionClass = '1,2,2';
+            Caption = 'Shortcut Dimension 2 Code';
+            ToolTip = 'Specifies the code for Shortcut Dimension 2, which is one of two global dimension codes that you set up in the General Ledger Setup window.';
+            TableRelation = "Dimension Value".Code where("Global Dimension No." = const(2),
+                                                          Blocked = const(false));
+
         }
     }
 

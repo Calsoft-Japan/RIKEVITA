@@ -26,32 +26,13 @@ page 50100 "RIKEVITA Setup"///
             group(General)
             {
                 Caption = 'General';
-                field("QC No. Nos."; Rec."IQC No. Nos.")
-                {
-                    ApplicationArea = All;
-                    Description = 'FDD039';
-                }
-                field("PQC No. Nos."; Rec."PQC No. Nos.")
-                {
-                    ApplicationArea = All;
-                    Description = 'FDD039';
-                }
-                field("FQC No. Nos."; Rec."FQC No. Nos.")
-                {
-                    ApplicationArea = All;
-                    Description = 'FDD039';
-                }
-                field("COA No. Nos."; Rec."COA No. Nos.")
-                {
-                    ApplicationArea = All;
-                    Description = 'FDD039';
-                }
                 field("FP Inventory Posting Group"; Rec."FP Inventory Posting Group")
                 {
                     ApplicationArea = All;
                     Description = 'FDD039';
                 }
                 field("WIP Inventory Posting Group"; Rec."WIP Inventory Posting Group")
+
                 {
                     ApplicationArea = All;
                     Description = 'FDD039';
@@ -275,7 +256,39 @@ page 50100 "RIKEVITA Setup"///
                     }
                 }
             }
-
+            group("QC and QA")
+            {
+                field("QC No. Nos."; Rec."IQC No. Nos.")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD039';
+                }
+                field("PQC No. Nos."; Rec."PQC No. Nos.")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD039';
+                }
+                field("FQC No. Nos."; Rec."FQC No. Nos.")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD039';
+                }
+                field("COA No. Nos."; Rec."COA No. Nos.")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD039';
+                }
+                field("NC Location Code"; Rec."NC Location Code")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD039';
+                }
+                field("NC Bin Code"; Rec."NC Bin Code")
+                {
+                    ApplicationArea = All;
+                    Description = 'FDD039';
+                }
+            }
             group(ChargeCalculation)
             {
                 Caption = 'Charge Calculation';
@@ -385,7 +398,6 @@ page 50100 "RIKEVITA Setup"///
     {
         area(Processing)
         {
-
             action("Refresh WE Dimensions")
             {
                 ApplicationArea = All;

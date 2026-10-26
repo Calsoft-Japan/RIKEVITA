@@ -152,6 +152,22 @@ page 50525 "RV FQC Card"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("QC Rejected By"; Rec."QC Rejected By")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("QC Rejected Remark"; Rec."QC Rejected Remark")
+                {
+                    ApplicationArea = All;
+                    MultiLine = true;
+                    Editable = false;
+                }
+                field("QC Rejected Date"; Rec."QC Rejected Date")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
             }
 
             part(SubQCLine; "RV FQC Subform")
@@ -262,14 +278,31 @@ page 50525 "RV FQC Card"
                 Image = Approval;
                 Enabled = QCReverseEnable;
                 trigger OnAction()
+                var
+                    oldStatus: Enum "RV QC Status";
                 begin
                     //IsQCReverseAllowed
                     Rec.IsQCReverseAllowed();
 
+                    oldStatus := Rec."QC Status";
                     Rec."QC Status" := Rec."QC Status"::Checked;
                     Rec.Modify();
                     //Enable
                     Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+
+                    Rec.TestField("Location Code");
+                    Rec.TestField("Bin Code");
+                    Rec.TestField("Storage Bin Code");
+                    Rec.TestField("Quantity");
+                    Rec.TestField("Expiration Date");
+                    if oldStatus = oldStatus::Approved then
+                        Rec.PostItemReclassJournal(Rec."Location Code", Rec."Location Code", Rec."Storage Bin Code", Rec."Bin Code", Rec.Quantity, Rec."Expiration Date");
+                    if oldStatus = oldStatus::Rejected then begin
+                        RIKEVITASetup.Get();
+                        RIKEVITASetup.TestField("NC Location Code");
+                        RIKEVITASetup.TestField("NC Bin Code");
+                        Rec.PostItemReclassJournal(RIKEVITASetup."NC Location Code", Rec."Location Code", RIKEVITASetup."NC Bin Code", rec."Bin Code", Rec.Quantity, Rec."Expiration Date");
+                    end;
                 end;
             }
             action("QC Reject")
@@ -284,10 +317,23 @@ page 50525 "RV FQC Card"
                     //IsQCRejectAllowed
                     Rec.IsQCRejectAllowed();
 
+                    //RejectedRemark_Input
+                    Rec.RejectedRemark_Input();
+
                     Rec."QC Status" := Rec."QC Status"::Rejected;
                     Rec.Modify();
                     //Enable
                     Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+
+                    RIKEVITASetup.Get();
+                    RIKEVITASetup.TestField("NC Location Code");
+                    RIKEVITASetup.TestField("NC Bin Code");
+                    Rec.TestField("Location Code");
+                    Rec.TestField("Bin Code");
+                    // Rec.TestField("Storage Bin Code");
+                    Rec.TestField("Quantity");
+                    Rec.TestField("Expiration Date");
+                    Rec.PostItemReclassJournal(Rec."Location Code", RIKEVITASetup."NC Location Code", Rec."Bin Code", RIKEVITASetup."NC Bin Code", Rec.Quantity, Rec."Expiration Date");
                 end;
             }
             action("NC Result")

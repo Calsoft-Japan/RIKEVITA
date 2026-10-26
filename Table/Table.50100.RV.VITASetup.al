@@ -81,21 +81,21 @@ table 50100 "RV RIKEVITA Setup"
             Caption = 'FQC No. Nos.';
             TableRelation = "No. Series";
         }
-        field(118; "QC Reclass Jnl Template Name"; Code[10])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'QC Reclass Jnl Template Name';
-            TableRelation = "Item Journal Template";
-            Description = 'FG-039';
-        }
+        // field(118; "QC Reclass Jnl Template Name"; Code[10])
+        // {
+        //     DataClassification = CustomerContent;
+        //     Caption = 'QC Reclass Jnl Template Name';
+        //     TableRelation = "Item Journal Template";
+        //     Description = 'FG-039';
+        // }
 
-        field(119; "QC Reclass Jnl Batch Name"; Code[10])
-        {
-            DataClassification = CustomerContent;
-            Caption = 'QC Reclass Jnl Batch Name';
-            TableRelation = "Item Journal Batch".Name where("Journal Template Name" = field("QC Reclass Jnl Template Name"));
-            Description = 'FG-039';
-        }
+        // field(119; "QC Reclass Jnl Batch Name"; Code[10])
+        // {
+        //     DataClassification = CustomerContent;
+        //     Caption = 'QC Reclass Jnl Batch Name';
+        //     TableRelation = "Item Journal Batch".Name where("Journal Template Name" = field("QC Reclass Jnl Template Name"));
+        //     Description = 'FG-039';
+        // }
         field(122; "NC Location Code"; Code[10])
         {
             Caption = 'NC Location Code';
@@ -106,6 +106,7 @@ table 50100 "RV RIKEVITA Setup"
             Caption = 'NC Bin Code';
             TableRelation = Bin.Code where("Location Code" = field("NC Location Code"));
         }
+
         field(10; "Recipient Ref. Code"; Code[10])
         {
             Description = 'FDD017';

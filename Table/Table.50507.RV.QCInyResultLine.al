@@ -44,15 +44,15 @@ table 50507 "RV QC Iny. Result Line"
             Caption = 'UOM';
             TableRelation = "Unit of Measure";
         }
-        field(9; "NC Location Code"; Code[10])
+        field(9; "Transfer-to Location"; Code[10])
         {
-            Caption = 'NC Location Code';
+            Caption = 'Transfer-to Location';
             TableRelation = Location;
         }
-        field(10; "NC Bin Code"; Code[20])
+        field(10; "Transfer-to Bin"; Code[20])
         {
-            Caption = 'NC Bin Code';
-            TableRelation = Bin.Code where("Location Code" = Field("NC Location Code"));
+            Caption = 'Transfer-to Bin';
+            TableRelation = Bin.Code where("Location Code" = Field("Transfer-to Location"));
         }
     }
     keys

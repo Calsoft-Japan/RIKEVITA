@@ -50,6 +50,11 @@ pageextension 50600 "RIKE User Setup" extends "User Setup"
                 ApplicationArea = All;
                 Description = 'FDD039';
             }
+            field("Allow QC Reject"; Rec."RV_Allow QC Reject")
+            {
+                ApplicationArea = All;
+                Description = 'FDD039';
+            }
             field("Allow QC Reverse"; Rec."RV_Allow QC Reverse")
             {
                 ApplicationArea = All;
@@ -71,6 +76,16 @@ pageextension 50600 "RIKE User Setup" extends "User Setup"
                 Description = 'FDD039';
             }
             field("Allow QA Reverse"; Rec."RV_Allow QA Reverse")
+            {
+                ApplicationArea = All;
+                Description = 'FDD039';
+            }
+            field("Allow NC Approve"; Rec."RV_Allow NC Approve")
+            {
+                ApplicationArea = All;
+                Description = 'FDD039';
+            }
+            field("Allow NC Check"; Rec."RV_Allow NC Check")
             {
                 ApplicationArea = All;
                 Description = 'FDD039';

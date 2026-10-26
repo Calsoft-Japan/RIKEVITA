@@ -4,8 +4,8 @@
 /// </summary>
 page 50539 "RV NC Card"
 {
-    Caption = 'NC';
-    PageType = Document;
+    Caption = 'Non-Conformance';
+    PageType = Card;
     ApplicationArea = All;
     RefreshOnActivate = true;
     UsageCategory = Documents;
@@ -63,31 +63,28 @@ page 50539 "RV NC Card"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("location Code"; Rec."location Code")
+                field("NC location Code"; Rec."NC location Code")
+                {
+                    ApplicationArea = All;
+                    //Editable = QCCardEnable;
+                    Editable = false;
+                }
+                field("NC Bin Code"; Rec."Inspect Bin Code")
                 {
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("Inspect Bin Code"; Rec."Inspect Bin Code")
+                field("Storage location Code"; Rec."location Code")
                 {
                     ApplicationArea = All;
-                    Editable = false;
+                    Editable = true;
                 }
                 field("Storage Bin Code"; Rec."Storage Bin Code")
                 {
                     ApplicationArea = All;
-                    Editable = false;
+                    Editable = true;
                 }
-                field("NC location Code"; Rec."NC location Code")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field("QC Analyzed by"; Rec."QC Analyzed by")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
+
                 field("QC Comment"; Rec."QC Comment")
                 {
                     ApplicationArea = All;
@@ -110,11 +107,6 @@ page 50539 "RV NC Card"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("NC Analyzed by"; Rec."NC Analyzed by")
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
                 field("NC Remark"; Rec."NC Remark")
                 {
                     ApplicationArea = All;
@@ -126,16 +118,32 @@ page 50539 "RV NC Card"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("NC Checked Remark"; Rec."NC Checked Remark")
+                field("NC Checked Date"; Rec."NC Checked Date")
                 {
                     ApplicationArea = All;
                     Editable = false;
                 }
-
+                field("NC Checked Remark"; Rec."NC Checked Remark")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    MultiLine = true;
+                }
                 field("NC Approved By"; Rec."NC Approved By")
                 {
                     ApplicationArea = All;
                     Editable = false;
+                }
+                field("NC Approved Date"; Rec."NC Approved Date")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("NC Approved Remark"; Rec."NC Approved Remark")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                    MultiLine = true;
                 }
                 field("NC Status"; Rec."NC Status")
                 {
@@ -187,6 +195,9 @@ page 50539 "RV NC Card"
                     //CheckTotalQuantity
                     Rec.CheckTotalQuantity();
 
+                    //CheckTestField
+                    Rec.CheckTestField();
+
                     //CheckRemark_Input
                     Rec.CheckRemark_Input();
 
@@ -208,13 +219,14 @@ page 50539 "RV NC Card"
 
                     //ApprovedRemark_Input
                     Rec.ApprovedRemark_Input();
-
+                    Rec.testfield(Quantity);
+                    Rec.testfield("Expiration Date");
+                    //CheckTotalQuantity
+                    Rec.CheckTotalQuantity();
+                    Rec.PostItemReclassJournal(Rec.Quantity, Rec."Expiration Date");
                     //Enable
                     Rec.SetQCEnable(QCCheckEnable, QCApproveEnable, SubInventoryResultEnable, QCCardEnable);
 
-                    Rec.testfield(Quantity);
-                    Rec.testfield("Expiration Date");
-                    Rec.PostItemReclassJournal(Rec.Quantity, Rec."Expiration Date");
                 end;
             }
         }
