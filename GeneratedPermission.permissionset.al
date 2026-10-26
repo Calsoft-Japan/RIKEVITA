@@ -205,6 +205,8 @@ permissionset 50100 GeneratedPermission
         page "RV Item Trace History"=X,
         page "RV Whse Rcpt Line Details"=X,
         page "RV Whse Shpt Line Details"=X,
+        page "RV Posted Whse Rcpt Line Dtl"=X,
+        page "RV Posted Whse Shpt Line Dtl"=X,
         page "RV Item Tracking Details-Whs."=X,
         page "RV Item Tracking Hst. - Sales"=X,
         page "RV MPS Rescheduling Batch"=X,
