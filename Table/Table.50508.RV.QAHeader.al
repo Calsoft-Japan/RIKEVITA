@@ -1,6 +1,7 @@
 /// <summary>
 /// Table RV QA Header (ID 50508)
 /// FDD039 2026/02/23: New. (Mike)
+/// FDD039 2026/02/23: 1023-Zhao  (Zhao)
 /// </summary>
 table 50508 "RV QA Header"
 {
@@ -397,7 +398,7 @@ table 50508 "RV QA Header"
     procedure ValidateOrderNo()
     var
         SalesShipmentHeader: Record "Sales Shipment Header";
-        SalesShipmentLine: Record "Sales Shipment Line";
+        //SalesShipmentLine: Record "Sales Shipment Line";
         PostedWhShipLine: Record "Posted Whse. Shipment Line";
         PostedWhShipHeader: Record "Posted Whse. Shipment Header";
 
@@ -427,6 +428,7 @@ table 50508 "RV QA Header"
         if Rec."Ref. Order Type QA" = RefOrderTypeQA::"Posted Whse. Shipment" then begin
 
             PostedWhShipLine.SetRange("No.", Rec."Order No.");
+            //1023-Zhao Begin
             PostedWhShipLine.SetRange("Line No.", Rec."Line No.");
 
             if PostedWhShipLine.FindFirst() then begin
@@ -445,50 +447,42 @@ table 50508 "RV QA Header"
                 if PostedWhShipHeader.Get(Rec."Order No.") then
                     Rec."Final Destination" := PostedWhShipHeader."RV_Final Destination";
 
-                SalesShipmentLine.Reset();
-                SalesShipmentLine.SetRange("Document No.", SalesShipmentHeader."No.");
-                SalesShipmentLine.SetRange("Line No.", PostedWhShipLine."Source Line No.");
-                SalesShipmentLine.FindFirst();
-
                 //WarehousePackingInfo
                 Clear(COALotLineNo);
                 WarehousePackingInfo.Reset();
-                WarehousePackingInfo.SetRange("Sales Order No.", PostedWhShipLine."Source No.");//Sales Header No.
-                WarehousePackingInfo.SetRange("SO Line No.", PostedWhShipLine."Source Line No."); //Sales Line No
+                //WarehousePackingInfo.SetRange("Sales Order No.", PostedWhShipLine."Source No.");//Sales Header No.
+                //WarehousePackingInfo.SetRange("SO Line No.", PostedWhShipLine."Source Line No."); //Sales Line No
+                WarehousePackingInfo.SetRange("Item No.", PostedWhShipLine."Item No.");
                 WarehousePackingInfo.SetRange("Posted Whse. Shipment No.", PostedWhShipLine."No.");
                 if WarehousePackingInfo.FindSet() then
                     repeat
+                        if not LotNoList.Contains(WarehousePackingInfo."Lot No.") then
+                            LotNoList.Add(WarehousePackingInfo."Lot No.");
                         COALotLineNo += 10000;
                         QAShipmentLotNo.Init();
                         QAShipmentLotNo."COA No." := Rec."COA No.";
                         QAShipmentLotNo."COA Lot Line No." := COALotLineNo;
                         QAShipmentLotNo."Lot No." := WarehousePackingInfo."Lot No.";
-                        //Collect unique Lot
-                        if not LotNoList.Contains(WarehousePackingInfo."Lot No.") then
-                            LotNoList.Add(WarehousePackingInfo."Lot No.");
-
-                        QAShipmentLotNo."Sales Order No." := PostedWhShipLine."Source No.";
-
+                        QAShipmentLotNo."Sales Order No." := WarehousePackingInfo."Sales Order No.";
+                        QAShipmentLotNo."Container No." := WarehousePackingInfo."Container No";
                         QAShipmentLotNo.Quantity := WarehousePackingInfo.Quantity * WarehousePackingInfo."Contents Per Package";
                         QAShipmentLotNo."Qty. (Base)" := WarehousePackingInfo."Quantity";
                         QAShipmentLotNo."Qty. per UOM" := WarehousePackingInfo."Contents Per Package";
                         QAShipmentLotNo."Container No." := WarehousePackingInfo."Container No";
                         QAShipmentLotNo.UOM := WarehousePackingInfo."Contents UOM";
                         QAShipmentLotNo.Comment := WarehousePackingInfo.Comment;
-
                         //QAShipmentLotNo."Qty. (Base)" := Abs(ItemLedgEntry.Quantity);
                         ItemLedgEntry.Reset();
-                        ItemLedgEntry.SetCurrentKey("Item No.", "Posting Date");
+                        //ItemLedgEntry.SetCurrentKey("Item No.", "Posting Date");
                         ItemLedgEntry.SetRange("Item No.", WarehousePackingInfo."Item No.");
                         ItemLedgEntry.SetRange("lot No.", WarehousePackingInfo."Lot No.");
-                        ItemLedgEntry.SetFilter(Quantity, '>%1', 0);
-                        if ItemLedgEntry.FindLast() then begin
+                        //ItemLedgEntry.SetFilter(Quantity, '>%1', 0);
+                        if ItemLedgEntry.Findfirst() then begin
                             QAShipmentLotNo."Expire Date" := ItemLedgEntry."Expiration Date";
                             QAShipmentLotNo."Expire Date for COA Report" := ItemLedgEntry."Expiration Date";
                             QAShipmentLotNo."Manufacturing Date" := ItemLedgEntry."Posting Date";
                         end;
-
-                        QAShipmentLotNo.Insert();
+                        QAShipmentLotNo.INSERT();
                     until WarehousePackingInfo.Next() = 0;
             end;
 
@@ -521,9 +515,10 @@ table 50508 "RV QA Header"
                 if SalesLine.FindFirst() then;
 
                 WarehousePackingInfo.Reset();
-                WarehousePackingInfo.SetRange("Sales Order No.", WhShipline."Source No.");//Sales Header No.
-                WarehousePackingInfo.SetRange("SO Line No.", WhShipline."Source Line No."); //Sales Line No
+                //WarehousePackingInfo.SetRange("Sales Order No.", WhShipline."Source No.");//Sales Header No.
+                //WarehousePackingInfo.SetRange("SO Line No.", WhShipline."Source Line No."); //Sales Line No
                 WarehousePackingInfo.SetRange("Warehouse Shipment No.", WhShipline."No.");
+                WarehousePackingInfo.SetRange("Item No.", WhShipline."Item No.");
                 if WarehousePackingInfo.FindSet() then
                     repeat
                         COALotLineNo += 10000;
@@ -537,7 +532,7 @@ table 50508 "RV QA Header"
                         if not LotNoList.Contains(WarehousePackingInfo."Lot No.") then
                             LotNoList.Add(WarehousePackingInfo."Lot No.");
 
-                        QAShipmentLotNo."Sales Order No." := WhShipline."Source No.";
+                        QAShipmentLotNo."Sales Order No." := WarehousePackingInfo."Sales Order No.";
 
                         QAShipmentLotNo.Quantity := WarehousePackingInfo.Quantity * WarehousePackingInfo."Contents Per Package";
                         QAShipmentLotNo."Qty. (Base)" := WarehousePackingInfo."Quantity";
@@ -550,7 +545,7 @@ table 50508 "RV QA Header"
                         ItemLedgEntry.Reset();
                         ItemLedgEntry.SetRange("Item No.", WarehousePackingInfo."Item No.");
                         ItemLedgEntry.SetRange("lot No.", WarehousePackingInfo."Lot No.");
-                        ItemLedgEntry.SetFilter(Quantity, '>%1', 0);
+                        //ItemLedgEntry.SetFilter(Quantity, '>%1', 0);
                         if ItemLedgEntry.FindFirst() then begin
                             QAShipmentLotNo."Expire Date" := ItemLedgEntry."Expiration Date";
                             QAShipmentLotNo."Expire Date for COA Report" := ItemLedgEntry."Expiration Date";

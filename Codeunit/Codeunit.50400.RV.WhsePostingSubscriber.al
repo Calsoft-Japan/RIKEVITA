@@ -134,4 +134,25 @@ codeunit 50400 "RV Whse. Posting Subscriber"
             until ItemJournalLine2.Next() = 0;
         end;
     end;
+
+    procedure GetManufacturingDate(ItemNo: Code[20]; LotNo: Code[50]; var ManufacturingDate: Date)
+    var
+        ItemLedgerEntry: Record "Item Ledger Entry";
+        Item: Record Item;
+        ItemLotInfo: Record "Lot No. Information";
+    begin
+        Item.get(ItemNo);
+        if Item."Replenishment System" = item."Replenishment System"::Purchase then begin
+            ItemLotInfo.SetRange("Item No.", ItemNo);
+            ItemLotInfo.SetRange("Lot No.", LotNo);
+            if ItemLotInfo.FindFirst() then
+                ManufacturingDate := ItemLotInfo."RV_Manufacture Date";
+        end else begin
+            ItemLedgerEntry.reset;
+            ItemLedgerEntry.SetRange("Item No.", ItemNo);
+            ItemLedgerEntry.SetRange("Lot No.", LotNo);
+            if ItemLedgerEntry.FindFirst() then
+                ManufacturingDate := ItemLedgerEntry."Posting Date";
+        end;
+    end;
 }

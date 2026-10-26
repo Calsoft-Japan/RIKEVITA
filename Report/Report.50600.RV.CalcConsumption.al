@@ -125,6 +125,7 @@ report 50600 "RV Calc. Consumption"
                     RVProdResultJnlLine."Prod. Order No." := ProdOrderLine."Prod. Order No.";
                     RVProdResultJnlLine."Output Item No." := ProdOrderLine."Item No.";
                     RVProdResultJnlLine."Output Item Description" := ProdOrderLine.Description;
+                    RVProdResultJnlLine."Routing No." := ProdOrderLine."Routing No.";
 
                     ProdOrderRtngLine.Reset();
                     ProdOrderRtngLine.SetRange("Prod. Order No.", ProdOrderLine."Prod. Order No.");

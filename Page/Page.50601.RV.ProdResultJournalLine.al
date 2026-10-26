@@ -64,6 +64,7 @@ page 50601 "RV Prod. Result Journal Line"
                 field("Work Center No."; Rec."Work Center No.")
                 {
                     ToolTip = 'Specifies the value of the Work Center No. field.', Comment = '%';
+                    editable = false;
                 }
                 field("Item No."; Rec."Item No.")
                 {
@@ -152,6 +153,8 @@ page 50601 "RV Prod. Result Journal Line"
                                     recTrackingSpec."Variant Code" := ProdLine."Variant Code";
                                     recTrackingSpec."Bin Code" := ProdLine."Bin Code";
                                     recTrackingSpec."Qty. per Unit of Measure" := ProdLine."Qty. per Unit of Measure";
+                                    recTrackingSpec."Source ID" := ProdLine."Prod. Order No.";
+                                    recTrackingSpec."Source Prod. Order Line" := ProdLine."Line No.";
                                     recTrackingSpec.Insert();
 
                                     AssistEditTrackingNo(recTrackingSpec,
@@ -170,32 +173,112 @@ page 50601 "RV Prod. Result Journal Line"
                         ItemTrackingMgt: Codeunit "Item Tracking Management";
                         ItemTrackingSetup: Record "Item Tracking Setup";
                         EntriesExist: Boolean;
+                        ILE: record "Item Ledger Entry";
+                        LotInfo: Record "Lot No. Information";
+                        ErrNotEnoughQty: Label 'Not enough remaining quantity for the Lot No. %1';
                     begin
                         if rec."Lot No." = '' then begin
                             Rec."Manufacturing Date" := 0D;
                             rec."Expire Date" := 0D;
                         end else begin
-                            rec.UpdateExpireDate();
-                            if rec."Data Type" IN [rec."Data Type"::"Adjust Consumption",
-                                                    rec."Data Type"::"Planned Consumption",
-                                                    rec."Data Type"::"Recycle Consumption"] then
-                                if LotNoInfo.get(Rec."Item No.",
-                                                Rec."Variant Code",
-                                                Rec."Lot No.") then begin
-                                    Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date";
-                                    ItemTrackingSetup."Lot No." := Rec."Lot No.";
-                                    Rec."Expire Date" := ItemTrackingMgt.ExistingExpirationDate(Rec."Item No.", Rec."Variant Code", ItemTrackingSetup, false, EntriesExist);
+                            if rec.Quantity < 0 then begin
+                                case rec."Data Type" of
+                                    rec."Data Type"::"Adjust Output",
+                                    rec."Data Type"::"Planned Output":
+                                        begin
+                                            if rec."Manufacturing Date" = 0D then
+                                                rec."Manufacturing Date" := Today;
+
+                                            ILE.Reset();
+                                            ILE.SetRange("Entry Type", ILE."Entry Type"::Output);
+                                            ILE.SetRange("Order No.", Rec."Prod. Order No.");
+                                            ILE.SetRange("Order Line No.", Rec."Prod. Order Line No.");
+                                            ILE.SetRange("Lot No.", Rec."Lot No.");
+                                            ILE.CalcSums("Remaining Quantity");
+                                            if ILE."Remaining Quantity" = 0 then
+                                                Error(ErrNotEnoughQty, Rec."Lot No.");
+                                            if ILE."Remaining Quantity" < rec.Quantity then
+                                                Error(ErrNotEnoughQty, Rec."Lot No.");
+
+                                            if LotNoInfo.get(Rec."Output Item No.",
+                                                            Rec."Variant Code",
+                                                            Rec."Lot No.") then begin
+                                                if LotNoInfo."RV_Manufacture Date" <> 0D then
+                                                    Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date";
+                                                ItemTrackingSetup."Lot No." := Rec."Lot No.";
+                                                Rec."Expire Date" := ItemTrackingMgt.ExistingExpirationDate(Rec."Output Item No.", Rec."Variant Code", ItemTrackingSetup, false, EntriesExist);
+                                            end;
+                                        end;
+                                    rec."Data Type"::"Adjust Consumption",
+                                    rec."Data Type"::"Planned Consumption",
+                                    rec."Data Type"::"Recycle Consumption":
+                                        begin
+                                            ILE.Reset();
+                                            ILE.SetRange("Entry Type", ILE."Entry Type"::consumption);
+                                            ILE.SetRange("Order No.", Rec."Prod. Order No.");
+                                            ILE.SetRange("Order Line No.", Rec."Prod. Order Line No.");
+                                            ILE.SetRange("Lot No.", Rec."Lot No.");
+                                            if ILE.FindSet() then begin
+                                                if LotNoInfo.get(Rec."Item No.",
+                                                                       Rec."Variant Code",
+                                                                       Rec."Lot No.") then begin
+                                                    if LotNoInfo."RV_Manufacture Date" <> 0D then
+                                                        Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date"
+                                                    else
+                                                        Rec."Manufacturing Date" := Today;
+                                                    ItemTrackingSetup."Lot No." := Rec."Lot No.";
+                                                    Rec."Expire Date" := ItemTrackingMgt.ExistingExpirationDate(Rec."Item No.", Rec."Variant Code", ItemTrackingSetup, false, EntriesExist);
+                                                end else begin
+                                                    if rec."Manufacturing Date" = 0D then
+                                                        rec."Manufacturing Date" := Today;
+
+                                                    Item.Get(Rec."Item No.");
+                                                    if Format(Item."Expiration Calculation") <> '' then begin
+                                                        if rec."Manufacturing Date" <> 0D then
+                                                            Rec."Expire Date" := CalcDate(Item."Expiration Calculation", Rec."Manufacturing Date")
+                                                    end;
+                                                end;
+                                            end else begin
+                                                if rec."Manufacturing Date" = 0D then
+                                                    rec."Manufacturing Date" := Today;
+
+                                                Item.Get(Rec."Item No.");
+                                                if Format(Item."Expiration Calculation") <> '' then begin
+                                                    if rec."Manufacturing Date" <> 0D then
+                                                        Rec."Expire Date" := CalcDate(Item."Expiration Calculation", Rec."Manufacturing Date")
+                                                end;
+                                            end;
+                                        end;
                                 end;
+                            end else begin
+
+                                if rec."Manufacturing Date" = 0D then
+                                    rec."Manufacturing Date" := Today;
+
+                                rec.UpdateExpireDate();
+                                if rec."Data Type" IN [rec."Data Type"::"Adjust Consumption",
+                                                        rec."Data Type"::"Planned Consumption",
+                                                        rec."Data Type"::"Recycle Consumption"] then begin
+                                    if LotNoInfo.get(Rec."Item No.",
+                                                    Rec."Variant Code",
+                                                    Rec."Lot No.") then begin
+                                        if rec."Manufacturing Date" = 0D then
+                                            rec."Manufacturing Date" := Today;
+
+                                        if LotNoInfo."RV_Manufacture Date" <> 0D then
+                                            Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date";
+
+                                        ItemTrackingSetup."Lot No." := Rec."Lot No.";
+                                        Rec."Expire Date" := ItemTrackingMgt.ExistingExpirationDate(Rec."Item No.", Rec."Variant Code", ItemTrackingSetup, false, EntriesExist);
+                                    end;
+                                end;
+                            end;
                         end;
                     end;
                 }
                 field("Manufacturing Date"; Rec."Manufacturing Date")
                 {
                     ToolTip = 'Specifies the value of the Manufacturing Date field.', Comment = '%';
-                    trigger OnValidate()
-                    begin
-                        rec.UpdateExpireDate();
-                    end;
                 }
                 field("Expire Date"; Rec."Expire Date")
                 {
@@ -1032,6 +1115,10 @@ page 50601 "RV Prod. Result Journal Line"
         ItemLedgEntry.SetRange("Variant Code", TempTrackingSpecification."Variant Code");
         ItemLedgEntry.SetRange(Open, true);
         ItemLedgEntry.SetRange("Location Code", TempTrackingSpecification."Location Code");
+        if TempTrackingSpecification."Source ID" <> '' then
+            ItemLedgEntry.SetRange("Order No.", TempTrackingSpecification."Source ID");
+        if TempTrackingSpecification."Source Prod. Order Line" <> 0 then
+            ItemLedgEntry.SetRange("Order Line No.", TempTrackingSpecification."Source Prod. Order Line");
 
         LotNo := '';
         PackageNo := '';

@@ -140,6 +140,7 @@ table 50505 "RV QC Header"
                 PurchRcptLine: Record "Purch. Rcpt. Line";
                 ItemLedgerEntry: Record "Item Ledger Entry";
                 ProdOrderLine: Record "Prod. Order Line";
+                GetManufacturingDate: Codeunit "RV Whse. Posting Subscriber";
             begin
 
                 if "Ref. Order Type" = RefOrderType::"Purchase Order" then begin
@@ -154,6 +155,7 @@ table 50505 "RV QC Header"
 
                     if (Page.RunModal(Page::"RV Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
                         Validate("Lot No.", ItemLedgerEntry."Lot No.");
+                        GetManufacturingDate.GetManufacturingDate(itemledgerentry."Item No.", ItemLedgerEntry."Lot No.", "Manufacturing Date");
                         "Expiration Date" := ItemLedgerEntry."Expiration Date";
                     end;
 
@@ -167,6 +169,7 @@ table 50505 "RV QC Header"
 
                     if (Page.RunModal(Page::"RV Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
                         Validate("Lot No.", ItemLedgerEntry."Lot No.");
+                        "Manufacturing Date" := ItemLedgerEntry."Posting Date";
                         "Expiration Date" := ItemLedgerEntry."Expiration Date";
                     end;
                 end;
@@ -176,6 +179,7 @@ table 50505 "RV QC Header"
             var
                 LotNoInformation: Record "Lot No. Information";
                 ItemLedgerEntry: Record "Item Ledger Entry";
+                GetManufacturingDate: Codeunit "RV Whse. Posting Subscriber";
             begin
 
                 if "Lot No." <> '' then
@@ -190,20 +194,14 @@ table 50505 "RV QC Header"
                         if not LotNoInformation.FindFirst() then
                             LotNoInformation.Init();
                         "RM Manufacture Date" := LotNoInformation."RV_Manufacture Date";
+                    end else begin
+                        GetManufacturingDate.GetManufacturingDate("Item No.", "Lot No.", "Manufacturing Date");
                     end;
-
-                    if "Ref. Order Type" = "Ref. Order Type"::"Posted Purchase Receipt" then begin
-                        //ItemLedgerEntry
-                        ItemLedgerEntry.Reset();
-                        ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Purchase Receipt");
-                        ItemLedgerEntry.SetRange("Document No.", "Order No.");
-                        ItemLedgerEntry.SetRange("Document Line No.", "Line No.");
-                        itemledgerentry.SetRange(Correction, false);
-                        if not itemledgerentry.FindFirst() then
-                            itemledgerentry.Init();
+                    ItemLedgerEntry.Reset();
+                    ItemLedgerEntry.SetRange("Item No.", "Item No.");
+                    itemledgerentry.SetRange("Lot No.", "Lot No.");
+                    if itemledgerentry.FindFirst() then
                         "Expiration Date" := itemledgerentry."Expiration Date";
-                    end;
-
                 end else begin
                     Clear("RM Manufacture Date");
                 end;

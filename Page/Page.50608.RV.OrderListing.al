@@ -269,7 +269,9 @@ page 50608 "RV Order Listing"
                 ApplicationArea = Basic, Suite;
                 Caption = 'Show Document';
                 Image = View;
-                ShortCutKey = 'Shift+F7';
+                Promoted = true;
+                PromotedCategory = Process;
+                PromotedOnly = false;
                 ToolTip = 'Open the document that the selected line exists on.';
 
                 trigger OnAction()

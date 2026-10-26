@@ -22,6 +22,12 @@ table 50601 "RV Prod. Result Journal Line"
         field(4; "Data Type"; Enum "RV Prod. Results Data Type")
         {
             Caption = 'Data Type';
+
+            trigger OnValidate()
+            begin
+                if rec."Data Type" <> xrec."Data Type" then
+                    InitializeLine();
+            end;
         }
         field(5; "Prod. Order No."; Code[20])
         {
@@ -32,6 +38,9 @@ table 50601 "RV Prod. Result Journal Line"
             var
                 ProdOrderLine: Record "Prod. Order Line";
             begin
+                if "Prod. Order No." <> xrec."Prod. Order No." then
+                    InitializeLine();
+
                 if "Data Type" IN [rec."Data Type"::"Adjust Consumption", rec."Data Type"::"Planned Consumption", rec."Data Type"::"Recycle Consumption"] then
                     if "Prod. Order No." <> '' then begin
                         ProdOrderLine.SetFilterByReleasedOrderNo(Rec."Prod. Order No.");
@@ -162,6 +171,9 @@ table 50601 "RV Prod. Result Journal Line"
                         rec.UOM := '';
                         rec."Location Code" := '';
                         rec."Bin Code" := '';
+                        rec.Quantity := 0;
+                        rec."Lot No." := '';
+                        rec."Expire Date" := 0D;
                     end;
                     if rec.uom = '' then
                         case "Data Type" of
@@ -192,6 +204,14 @@ table 50601 "RV Prod. Result Journal Line"
             Caption = 'Quantity';
             DecimalPlaces = 0 : 5;
             // BlankZero = true;
+
+            trigger OnValidate()
+            begin
+                if Rec.Quantity <> xrec.Quantity then begin
+                    rec."Lot No." := '';
+                    rec."Expire Date" := 0D;
+                end;
+            end;
         }
         field(11; "Scrap Quantity"; Decimal)
         {
@@ -210,8 +230,15 @@ table 50601 "RV Prod. Result Journal Line"
             IF ("Data Type" = CONST("Planned Consumption")) "Item Unit of Measure".Code WHERE("Item No." = FIELD("Item No."))
             ELSE
             IF ("Data Type" = CONST("Adjust Consumption")) "Item Unit of Measure".Code WHERE("Item No." = FIELD("Item No."));
+            trigger OnValidate()
+            begin
+                if Rec.UOM <> xrec.UOM then begin
+                    rec."Lot No." := '';
+                    rec."Expire Date" := 0D;
+                end;
+            end;
         }
-        field(13; "Lot No."; Code[50])
+        field(13; "Lot No."; Code[30])
         {
             Caption = 'Lot No.';
         }
@@ -220,8 +247,53 @@ table 50601 "RV Prod. Result Journal Line"
             Caption = 'Manufacturing Date';
 
             trigger OnValidate()
+            var
+                ILE: Record "Item Ledger Entry";
+                LotNoInfo: Record "Lot No. Information";
+                ItemTrackingSetup: Record "Item Tracking Setup";
+                ItemTrackingMgt: Codeunit "Item Tracking Management";
+                EntriesExist: Boolean;
+                Item: Record Item;
             begin
-                UpdateExpireDate();
+                case rec."Data Type" of
+                    rec."Data Type"::"Adjust Output",
+                    rec."Data Type"::"Planned Output":
+                        begin
+                            if rec.Quantity > 0 then
+                                if rec."Lot No." <> '' then
+                                    rec.UpdateExpireDate();
+                        end;
+                    rec."Data Type"::"Adjust Consumption",
+                    rec."Data Type"::"Planned Consumption",
+                    rec."Data Type"::"Recycle Consumption":
+                        if rec.Quantity < 0 then begin
+                            ILE.Reset();
+                            ILE.SetRange("Entry Type", ILE."Entry Type"::consumption);
+                            ILE.SetRange("Order No.", Rec."Prod. Order No.");
+                            ILE.SetRange("Order Line No.", Rec."Prod. Order Line No.");
+                            ILE.SetRange("Lot No.", Rec."Lot No.");
+                            if ILE.FindSet() then begin
+                                if LotNoInfo.get(Rec."Item No.",
+                                                       Rec."Variant Code",
+                                                       Rec."Lot No.") then begin
+                                    ItemTrackingSetup."Lot No." := Rec."Lot No.";
+                                    Rec."Expire Date" := ItemTrackingMgt.ExistingExpirationDate(Rec."Item No.", Rec."Variant Code", ItemTrackingSetup, false, EntriesExist);
+                                end else begin
+                                    Item.Get(Rec."Item No.");
+                                    if Format(Item."Expiration Calculation") <> '' then begin
+                                        if rec."Manufacturing Date" <> 0D then
+                                            Rec."Expire Date" := CalcDate(Item."Expiration Calculation", Rec."Manufacturing Date")
+                                    end;
+                                end;
+                            end else begin
+                                Item.Get(Rec."Item No.");
+                                if Format(Item."Expiration Calculation") <> '' then begin
+                                    if rec."Manufacturing Date" <> 0D then
+                                        Rec."Expire Date" := CalcDate(Item."Expiration Calculation", Rec."Manufacturing Date")
+                                end;
+                            end;
+                        end;
+                end;
             end;
         }
         field(16; "Expire Date"; Date)
@@ -354,6 +426,19 @@ table 50601 "RV Prod. Result Journal Line"
         {
         }
     }
+    procedure InitializeLine()
+    var
+        DataType: Enum "RV Prod. Results Data Type";
+        ProdOrderNo: Code[20];
+    begin
+        DataType := Rec."Data Type";
+        ProdOrderNo := Rec."Prod. Order No.";
+        // Init preserves the primary key: Batch Name and Journal Line No.
+        Rec.Init();
+        Rec."Data Type" := DataType;
+        Rec."Prod. Order No." := ProdOrderNo;
+    end;
+
     procedure UpdateExpireDate()
     var
         Item: Record Item;
