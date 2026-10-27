@@ -38,6 +38,30 @@ page 50527 "RV FQC Iny. Result Subform"
                 field("Inventory Type"; Rec."Inventory Type")
                 {
                     ApplicationArea = All;
+                    trigger OnValidate()
+                    var
+                        NCHeader: Record "RV NC Header";
+                        RIKEVITASetup: Record "RV RIKEVITA Setup";
+                    begin
+                        if NCHeader.Get(Rec."QC No.", Rec."QC Type") then begin
+                            RIKEVITASetup.Get();
+                            Rec."UOM" := NCHeader."Unit of Measure";
+                            case rec."Inventory Type" of
+                                rec."Inventory Type"::BLCK,
+                                rec."Inventory Type"::DISP,
+                                rec."Inventory Type"::DMGE:
+                                    begin
+                                        Rec."Transfer-to Location" := NCHeader."NC Location Code";
+                                        Rec."Transfer-to Bin" := RIKEVITASetup."NC Bin Code";
+                                    end;
+                                rec."Inventory Type"::STCK:
+                                    begin
+                                        Rec."Transfer-to Location" := NCHeader."Location Code";
+                                        Rec."Transfer-to Bin" := NCHeader."Storage Bin Code";
+                                    end;
+                            end;
+                        end;
+                    end;
                 }
                 field("Quantity"; Rec."Quantity")
                 {

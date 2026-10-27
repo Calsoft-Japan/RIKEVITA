@@ -403,6 +403,8 @@ table 50520 "RV NC Header"
         QCInyResultLine: Record "RV QC Iny. Result Line";
         NoSeriesBatch: Codeunit "No. Series - Batch";
         ItemJnlPostBatch: Codeunit "Item Jnl.-Post Batch";
+        ReceiptILE: Record "Item Ledger Entry";
+        ReasonCode: Record "Reason Code";
     begin
         RIKEVITASetup.Get();
         // RIKEVITASetup.TestField("QC Reclass Jnl Template Name");
@@ -453,7 +455,42 @@ table 50520 "RV NC Header"
                     //     ItemJnlLine."Lot No." := Rec."Lot No.";
                     ItemJnlLine.Validate("Unit of Measure Code", Rec."Unit of Measure");
                     ItemJnlLine.Validate("Quantity", QCInyResultLine."Quantity");
-                    ItemJnlLine."reason Code" := ItemJournalBatch."Reason Code";
+                    // ItemJnlLine."reason Code" := ItemJournalBatch."Reason Code";
+
+                    ReasonCode.Reset();
+                    ReasonCode.SetRange("RV_Reason Code Type", ReasonCode."RV_Reason Code Type"::"Transfer Site");
+                    if ReasonCode.FindFirst() then
+                        ItemJnlLine."reason Code" := ReasonCode.Code
+                    else
+                        Error('Please set a Reason Code for QC inventory transfers with the Reason Code Type set to Transfer Site');
+
+                    ReceiptILE.reset;
+                    ReceiptILE.SetRange("Document No.", Rec."Order No.");
+                    ReceiptILE.SetRange("Item No.");
+                    ReceiptILE.SetRange("Lot No.", Rec."Lot No.");
+                    case Rec."QC Type" of
+                        "RV QC Type"::IQC:
+                            ReceiptILE.SetRange("Entry Type", ReceiptILE."Entry Type"::Purchase);
+                        "RV QC Type"::FQC,
+                        "RV QC Type"::PQC:
+                            ReceiptILE.SetRange("Entry Type", ReceiptILE."Entry Type"::Output);
+                    end;
+
+                    if ReceiptILE.FindFirst() then begin
+                        ItemJnlLine.Validate("Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
+                        ItemJnlLine.Validate("Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
+                        ItemJnlLine.Validate("New Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
+                        ItemJnlLine.Validate("New Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
+                    end else begin
+                        ReceiptILE.SetRange("Entry Type");
+                        if ReceiptILE.FindFirst() then begin
+                            ItemJnlLine.Validate("Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
+                            ItemJnlLine.Validate("Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
+                            ItemJnlLine.Validate("New Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
+                            ItemJnlLine.Validate("New Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
+                        end;
+                    end;
+
                     ItemJnlLine.modify(true);
 
                     //ReservationEntry

@@ -138,7 +138,6 @@ table 50505 "RV QC Header"
             Caption = 'Lot No.';
             trigger OnLookup()
             var
-                RefOrderType: Enum "RV Ref. Order Type";
                 Purchaseline: Record "Purchase line";
                 PurchRcptLine: Record "Purch. Rcpt. Line";
                 ItemLedgerEntry: Record "Item Ledger Entry";
@@ -149,75 +148,81 @@ table 50505 "RV QC Header"
                 GetManufacturingDate: Codeunit "RV Whse. Posting Subscriber";
             begin
 
-                if "Ref. Order Type" = RefOrderType::"Purchase Order" then begin
-                    //nothing
-                end else if "Ref. Order Type" = RefOrderType::"Posted Purchase Receipt" then begin
-                    PurchRcptLine.get("Order No.", "Line No.");
-                    ItemLedgerEntry.Reset();
-                    ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Purchase Receipt");
-                    ItemLedgerEntry.SetRange("Document No.", PurchRcptLine."Document No.");
-                    ItemLedgerEntry.SetRange("Document Line No.", PurchRcptLine."Line No.");
-                    ItemLedgerEntry.SetRange("Item No.", PurchRcptLine."No.");
-                    ItemLedgerEntry.SetRange(Correction, false);
-                    if (PurchRcptLine."RV_IQC Status") or
-                       ((PurchRcptLine."Quantity (Base)" > 0) and
-                        (PurchRcptLine."RV_IQC Quantity" >= PurchRcptLine."Quantity (Base)"))
-                    then begin
-                        ItemLedgerEntry.SetRange("Lot No.", '');
-                    end else begin
-                        QCHeader.SetRange("QC Type", QCHeader."QC Type"::IQC);
-                        QCHeader.SetRange("Ref. Order Type", QCHeader."Ref. Order Type"::"Posted Purchase Receipt");
-                        QCHeader.SetRange("Order No.", PurchRcptLine."Document No.");
-                        QCHeader.SetRange("Line No.", PurchRcptLine."Line No.");
-                        QCHeader.SetRange("Item No.", PurchRcptLine."No.");
-                        QCHeader.SetFilter("QC Status", '%1|%2', QCHeader."QC Status"::Approved, QCHeader."QC Status"::Rejected);
-                        if QCHeader.FindSet() then
-                            repeat
-                                if QCHeader."Lot No." <> '' then
-                                    if not CompletedLotNos.Contains(QCHeader."Lot No.") then
-                                        CompletedLotNos.Add(QCHeader."Lot No.");
-                            until QCHeader.Next() = 0;
+                case "Ref. Order Type" of
+                    "Ref. Order Type"::"Posted Purchase Receipt":
+                        begin
+                            PurchRcptLine.get("Order No.", "Line No.");
+                            ItemLedgerEntry.Reset();
+                            ItemLedgerEntry.SetRange("Document Type", ItemLedgerEntry."Document Type"::"Purchase Receipt");
+                            ItemLedgerEntry.SetRange("Document No.", PurchRcptLine."Document No.");
+                            ItemLedgerEntry.SetRange("Document Line No.", PurchRcptLine."Line No.");
+                            ItemLedgerEntry.SetRange("Item No.", PurchRcptLine."No.");
+                            ItemLedgerEntry.SetRange(Correction, false);
+                            if (PurchRcptLine."RV_IQC Status") or
+                               ((PurchRcptLine."Quantity (Base)" > 0) and
+                                (PurchRcptLine."RV_IQC Quantity" >= PurchRcptLine."Quantity (Base)"))
+                            then begin
+                                ItemLedgerEntry.SetRange("Lot No.", '');
+                            end else begin
+                                QCHeader.SetRange("QC Type", QCHeader."QC Type"::IQC);
+                                QCHeader.SetRange("Ref. Order Type", QCHeader."Ref. Order Type"::"Posted Purchase Receipt");
+                                QCHeader.SetRange("Order No.", PurchRcptLine."Document No.");
+                                QCHeader.SetRange("Line No.", PurchRcptLine."Line No.");
+                                QCHeader.SetRange("Item No.", PurchRcptLine."No.");
+                                QCHeader.SetFilter("QC Status", '%1|%2', QCHeader."QC Status"::Approved, QCHeader."QC Status"::Rejected);
+                                if QCHeader.FindSet() then
+                                    repeat
+                                        if QCHeader."Lot No." <> '' then
+                                            if not CompletedLotNos.Contains(QCHeader."Lot No.") then
+                                                CompletedLotNos.Add(QCHeader."Lot No.");
+                                    until QCHeader.Next() = 0;
 
-                        ItemLedgerEntry.SetFilter("Lot No.", '<>%1', '');
-                        ItemLedgerEntry.ClearMarks();
-                        if ItemLedgerEntry.FindSet() then
-                            repeat
-                                ItemLedgerEntry.Mark(not CompletedLotNos.Contains(ItemLedgerEntry."Lot No."));
-                            until ItemLedgerEntry.Next() = 0;
-                        ItemLedgerEntry.MarkedOnly(true);
-                    end;
-                    ItemLedgerEntry.MarkedOnly(true);
-                    if (Page.RunModal(Page::"RV Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
-                        Validate("Lot No.", ItemLedgerEntry."Lot No.");
-                        GetManufacturingDate.GetManufacturingDate(itemledgerentry."Item No.", ItemLedgerEntry."Lot No.", "Manufacturing Date");
-                        "Expiration Date" := ItemLedgerEntry."Expiration Date";
-                        LotItemLedgerEntry.SetRange("Document Type", LotItemLedgerEntry."Document Type"::"Purchase Receipt");
-                        LotItemLedgerEntry.SetRange("Document No.", PurchRcptLine."Document No.");
-                        LotItemLedgerEntry.SetRange("Document Line No.", PurchRcptLine."Line No.");
-                        LotItemLedgerEntry.SetRange("Item No.", ItemLedgerEntry."Item No.");
-                        LotItemLedgerEntry.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
-                        LotItemLedgerEntry.SetRange(Correction, false);
-                        LotItemLedgerEntry.CalcSums(Quantity);
-                        "Quantity (Base)" := LotItemLedgerEntry.Quantity;
-                        if ItemLedgerEntry."Qty. per Unit of Measure" <> 0 then
-                            Quantity := LotItemLedgerEntry.Quantity / ItemLedgerEntry."Qty. per Unit of Measure";
-                        "UOM" := ItemLedgerEntry."Unit of Measure Code";
-                    end;
+                                ItemLedgerEntry.SetFilter("Lot No.", '<>%1', '');
+                                ItemLedgerEntry.ClearMarks();
+                                if ItemLedgerEntry.FindSet() then
+                                    repeat
+                                        ItemLedgerEntry.Mark(not CompletedLotNos.Contains(ItemLedgerEntry."Lot No."));
+                                    until ItemLedgerEntry.Next() = 0;
+                                ItemLedgerEntry.MarkedOnly(true);
+                            end;
+                            ItemLedgerEntry.MarkedOnly(true);
+                            if (Page.RunModal(Page::"RV Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
+                                Validate("Lot No.", ItemLedgerEntry."Lot No.");
+                                GetManufacturingDate.GetManufacturingDate(itemledgerentry."Item No.", ItemLedgerEntry."Lot No.", "Manufacturing Date");
+                                "Expiration Date" := ItemLedgerEntry."Expiration Date";
+                                LotItemLedgerEntry.SetRange("Document Type", LotItemLedgerEntry."Document Type"::"Purchase Receipt");
+                                LotItemLedgerEntry.SetRange("Document No.", PurchRcptLine."Document No.");
+                                LotItemLedgerEntry.SetRange("Document Line No.", PurchRcptLine."Line No.");
+                                LotItemLedgerEntry.SetRange("Item No.", ItemLedgerEntry."Item No.");
+                                LotItemLedgerEntry.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
+                                LotItemLedgerEntry.SetRange(Correction, false);
+                                LotItemLedgerEntry.CalcSums(Quantity);
+                                "Quantity (Base)" := LotItemLedgerEntry.Quantity;
+                                if ItemLedgerEntry."Qty. per Unit of Measure" <> 0 then
+                                    Quantity := LotItemLedgerEntry.Quantity / ItemLedgerEntry."Qty. per Unit of Measure";
+                                "UOM" := ItemLedgerEntry."Unit of Measure Code";
+                            end;
+                        end;
+                    "Ref. Order Type"::"Production Order":
+                        begin
+                            ItemLedgerEntry.Reset();
+                            ItemLedgerEntry.SetRange("Order Type", ItemLedgerEntry."Order Type"::Production);
+                            ItemLedgerEntry.SetRange("Order No.", "Order No.");
+                            ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::Output);
+                            ItemLedgerEntry.SetFilter("Quantity", '>0');
 
-                end else if "Ref. Order Type" = RefOrderType::"Production Order" then begin
+                            if (Page.RunModal(Page::"RV Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
+                                Validate("Lot No.", ItemLedgerEntry."Lot No.");
+                                "Manufacturing Date" := ItemLedgerEntry."Posting Date";
+                                "Expiration Date" := ItemLedgerEntry."Expiration Date";
 
-                    ItemLedgerEntry.Reset();
-                    ItemLedgerEntry.SetRange("Order Type", ItemLedgerEntry."Order Type"::Production);
-                    ItemLedgerEntry.SetRange("Order No.", "Order No.");
-                    ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::Output);
-                    ItemLedgerEntry.SetFilter("Quantity", '>0');
-
-                    if (Page.RunModal(Page::"RV Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
-                        Validate("Lot No.", ItemLedgerEntry."Lot No.");
-                        "Manufacturing Date" := ItemLedgerEntry."Posting Date";
-                        "Expiration Date" := ItemLedgerEntry."Expiration Date";
-                    end;
-                end;
+                                "Quantity (Base)" := ItemLedgerEntry.Quantity;
+                                if ItemLedgerEntry."Qty. per Unit of Measure" <> 0 then
+                                    Quantity := ItemLedgerEntry.Quantity / ItemLedgerEntry."Qty. per Unit of Measure";
+                                "UOM" := ItemLedgerEntry."Unit of Measure Code";
+                            end;
+                        end;
+                End;
             end;
 
             trigger OnValidate()
@@ -968,14 +973,20 @@ table 50505 "RV QC Header"
         ReasonCode.Reset();
         ReasonCode.SetRange("RV_Reason Code Type", ReasonCode."RV_Reason Code Type"::"Transfer Site");
         if ReasonCode.FindFirst() then
-            ItemJnlLine."reason Code" := ItemJournalBatch."Reason Code"
+            ItemJnlLine."reason Code" := ReasonCode.Code
         else
             Error('Please set a Reason Code for QC inventory transfers with the Reason Code Type set to Transfer Site');
         ReceiptILE.reset;
         ReceiptILE.SetRange("Document No.", Rec."Order No.");
         ReceiptILE.SetRange("Item No.");
         ReceiptILE.SetRange("Lot No.", Rec."Lot No.");
-        ReceiptILE.SetRange("Entry Type", ReceiptILE."Entry Type"::Purchase);
+        case Rec."QC Type" of
+            "RV QC Type"::IQC:
+                ReceiptILE.SetRange("Entry Type", ReceiptILE."Entry Type"::Purchase);
+            "RV QC Type"::FQC,
+            "RV QC Type"::PQC:
+                ReceiptILE.SetRange("Entry Type", ReceiptILE."Entry Type"::Output);
+        end;
         if ReceiptILE.FindFirst() then begin
             ItemJnlLine.Validate("Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
             ItemJnlLine.Validate("Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
@@ -983,10 +994,12 @@ table 50505 "RV QC Header"
             ItemJnlLine.Validate("New Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
         end else begin
             ReceiptILE.SetRange("Entry Type");
-            ItemJnlLine.Validate("Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
-            ItemJnlLine.Validate("Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
-            ItemJnlLine.Validate("New Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
-            ItemJnlLine.Validate("New Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
+            if ReceiptILE.FindFirst() then begin
+                ItemJnlLine.Validate("Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
+                ItemJnlLine.Validate("Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
+                ItemJnlLine.Validate("New Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
+                ItemJnlLine.Validate("New Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
+            end;
         end;
 
         ItemJnlLine.Modify(true);

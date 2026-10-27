@@ -84,7 +84,6 @@ page 50539 "RV NC Card"
                     ApplicationArea = All;
                     Editable = true;
                 }
-
                 field("QC Comment"; Rec."QC Comment")
                 {
                     ApplicationArea = All;

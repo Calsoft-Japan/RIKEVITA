@@ -321,7 +321,6 @@ page 50509 "RV IQC Card"
                     //Enable
                     Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
 
-
                 end;
             }
             action("QC Reverse")
