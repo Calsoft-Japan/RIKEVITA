@@ -23,6 +23,9 @@ page 50913 "RV Posted Whse Rcpt Line Dtl"
                 field("Line No."; Rec."Line No.")
                 {
                 }
+                field("Source Document"; Rec."Source Document")
+                {
+                }
                 field("Source No."; Rec."Source No.")
                 {
                 }

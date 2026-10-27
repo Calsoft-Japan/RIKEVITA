@@ -73,9 +73,14 @@ table 50900 "RV Charge Calc. Header"
 
             trigger OnValidate()
             begin
+                //TODO.
+                //Comment out this limitation for Function Test objective.
+                //Should make it active when Go-Live.
+                /*
                 if (xRec.Status = Enum::"RV Charge Calc. Status"::Completed) and (Rec.Status <> Enum::"RV Charge Calc. Status"::Completed) then begin
                     Error(ModifyOnCompletedErr);
                 end;
+                */
                 if (xRec.Status <> Enum::"RV Charge Calc. Status"::Completed) and (Rec.Status = Enum::"RV Charge Calc. Status"::Completed) then begin
                     Error(ChangeToCompletedErr);
                 end;
@@ -106,10 +111,11 @@ table 50900 "RV Charge Calc. Header"
 
                 if xRec.LOB <> LOB then begin
                     if recCust.Get(LOB) then begin
-                        Validate("Invoice Currency Code", recCust."Currency Code");
+                        //Currency Code should be consist with Vendor Invoice.
+                        //Validate("Invoice Currency Code", recCust."Currency Code");
                         Validate("HTP Adjustment Price", recCust."RV_HTP Adjustment Price");
                     end else begin
-                        Validate("Invoice Currency Code", '');
+                        //Validate("Invoice Currency Code", '');
                         Validate("HTP Adjustment Price", 0);
                     end;
                 end;
@@ -289,6 +295,20 @@ table 50900 "RV Charge Calc. Header"
                 end;
             end;
         }
+        field(43; "Posted Whse. Shipment No."; Code[20])
+        {
+            Caption = 'Posted Whse. Shipment No.';
+            FieldClass = FlowField;
+            CalcFormula = lookup("RV Charge Calc. Line"."Posted Whse. Shipment No." where("Document No." = field("No.")));
+            Editable = false;
+        }
+        field(44; "Warehouse Shipment No."; Code[20])
+        {
+            Caption = 'Warehouse Shipment No.';
+            FieldClass = FlowField;
+            CalcFormula = lookup("Posted Whse. Shipment Header"."Whse. Shipment No." where("No." = field("Posted Whse. Shipment No.")));
+            Editable = false;
+        }
 
     }
     keys
@@ -326,7 +346,12 @@ table 50900 "RV Charge Calc. Header"
 
     trigger OnModify()
     begin
-        CheckStatusCompleted();
+        //TODO.
+        //Comment out this limitation for Function Test objective.
+        //Should remove the if condition (xRec.Status = Rec.Status) when Go-Live.
+        if (xRec.Status = Rec.Status) then begin
+            CheckStatusCompleted();
+        end;
 
         if (xRec."Charge Type" <> Rec."Charge Type")
             or (xRec."LOB" <> Rec."LOB")

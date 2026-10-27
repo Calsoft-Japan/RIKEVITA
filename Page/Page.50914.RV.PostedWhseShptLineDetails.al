@@ -26,6 +26,12 @@ page 50914 "RV Posted Whse Shpt Line Dtl"
                 field("Whse. Shipment No."; Rec."Whse. Shipment No.")
                 {
                 }
+                field("Source Document"; Rec."Source Document")
+                {
+                }
+                field("Source No."; Rec."Source No.")
+                {
+                }
                 field("Posted Source No."; Rec."Posted Source No.")
                 {
                 }

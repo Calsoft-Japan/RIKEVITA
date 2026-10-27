@@ -39,6 +39,12 @@ page 50900 "RV Charge Calculations"
                 field("Invoice Currency Code"; Rec."Invoice Currency Code")
                 {
                 }
+                field("Warehouse Shipment No."; Rec."Warehouse Shipment No.")
+                {
+                }
+                field("Posted Whse. Shipment No."; Rec."Posted Whse. Shipment No.")
+                {
+                }
                 field("Calculation Date"; Rec."Calculation Date")
                 {
                 }
