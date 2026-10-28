@@ -74,22 +74,31 @@ page 50539 "RV NC Card"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("Storage location Code"; Rec."location Code")
-                {
-                    ApplicationArea = All;
-                    Editable = true;
-                }
-                field("Storage Bin Code"; Rec."Storage Bin Code")
-                {
-                    ApplicationArea = All;
-                    Editable = true;
-                }
                 field("QC Comment"; Rec."QC Comment")
                 {
                     ApplicationArea = All;
                     Editable = false;
                     MultiLine = true;
                 }
+                field("NC Invy. Transfer to Bin"; Rec."NC Invy. Transfer to Bin")
+                {
+                    ApplicationArea = All;
+                    Editable = QCCardEnable;
+                    //Editable = true;
+                }
+                field("Stock Transfer to Location"; Rec."Stock Transfer to Location")
+                {
+                    ApplicationArea = All;
+                    Editable = QCCardEnable;
+                    //Editable = true;
+                }
+                field("Stock Transfer to Bin"; Rec."Stock Transfer to Bin")
+                {
+                    ApplicationArea = All;
+                    //Editable = true;
+                    Editable = QCCardEnable;
+                }
+
                 field("QC Checked By"; Rec."QC Checked By")
                 {
                     ApplicationArea = All;

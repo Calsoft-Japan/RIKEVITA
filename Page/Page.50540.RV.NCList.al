@@ -59,7 +59,7 @@ page 50540 "RV NC List"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("location Code"; Rec."location Code")
+                field("location Code"; Rec."Stock Transfer to Bin")
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -69,7 +69,7 @@ page 50540 "RV NC List"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("Storage Bin Code"; Rec."Storage Bin Code")
+                field("Storage Bin Code"; Rec."Stock Transfer to Bin")
                 {
                     ApplicationArea = All;
                     Editable = false;

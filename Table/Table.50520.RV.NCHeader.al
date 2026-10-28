@@ -94,9 +94,9 @@ table 50520 "RV NC Header"
             Caption = 'Unit of Measure';
             TableRelation = "Unit of Measure";
         }
-        field(100; "Location Code"; Code[10])
+        field(100; "Stock Transfer to Location"; Code[10])
         {
-            Caption = 'Location Code';
+            Caption = 'Stock Transfer to Location';
             TableRelation = Location;
         }
         field(110; "QC Checked By"; Text[50])
@@ -134,12 +134,17 @@ table 50520 "RV NC Header"
         }
         field(160; "Inspect Bin Code"; Code[20])
         {
-            Caption = 'Inspect Bin Code';
+            Caption = 'NC Inspect Bin Code';
             TableRelation = Bin.Code where("Location Code" = field("NC Location Code"));
         }
-        field(170; "Storage Bin Code"; Code[20])
+        field(170; "Stock Transfer to Bin"; Code[20])
         {
-            Caption = 'Storage Bin Code';
+            Caption = 'Stock Transfer to Bin';
+            TableRelation = Bin.Code where("Location Code" = field("Stock Transfer to Location"));
+        }
+        field(171; "NC Invy. Transfer to Bin"; Code[20])
+        {
+            Caption = 'NC Invy. Transfer to Bin';
             TableRelation = Bin.Code where("Location Code" = field("NC Location Code"));
         }
         field(180; "NC Location Code"; Code[10])

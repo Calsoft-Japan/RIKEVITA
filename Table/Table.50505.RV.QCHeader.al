@@ -50,6 +50,7 @@ table 50505 "RV QC Header"
             begin
 
                 if Rec."Ref. Order Type" = RefOrderType::"Purchase Order" then begin
+                    RIKEVITASetup.Get();
                     Purchaseline.Reset();
                     Purchaseline.SetRange("Document Type", Purchaseline."Document Type"::Order);
                     if (Page.RunModal(Page::"Purchase Lines", Purchaseline) = Action::LookupOK) then begin
@@ -72,10 +73,12 @@ table 50505 "RV QC Header"
                         "Quantity" := Purchaseline."Quantity";
                         "UOM" := Purchaseline."unit of Measure Code";
                         "Quantity (Base)" := Purchaseline."Quantity (Base)";
+                        rec."NC Bin Code" := RIKEVITASetup."NC Bin Code";
+                        rec."NC Location Code" := RIKEVITASetup."NC Location Code";
                         Modify();
                     end;
                 end else if Rec."Ref. Order Type" = RefOrderType::"Posted Purchase Receipt" then begin
-
+                    RIKEVITASetup.Get();
                     PurchRcptLine.Reset();
                     PurchRcptLine.SetRange(Type, PurchRcptLine.Type::Item);
                     PurchRcptLine.SetRange("RV_IQC Status", false);
@@ -95,6 +98,8 @@ table 50505 "RV QC Header"
                         "Quantity" := PurchRcptLine."Quantity";
                         "UOM" := PurchRcptLine."unit of Measure Code";
                         "Quantity (Base)" := PurchRcptLine."Quantity (Base)";
+                        rec."NC Bin Code" := RIKEVITASetup."NC Bin Code";
+                        rec."NC Location Code" := RIKEVITASetup."NC Location Code";
                         Modify();
                     end;
                 end else if Rec."Ref. Order Type" = RefOrderType::"Production Order" then begin
@@ -121,9 +126,12 @@ table 50505 "RV QC Header"
                         "UOM" := ProdOrderLine."unit of Measure Code";
                         "Quantity (Base)" := ProdOrderLine."Quantity (Base)";
                         ProductionOrder.get(ProductionOrder.Status::Released, ProdOrderLine."Prod. Order No.");
+                        rec."NC Bin Code" := RIKEVITASetup."NC Bin Code";
+                        rec."NC Location Code" := RIKEVITASetup."NC Location Code";
                         Modify();
                     end;
                 end;
+
             end;
 
             trigger OnValidate()
@@ -365,6 +373,16 @@ table 50505 "RV QC Header"
             Caption = 'Quantity (Base)';
             DecimalPlaces = 0 : 5;
         }
+        field(31; "NC Location Code"; Code[10])
+        {
+            Caption = 'NC Location Code';
+            TableRelation = Location;
+        }
+        field(32; "NC Bin Code"; Code[20])
+        {
+            Caption = 'NC Bin Code';
+            TableRelation = Bin.Code where("Location Code" = field("NC Location Code"));
+        }
         field(100; "Line No."; Integer)
         {
             Caption = 'Line No.';
@@ -491,6 +509,8 @@ table 50505 "RV QC Header"
     var
         UserSetup: Record "User Setup";
         TextReverseErr: Label 'You don''t have permission to Reverse!';
+        TextReverseErr2: Label 'Please delete the related non-conformance data before run Reverse!';
+        NCHeader: Record "RV NC Header";
     begin
         if UserSetup.Get(UserId) then begin
             if not UserSetup."RV_Allow QC Reverse" then
@@ -499,7 +519,15 @@ table 50505 "RV QC Header"
             Error(TextReverseErr);
 
         if "QC Status" in ["QC Status"::Analyzing, "QC Status"::Checked] then
-            Error('You can not Reverse, because you need approval or Reject.')
+            Error('You can not Reverse, because you need approval or Reject.');
+        //Check the NC data has been created
+        NCHeader.Reset();
+        NCHeader.SetRange("Ref. Order Type", Rec."Ref. Order Type");
+        NCHeader.SetRange("Order No.", Rec."Order No.");
+        if not NCHeader.IsEmpty then
+            error(TextReverseErr2);
+
+
     end;
 
     procedure IsQCRejectAllowed()
@@ -739,11 +767,12 @@ table 50505 "RV QC Header"
             NCHeader."Quantity" := Rec."Quantity";
             NCHeader."Expiration Date" := Rec."Expiration Date";
             NCHeader."QC Date" := Rec."QC Date";
-            NCHeader."Location Code" := Rec."Location Code";
+            NCHeader."Stock Transfer to Location" := Rec."Location Code";
             NCHeader."Inspect Bin Code" := Rec."Bin Code";
-            NCHeader."Storage Bin Code" := Rec."Storage Bin Code";
+            NCHeader."Stock Transfer to Bin" := Rec."Storage Bin Code";
             NCHeader."Unit of Measure" := Rec."UOM";
-            NCHeader."NC Location Code" := RIKEVITASetup."NC Location Code";
+            NCHeader."NC Location Code" := Rec."NC Location Code";
+            NCHeader."Inspect Bin Code" := Rec."NC Bin Code";
             NCHeader."QC Checked By" := Rec."QC Checked By";
             NCHeader."QC Checked Remark" := Rec."QC Checked Remark";
             NCHeader."QC Checked Date" := Rec."QC Checked Date";
@@ -815,6 +844,7 @@ table 50505 "RV QC Header"
                     SubQCLineEnable := true;
                     SubInventoryResultEnable := true;
                     QCCardEnable := true;
+
                 end;
             (Rec."QC Status"::Checked):
                 begin
@@ -827,7 +857,8 @@ table 50505 "RV QC Header"
 
                     SubQCLineEnable := true;
                     SubInventoryResultEnable := true;
-                    QCCardEnable := true;
+                    //QCCardEnable := true;
+                    QCCardEnable := false;
                 end;
             (Rec."QC Status"::Approved):
                 begin

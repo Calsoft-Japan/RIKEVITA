@@ -56,8 +56,8 @@ page 50527 "RV FQC Iny. Result Subform"
                                     end;
                                 rec."Inventory Type"::STCK:
                                     begin
-                                        Rec."Transfer-to Location" := NCHeader."Location Code";
-                                        Rec."Transfer-to Bin" := NCHeader."Storage Bin Code";
+                                        Rec."Transfer-to Location" := NCHeader."Stock Transfer to Location";
+                                        Rec."Transfer-to Bin" := NCHeader."Stock Transfer to Bin";
                                     end;
                             end;
                         end;
@@ -114,8 +114,8 @@ page 50527 "RV FQC Iny. Result Subform"
                     end;
                 rec."Inventory Type"::STCK:
                     begin
-                        Rec."Transfer-to Location" := NCHeader."Location Code";
-                        Rec."Transfer-to Bin" := NCHeader."Storage Bin Code";
+                        Rec."Transfer-to Location" := NCHeader."Stock Transfer to Location";
+                        Rec."Transfer-to Bin" := NCHeader."Stock Transfer to Bin";
                     end;
             end;
         end;
