@@ -31,6 +31,11 @@ codeunit 50203 "RV Get Shipment Lines"
         end;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Get Shipment", OnRunAfterFilterSalesShpLine, '', false, false)]
+    local procedure "Sales-Get Shipment_OnRunAfterFilterSalesShpLine"(var SalesShptLine: Record "Sales Shipment Line"; SalesHeader: Record "Sales Header"; var IsHandled: Boolean)
+    begin
+        SalesShptLine.SetFilter("Posting Date", '..%1', SalesHeader."Posting Date");
+    end;
 
 
 }

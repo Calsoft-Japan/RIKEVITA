@@ -2,11 +2,39 @@
 /// PageExtension RV Get Shipment Lines (ID 50215) extends "Get Shipment Lines"
 /// FDD018 2026/07/07: New. (Bobby.ji)
 /// FDD009 2026/08/30: Update to table field for page filtering. (Shawn)
+/// additional requirement 2026/10/29: Add the following field. (Bobby.ji)
 /// </summary>
 pageextension 50215 "RV Get Shipment Lines Ext" extends "Get Shipment Lines"
 {
     layout
     {
+        addafter("Bill-to Customer No.")
+        {
+            field("Customer Name"; CustomerName)
+            {
+                Caption = 'Customer Name';
+                ApplicationArea = All;
+                Description = 'additional requirement';
+            }
+            field("Posting Date"; Rec."Posting Date")
+            {
+                Caption = 'Posting Date';
+                ApplicationArea = All;
+                Description = 'additional requirement';
+            }
+            field("Order No."; Rec."Order No.")
+            {
+                Caption = 'Order No.';
+                ApplicationArea = All;
+                Description = 'additional requirement';
+            }
+            field("Order Line No."; Rec."Order Line No.")
+            {
+                Caption = 'Order Line No.';
+                ApplicationArea = All;
+                Description = 'additional requirement';
+            }
+        }
         addafter(YourReference)
         {
             field("Warehouse Shipment No."; Rec."RV_Warehouse Shipment No.")
@@ -23,22 +51,16 @@ pageextension 50215 "RV Get Shipment Lines Ext" extends "Get Shipment Lines"
             }
         }
     }
-    /*
     var
-        WarehouseShipmentNo: Code[20];
-        PostedWarehouseShipmentNo: Code[20];
+        CustomerName: Text[100];
 
     trigger OnAfterGetRecord()
     var
-        PostedWhseShipmentLine: Record "Posted Whse. Shipment Line";
+        Customer: Record Customer;
     begin
-        PostedWhseShipmentLine.Reset();
-        PostedWhseShipmentLine.SetRange("Posted Source No.", Rec."Document No.");
-        PostedWhseShipmentLine.SetRange("Source Line No.", Rec."Line No.");
-        if PostedWhseShipmentLine.FindFirst() then begin
-            WarehouseShipmentNo := PostedWhseShipmentLine."Whse. Shipment No.";
-            PostedWarehouseShipmentNo := PostedWhseShipmentLine."No.";
+        if Customer.Get(Rec."Bill-to Customer No.") then begin
+            CustomerName := Customer.Name;
         end;
     end;
-    */
+
 }
