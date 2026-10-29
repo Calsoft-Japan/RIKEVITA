@@ -412,12 +412,8 @@ table 50520 "RV NC Header"
         ReasonCode: Record "Reason Code";
     begin
         RIKEVITASetup.Get();
-        // RIKEVITASetup.TestField("QC Reclass Jnl Template Name");
-        // RIKEVITASetup.TestField("QC Reclass Jnl Batch Name");
-        RIKEVITASetup.TestField("NC Location Code");
-        RIKEVITASetup.TestField("NC Bin Code");
         FromLocation := Rec."NC Location Code";
-        FromBin := RIKEVITASetup."NC Bin Code";
+        FromBin := Rec."Inspect Bin Code";
 
         SetTemplateAndBatchName();
         DeleteJnlLines(ToTemplateName, ToBatchName);

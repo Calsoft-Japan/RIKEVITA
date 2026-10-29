@@ -98,8 +98,11 @@ table 50505 "RV QC Header"
                         "Quantity" := PurchRcptLine."Quantity";
                         "UOM" := PurchRcptLine."unit of Measure Code";
                         "Quantity (Base)" := PurchRcptLine."Quantity (Base)";
-                        rec."NC Bin Code" := RIKEVITASetup."NC Bin Code";
-                        rec."NC Location Code" := RIKEVITASetup."NC Location Code";
+                        "Lot No." := '';
+                        CLEAR("RM Manufacture Date");
+                        CLEAR("Expiration Date");
+                        "NC Bin Code" := RIKEVITASetup."NC Bin Code";
+                        "NC Location Code" := RIKEVITASetup."NC Location Code";
                         Modify();
                     end;
                 end else if Rec."Ref. Order Type" = RefOrderType::"Production Order" then begin
@@ -126,8 +129,10 @@ table 50505 "RV QC Header"
                         "UOM" := ProdOrderLine."unit of Measure Code";
                         "Quantity (Base)" := ProdOrderLine."Quantity (Base)";
                         ProductionOrder.get(ProductionOrder.Status::Released, ProdOrderLine."Prod. Order No.");
-                        rec."NC Bin Code" := RIKEVITASetup."NC Bin Code";
-                        rec."NC Location Code" := RIKEVITASetup."NC Location Code";
+                        CLEAR("RM Manufacture Date");
+                        CLEAR("Expiration Date");
+                        "NC Bin Code" := RIKEVITASetup."NC Bin Code";
+                        "NC Location Code" := RIKEVITASetup."NC Location Code";
                         Modify();
                     end;
                 end;
@@ -768,7 +773,6 @@ table 50505 "RV QC Header"
             NCHeader."Expiration Date" := Rec."Expiration Date";
             NCHeader."QC Date" := Rec."QC Date";
             NCHeader."Stock Transfer to Location" := Rec."Location Code";
-            NCHeader."Inspect Bin Code" := Rec."Bin Code";
             NCHeader."Stock Transfer to Bin" := Rec."Storage Bin Code";
             NCHeader."Unit of Measure" := Rec."UOM";
             NCHeader."NC Location Code" := Rec."NC Location Code";

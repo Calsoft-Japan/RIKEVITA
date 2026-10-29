@@ -89,7 +89,7 @@ page 50509 "RV IQC Card"
                 field("Storage Bin Code"; Rec."Storage Bin Code")
                 {
                     ApplicationArea = All;
-                    Editable = QCCardEnable;
+                    Editable = (QCApproveEnable OR QCCardEnable);
                 }
                 field("RM Manufacture Date"; Rec."RM Manufacture Date")
                 {
