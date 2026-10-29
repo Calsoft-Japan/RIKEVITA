@@ -231,7 +231,8 @@ page 50539 "RV NC Card"
                     Rec.testfield("Expiration Date");
                     //CheckTotalQuantity
                     Rec.CheckTotalQuantity();
-                    Rec.PostItemReclassJournal(Rec.Quantity, Rec."Expiration Date");
+                    if Rec.CheckSameLocation() then
+                        Rec.PostItemReclassJournal(Rec.Quantity, Rec."Expiration Date");
                     //Enable
                     Rec.SetQCEnable(QCCheckEnable, QCApproveEnable, SubInventoryResultEnable, QCCardEnable);
 

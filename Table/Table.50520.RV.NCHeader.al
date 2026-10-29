@@ -388,6 +388,31 @@ table 50520 "RV NC Header"
         END;
     end;
 
+    procedure CheckSameLocation(): boolean
+    var
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
+        QCInyResultLine: Record "RV QC Iny. Result Line";
+        FromLocation: Code[10];
+        FromBin: Code[20];
+    begin
+        FromLocation := Rec."NC Location Code";
+        FromBin := Rec."Inspect Bin Code";
+
+        QCInyResultLine.Reset();
+        QCInyResultLine.SetRange("QC No.", Rec."QC No.");
+        QCInyResultLine.SetRange("QC Type", Rec."QC Type");
+        if QCInyResultLine.findset() then
+            repeat
+                if (QCInyResultLine."Transfer-to Location" <> FromLocation) or
+                   ((QCInyResultLine."Transfer-to Location" = FromLocation) and
+                   (QCInyResultLine."Transfer-to Bin" <> FromBin)) then
+                    exit(true);
+            until QCInyResultLine.next = 0;
+        if not confirm(StrSubstNo(Text005, FromLocation, FromBin, QCInyResultLine."Transfer-to Location", QCInyResultLine."Transfer-to Bin", QCInyResultLine."Line No."), false) then
+            exit(false);
+        exit(true);
+    end;
+
     procedure PostItemReclassJournal(var Quantity: Decimal; var NewExpirationDate: Date)
     var
         ItemJnlLine: Record "Item Journal Line";
@@ -428,93 +453,94 @@ table 50520 "RV NC Header"
 
                 ToLocation := QCInyResultLine."Transfer-to Location";
                 ToBin := QCInyResultLine."Transfer-to Bin";
-                if (FromLocation <> ToLocation) or (FromBin <> ToBin) then begin
-                    ItemJnlLine.Init();
-                    // ItemJnlLine."Journal Template Name" := RIKEVITASetup."QC Reclass Jnl Template Name";
-                    // ItemJnlLine."Journal Batch Name" := RIKEVITASetup."QC Reclass Jnl Batch Name";
-                    ItemJnlLine."Journal Template Name" := ToTemplateName;
-                    ItemJnlLine."Journal Batch Name" := ToBatchName;
 
-                    LineNo += 10000;
-                    ItemJnlLine."Line No." := LineNo;
-                    ItemJnlLine.Insert();
+                // if (FromLocation <> ToLocation) or (FromBin <> ToBin) then begin
+                ItemJnlLine.Init();
+                // ItemJnlLine."Journal Template Name" := RIKEVITASetup."QC Reclass Jnl Template Name";
+                // ItemJnlLine."Journal Batch Name" := RIKEVITASetup."QC Reclass Jnl Batch Name";
+                ItemJnlLine."Journal Template Name" := ToTemplateName;
+                ItemJnlLine."Journal Batch Name" := ToBatchName;
 
-                    ItemJnlLine."Entry Type" := Enum::"Item Ledger Entry Type"::Transfer;
-                    ItemJnlLine."Source Code" := ItemJnlTemplate."Source Code";
-                    ItemJnlLine."Value Entry Type" := Enum::"Cost Entry Type"::"Direct Cost";
+                LineNo += 10000;
+                ItemJnlLine."Line No." := LineNo;
+                ItemJnlLine.Insert();
 
-                    ItemJnlLine.Validate("Posting Date", WorkDate());
-                    ItemJnlLine."Document Date" := WorkDate();
-                    // ItemJnlLine."Document No." := NoSeriesBatch.GetNextNo(ItemJournalBatch."No. Series", ItemJnlLine."Posting Date");
-                    ItemJnlLine."Document No." := Rec."QC No.";
-                    ItemJnlLine.Validate("Item No.", Rec."Item No.");
-                    ItemJnlLine.Validate("Location Code", FromLocation);
-                    ItemJnlLine.Validate("New Location Code", ToLocation);
-                    ItemJnlLine.Validate("Bin Code", FromBin);
-                    ItemJnlLine.Validate("New Bin Code", ToBin);
-                    // if Rec."Lot No." <> '' then
-                    //     ItemJnlLine."Lot No." := Rec."Lot No.";
-                    ItemJnlLine.Validate("Unit of Measure Code", Rec."Unit of Measure");
-                    ItemJnlLine.Validate("Quantity", QCInyResultLine."Quantity");
-                    // ItemJnlLine."reason Code" := ItemJournalBatch."Reason Code";
+                ItemJnlLine."Entry Type" := Enum::"Item Ledger Entry Type"::Transfer;
+                ItemJnlLine."Source Code" := ItemJnlTemplate."Source Code";
+                ItemJnlLine."Value Entry Type" := Enum::"Cost Entry Type"::"Direct Cost";
 
-                    ReasonCode.Reset();
-                    ReasonCode.SetRange("RV_Reason Code Type", ReasonCode."RV_Reason Code Type"::"Transfer Site");
-                    if ReasonCode.FindFirst() then
-                        ItemJnlLine."reason Code" := ReasonCode.Code
-                    else
-                        Error('Please set a Reason Code for QC inventory transfers with the Reason Code Type set to Transfer Site');
+                ItemJnlLine.Validate("Posting Date", WorkDate());
+                ItemJnlLine."Document Date" := WorkDate();
+                // ItemJnlLine."Document No." := NoSeriesBatch.GetNextNo(ItemJournalBatch."No. Series", ItemJnlLine."Posting Date");
+                ItemJnlLine."Document No." := Rec."QC No.";
+                ItemJnlLine.Validate("Item No.", Rec."Item No.");
+                ItemJnlLine.Validate("Location Code", FromLocation);
+                ItemJnlLine.Validate("New Location Code", ToLocation);
+                ItemJnlLine.Validate("Bin Code", FromBin);
+                ItemJnlLine.Validate("New Bin Code", ToBin);
+                // if Rec."Lot No." <> '' then
+                //     ItemJnlLine."Lot No." := Rec."Lot No.";
+                ItemJnlLine.Validate("Unit of Measure Code", Rec."Unit of Measure");
+                ItemJnlLine.Validate("Quantity", QCInyResultLine."Quantity");
+                // ItemJnlLine."reason Code" := ItemJournalBatch."Reason Code";
 
-                    ReceiptILE.reset;
-                    ReceiptILE.SetRange("Document No.", Rec."Order No.");
-                    ReceiptILE.SetRange("Item No.");
-                    ReceiptILE.SetRange("Lot No.", Rec."Lot No.");
-                    case Rec."QC Type" of
-                        "RV QC Type"::IQC:
-                            ReceiptILE.SetRange("Entry Type", ReceiptILE."Entry Type"::Purchase);
-                        "RV QC Type"::FQC,
-                        "RV QC Type"::PQC:
-                            ReceiptILE.SetRange("Entry Type", ReceiptILE."Entry Type"::Output);
-                    end;
+                ReasonCode.Reset();
+                ReasonCode.SetRange("RV_Reason Code Type", ReasonCode."RV_Reason Code Type"::"Transfer Site");
+                if ReasonCode.FindFirst() then
+                    ItemJnlLine."reason Code" := ReasonCode.Code
+                else
+                    Error('Please set a Reason Code for QC inventory transfers with the Reason Code Type set to Transfer Site');
 
+                ReceiptILE.reset;
+                ReceiptILE.SetRange("Document No.", Rec."Order No.");
+                ReceiptILE.SetRange("Item No.");
+                ReceiptILE.SetRange("Lot No.", Rec."Lot No.");
+                case Rec."QC Type" of
+                    "RV QC Type"::IQC:
+                        ReceiptILE.SetRange("Entry Type", ReceiptILE."Entry Type"::Purchase);
+                    "RV QC Type"::FQC,
+                    "RV QC Type"::PQC:
+                        ReceiptILE.SetRange("Entry Type", ReceiptILE."Entry Type"::Output);
+                end;
+
+                if ReceiptILE.FindFirst() then begin
+                    ItemJnlLine.Validate("Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
+                    ItemJnlLine.Validate("Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
+                    ItemJnlLine.Validate("New Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
+                    ItemJnlLine.Validate("New Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
+                end else begin
+                    ReceiptILE.SetRange("Entry Type");
                     if ReceiptILE.FindFirst() then begin
                         ItemJnlLine.Validate("Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
                         ItemJnlLine.Validate("Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
                         ItemJnlLine.Validate("New Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
                         ItemJnlLine.Validate("New Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
-                    end else begin
-                        ReceiptILE.SetRange("Entry Type");
-                        if ReceiptILE.FindFirst() then begin
-                            ItemJnlLine.Validate("Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
-                            ItemJnlLine.Validate("Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
-                            ItemJnlLine.Validate("New Shortcut Dimension 1 Code", ReceiptILE."Global Dimension 1 Code");
-                            ItemJnlLine.Validate("New Shortcut Dimension 2 Code", ReceiptILE."Global Dimension 2 Code");
-                        end;
-                    end;
-
-                    ItemJnlLine.modify(true);
-
-                    //ReservationEntry
-                    if Rec."Lot No." <> '' then begin
-                        ReservEntry."Lot No." := Rec."Lot No.";
-                        TempTrackingSpec."New Lot No." := Rec."Lot No.";
-                        CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TempTrackingSpec);
-                        CreateReservEntry.CreateReservEntryFor(Database::"Item Journal Line", ItemJnlLine."Entry Type".AsInteger(),
-                                                           ItemJnlLine."Journal Template Name", ItemJnlLine."Journal Batch Name",
-                                                           0, ItemJnlLine."Line No.", ItemJnlLine."Qty. per Unit of Measure",
-                                                           ItemJnlLine.Quantity, ItemJnlLine."Quantity (Base)", ReservEntry);
-                        ItemTrackingSetup."Lot No." := Rec."Lot No.";
-                        NewExpirationDate := ItemTrackingMgt.ExistingExpirationDate(Rec."Item No.", ItemJnlLine."Variant Code", ItemTrackingSetup, false, EntriesExist);
-                        CreateReservEntry.SetNewExpirationDate(NewExpirationDate);
-                        CreateReservEntry.CreateEntry(ItemJnlLine."Item No.", ItemJnlLine."Variant Code",
-                                                      ItemJnlLine."Location Code", '',
-                                                      ItemJnlLine."Posting Date", 0D, 0, ReservEntry."Reservation Status"::Prospect);
-                        // if ItemJnlLine."Lot No." <> '' then begin
-                        //     ItemJnlLine."Lot No." := '';
-                        //     ItemJnlLine.Modify();
-                        // end;
                     end;
                 end;
+
+                ItemJnlLine.modify(true);
+
+                //ReservationEntry
+                if Rec."Lot No." <> '' then begin
+                    ReservEntry."Lot No." := Rec."Lot No.";
+                    TempTrackingSpec."New Lot No." := Rec."Lot No.";
+                    CreateReservEntry.SetNewTrackingFromNewTrackingSpecification(TempTrackingSpec);
+                    CreateReservEntry.CreateReservEntryFor(Database::"Item Journal Line", ItemJnlLine."Entry Type".AsInteger(),
+                                                       ItemJnlLine."Journal Template Name", ItemJnlLine."Journal Batch Name",
+                                                       0, ItemJnlLine."Line No.", ItemJnlLine."Qty. per Unit of Measure",
+                                                       ItemJnlLine.Quantity, ItemJnlLine."Quantity (Base)", ReservEntry);
+                    ItemTrackingSetup."Lot No." := Rec."Lot No.";
+                    NewExpirationDate := ItemTrackingMgt.ExistingExpirationDate(Rec."Item No.", ItemJnlLine."Variant Code", ItemTrackingSetup, false, EntriesExist);
+                    CreateReservEntry.SetNewExpirationDate(NewExpirationDate);
+                    CreateReservEntry.CreateEntry(ItemJnlLine."Item No.", ItemJnlLine."Variant Code",
+                                                  ItemJnlLine."Location Code", '',
+                                                  ItemJnlLine."Posting Date", 0D, 0, ReservEntry."Reservation Status"::Prospect);
+                    // if ItemJnlLine."Lot No." <> '' then begin
+                    //     ItemJnlLine."Lot No." := '';
+                    //     ItemJnlLine.Modify();
+                    // end;
+                end;
+            // end;
             until QCInyResultLine.Next() = 0;
         Clear(ItemJnlPostBatch);
         ItemJnlPostBatch.SetSuppressCommit(true);
@@ -615,4 +641,5 @@ table 50520 "RV NC Header"
         Text000: Label '%1 journal';
         Text003: Label 'DEFAULT';
         Text004: Label 'Item Reclass Journal';
+        Text005: Label 'Inventory movement is not required for the non-conformance operation with the Transfer-to Location and Transfer-to Bin settings. \Do you continue Approve?';
 }

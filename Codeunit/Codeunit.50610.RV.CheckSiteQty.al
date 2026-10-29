@@ -57,6 +57,7 @@ codeunit 50610 "RV Check Site Qty"
         T337Plus: Record "Reservation Entry";
         ILE: Record "Item Ledger Entry";
         ProdOrderLine: Record "Prod. Order Line";
+        salesLine: Record "Sales Line";
     begin
         // Your code for handling the event here
         T337.Reset();
@@ -72,22 +73,82 @@ codeunit 50610 "RV Check Site Qty"
                             // Your code for handling sales line source type here
                             begin
                                 ILE.get(T337Plus."Source Ref. No.");
-                                Rec.Validate("Shortcut Dimension 1 Code", ILE."Global Dimension 1 Code");
-                                Rec.Modify();
+                                salesLine.get(Rec."Document Type", Rec."Document No.", Rec."Line No.");
+                                salesLine.Validate("Shortcut Dimension 1 Code", ILE."Global Dimension 1 Code");
+                                salesLine.Modify();
                                 exit;
                             end;
                         database::"Prod. Order Line":
                             // Your code for handling production order line source type here
                             begin
                                 if ProdOrderLine.get(T337Plus."Source Subtype", T337Plus."Source ID", T337Plus."Source Prod. Order Line") then begin
-                                    Rec.Validate("Shortcut Dimension 1 Code", ProdOrderLine."Shortcut Dimension 1 Code");
-                                    Rec.Modify();
+                                    salesLine.get(Rec."Document Type", Rec."Document No.", Rec."Line No.");
+                                    salesLine.Validate("Shortcut Dimension 1 Code", ProdOrderLine."Shortcut Dimension 1 Code");
+                                    salesLine.Modify();
                                     exit;
                                 end;
                             end;
                     end;
                 end;
             until T337.Next() = 0;
+    end;
+
+    [EventSubscriber(ObjectType::page, page::"Released Prod. Order Lines", 'OnAfterActionEvent', '&Reserve', false, false)]
+    local procedure OnAfterActionReserveReleasedProdOrderLines(var Rec: Record "Prod. Order Line")
+    begin
+        // Your code for handling the event here
+        SetSiteCodeFromProdToSO(Rec);
+    end;
+
+    [EventSubscriber(ObjectType::page, page::"Firm Planned Prod. Order Lines", 'OnAfterActionEvent', '&Reserve', false, false)]
+    local procedure OnAfterActionReserveFirmPlannedProdOrderLines(var Rec: Record "Prod. Order Line")
+    begin
+        // Your code for handling the event here
+        SetSiteCodeFromProdToSO(Rec);
+    end;
+
+    procedure SetSiteCodeFromProdToSO(var Rec: Record "Prod. Order Line")
+    var
+        T337: Record "Reservation Entry";
+        T337Minus: Record "Reservation Entry";
+        SalesLine: Record "Sales Line";
+        ProdOrderHeader: Record "Production Order";
+        ProdOrderLine: Record "Prod. Order Line";
+    begin
+        T337.Reset();
+        T337.SetRange("Item No.", Rec."Item No.");
+        T337.SetRange("Source Type", DATABASE::"Prod. Order Line");
+        T337.SetRange("Source ID", Rec."Prod. Order No.");
+        T337.SetRange("Source Prod. Order Line", Rec."Line No.");
+        if T337.FindSet() then
+            repeat
+                if T337Minus.get(T337."Entry No.", false) then begin
+                    // Your code for handling the reservation entry here
+                    case T337Minus."Source Type" of
+                        DATABASE::"Sales Line":
+                            begin
+                                // Your code for handling sales line source type here
+                                if SalesLine.get(T337Minus."Source Subtype", T337Minus."Source ID", T337Minus."Source Ref. No.") then begin
+                                    // Your code for handling the sales line here
+                                    ProdOrderHeader.get(Rec.Status, Rec."Prod. Order No.");
+                                    ProdOrderHeader.Validate("Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 1 Code");
+                                    ProdOrderHeader.Modify();
+
+                                    ProdOrderLine.get(Rec.Status, Rec."Prod. Order No.", Rec."Line No.");
+                                    ProdOrderLine.Validate("Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 1 Code");
+                                    ProdOrderLine.Modify();
+                                end;
+                            end;
+                    end;
+                end;
+            until T337.Next() = 0;
+    end;
+
+    [EventSubscriber(ObjectType::table, database::"Production Order", 'OnBeforeConfirmUpdateAllLineDim', '', false, false)]
+    local procedure OnBeforeConfirmUpdateAllLineDim(var IsHandled: Boolean)
+    begin
+        // Your code for handling the event here
+        IsHandled := true;
     end;
 
     var
