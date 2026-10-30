@@ -8,9 +8,9 @@ pageextension 50220 "RV Get Receipt Lines Ext" extends "Get Receipt Lines"
     {
         addafter("Buy-from Vendor No.")
         {
-            field("Customer Name"; CustomerName)
+            field("Vendor Name"; VendorName)
             {
-                Caption = 'Customer Name';
+                Caption = 'Vendor Name';
                 ApplicationArea = All;
                 Description = 'additional requirement';
             }
@@ -36,14 +36,14 @@ pageextension 50220 "RV Get Receipt Lines Ext" extends "Get Receipt Lines"
 
     }
     var
-        CustomerName: Text[100];
+        VendorName: Text[100];
 
     trigger OnAfterGetRecord()
     var
         Vendor: Record Vendor;
     begin
         if Vendor.Get(Rec."Buy-from Vendor No.") then begin
-            CustomerName := Vendor.Name;
+            VendorName := Vendor.Name;
         end;
     end;
 
