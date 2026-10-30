@@ -24,6 +24,7 @@ table 50508 "RV QA Header"
         field(4; "Item No."; Code[20])
         {
             Caption = 'Item No.';
+            TableRelation = Item;
         }
         field(5; "Item Description"; Text[100])
         {
@@ -107,6 +108,10 @@ table 50508 "RV QA Header"
         field(23; "Lot No."; Code[250])
         {
             Caption = 'Lot No.';
+        }
+        field(24; "QC Resource Group No."; Code[20])
+        {
+            Caption = 'QC Resource Group No.';
         }
         field(100; "Line No."; Integer)
         {

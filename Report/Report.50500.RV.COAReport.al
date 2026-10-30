@@ -66,6 +66,9 @@ report 50500 "RV_COA Report"
                     column(CompanyInfo_Registration; RegistrationNo)
                     {
                     }
+                    column(RSPONo; RSPONo)
+                    {
+                    }
                     column(DisplayQuantityPerLot; DisplayQuantityPerLot)
                     {
                     }
@@ -78,6 +81,12 @@ report 50500 "RV_COA Report"
                     column(MARKSCommentAll; MARKSCommentAll)
                     {
                     }
+                    column(ResourceGroupMARKS; ResourceGroupMARKS)
+                    {
+                    }
+                    column(ResourceGroupMARKSText; ResourceGroupMARKSText)
+                    {
+                    }
                     column(QACommentText; QACommentText)
                     {
                     }
@@ -85,6 +94,12 @@ report 50500 "RV_COA Report"
                     {
                     }
                     column(QAComment; QAComment)
+                    {
+                    }
+                    column(NoteText; NoteText)
+                    {
+                    }
+                    column(FooterRemarkText; FooterRemarkText)
                     {
                     }
                     column(OutputNo; OutputNo)
@@ -191,6 +206,13 @@ report 50500 "RV_COA Report"
                                 else
                                     if QCParameter.Get(ExternalQCResults."QC Parameter Name") then
                                         QCParameterName := QCParameter."Parameter Description";
+
+                                if NoteText = '' then begin
+                                    if (QCParameterName <> '') and
+                                       (CopyStr(QCParameterName, StrLen(QCParameterName), 1) = '*')
+                                    then
+                                        NoteText := 'Note: Results listed on COA with identification as asterisk (*) are not tested every lot or represent typical range of value.';
+                                end;
 
                                 CASE DisplayMethodCharsSpec OF
                                     DisplayMethodCharsSpec::Method:
@@ -339,19 +361,29 @@ report 50500 "RV_COA Report"
                 if "QA Status" = "QA Status"::Approved then
                     ReportTitle := 'CERTIFICATE OF ANALYSIS'
                 else
-                    ReportTitle := 'CERTIFICATE OF ANALYSIS DRAFT';
+                    ReportTitle := 'CERTIFICATE OF ANALYSIS (Not Approve)';
 
                 CompanyInfo.Get();
                 CompanyInfo.CalcFields(Picture);
 
                 //RegistrationNo
+                if CompanyInfo."RV_Registration No." = '' then
+                    RegistrationNo := ''
+                else
+                    RegistrationNo := 'Registration No. ' + CompanyInfo."RV_Registration No.";
+
+                //RSPONo
                 if recItem.Get("QA Header"."Item No.") then begin
-                    if recItem."RV_Print RSPO No." then
-                        RegistrationNo := 'Registration No. ' + CompanyInfo."RV_Registration No."
-                    else
-                        RegistrationNo := '';
+                    if recItem."RV_Print RSPO No." then begin
+                        if CompanyInfo."RV_RSPU Certificate No." = '' then
+                            RSPONo := ''
+                        else
+                            RSPONo := 'RSPO Supply Chain Certificate Number is ' + CompanyInfo."RV_RSPU Certificate No." + '.';
+                    end else begin
+                        RSPONo := '';
+                    end;
                 end else
-                    RegistrationNo := '';
+                    RSPONo := '';
 
                 QAShipmentLotNo.SetRange("COA No.", "COA No.");
 
@@ -359,6 +391,7 @@ report 50500 "RV_COA Report"
                 Clear(SalesOrderNoText);
                 CollectUniqueSalesOrderNo("COA No.");
                 CollectAllMARKSComment("COA No.");
+                CollectQCResourceGroupMARKS("QC Resource Group No.");
 
                 Clear(PRODUCTText);
                 Clear(MARKSText);
@@ -397,6 +430,7 @@ report 50500 "RV_COA Report"
                 Clear(DisplayMethodCharsSpec);
                 Clear(DateWordingText);
                 Clear(DateWording_remarkText);
+                clear(FooterRemarkText);
 
                 CustCOAReportSetting.Reset();
                 CustCOAReportSetting.SetRange("Customer No.", "Ship-to Customer No.");
@@ -420,6 +454,13 @@ report 50500 "RV_COA Report"
                         Format_DateText := Format("QA Header"."COA Created Date", 0, '<Day,2>-<Month Text,3>-<Year4>')
                     else if (CustCOAReportSetting."Display COA Date" = DisplayCOADate::"COA Print Date") then
                         Format_DateText := Format(WorkDate(), 0, '<Day,2>-<Month Text,3>-<Year4>');
+
+                    //FooterRemarkText
+                    if (DateCalculation = DateCalculation::"Shelf Life By Months Without Days MMM-YYYY")
+                    and (ExpiredDateCalclogic = ExpiredDateCalclogic::"By month + end of the month") then
+                        FooterRemarkText := 'Remark: The validity of expiry date shall follow the end of the month as in ''' + DateWording_remarkText + ''''
+                    else
+                        FooterRemarkText := '';
 
                 end else begin
                     CustCOAReportSetting.Reset();
@@ -497,6 +538,13 @@ report 50500 "RV_COA Report"
                                 SPECIFICATION_Caption := '';
                             END;
                     end;
+
+                    //FooterRemarkText
+                    if (DateCalculation = DateCalculation::"Shelf Life By Months Without Days MMM-YYYY")
+                    and (ExpiredDateCalclogic = ExpiredDateCalclogic::"By month + end of the month") then
+                        FooterRemarkText := 'Remark: The validity of expiry date shall follow the end of the month as in ''' + DateWording_remarkText + ''''
+                    else
+                        FooterRemarkText := '';
                 end;
             end;
         }
@@ -571,11 +619,16 @@ report 50500 "RV_COA Report"
         PRODUCTText: Text;
         Format_DateText: Text;
         MARKSCommentAll: Text;
+        ResourceGroupMARKS: Text;
+        ResourceGroupMARKSText: Text;
+        NoteText: Text;
+        FooterRemarkText: Text;
         QACommentText: Text;
         QAColonText: Text;
         QAComment: Text;
         ReportTitle: Text;
         RegistrationNo: Text;
+        RSPONo: Text;
 
     procedure CollectUniqueSalesOrderNo(ParCOANO: Code[20])
     var
@@ -620,6 +673,30 @@ report 50500 "RV_COA Report"
                     MARKSCommentAll += LineComment;
                 end;
             until QAShipmentLotNo.Next() = 0;
+    end;
+
+    procedure CollectQCResourceGroupMARKS(ParQCResourceGroupNo: Code[20])
+    var
+        QCResourceGroupRemarks: Record "RV QC Resource Group Remarks";
+        LineRemark: Text;
+    begin
+        Clear(ResourceGroupMARKS);
+        QCResourceGroupRemarks.Reset();
+        QCResourceGroupRemarks.SetRange("QC Resource Group No.", ParQCResourceGroupNo);
+        if QCResourceGroupRemarks.FindSet() then
+            repeat
+                LineRemark := QCResourceGroupRemarks.Remark;
+                if LineRemark <> '' then begin
+                    if ResourceGroupMARKS <> '' then
+                        ResourceGroupMARKS += TypeHelper.LFSeparator();
+                    ResourceGroupMARKS += LineRemark;
+                end;
+            until QCResourceGroupRemarks.Next() = 0;
+
+        if ResourceGroupMARKS = '' then
+            ResourceGroupMARKSText := ''
+        else
+            ResourceGroupMARKSText := 'This product contains the following antioxidants:';
     end;
 
 
@@ -679,7 +756,7 @@ report 50500 "RV_COA Report"
         Clear(Format_DateText);
         Clear(UOM);
         Clear(MARKSCommentAll);
+        Clear(NoteText);
         Clear(ReportTitle);
     end;
 }
-

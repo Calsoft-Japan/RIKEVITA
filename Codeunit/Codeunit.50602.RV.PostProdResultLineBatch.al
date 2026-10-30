@@ -21,6 +21,7 @@ codeunit 50602 "RV Post Prod Result Line Batch"
         while QueryProdResultLine.Read() do begin
             Commit();
             RVPostProdResultLine.Reset();
+            RVPostProdResultLine.Copy(SourceProdResultLine);
             RVPostProdResultLine.SetRange("Batch Name", QueryProdResultLine.Batch_Name);
             if GFromPage then
                 RVPostProdResultLine.SetFilter(Status, '%1|%2', QueryProdResultLine.Status::Preparing, QueryProdResultLine.Status::"Ready Post")
@@ -28,10 +29,11 @@ codeunit 50602 "RV Post Prod Result Line Batch"
                 RVPostProdResultLine.setrange(Status, QueryProdResultLine.Status::"Ready Post");
             RVPostProdResultLine.SetRange("Prod. Order No.", QueryProdResultLine.ProdOrderNo);
             RVPostProdResultLine.SetRange("Prod. Order Line No.", QueryProdResultLine.ProdOrderLineNo);
-            if not CURVPostProdResultLine.Run(RVPostProdResultLine) then begin
-                RVPostProdResultLine.ModifyAll("Error Message", GetLastErrorText());
-                RVPostProdResultLine.ModifyAll(Status, RVPostProdResultLine.Status::"Post Error");
-            end;
+            if not RVPostProdResultLine.IsEmpty() then
+                if not CURVPostProdResultLine.Run(RVPostProdResultLine) then begin
+                    RVPostProdResultLine.ModifyAll("Error Message", GetLastErrorText());
+                    RVPostProdResultLine.ModifyAll(Status, RVPostProdResultLine.Status::"Post Error");
+                end;
         end;
 
         if guiAllowed() then
@@ -42,6 +44,7 @@ codeunit 50602 "RV Post Prod Result Line Batch"
         QueryProdResultLine: Query "RV Prod. Result Journal Line G";
         CURVPostProdResultLine: Codeunit "RV Post Prod Result Line Proc.";
         RVPostProdResultLine: Record "RV Prod. Result Journal Line";
+        SourceProdResultLine: Record "RV Prod. Result Journal Line";
         GbatchName: Code[20];
         GFromPage: Boolean;
         ConfirmMsg: Label 'Are you sure you want to post the production result journal lines in batch %1?';
@@ -51,5 +54,10 @@ codeunit 50602 "RV Post Prod Result Line Batch"
     begin
         GbatchName := parBatchName;
         GFromPage := parFromPage;
+    end;
+
+    procedure SetSource(var Source: Record "RV Prod. Result Journal Line")
+    begin
+        SourceProdResultLine.Copy(Source);
     end;
 }

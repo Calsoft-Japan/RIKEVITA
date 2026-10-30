@@ -175,8 +175,8 @@ page 50539 "RV NC Card"
                 ApplicationArea = All;
                 Caption = 'Documents';
                 UpdatePropagation = Both;
-                SubPageLink = "Table ID" = const(Database::"RV QC Header"),
-                               "No." = field("QC No."), "Line No." = const(2);
+                SubPageLink = "Table ID" = const(Database::"RV NC Header"),
+                               "No." = field("QC No."), "Line No." = field("QC Type");
             }
         }
     }

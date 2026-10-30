@@ -319,8 +319,13 @@ page 50514 "RV COA Card Subform"
                     QCResource.Reset();
                     QCResource.SetFilter("Effective Date", '%1|..%2', 0D, WorkDate());
                     QCResource.SetRange("QC Resource Group No.", QCResourceGroupApply."QC Resource Group No.");
-                    if not QCResource.FindLast() OR (QCResource."External Specification" = '') then
+                    if not QCResource.FindLast() OR (QCResource."External Specification" = '') then begin
                         Error('No QC Resource found for group %1', QCResourceGroupApply."QC Resource Group No.");
+                    end else begin
+                        Rec."QC Resource Group No." := QCResource."QC Resource Group No.";
+                        Rec.Modify();
+                    end;
+
                 end Else
                     Error('No QC Resource found for group %1', QCResourceGroupApply."QC Resource Group No.");
 
@@ -377,7 +382,6 @@ page 50514 "RV COA Card Subform"
                         QAExternalQCResults."QC Specification Name" := QCSpecificationLine."QC Specification Name";
                         If QCParameter.Get(QCSpecificationLine."QC Parameter Name") then
                             QAExternalQCResults."QC Parameter Description" := QCParameter."Parameter Description";
-                        //QAExternalQCResults."QC External Description" := QCSpecificationLine."Description";
                         QAexternalqcresults."Alpha. Min" := QCSpecificationLine."Minimum Value";
                         QAexternalqcresults."Alpha. Max" := QCSpecificationLine."Maximum Value";
                         QAExternalQCResults.Insert();

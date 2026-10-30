@@ -256,7 +256,7 @@ page 50409 "RV Inventory Monitoring"
         AvailableInvyLine."Base Unit of Measure" := Item."Base Unit of Measure";
         AvailableInvyLine.Allergen := item.Allergen;
         //AvailableInvyLine."Derive Unit of Measure" :=
-        AvailableInvyLine."KG Unit of Measure" := item."RV_Supp. Unit of Measure Code";
+        AvailableInvyLine."Supp. Unit of Measure" := item."RV_Supp. Unit of Measure Code";
         AvailableInvyLine."Item Category Code" := Item."Item Category Code";
         DefaultDim.Reset();
         DefaultDim.SetRange("No.", ILE."Item No.");
@@ -290,8 +290,8 @@ page 50409 "RV Inventory Monitoring"
             AvailableInvyLine."Base Unit Invy. Qty." := WE."Qty. (Base)"
         else
             AvailableInvyLine."Base Unit Invy. Qty." := ILE.Quantity;
-        if ItemUOM.Get(ILE."Item No.", AvailableInvyLine."KG Unit of Measure") then begin
-            AvailableInvyLine."KG Unit Invy. Qty." := Round(AvailableInvyLine."Base Unit Invy. Qty." / ItemUOM."Qty. per Unit of Measure", 0.00001);
+        if ItemUOM.Get(ILE."Item No.", AvailableInvyLine."Supp. Unit of Measure") then begin
+            AvailableInvyLine."Supp. Unit Qty." := Round(AvailableInvyLine."Base Unit Invy. Qty." / ItemUOM."Qty. per Unit of Measure", 0.00001);
         end;
         AvailableInvyLine."Expiration Date" := ILE."Expiration Date";
         //Cost Information

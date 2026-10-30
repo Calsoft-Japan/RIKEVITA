@@ -274,6 +274,7 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         CreateReservEntry: Codeunit "Create Reserv. Entry";
         TempReservEntry: Record "Reservation Entry" temporary;
         PostingDate: Date;
+        ExpireDate: Date;
     begin
         ItemJnlLine.Init();
         ItemJnlLine."Journal Template Name" := ToTemplateName;
@@ -329,6 +330,10 @@ codeunit 50603 "RV Post Prod Result Line Proc."
             ItemJnlLine."Quantity (Base)",
             TempReservEntry
             );
+
+        ExpireDate := ProdResultJournalLine."Expire Date";
+        CreateReservEntry.SetDates(0D, ExpireDate);
+
         CreateReservEntry.CreateEntry(
         ItemJnlLine."Item No.",
         ItemJnlLine."Variant Code",

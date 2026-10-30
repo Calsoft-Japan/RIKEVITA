@@ -37,4 +37,28 @@ page 50506 "RV QC Resource Group List"
             }
         }
     }
+    actions
+    {
+        area(processing)
+        {
+            action(QCResourceGroupRemarks)
+            {
+                Caption = 'QC Resource Group Remarks';
+                ApplicationArea = All;
+                Image = Create;
+                RunObject = Page "RV QC Resource Group Remarks";
+                RunPageLink = "QC Resource Group No." = field("QC Resource Group No.");
+            }
+        }
+        area(Promoted)
+        {
+            group(Category_Process)
+            {
+                Caption = 'Process';
+                actionref("QCResourceGroupRemarks_Promoted"; "QCResourceGroupRemarks")
+                {
+                }
+            }
+        }
+    }
 }

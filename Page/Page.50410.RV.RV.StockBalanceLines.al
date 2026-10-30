@@ -82,13 +82,13 @@ page 50410 "RV.Stock Balance Lines"
                 {
                     ToolTip = 'Specifies the value of the Base Unit Invy. Qty. field.', Comment = '%';
                 }
-                field("KG Unit of Measure"; Rec."KG Unit of Measure")
+                field("KG Unit of Measure"; Rec."Supp. Unit of Measure")
                 {
-                    ToolTip = 'Specifies the value of the KG Unit of Measure field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Supp. Unit of Measure field.', Comment = '%';
                 }
-                field("KG Unit Invy. Qty."; Rec."KG Unit Invy. Qty.")
+                field("KG Unit Invy. Qty."; Rec."Supp. Unit Qty.")
                 {
-                    ToolTip = 'Specifies the value of the KG Unit Invy. Qty. field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Supp. Invy. Qty. field.', Comment = '%';
                 }
                 field("Mfg. Date"; Rec."Mfg. Date")
                 {

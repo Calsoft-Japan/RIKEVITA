@@ -113,14 +113,14 @@ table 50410 "RV.Available Invy. Line"
             Caption = 'Base Unit of Measure';
             TableRelation = "Unit of Measure";
         }
-        field(103; "KG Unit Invy. Qty."; decimal)
+        field(103; "Supp. Unit Qty."; decimal)
         {
-            Caption = 'KG Unit Invy. Qty.';
+            Caption = 'Supp. Unit Qty.';
             DecimalPlaces = 0 : 5;
         }
-        field(104; "KG Unit of Measure"; Code[10])
+        field(104; "Supp. Unit of Measure"; Code[10])
         {
-            Caption = 'KG Unit of Measure';
+            Caption = 'Supp. Unit of Measure';
             TableRelation = "Unit of Measure";
         }
         field(105; "Unit Cost 1"; decimal)

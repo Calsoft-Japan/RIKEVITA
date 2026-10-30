@@ -9,6 +9,8 @@ codeunit 50500 "RV DocAttachmentSubscriber"
     local procedure GetRefTableCollectiveInvoice(var RecRef: RecordRef; DocumentAttachment: Record "Document Attachment")
     var
         QCHeader: Record "RV QC Header";
+        NCHeader: Record "RV NC Header";
+        QCType: Enum "RV QC Type";
     begin
         case DocumentAttachment."Table ID" of
             Database::"RV QC Header":
@@ -16,6 +18,13 @@ codeunit 50500 "RV DocAttachmentSubscriber"
                     RecRef.Open(Database::"RV QC Header");
                     if QCHeader.Get(DocumentAttachment."No.", DocumentAttachment."Line No.") then
                         RecRef.GetTable(QCHeader);
+                end;
+            Database::"RV NC Header":
+                begin
+                    RecRef.Open(Database::"RV NC Header");
+                    QCType := Enum::"RV QC Type".FromInteger(DocumentAttachment."Line No.");
+                    if NCHeader.Get(DocumentAttachment."No.", QCType) then
+                        RecRef.GetTable(NCHeader);
                 end;
         end;
     end;
@@ -29,6 +38,11 @@ codeunit 50500 "RV DocAttachmentSubscriber"
                     FieldNo := 1;
                     Result := true;
                 end;
+            Database::"RV NC Header":
+                begin
+                    FieldNo := 1;
+                    Result := true;
+                end;
         end;
     end;
 
@@ -37,6 +51,11 @@ codeunit 50500 "RV DocAttachmentSubscriber"
     begin
         case TableNo of
             Database::"RV QC Header":
+                begin
+                    FieldNo := 2;
+                    Result := true;
+                end;
+            Database::"RV NC Header":
                 begin
                     FieldNo := 2;
                     Result := true;
@@ -54,5 +73,14 @@ codeunit 50500 "RV DocAttachmentSubscriber"
         DocAttachmentMgt.DeleteAttachedDocuments(RecordRef);
     end;
 
-}
+    [EventSubscriber(ObjectType::Table, Database::"RV NC Header", OnAfterDeleteEvent, '', false, false)]
+    local procedure DeleteAttachedDocumentsOnAfterDeleteNCHeader(var Rec: Record "RV NC Header"; RunTrigger: Boolean)
+    var
+        DocAttachmentMgt: Codeunit "Document Attachment Mgmt";
+        RecordRef: RecordRef;
+    begin
+        RecordRef.GetTable(Rec);
+        DocAttachmentMgt.DeleteAttachedDocuments(RecordRef);
+    end;
 
+}
