@@ -23,19 +23,19 @@ pageextension 50619 "RV_Lot No. Information Card" extends "Lot No. Information C
         }
         addafter("Item No.")
         {
-            field("Item Description"; ItemDescription)
+            field("Item Description"; Rec."RV_Item Description")
             {
                 Caption = 'Item Description';
                 ApplicationArea = All;
                 Description = 'additional requirement';
             }
-            field("Base Unit of Measure"; BaseUnitofMeasure)
+            field("Base Unit of Measure"; Rec."RV_Base Unit of Measure")
             {
                 Caption = 'Base Unit of Measure';
                 ApplicationArea = All;
                 Description = 'additional requirement';
             }
-            field("Item Category Code"; ItemCategoryCode)
+            field("Item Category Code"; Rec."RV_Item Category Code")
             {
                 Caption = 'Item Category Code';
                 ApplicationArea = All;
@@ -56,18 +56,4 @@ pageextension 50619 "RV_Lot No. Information Card" extends "Lot No. Information C
             }
         }
     }
-    var
-        ItemDescription: Text[100];
-        BaseUnitofMeasure: Code[10];
-        ItemCategoryCode: Code[20];
-
-    trigger OnAfterGetRecord()
-    var
-        Item: Record Item;
-    begin
-        Item.Get(Rec."Item No.");
-        ItemDescription := Item.Description;
-        BaseUnitofMeasure := Item."Base Unit of Measure";
-        ItemCategoryCode := Item."Item Category Code";
-    end;
 }

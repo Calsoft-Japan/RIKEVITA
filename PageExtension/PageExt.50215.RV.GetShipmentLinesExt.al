@@ -10,7 +10,7 @@ pageextension 50215 "RV Get Shipment Lines Ext" extends "Get Shipment Lines"
     {
         addafter("Bill-to Customer No.")
         {
-            field("Customer Name"; CustomerName)
+            field("Customer Name"; Rec."RV_Customer Name")
             {
                 Caption = 'Customer Name';
                 ApplicationArea = All;
@@ -51,16 +51,4 @@ pageextension 50215 "RV Get Shipment Lines Ext" extends "Get Shipment Lines"
             }
         }
     }
-    var
-        CustomerName: Text[100];
-
-    trigger OnAfterGetRecord()
-    var
-        Customer: Record Customer;
-    begin
-        if Customer.Get(Rec."Bill-to Customer No.") then begin
-            CustomerName := Customer.Name;
-        end;
-    end;
-
 }

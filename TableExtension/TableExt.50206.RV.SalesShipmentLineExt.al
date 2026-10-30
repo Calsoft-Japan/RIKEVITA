@@ -1,6 +1,7 @@
 /// <summary>
 /// TableExtension RV_Sales Shipment Line (ID 50206) extends Sales Shipment Line table
 /// FDD020 2026/04/08: New. (Bobby.ji)
+/// additional requirement 2026/10/30: Add the following field. (Bobby.ji)
 /// </summary>
 tableextension 50206 "RV Sales Shipment Line" extends "Sales Shipment Line"
 {
@@ -19,6 +20,13 @@ tableextension 50206 "RV Sales Shipment Line" extends "Sales Shipment Line"
             Description = 'FDD019';
             FieldClass = FlowField;
             CalcFormula = Lookup("RV Item Symbol Setting"."Symbol Display Packing List" WHERE("Item Code" = FIELD("No.")));
+        }
+        field(50202; "RV_Customer Name"; Text[100])
+        {
+            Caption = 'Customer Name';
+            Description = 'additional requirement';
+            FieldClass = FlowField;
+            CalcFormula = Lookup(Customer."Name" WHERE("No." = FIELD("Bill-to Customer No.")));
         }
     }
 }
