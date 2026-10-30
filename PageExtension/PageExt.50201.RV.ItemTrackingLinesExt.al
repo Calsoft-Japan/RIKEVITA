@@ -1,11 +1,16 @@
 /// <summary>
 /// PageExtension RV_Item Tracking Lines (ID 50201) extends "Item Tracking Lines"
 /// FDD001 FDD008 2026/03/12: New. (Bobby.ji)
+/// additional requirement 2026/10/30: Hide the "New Lot No." field. (Bobby.ji)
 /// </summary>
 pageextension 50201 "RV Item Tracking Lines Ext" extends "Item Tracking Lines"
 {
     layout
     {
+        modify("New Lot No.")
+        {
+            Visible = false;
+        }
         addbefore("Expiration Date")
         {
 
