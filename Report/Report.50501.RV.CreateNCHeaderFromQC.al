@@ -108,6 +108,7 @@ report 50501 "RV Create NC Header from QC"
         if not QCHeader.FindFirst() then
             Error('QC No. %1 does not exist.', SelectedQCNo);
         QCHeader.CreateNCHeaderRecord(NCHeader);
+        Page.Run(Page::"RV NC Card", NCHeader);
     end;
 
     var

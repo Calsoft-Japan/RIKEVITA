@@ -1005,12 +1005,13 @@ table 50505 "RV QC Header"
         ItemJnlLine.Validate("Unit of Measure Code", Rec."UOM");
         ItemJnlLine.Validate("Quantity", Rec."Quantity");
         //set dimension and reason informaiton
+
         ReasonCode.Reset();
-        ReasonCode.SetRange("RV_Reason Code Type", ReasonCode."RV_Reason Code Type"::"Transfer Site");
+        ReasonCode.SetRange("RV_Reason Code Type", ReasonCode."RV_Reason Code Type"::Blank);
         if ReasonCode.FindFirst() then
-            ItemJnlLine."reason Code" := ReasonCode.Code
-        else
-            Error('Please set a Reason Code for QC inventory transfers with the Reason Code Type set to Transfer Site');
+            ItemJnlLine."reason Code" := ReasonCode.Code;
+        //else
+        //    Error('Please set a Reason Code for normal Transfer Site');
         ReceiptILE.reset;
         ReceiptILE.SetRange("Document No.", Rec."Order No.");
         ReceiptILE.SetRange("Item No.");

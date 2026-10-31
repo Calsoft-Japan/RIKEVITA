@@ -136,6 +136,11 @@ page 50514 "RV COA Card Subform"
                 {
                     ApplicationArea = All;
                 }
+                field("Item Reference Description"; Rec."Item Reference Description")
+                {
+                    ApplicationArea = All;
+                    Editable = SubCOACardEditable;
+                }
                 field("Ship-to Customer No."; Rec."Ship-to Customer No.")
                 {
                     ApplicationArea = All;
@@ -209,6 +214,11 @@ page 50514 "RV COA Card Subform"
                     MultiLine = true;
                 }
                 field("QA Approved Date"; Rec."QA Approved Date")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Revision No"; Rec."Revision No.")
                 {
                     ApplicationArea = All;
                     Editable = false;

@@ -64,7 +64,17 @@ page 50512 "RV COA List"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field("Sales Order No."; Rec."Sales Order No.")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
                 field("Item Description"; Rec."Item Description")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Item Reference Description"; Rec."Item Reference Description")
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -75,6 +85,16 @@ page 50512 "RV COA List"
                     Editable = false;
                 }
                 field("QA Status"; Rec."QA Status")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("Revision No."; Rec."Revision No.")
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
+                field("QA Analyzed By"; Rec.SystemCreatedBy)
                 {
                     ApplicationArea = All;
                     Editable = false;
