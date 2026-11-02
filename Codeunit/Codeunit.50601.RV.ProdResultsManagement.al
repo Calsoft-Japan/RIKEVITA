@@ -18,6 +18,7 @@ codeunit 50601 "RV Prod. Results Management"
 
     procedure SetName(CurrentJnlBatchName: Code[10]; var ProdResultJournalLine: Record "RV Prod. Result Journal Line")
     begin
+        ProdResultJournalLine.Reset();
         ProdResultJournalLine.FilterGroup := 2;
         ProdResultJournalLine.SetRange("Batch Name", CurrentJnlBatchName);
         ProdResultJournalLine.FilterGroup := 0;

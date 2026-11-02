@@ -8,37 +8,6 @@ report 50501 "RV Create NC Header from QC"
     Caption = 'Create NC Header from QC';
     UsageCategory = Tasks;
     ProcessingOnly = true;
-
-
-
-    /*
-    dataset
-    {
-        dataitem(RunOnce; Integer)
-        {
-            DataItemTableView = sorting(Number) where(Number = const(1));
-
-            trigger OnAfterGetRecord()
-            var
-                QCHeader: Record "RV QC Header";
-                NCHeader: Record "RV NC Header";
-            begin
-                QCHeader.SetRange("QC No.", SelectedQCNo);
-                if not QCHeader.FindFirst() then
-                    Error('QC No. %1 does not exist.', SelectedQCNo);
-
-                if QCHeader.Next() <> 0 then
-                    Error('QC No. %1 is not unique. Select a QC No. that identifies one QC Header.', SelectedQCNo);
-
-                if QCHeader."QC Status" <> QCHeader."QC Status"::Rejected then
-                    Error('QC No. %1 must have the Rejected status before an NC Header can be created.', SelectedQCNo);
-
-                QCHeader.CreateNCHeaderRecord(NCHeader);
-            end;
-        }
-    }
-    */
-
     requestpage
     {
         layout
@@ -58,7 +27,7 @@ report 50501 "RV Create NC Header from QC"
                             QCHeader: Record "RV QC Header";
                             QCHeaderLookup: Page "RV QC Header Lookup";
                         begin
-                            //QCHeader.SetRange("QC Status", QCHeader."QC Status"::Rejected);
+                            QCHeader.SetRange("NC Exist", false);
                             Clear(QCHeaderLookup);
                             QCHeaderLookup.SetTableView(QCHeader);
                             QCHeaderLookup.LookupMode(true);

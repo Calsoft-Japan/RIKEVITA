@@ -207,7 +207,8 @@ page 50539 "RV NC Card"
                     Rec.CheckTestField();
 
                     //CheckRemark_Input
-                    Rec.CheckRemark_Input();
+                    if not Rec.CheckRemark_Input() then
+                        exit;
 
                     //Enable
                     Rec.SetQCEnable(QCCheckEnable, QCApproveEnable, SubInventoryResultEnable, QCCardEnable);
@@ -224,13 +225,13 @@ page 50539 "RV NC Card"
                 begin
                     //IsNCApproveAllowed
                     Rec.IsNCApproveAllowed();
-
-                    //ApprovedRemark_Input
-                    Rec.ApprovedRemark_Input();
                     Rec.testfield(Quantity);
                     Rec.testfield("Expiration Date");
                     //CheckTotalQuantity
                     Rec.CheckTotalQuantity();
+                    //ApprovedRemark_Input
+                    if not Rec.ApprovedRemark_Input() then
+                        exit;
                     if Rec.CheckSameLocation() then
                         Rec.PostItemReclassJournal(Rec.Quantity, Rec."Expiration Date");
                     //Enable

@@ -32,6 +32,7 @@ page 50601 "RV Prod. Result Journal Line"
                 trigger OnValidate()
                 begin
                     RVProdResultsMgt.CheckName(CurrentJnlBatchName, Rec);
+                    CurrentJnlBatchNameOnAfterValidate();
                 end;
 
             }
@@ -512,7 +513,7 @@ page 50601 "RV Prod. Result Journal Line"
         HideScrapQty: Boolean;
         ScrapCanEdit: Boolean;
 
-    local procedure CurrentJnlBatchNameOnAfterVali()
+    local procedure CurrentJnlBatchNameOnAfterValidate()
     begin
         CurrPage.SaveRecord();
         RVProdResultsMgt.SetName(CurrentJnlBatchName, Rec);

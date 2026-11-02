@@ -249,7 +249,8 @@ page 50521 "RV PQC Card"
                     Rec.CheckInit();
 
                     //CheckRemark_Input
-                    Rec.CheckRemark_Input();
+                    if not Rec.CheckRemark_Input() then
+                        exit;
                     //Enable
                     Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
                 end;
@@ -269,7 +270,6 @@ page 50521 "RV PQC Card"
                     //CheckFail
                     if Rec.CheckFail() then
                         exit;
-
                     //CheckInit
                     Rec.CheckInit();
                     //check setting for post
@@ -278,10 +278,11 @@ page 50521 "RV PQC Card"
                     Rec.TestField("Storage Bin Code");
                     Rec.TestField("Quantity");
                     //ApprovedRemark_Input
-                    Rec.ApprovedRemark_Input();
+                    if not Rec.ApprovedRemark_Input() then
+                        exit;
                     //Post Item Reclass Journal
                     Rec.PostItemReclassJournal(Rec."Location Code", Rec."Location Code", Rec."Bin Code", Rec."Storage Bin Code", Rec.Quantity, Rec."Expiration Date");
-
+                    Rec.UpdateIQC_PQC_FQCProgress();
                     //Enable
                     Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
 
@@ -299,7 +300,6 @@ page 50521 "RV PQC Card"
                 begin
                     //IsQCReverseAllowed
                     Rec.IsQCReverseAllowed();
-
 
                     oldStatus := Rec."QC Status";
                     Rec.TestField("Location Code");
@@ -319,6 +319,9 @@ page 50521 "RV PQC Card"
                     end;
                     Rec."QC Status" := Rec."QC Status"::Checked;
                     Rec.Modify();
+
+                    Rec.UpdateIQC_PQC_FQCProgress();
+
                     //Enable
                     Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
                 end;
@@ -347,14 +350,17 @@ page 50521 "RV PQC Card"
                     Rec.TestField("NC Location Code");
 
                     //RejectedRemark_Input
-                    Rec.RejectedRemark_Input();
+                    if not Rec.RejectedRemark_Input() then
+                        exit;
 
+                    Rec.PostItemReclassJournal(Rec."Location Code", Rec."NC Location Code", Rec."Bin Code", Rec."NC Bin Code", Rec.Quantity, Rec."Expiration Date");
                     Rec."QC Status" := Rec."QC Status"::Rejected;
                     Rec.Modify();
+
+                    Rec.UpdateIQC_PQC_FQCProgress();
                     //Enable
                     Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
 
-                    Rec.PostItemReclassJournal(Rec."Location Code", Rec."NC Location Code", Rec."Bin Code", Rec."NC Bin Code", Rec.Quantity, Rec."Expiration Date");
                 end;
             }
             action("NC Result")

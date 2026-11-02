@@ -50,6 +50,6 @@ codeunit 50501 "RV Purchase Posting Subscriber"
         QCHeader.SetRange("Lot No.", LotNo);
         QCHeader.SetRange("QC Status", QCHeader."QC Status"::Rejected);
         if QCHeader.FindFirst() then
-            Error('Cannot post receipt for item %1, lot %2 on Purchase Order %3, line %4 because IQC %5 has been rejected.', PurchLine."No.", LotNo, PurchHeader."No.", PurchLine."Line No.", QCHeader."QC No.");
+            Error('The receipt cannot be posted for item %1, lot %2, because the related IQC %3 has been rejected.', PurchLine."No.", LotNo, QCHeader."QC No.");
     end;
 }

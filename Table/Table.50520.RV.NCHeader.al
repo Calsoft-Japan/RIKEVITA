@@ -207,18 +207,28 @@ table 50520 "RV NC Header"
 
     trigger OnInsert()
     var
+        QCHeader: Record "RV QC Header";
     begin
-
+        if QCHeader.Get(Rec."QC No.", Rec."QC Type") then begin
+            QCHeader."NC Exist" := true;
+            QCHeader.Modify()
+        end;
     end;
 
     trigger OnDelete()
     var
         QCInyResultLine: Record "RV QC Iny. Result Line";
+        QCHeader: Record "RV QC Header";
     begin
         QCInyResultLine.Reset();
         QCInyResultLine.SetRange("QC No.", Rec."QC No.");
         QCInyResultLine.SetRange("QC Type", Rec."QC Type");
         QCInyResultLine.DeleteAll(true);
+
+        if QCHeader.Get(Rec."QC No.", Rec."QC Type") then begin
+            QCHeader."NC Exist" := false;
+            QCHeader.Modify()
+        end;
     end;
 
     procedure IsNCCheckAllowed(): Boolean
@@ -264,7 +274,7 @@ table 50520 "RV NC Header"
             Error('You can not Reverse, because you need approval or Reject.')
     end;
 
-    procedure CheckRemark_Input()
+    procedure CheckRemark_Input(): Boolean
     var
         UserSetup: Record "User Setup";
         RVQCRemarkInput: Page "RV QC Remark Input";
@@ -287,11 +297,13 @@ table 50520 "RV NC Header"
             "NC Checked By" := UserId;
             "NC Checked Date" := WorkDate();
             Modify();
+            exit(true);
 
-        end;
+        end else
+            exit(false);
     end;
 
-    procedure ApprovedRemark_Input()
+    procedure ApprovedRemark_Input(): boolean
     var
         UserSetup: Record "User Setup";
         RVQCRemarkInput: Page "RV QC Remark Input";
@@ -313,7 +325,9 @@ table 50520 "RV NC Header"
             rec."NC Approved By" := UserId;
             rec."NC Approved Date" := WorkDate();
             Modify();
-        end;
+            exit(true);
+        end else
+            exit(false);
     end;
 
     procedure CheckTotalQuantity()
@@ -483,13 +497,13 @@ table 50520 "RV NC Header"
                 ItemJnlLine.Validate("Unit of Measure Code", Rec."Unit of Measure");
                 ItemJnlLine.Validate("Quantity", QCInyResultLine."Quantity");
                 // ItemJnlLine."reason Code" := ItemJournalBatch."Reason Code";
-
-                ReasonCode.Reset();
-                ReasonCode.SetRange("RV_Reason Code Type", ReasonCode."RV_Reason Code Type"::"Transfer Site");
-                if ReasonCode.FindFirst() then
-                    ItemJnlLine."reason Code" := ReasonCode.Code
-                else
-                    Error('Please set a Reason Code for QC inventory transfers with the Reason Code Type set to Transfer Site');
+                //need to modify based on inventory valuation function
+                //ReasonCode.Reset();
+                //ReasonCode.SetRange("RV_Reason Code Type", ReasonCode."RV_Reason Code Type"::Blank);
+                //if ReasonCode.FindFirst() then
+                //    ItemJnlLine."reason Code" := ReasonCode.Code
+                //else
+                //    Error('Please set a Reason Code for QC inventory transfers with the Reason Code Type set to Transfer Site');
 
                 ReceiptILE.reset;
                 ReceiptILE.SetRange("Document No.", Rec."Order No.");
@@ -641,5 +655,5 @@ table 50520 "RV NC Header"
         Text000: Label '%1 journal';
         Text003: Label 'DEFAULT';
         Text004: Label 'Item Reclass Journal';
-        Text005: Label 'Inventory movement is not required for the non-conformance operation with the Transfer-to Location and Transfer-to Bin settings. \Do you continue Approve?';
+        Text005: Label 'The Transfer-to Location and Transfer-to Bin are same with NC Location and NC Bin. \Do you continue Approve?';
 }

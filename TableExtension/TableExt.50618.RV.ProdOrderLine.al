@@ -19,5 +19,17 @@ tableextension 50618 "RV Prod. Order Line" extends "Prod. Order Line"
             fieldClass = FlowField;
             CalcFormula = lookup("Bin"."RV_Invy. Status" WHERE("Location Code" = field("Location Code"), Code = field("Bin Code")));
         }
+        field(50500; "RV_FQC Quantity"; decimal)
+        {
+            Caption = 'FQC Quantity';
+            Description = 'FDD039';
+            DataClassification = ToBeClassified;
+        }
+        field(50501; "RV_FQC Status"; boolean)
+        {
+            Caption = 'FQC Status';
+            Description = 'FDD039';
+            DataClassification = ToBeClassified;
+        }
     }
 }

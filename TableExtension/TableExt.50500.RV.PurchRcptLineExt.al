@@ -9,13 +9,13 @@ tableextension 50500 "RV Purch. Rcpt. Line" extends "Purch. Rcpt. Line"
         field(50500; "RV_IQC Quantity"; decimal)
         {
             Caption = 'IQC Quantity';
-            Description = 'FDD014';
+            Description = 'FDD039';
             DataClassification = ToBeClassified;
         }
         field(50501; "RV_IQC Status"; boolean)
         {
             Caption = 'IQC Status';
-            Description = 'FDD014';
+            Description = 'FDD039';
             DataClassification = ToBeClassified;
         }
     }

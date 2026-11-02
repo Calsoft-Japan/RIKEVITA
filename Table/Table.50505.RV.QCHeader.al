@@ -6,7 +6,8 @@ table 50505 "RV QC Header"
 {
     Caption = 'QC Header';
     DataClassification = CustomerContent;
-    Permissions = tabledata "Purch. Rcpt. Line" = RIMD;
+    Permissions = tabledata "Purch. Rcpt. Line" = RIMD,
+                  tabledata "Prod. Order Line" = RIMD;
     fields
     {
         field(1; "QC No."; Code[20])
@@ -46,6 +47,7 @@ table 50505 "RV QC Header"
                 PurchRcptLine: Record "Purch. Rcpt. Line";
                 ProductionOrder: Record "Production Order";
                 ProdOrderLine: Record "Prod. Order Line";
+                QAHeader: Record "RV QA Header";
                 RIKEVITASetup: Record "RV RIKEVITA Setup";
             begin
 
@@ -53,6 +55,7 @@ table 50505 "RV QC Header"
                     RIKEVITASetup.Get();
                     Purchaseline.Reset();
                     Purchaseline.SetRange("Document Type", Purchaseline."Document Type"::Order);
+                    Purchaseline.SetRange("Quantity received", 0);
                     if (Page.RunModal(Page::"Purchase Lines", Purchaseline) = Action::LookupOK) then begin
 
                         if Purchaseline."Quantity received" > 0 then
@@ -75,6 +78,7 @@ table 50505 "RV QC Header"
                         "Quantity (Base)" := Purchaseline."Quantity (Base)";
                         rec."NC Bin Code" := RIKEVITASetup."NC Bin Code";
                         rec."NC Location Code" := RIKEVITASetup."NC Location Code";
+                        Clear("Lot No.");
                         Modify();
                     end;
                 end else if Rec."Ref. Order Type" = RefOrderType::"Posted Purchase Receipt" then begin
@@ -118,6 +122,7 @@ table 50505 "RV QC Header"
                         ProdOrderLine.SetRange("Inventory Posting Group", RIKEVITASetup."WIP Inventory Posting Group");
                     end;
 
+                    ProdOrderLine.SetRange("RV_FQC Status", false);
                     if (Page.RunModal(Page::"Prod. Order Line List", ProdOrderLine) = Action::LookupOK) then begin
                         "Order No." := ProdOrderLine."Prod. Order No.";
                         "Line No." := ProdOrderLine."Line No.";
@@ -136,7 +141,6 @@ table 50505 "RV QC Header"
                         Modify();
                     end;
                 end;
-
             end;
 
             trigger OnValidate()
@@ -151,6 +155,7 @@ table 50505 "RV QC Header"
             Caption = 'Lot No.';
             trigger OnLookup()
             var
+                RefOrderType: Enum "RV Ref. Order Type";
                 Purchaseline: Record "Purchase line";
                 PurchRcptLine: Record "Purch. Rcpt. Line";
                 ItemLedgerEntry: Record "Item Ledger Entry";
@@ -222,20 +227,69 @@ table 50505 "RV QC Header"
                             ItemLedgerEntry.SetRange("Order Type", ItemLedgerEntry."Order Type"::Production);
                             ItemLedgerEntry.SetRange("Order No.", "Order No.");
                             ItemLedgerEntry.SetRange("Entry Type", ItemLedgerEntry."Entry Type"::Output);
+                            ItemLedgerEntry.SetRange("Order Line No.", "Line No.");
+                            ItemLedgerEntry.SetRange("Item No.", "Item No.");
                             ItemLedgerEntry.SetFilter("Quantity", '>0');
+
+                            ProdOrderLine.Reset();
+                            ProdOrderLine.SetRange(Status, ProdOrderLine.Status::Released);
+                            ProdOrderLine.SetRange("Prod. Order No.", "Order No.");
+                            ProdOrderLine.SetRange("Line No.", "Line No.");
+                            ProdOrderLine.SetRange("Item No.", "Item No.");
+                            if ProdOrderLine.FindFirst() then begin
+                                ItemLedgerEntry.SetRange("Order Line No.", ProdOrderLine."Line No.");
+                                ItemLedgerEntry.SetRange("Item No.", ProdOrderLine."Item No.");
+                                if ("QC Type" in ["QC Type"::FQC, "QC Type"::PQC]) and ProdOrderLine."RV_FQC Status" then
+                                    ItemLedgerEntry.SetRange("Item No.", '');
+
+                                if ("QC Type" in ["QC Type"::FQC, "QC Type"::PQC]) and not ProdOrderLine."RV_FQC Status" then begin
+                                    QCHeader.Reset();
+                                    QCHeader.SetRange("QC Type", Rec."QC Type");
+                                    QCHeader.SetRange("Ref. Order Type", QCHeader."Ref. Order Type"::"Production Order");
+                                    QCHeader.SetRange("Order No.", ProdOrderLine."Prod. Order No.");
+                                    QCHeader.SetRange("Line No.", ProdOrderLine."Line No.");
+                                    QCHeader.SetRange("Item No.", ProdOrderLine."Item No.");
+                                    QCHeader.SetFilter("QC Status", '%1|%2', QCHeader."QC Status"::Approved, QCHeader."QC Status"::Rejected);
+                                    if QCHeader.FindSet() then
+                                        repeat
+                                            if (QCHeader."Lot No." <> '') and
+                                               (not CompletedLotNos.Contains(QCHeader."Lot No."))
+                                            then
+                                                CompletedLotNos.Add(QCHeader."Lot No.");
+                                        until QCHeader.Next() = 0;
+
+                                    ItemLedgerEntry.SetFilter("Lot No.", '<>%1', '');
+                                    ItemLedgerEntry.ClearMarks();
+                                    if ItemLedgerEntry.FindSet() then
+                                        repeat
+                                            ItemLedgerEntry.Mark(not CompletedLotNos.Contains(ItemLedgerEntry."Lot No."));
+                                        until ItemLedgerEntry.Next() = 0;
+                                    ItemLedgerEntry.MarkedOnly(true);
+                                end;
+                            end;
 
                             if (Page.RunModal(Page::"RV Item Ledger Entries", ItemLedgerEntry) = Action::LookupOK) then begin
                                 Validate("Lot No.", ItemLedgerEntry."Lot No.");
                                 "Manufacturing Date" := ItemLedgerEntry."Posting Date";
                                 "Expiration Date" := ItemLedgerEntry."Expiration Date";
-
-                                "Quantity (Base)" := ItemLedgerEntry.Quantity;
-                                if ItemLedgerEntry."Qty. per Unit of Measure" <> 0 then
-                                    Quantity := ItemLedgerEntry.Quantity / ItemLedgerEntry."Qty. per Unit of Measure";
-                                "UOM" := ItemLedgerEntry."Unit of Measure Code";
+                                if "QC Type" in ["QC Type"::PQC, "QC Type"::FQC] then begin
+                                    LotItemLedgerEntry.Reset();
+                                    LotItemLedgerEntry.SetRange("Order Type", LotItemLedgerEntry."Order Type"::Production);
+                                    LotItemLedgerEntry.SetRange("Order No.", "Order No.");
+                                    LotItemLedgerEntry.SetRange("Order Line No.", "Line No.");
+                                    LotItemLedgerEntry.SetRange("Entry Type", LotItemLedgerEntry."Entry Type"::Output);
+                                    LotItemLedgerEntry.SetRange("Item No.", "Item No.");
+                                    LotItemLedgerEntry.SetRange("Lot No.", ItemLedgerEntry."Lot No.");
+                                    LotItemLedgerEntry.SetFilter(Quantity, '>0');
+                                    LotItemLedgerEntry.CalcSums(Quantity);
+                                    "Quantity (Base)" := LotItemLedgerEntry.Quantity;
+                                    if ItemLedgerEntry."Qty. per Unit of Measure" <> 0 then
+                                        Quantity := LotItemLedgerEntry.Quantity / ItemLedgerEntry."Qty. per Unit of Measure";
+                                    "UOM" := ItemLedgerEntry."Unit of Measure Code";
+                                end;
                             end;
-                        end;
-                End;
+                        End;
+                end;
             end;
 
             trigger OnValidate()
@@ -408,6 +462,10 @@ table 50505 "RV QC Header"
         {
             Caption = 'QC Comment';
         }
+        field(105; "NC Exist"; Boolean)
+        {
+            Caption = 'NC Exist';
+        }
     }
     keys
     {
@@ -466,10 +524,7 @@ table 50505 "RV QC Header"
         QCline.SetRange("QC Type", Rec."QC Type");
         QCline.DeleteAll(true);
 
-        if ("QC Type" = "QC Type"::IQC) and
-           ("Ref. Order Type" = "Ref. Order Type"::"Posted Purchase Receipt")
-        then
-            RecalculatePostedReceiptIQCProgress("Order No.", "Line No.", "Item No.", "QC No.");
+        UpdateIQC_PQC_FQCProgress();
 
         QCInyResultLine.Reset();
         QCInyResultLine.SetRange("QC No.", Rec."QC No.");
@@ -480,6 +535,19 @@ table 50505 "RV QC Header"
         NCHeader.SetRange("QC No.", Rec."QC No.");
         NCHeader.SetRange("QC Type", Rec."QC Type");
         NCHeader.DeleteAll(true);
+    end;
+
+    trigger OnModify()
+    begin
+        if (xRec."QC Type" = Rec."QC Type") and
+           (xRec."Ref. Order Type" = Rec."Ref. Order Type") and
+           (xRec."Order No." = Rec."Order No.") and
+           (xRec."Line No." = Rec."Line No.") and
+           (xRec."Item No." = Rec."Item No.") and
+           (xRec."QC Status" = Rec."QC Status") and
+           (xRec."Quantity (Base)" = Rec."Quantity (Base)")
+        then
+            exit;
     end;
 
     procedure IsQCCheckAllowed(): Boolean
@@ -550,7 +618,7 @@ table 50505 "RV QC Header"
             Error('You need to Check before Reject.');
     end;
 
-    procedure CheckRemark_Input()
+    procedure CheckRemark_Input(): Boolean
     var
         UserSetup: Record "User Setup";
         RVQCRemarkInput: Page "RV QC Remark Input";
@@ -573,10 +641,12 @@ table 50505 "RV QC Header"
             "QC Checked By" := UserId;
             "QC Checked Date" := WorkDate();
             Modify();
-        end;
+            exit(true);
+        end else
+            exit(false);
     end;
 
-    procedure ApprovedRemark_Input()
+    procedure ApprovedRemark_Input(): Boolean
     var
         UserSetup: Record "User Setup";
         RVQCRemarkInput: Page "RV QC Remark Input";
@@ -598,11 +668,13 @@ table 50505 "RV QC Header"
             Rec."QC Approved Remark" := RemarkText[1];// set Remark
             rec."QC Approved By" := UserId;
             rec."QC Approved Date" := WorkDate();
-            Modify();
-        end;
+            //Modify();
+            exit(true);
+        end else
+            exit(false);
     end;
 
-    procedure RejectedRemark_Input()
+    procedure RejectedRemark_Input(): boolean
     var
         UserSetup: Record "User Setup";
         RVQCRemarkInput: Page "RV QC Remark Input";
@@ -618,23 +690,38 @@ table 50505 "RV QC Header"
         RVQCRemarkInput.SetParameter(RemarkText);
 
         IF RVQCRemarkInput.RUNMODAL = ACTION::OK then begin
-
             CopyArray(RemarkText, RVQCRemarkInput.GetParameter(), 1, 2);
             Rec."QC Status" := Rec."QC Status"::Rejected;
             Rec."QC Rejected Remark" := RemarkText[1];// set Remark
             rec."QC Rejected By" := UserId;
             rec."QC Rejected Date" := WorkDate();
-            Modify();
-        end;
+            //Modify();
+            exit(true);
+        end else
+            exit(false);
     end;
 
     procedure ClearHeaderData()
     begin
-        "Order No." := '';
-        "Item No." := '';
-        "Lot No." := '';
-        "Location Code" := '';
-        "Bin Code" := '';
+        Clear("Order No.");
+        Clear("Line No.");
+        Clear("Item No.");
+        Clear("Item Description");
+        Clear("Vendor No.");
+
+        Clear("Location Code");
+        Clear("Bin Code");
+
+        Clear("Lot No.");
+
+        Clear("Vendor Name");
+        Clear("Customer No.");
+        Clear("Ship-to Code");
+        Clear("Ship-to Country");
+        Clear("Quantity");
+        Clear("UOM");
+        Clear("Quantity (Base)");
+
         Clear("RM Manufacture Date");
         Clear("Expiration Date");
 
@@ -787,18 +874,54 @@ table 50505 "RV QC Header"
             NCHeader."NC Analyzed by" := userid;
             NCHeader."NC Date" := WorkDate();
             NCHeader."NC Status" := NCHeader."NC Status"::Analyzing;
-            NCHeader.Insert();
+            NCHeader.Insert(true);
         end;
     end;
 
-    procedure UpdatePostedReceiptIQCProgress()
+    procedure UpdateIQC_PQC_FQCProgress()
     begin
-        if ("QC Type" <> "QC Type"::IQC) or
-           ("Ref. Order Type" <> "Ref. Order Type"::"Posted Purchase Receipt")
+        if ("QC Type" = "QC Type"::IQC) and
+           ("Ref. Order Type" = "Ref. Order Type"::"Posted Purchase Receipt")
         then
+            RecalculatePostedReceiptIQCProgress("Order No.", "Line No.", "Item No.", '')
+        else if ("QC Type" in ["QC Type"::FQC, "QC Type"::PQC]) and
+        ("Ref. Order Type" = "Ref. Order Type"::"Production Order")
+        then
+            RecalculateProdOrderFQC_PQCProgress("Order No.", "Line No.", "Item No.", '');
+    end;
+
+    local procedure RecalculateProdOrderFQC_PQCProgress(ProdOrderNo: Code[20]; ProdOrderLineNo: Integer; ItemNo: Code[20]; ExcludedQCNo: Code[20])
+    var
+        ProdOrderLine: Record "Prod. Order Line";
+        QCHeader: Record "RV QC Header";
+        CompletedFQCQuantity: Decimal;
+    begin
+
+        exit;//2026/11/1 comment by zhao, for production, it is not necessary to updated the informtion as the output quantity is difficult to control
+        if (ProdOrderNo = '') or (ProdOrderLineNo = 0) or (ItemNo = '') then
             exit;
 
-        RecalculatePostedReceiptIQCProgress("Order No.", "Line No.", "Item No.", '');
+        QCHeader.SetRange("QC Type", Rec."QC Type");//Rec."QC Type"
+        QCHeader.SetRange("Ref. Order Type", QCHeader."Ref. Order Type"::"Production Order");
+        QCHeader.SetRange("Order No.", ProdOrderNo);
+        QCHeader.SetRange("Line No.", ProdOrderLineNo);
+        QCHeader.SetRange("Item No.", ItemNo);
+        QCHeader.SetFilter("QC Status", '%1|%2', QCHeader."QC Status"::Approved, QCHeader."QC Status"::Rejected);
+        if ExcludedQCNo <> '' then
+            QCHeader.SetFilter("QC No.", '<>%1', ExcludedQCNo);
+        if QCHeader.FindSet() then
+            repeat
+                CompletedFQCQuantity += QCHeader."Quantity (Base)";
+            until QCHeader.Next() = 0;
+
+        if not ProdOrderLine.Get(ProdOrderLine.Status::Released, ProdOrderNo, ProdOrderLineNo) then
+            exit;
+
+        ProdOrderLine."RV_FQC Quantity" := CompletedFQCQuantity;
+        ProdOrderLine."RV_FQC Status" :=
+            (ProdOrderLine."Quantity (Base)" > 0) and
+            (CompletedFQCQuantity >= ProdOrderLine."Quantity (Base)");
+        ProdOrderLine.Modify();
     end;
 
     local procedure RecalculatePostedReceiptIQCProgress(PostedReceiptNo: Code[20]; PostedReceiptLineNo: Integer; ItemNo: Code[20]; ExcludedQCNo: Code[20])
@@ -824,10 +947,10 @@ table 50505 "RV QC Header"
             exit;
 
         PurchRcptLine."RV_IQC Quantity" := CompletedIQCQuantity;
-        PurchRcptLine."RV_IQC Status" :=
-            (PurchRcptLine."Quantity (Base)" > 0) and
-            (CompletedIQCQuantity >= PurchRcptLine."Quantity (Base)");
-        PurchRcptLine.Modify();
+        if CompletedIQCQuantity >= PurchRcptLine."Quantity (Base)" then begin
+            PurchRcptLine."RV_IQC Status" := true;
+            PurchRcptLine.Modify();
+        end;
     end;
 
     procedure SetQCEnable(var CreateQCLineEnable: Boolean; var QCCheckEnable: Boolean; var QCApproveEnable: Boolean; var QCReverseEnable: Boolean; var QCRejectEnable: Boolean; var NCResultEnable: Boolean;
@@ -1006,10 +1129,10 @@ table 50505 "RV QC Header"
         ItemJnlLine.Validate("Quantity", Rec."Quantity");
         //set dimension and reason informaiton
 
-        ReasonCode.Reset();
-        ReasonCode.SetRange("RV_Reason Code Type", ReasonCode."RV_Reason Code Type"::Blank);
-        if ReasonCode.FindFirst() then
-            ItemJnlLine."reason Code" := ReasonCode.Code;
+        //ReasonCode.Reset(); need to modify based on inventory valuation function
+        //ReasonCode.SetRange("RV_Reason Code Type", ReasonCode."RV_Reason Code Type"::Blank);
+        //if ReasonCode.FindFirst() then
+        //    ItemJnlLine."reason Code" := ReasonCode.Code;
         //else
         //    Error('Please set a Reason Code for normal Transfer Site');
         ReceiptILE.reset;

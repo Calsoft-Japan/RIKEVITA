@@ -123,7 +123,7 @@ table 50508 "RV QA Header"
         }
         field(27; "Sales Order No."; Text[250])
         {
-            Caption = 'Item Reference Description';
+            Caption = 'Sales Order No.';
         }
         field(100; "Line No."; Integer)
         {
@@ -146,6 +146,7 @@ table 50508 "RV QA Header"
               (CurrFieldNo = FieldNo("Item Description")) or
               (CurrFieldNo = FieldNo("QA Checked Remark")) then
                 "Revision No." += 1;
+            "Revision No." += 1;
         end;
 
     end;
@@ -178,6 +179,7 @@ table 50508 "RV QA Header"
         QAInyResultLine.SetRange("COA No.", Rec."COA No.");
         QAInyResultLine.DeleteAll(true);
 
+        RecalculatePostedWhseShipmentQAStatus("Order No.", "Line No.", false);
     end;
 
     var
@@ -377,6 +379,17 @@ table 50508 "RV QA Header"
             QAInternalQCResults.Reset();
             QAInternalQCResults.SetRange("COA No.", "COA No.");
             QAInternalQCResults.ModifyAll("QC Approved Remark", "QA Approved Remark");
+
+        end;
+    end;
+
+    procedure RecalculatePostedWhseShipmentQAStatus(PostedWhseShipmentNo: Code[20]; PostedWhseShipmentLineNo: Integer; RVQAStatus: Boolean)
+    var
+        PostedWhseShipmentLine: Record "Posted Whse. Shipment Line";
+    begin
+        if PostedWhseShipmentLine.Get(PostedWhseShipmentNo, PostedWhseShipmentLineNo) then begin
+            PostedWhseShipmentLine."RV_QA Status" := RVQAStatus;
+            PostedWhseShipmentLine.Modify();
         end;
     end;
 
@@ -451,6 +464,7 @@ table 50508 "RV QA Header"
         SaleNoList: List of [Code[20]];
         LotNo: Code[50];
         SaleOrderNo: Code[20];
+        QCHeader: Record "RV QC Header";
 
     begin
         clear(Rec."Lot No.");
@@ -460,6 +474,7 @@ table 50508 "RV QA Header"
         clear(SaleNoList);
         clear(LotNo);
         clear(SaleOrderNo);
+
         if Rec."Ref. Order Type QA" = RefOrderTypeQA::"Posted Whse. Shipment" then begin
 
             PostedWhShipLine.SetRange("No.", Rec."Order No.");
@@ -482,7 +497,9 @@ table 50508 "RV QA Header"
                 ItemReference.SetRange("Reference Type No.", Rec."Ship-to Customer No.");
                 ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
                 if ItemReference.FindFirst() then
-                    "Item Reference Description" := ItemReference.Description;
+                    "Item Reference Description" := ItemReference.Description
+                else
+                    "Item Reference Description" := '';
 
                 if PostedWhShipHeader.Get(Rec."Order No.") then
                     Rec."Final Destination" := PostedWhShipHeader."RV_Final Destination";
@@ -514,15 +531,14 @@ table 50508 "RV QA Header"
                         QAShipmentLotNo.UOM := WarehousePackingInfo."Contents UOM";
                         QAShipmentLotNo.Comment := WarehousePackingInfo.Comment;
                         //QAShipmentLotNo."Qty. (Base)" := Abs(ItemLedgEntry.Quantity);
-                        ItemLedgEntry.Reset();
-                        //ItemLedgEntry.SetCurrentKey("Item No.", "Posting Date");
-                        ItemLedgEntry.SetRange("Item No.", WarehousePackingInfo."Item No.");
-                        ItemLedgEntry.SetRange("lot No.", WarehousePackingInfo."Lot No.");
+                        QCHeader.Reset();
+                        QCHeader.SetRange("Item No.", WarehousePackingInfo."Item No.");
+                        QCHeader.SetRange("lot No.", WarehousePackingInfo."Lot No.");
                         //ItemLedgEntry.SetFilter(Quantity, '>%1', 0);
-                        if ItemLedgEntry.Findfirst() then begin
-                            QAShipmentLotNo."Expire Date" := ItemLedgEntry."Expiration Date";
-                            QAShipmentLotNo."Expire Date for COA Report" := ItemLedgEntry."Expiration Date";
-                            QAShipmentLotNo."Manufacturing Date" := ItemLedgEntry."Posting Date";
+                        if QCHeader.FindFirst() then begin
+                            QAShipmentLotNo."Expire Date" := QCHeader."Expiration Date";
+                            QAShipmentLotNo."Expire Date for COA Report" := QCHeader."Expiration Date";
+                            QAShipmentLotNo."Manufacturing Date" := QCHeader."Manufacturing Date";
                         end;
                         QAShipmentLotNo.INSERT();
                     until WarehousePackingInfo.Next() = 0;
@@ -585,14 +601,14 @@ table 50508 "RV QA Header"
                         QAShipmentLotNo.Comment := WarehousePackingInfo.Comment;
 
                         //QAShipmentLotNo."Qty. (Base)" := -ReservEntry."Quantity (Base)";
-                        ItemLedgEntry.Reset();
-                        ItemLedgEntry.SetRange("Item No.", WarehousePackingInfo."Item No.");
-                        ItemLedgEntry.SetRange("lot No.", WarehousePackingInfo."Lot No.");
+                        QCHeader.Reset();
+                        QCHeader.SetRange("Item No.", WarehousePackingInfo."Item No.");
+                        QCHeader.SetRange("lot No.", WarehousePackingInfo."Lot No.");
                         //ItemLedgEntry.SetFilter(Quantity, '>%1', 0);
-                        if ItemLedgEntry.FindFirst() then begin
-                            QAShipmentLotNo."Expire Date" := ItemLedgEntry."Expiration Date";
-                            QAShipmentLotNo."Expire Date for COA Report" := ItemLedgEntry."Expiration Date";
-                            QAShipmentLotNo."Manufacturing Date" := ItemLedgEntry."Posting Date";
+                        if QCHeader.FindFirst() then begin
+                            QAShipmentLotNo."Expire Date" := QCHeader."Expiration Date";
+                            QAShipmentLotNo."Expire Date for COA Report" := QCHeader."Expiration Date";
+                            QAShipmentLotNo."Manufacturing Date" := QCHeader."Manufacturing Date";
                         end;
 
                         QAShipmentLotNo.Insert();
@@ -600,13 +616,16 @@ table 50508 "RV QA Header"
             end;
         end;
         foreach LotNo in LotNoList do begin
+            rec."Lot No." := '';
             i += 1;
             if i = 1 then
                 rec."Lot No." := LotNo
             else
                 rec."Lot No." += ',' + LotNo;
         end;
+        Clear(i);
         foreach SaleOrderNo in SaleNoList do begin
+            rec."Sales Order No." := '';
             i += 1;
             if i = 1 then
                 rec."Sales Order No." := SaleOrderNo

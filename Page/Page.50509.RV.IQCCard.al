@@ -285,7 +285,8 @@ page 50509 "RV IQC Card"
                     Rec.CheckInit();
 
                     //CheckRemark_Input
-                    Rec.CheckRemark_Input();
+                    if not Rec.CheckRemark_Input() then
+                        exit;
                     //Enable
                     Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
                 end;
@@ -313,22 +314,26 @@ page 50509 "RV IQC Card"
                     //CheckFail
                     if Rec.CheckFail() then
                         exit;
-
+                    if Rec."Ref. Order Type" = Rec."Ref. Order Type"::"Posted Purchase Receipt" then begin
+                        //check setting for post
+                        Rec.TestField("Location Code");
+                        Rec.TestField("Bin Code");
+                        Rec.TestField("Storage Bin Code");
+                        Rec.TestField("Quantity");
+                    end;
                     //CheckInit
                     Rec.CheckInit();
-                    //check setting for post
-                    Rec.TestField("Location Code");
-                    Rec.TestField("Bin Code");
-                    Rec.TestField("Storage Bin Code");
-                    Rec.TestField("Quantity");
                     //Rec.TestField("Expiration Date");
                     //ApprovedRemark_Input
-                    Rec.ApprovedRemark_Input();
+                    if not Rec.ApprovedRemark_Input() then
+                        exit;
                     //Post Item Reclass Journal
                     if Rec."Ref. Order Type" = Rec."Ref. Order Type"::"Posted Purchase Receipt" then begin
                         Rec.PostItemReclassJournal(Rec."Location Code", Rec."Location Code", Rec."Bin Code", Rec."Storage Bin Code", Rec.Quantity, Rec."Expiration Date");
                     end;
-                    Rec.UpdatePostedReceiptIQCProgress();
+                    Rec."QC Status" := Rec."QC Status"::Approved;
+                    Rec.Modify();
+                    Rec.UpdateIQC_PQC_FQCProgress();
 
                     //Enable
                     Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
@@ -365,6 +370,8 @@ page 50509 "RV IQC Card"
                     end;
                     Rec."QC Status" := Rec."QC Status"::Checked;
                     Rec.Modify();
+
+                    Rec.UpdateIQC_PQC_FQCProgress();
                     //Enable
                     Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
                 end;
@@ -382,28 +389,30 @@ page 50509 "RV IQC Card"
                     //IsQCRejectAllowed
                     Rec.IsQCRejectAllowed();
                     //Check setting for reject posting
-                    RIKEVITASetup.Get();
-                    RIKEVITASetup.TestField("NC Location Code");
-                    RIKEVITASetup.TestField("NC Bin Code");
-                    Rec.TestField("Location Code");
-                    Rec.TestField("Bin Code");
-                    // Rec.TestField("Storage Bin Code");
-                    Rec.TestField("Quantity");
-                    Rec.TestField("NC Location Code");
-                    Rec.TestField("NC Bin Code");
-                    //RejectedRemark_Input
-                    Rec.RejectedRemark_Input();
+                    if Rec."Ref. Order Type" = Rec."Ref. Order Type"::"Posted Purchase Receipt" then begin
+                        RIKEVITASetup.Get();
+                        Rec.TestField("Location Code");
+                        Rec.TestField("Bin Code");
+                        Rec.TestField("Storage Bin Code");
+                        Rec.TestField("Quantity");
+                        Rec.TestField("NC Location Code");
+                        Rec.TestField("NC Bin Code");
+                        //RejectedRemark_Input
+                    end;
+                    if not Rec.RejectedRemark_Input() then
+                        exit;
 
                     Rec."QC Status" := Rec."QC Status"::Rejected;
                     Rec.Modify();
-                    Rec.UpdatePostedReceiptIQCProgress();
-                    //Enable
-                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
                     //Post Item Reclass Journal
                     if Rec."Ref. Order Type" = Rec."Ref. Order Type"::"Posted Purchase Receipt" then begin
                         //Rec.TestField("Expiration Date");
                         Rec.PostItemReclassJournal(Rec."Location Code", Rec."NC Location Code", Rec."Bin Code", Rec."NC Bin Code", Rec.Quantity, Rec."Expiration Date");
                     end;
+                    Rec.UpdateIQC_PQC_FQCProgress();
+                    //Enable
+                    Rec.SetQCEnable(CreateQCLineEnable, QCCheckEnable, QCApproveEnable, QCReverseEnable, QCRejectEnable, NCResultEnable, SubQCLineEnable, SubInventoryResultEnable, QCCardEnable);
+
                 end;
             }
             action("NC Result")

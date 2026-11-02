@@ -68,6 +68,7 @@ page 50514 "RV COA Card Subform"
                     begin
 
                         if Rec."Ref. Order Type QA" = RefOrderTypeQA::"Posted Whse. Shipment" then begin
+                            PostedWhShipLine.SetRange("RV_QA Status", false);
                             if Page.RunModal(Page::"Posted Whse. Shipment Lines", PostedWhShipLine) <> Action::LookupOK then
                                 exit(false);
 
@@ -415,6 +416,8 @@ page 50514 "RV COA Card Subform"
     end;
 
     procedure COAApprove_Action()
+    var
+        QAShipmentLotNo: Record "RV QA Shipment Lot No.";
     begin
         //IsQAApproveAllowed
         Rec.IsQAApproveAllowed();
@@ -424,6 +427,15 @@ page 50514 "RV COA Card Subform"
 
         //Enable
         Rec.SetQAEnable(UpdateQALineEnable, QACheckEnable, QAApproveEnable, QARejectEnable, SubCOACardEditable);
+
+        Rec."QA Status" := Rec."QA Status"::Approved;
+        Rec.Modify();
+
+        QAShipmentLotNo.Reset();
+        QAShipmentLotNo.SetRange("COA No.", Rec."COA No.");
+        QAShipmentLotNo.ModifyAll("QA Status", Rec."QA Status"::Approved);
+
+        Rec.RecalculatePostedWhseShipmentQAStatus(Rec."Order No.", Rec."Line No.", true);
     end;
 
     procedure COAReject_Action()
@@ -441,6 +453,8 @@ page 50514 "RV COA Card Subform"
         QAShipmentLotNo.Reset();
         QAShipmentLotNo.SetRange("COA No.", Rec."COA No.");
         QAShipmentLotNo.ModifyAll("QA Status", Rec."QA Status"::Rejected);
+
+        Rec.RecalculatePostedWhseShipmentQAStatus(Rec."Order No.", Rec."Line No.", true);
     end;
 
     procedure COAReverse_Action()
@@ -460,6 +474,8 @@ page 50514 "RV COA Card Subform"
         QAShipmentLotNo.Reset();
         QAShipmentLotNo.SetRange("COA No.", Rec."COA No.");
         QAShipmentLotNo.ModifyAll("QA Status", Rec."QA Status"::Checked);
+
+        Rec.RecalculatePostedWhseShipmentQAStatus(Rec."Order No.", Rec."Line No.", false);
     end;
 
     procedure COAPrint_Action()
