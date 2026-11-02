@@ -202,6 +202,8 @@ table 50508 "RV QA Header"
         "QA Approved By" := '';
         "QA Checked Remark" := '';
         "QA Approved Remark" := '';
+        "item Reference Description" := '';
+        "Sales Order No." := '';
     end;
 
     procedure ClearShipmentLotNo()
@@ -497,10 +499,9 @@ table 50508 "RV QA Header"
                 ItemReference.SetRange("Reference Type No.", Rec."Ship-to Customer No.");
                 ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
                 if ItemReference.FindFirst() then
-                    "Item Reference Description" := ItemReference.Description
+                    Rec."Item Reference Description" := ItemReference.Description
                 else
-                    "Item Reference Description" := '';
-
+                    Rec."Item Reference Description" := '';
                 if PostedWhShipHeader.Get(Rec."Order No.") then
                     Rec."Final Destination" := PostedWhShipHeader."RV_Final Destination";
 
@@ -561,7 +562,14 @@ table 50508 "RV QA Header"
                     Rec."Bill-to Customer No." := SalesHeader."Bill-to Customer No.";
                     Rec."Bill-to Customer name" := SalesHeader."Bill-to name";
                 end;
-
+                ItemReference.reset;
+                ItemReference.SetRange("Item No.", WhShipline."Item No.");
+                ItemReference.SetRange("Reference Type No.", Rec."Ship-to Customer No.");
+                ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                if ItemReference.FindFirst() then
+                    Rec."Item Reference Description" := ItemReference.Description
+                else
+                    Rec."Item Reference Description" := '';
                 if WhShipHeader.Get(Rec."Order No.") then
                     Rec."Final Destination" := WhShipHeader."RV_Final Destination";
 
@@ -615,8 +623,8 @@ table 50508 "RV QA Header"
                     until WarehousePackingInfo.Next() = 0;
             end;
         end;
+        rec."Lot No." := '';
         foreach LotNo in LotNoList do begin
-            rec."Lot No." := '';
             i += 1;
             if i = 1 then
                 rec."Lot No." := LotNo
@@ -624,8 +632,8 @@ table 50508 "RV QA Header"
                 rec."Lot No." += ',' + LotNo;
         end;
         Clear(i);
+        rec."Sales Order No." := '';
         foreach SaleOrderNo in SaleNoList do begin
-            rec."Sales Order No." := '';
             i += 1;
             if i = 1 then
                 rec."Sales Order No." := SaleOrderNo

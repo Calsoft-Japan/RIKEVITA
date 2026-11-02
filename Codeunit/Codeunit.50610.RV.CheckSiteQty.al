@@ -60,6 +60,8 @@ codeunit 50610 "RV Check Site Qty"
         salesLine: Record "Sales Line";
     begin
         // Your code for handling the event here
+        glSetup.Get();
+        RVSetup.Get();
         T337.Reset();
         T337.SetRange("Item No.", Rec."No.");
         T337.SetRange("Source Type", DATABASE::"Sales Line");
@@ -74,7 +76,10 @@ codeunit 50610 "RV Check Site Qty"
                             begin
                                 ILE.get(T337Plus."Source Ref. No.");
                                 salesLine.get(Rec."Document Type", Rec."Document No.", Rec."Line No.");
-                                salesLine.Validate("Shortcut Dimension 1 Code", ILE."Global Dimension 1 Code");
+                                if RVSetup."SITE Dim. Code" = glsetup."Shortcut Dimension 1 Code" then
+                                    salesLine.Validate("Shortcut Dimension 1 Code", ILE."Global Dimension 1 Code")
+                                else
+                                    salesLine.Validate("Shortcut Dimension 2 Code", ILE."Global Dimension 2 Code");
                                 salesLine.Modify();
                                 exit;
                             end;
@@ -83,7 +88,10 @@ codeunit 50610 "RV Check Site Qty"
                             begin
                                 if ProdOrderLine.get(T337Plus."Source Subtype", T337Plus."Source ID", T337Plus."Source Prod. Order Line") then begin
                                     salesLine.get(Rec."Document Type", Rec."Document No.", Rec."Line No.");
-                                    salesLine.Validate("Shortcut Dimension 1 Code", ProdOrderLine."Shortcut Dimension 1 Code");
+                                    if RVSetup."SITE Dim. Code" = glsetup."Shortcut Dimension 1 Code" then
+                                        salesLine.Validate("Shortcut Dimension 1 Code", ProdOrderLine."Shortcut Dimension 1 Code")
+                                    else
+                                        salesLine.Validate("Shortcut Dimension 2 Code", ProdOrderLine."Shortcut Dimension 2 Code");
                                     salesLine.Modify();
                                     exit;
                                 end;
@@ -115,6 +123,9 @@ codeunit 50610 "RV Check Site Qty"
         ProdOrderHeader: Record "Production Order";
         ProdOrderLine: Record "Prod. Order Line";
     begin
+        RVSetup.Get();
+        GLSetup.Get();
+
         T337.Reset();
         T337.SetRange("Item No.", Rec."Item No.");
         T337.SetRange("Source Type", DATABASE::"Prod. Order Line");
@@ -130,13 +141,11 @@ codeunit 50610 "RV Check Site Qty"
                                 // Your code for handling sales line source type here
                                 if SalesLine.get(T337Minus."Source Subtype", T337Minus."Source ID", T337Minus."Source Ref. No.") then begin
                                     // Your code for handling the sales line here
-                                    ProdOrderHeader.get(Rec.Status, Rec."Prod. Order No.");
-                                    ProdOrderHeader.Validate("Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 1 Code");
-                                    ProdOrderHeader.Modify();
-
-                                    ProdOrderLine.get(Rec.Status, Rec."Prod. Order No.", Rec."Line No.");
-                                    ProdOrderLine.Validate("Shortcut Dimension 1 Code", SalesLine."Shortcut Dimension 1 Code");
-                                    ProdOrderLine.Modify();
+                                    if RVSetup."SITE Dim. Code" = glsetup."Shortcut Dimension 1 Code" then
+                                        salesLine.Validate("Shortcut Dimension 1 Code", Rec."Shortcut Dimension 1 Code")
+                                    else
+                                        salesLine.Validate("Shortcut Dimension 2 Code", Rec."Shortcut Dimension 2 Code");
+                                    salesLine.Modify();
                                 end;
                             end;
                     end;
@@ -155,4 +164,5 @@ codeunit 50610 "RV Check Site Qty"
         ItemJnlTemplate: Record "Item Journal Template";
         ErrorText: Label 'Not enough quantity available for Item %1 in Location %2 and Lot %3 and %4 and %5 for Item Reclass Journal Line No. %6';
         GLSetup: Record "General Ledger Setup";
+        RVSetup: Record "RV RIKEVITA Setup";
 }
