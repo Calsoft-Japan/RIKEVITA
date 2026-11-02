@@ -124,7 +124,7 @@ report 50204 "RV Posted Sales Invoice(Local)"
                     Description2 := RecItem."Description 2";
                     BaseUnitofMeasure := RecItem."RV_Supp. Unit of Measure Code";
 
-                    if ItemDescriptionOption = 1 then begin
+                    if ItemDescriptionOption = 0 then begin
                         ItemReference.Reset();
                         ItemReference.SetRange("Item No.", "No.");
                         ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
@@ -247,7 +247,7 @@ report 50204 "RV Posted Sales Invoice(Local)"
                     {
                         Caption = 'Item Description';
                         ApplicationArea = All;
-                        OptionCaption = 'Default,Product standard,Customer Specification';
+                        OptionCaption = 'Product standard,Item Description,Customer Specification';
                     }
                 }
             }

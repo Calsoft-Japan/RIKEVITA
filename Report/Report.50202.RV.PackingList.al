@@ -200,7 +200,7 @@ report 50202 "RV Packing List Report"
                             "Contents Per Package", "Contents UOM", "No. of Packages", BaseUnitofMeasure);
                         end;
 
-                        if ItemDescriptionOption = 1 then begin
+                        if ItemDescriptionOption = 0 then begin
                             ItemReference.Reset();
                             ItemReference.SetRange("Item No.", "Item No.");
                             ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
@@ -392,7 +392,7 @@ report 50202 "RV Packing List Report"
                     {
                         Caption = 'Item Description';
                         ApplicationArea = All;
-                        OptionCaption = 'Default,Product standard,Customer Specification';
+                        OptionCaption = 'Product standard,Item Description,Customer Specification';
                     }
                 }
             }
