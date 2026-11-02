@@ -128,7 +128,7 @@ report 50200 "RV Delivery Order Report"
                         Description2 := RecItem."Description 2";
                     end;
 
-                    if ItemDescriptionOption = 1 then begin
+                    if ItemDescriptionOption = 0 then begin
                         ItemReference.Reset();
                         ItemReference.SetRange("Item No.", SalesShipmentLine."No.");
                         ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
@@ -223,7 +223,7 @@ report 50200 "RV Delivery Order Report"
                     {
                         Caption = 'Item Description';
                         ApplicationArea = All;
-                        OptionCaption = 'Default,Product standard,Customer Specification';
+                        OptionCaption = 'Product standard,Item Description,Customer Specification';
                     }
                 }
             }

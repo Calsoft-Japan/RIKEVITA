@@ -796,6 +796,7 @@ report 50107 "RV Payment Voucher With Check"
                         end;
                 end;
 
+                PayToName := GenJnlLine."RV_Account Name";//FDD017 2026/04/22: Client will change the Acct Name in case of temporary vendor/employee. 
                 FormatNoText(DescriptionLine, Round("Amount (LCY)", 0.01), "Currency Code");
 
                 Clear(VendID);

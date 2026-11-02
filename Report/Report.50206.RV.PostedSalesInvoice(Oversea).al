@@ -188,7 +188,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                         Description := SalesInvoiceLine.Description;
                         Description2 := SalesInvoiceLine."Description 2";
 
-                        if ItemDescriptionOption = 1 then begin
+                        if ItemDescriptionOption = 0 then begin
                             ItemReference.Reset();
                             ItemReference.SetRange("Item No.", "No.");
                             ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
@@ -398,7 +398,7 @@ report 50206 "RV PostedSalesInvoice(Oversea)"
                     {
                         Caption = 'Item Description';
                         ApplicationArea = All;
-                        OptionCaption = 'Default,Product standard,Customer Specification';
+                        OptionCaption = 'Product standard,Item Description,Customer Specification';
                     }
                 }
             }
