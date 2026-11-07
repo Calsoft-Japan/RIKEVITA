@@ -335,11 +335,14 @@ page 50614 "RV Salesforce Order Buffer"
                 var
                     SFMgt: Codeunit "RV Salesforce Order Mgt";
                     ProcessQst: Label 'Are you sure to process all data to Staging?';
+                    ProcessOkMsg: Label 'Process finished.';
                 begin
                     if not Confirm(ProcessQst) then
                         exit;
 
                     SFMgt.SendtoStaging();
+
+                    Message(ProcessOkMsg);
                 end;
             }
         }

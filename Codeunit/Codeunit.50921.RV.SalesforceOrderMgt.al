@@ -19,6 +19,7 @@ codeunit 50921 "RV Salesforce Order Mgt"
             repeat
                 recSFStaging.Init();
                 recSFStaging.TransferFields(recSFBuffer);
+                recSFStaging."Entry No." := 0;
                 recSFStaging.Insert();
             until recSFBuffer.Next() = 0;
 
