@@ -1,11 +1,17 @@
 /// <summary>
 /// PageExtension RV_Sales Order Subform (ID 50618) extends "Sales Order Subform"
 /// FDD006 2026/03/31: New. (Stephen)
+/// additional requirement 2026/11/07: Display VAT Prod. Posting Group. (Bobby.ji)
 /// </summary>
 pageextension 50618 "RV_Sales Order Subform" extends "Sales Order Subform"
 {
     layout
     {
+        modify("VAT Prod. Posting Group")//additional requirement
+        {
+            Visible = true;
+        }
+
         addafter("Shipment Date")
         {
             field("RV_ECR Required"; Rec."RV_ECR Required")
