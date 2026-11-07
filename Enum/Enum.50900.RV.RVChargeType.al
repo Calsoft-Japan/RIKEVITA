@@ -2,7 +2,7 @@
 /// Enum RV Charge Type for Charge Allocation (ID 50900)
 /// FDD009 2026/04/29: New. (Shawn)
 /// </summary>
-enum 50990 "RV Charge Type"
+enum 50900 "RV Charge Type"
 {
     value(0; " ")
     {
