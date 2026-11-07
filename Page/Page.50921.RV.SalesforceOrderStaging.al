@@ -317,6 +317,10 @@ page 50921 "RV Salesforce Order Staging"
                 {
                     ToolTip = 'Specifies the value of the After Order PIC(TEXT) field.', Comment = '%';
                 }
+                field(Status; Rec.Status)
+                {
+                    ToolTip = 'Specifies the value of the Status field.', Comment = '%';
+                }
             }
         }
     }
@@ -341,6 +345,8 @@ page 50921 "RV Salesforce Order Staging"
 
                     if not Confirm(ProcessQst) then
                         exit;
+
+                    SFMgt.SendtoTrans();
 
                 end;
             }
