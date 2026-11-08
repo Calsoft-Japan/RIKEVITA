@@ -321,6 +321,40 @@ page 50614 "RV Salesforce Order Buffer"
         }
     }
 
+    actions
+    {
+        area(processing)
+        {
+            action("Staging")
+            {
+                Caption = 'Staging';
+                ApplicationArea = All;
+                Image = NewSparkle;
+
+                trigger OnAction()
+                var
+                    SFMgt: Codeunit "RV Salesforce Order Mgt";
+                    ProcessQst: Label 'Are you sure to process all data to Staging?';
+                    ProcessOkMsg: Label 'Process finished.';
+                begin
+                    if not Confirm(ProcessQst) then
+                        exit;
+
+                    SFMgt.SendtoStaging();
+
+                    Message(ProcessOkMsg);
+                end;
+            }
+        }
+
+        area(Promoted)
+        {
+            actionref("Staging_Promoted"; "Staging")
+            {
+            }
+        }
+    }
+
     trigger OnAfterGetRecord()
     var
         InStr: InStream;
