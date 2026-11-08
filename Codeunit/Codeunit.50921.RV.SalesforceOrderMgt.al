@@ -172,6 +172,8 @@ codeunit 50921 "RV Salesforce Order Mgt"
         recSalesHeader.Init();
         recSalesHeader.Validate("Document Type", recSalesHeader."Document Type"::Order);
         recSalesHeader.Validate("No.", pSFTrans."Order No.");
+        recSalesHeader.Insert(true);
+
         recSalesHeader.Validate("Sell-to Customer No.", pSFTrans."Sell-to Customer No.");
         recSalesHeader.Validate("Bill-to Customer No.", pSFTrans."Bill-to Customer No.");
         recSalesHeader.Validate("Order Date", pSFTrans."Order Date");
@@ -185,18 +187,20 @@ codeunit 50921 "RV Salesforce Order Mgt"
         recSalesHeader.Validate("RV_ETD", pSFTrans."ETD");
         recSalesHeader.Validate("RV_RVM PIC", pSFTrans."RVM PIC");
         recSalesHeader.Validate("RV_Sales Force Remark", pSFTrans."Salesforce Remarks");
-        recSalesHeader.Insert(true);
+        recSalesHeader.Modify(true);
 
         recSalesLine.Init();
         recSalesLine.Validate("Document Type", recSalesHeader."Document Type");
         recSalesLine.Validate("Document No.", recSalesHeader."NO.");
         recSalesLine.Validate("Line No.", 10000);
+        recSalesLine.Insert(true);
+
         recSalesLine.Validate(Type, recSalesLine.Type::Item);
         recSalesLine.Validate("No.", pSFTrans."Item No.");
         recSalesLine.Validate(Quantity, pSFTrans.Quantity);
         recSalesLine.Validate("Unit of Measure Code", pSFTrans."Unit of Measure Code");
         recSalesLine.Validate("Unit Price", pSFTrans."Unit Price");
-        recSalesLine.Insert(true);
+        recSalesLine.Modify(true);
 
     end;
 
@@ -281,7 +285,7 @@ codeunit 50921 "RV Salesforce Order Mgt"
         end;
 
         if LineChanged then
-            recSalesHeader.Modify(true);
+            recSalesLine.Modify(true);
 
     end;
 
