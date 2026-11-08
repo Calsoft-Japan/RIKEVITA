@@ -339,7 +339,34 @@ report 50500 "RV_COA Report"
                     if Number > 1 then begin
                         OutputNo += 1;
                     end;
-                    PRODUCTText := "QA Header"."Item Description";
+
+                    if ItemDescriptionOption = 0 then begin
+                        ItemReference.Reset();
+                        ItemReference.SetRange("Item No.", "QA Header"."Item No.");
+                        ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                        ItemReference.SetFilter("Reference Type No.", '');
+                        if ItemReference.FindFirst() then begin
+                            PRODUCTText := ItemReference.Description;
+                            //Description2 := ItemReference."Description 2";
+                        end else begin
+                            Error(StrSubstNo(ErrorMessage, "QA Header"."Item No.", ''));
+                        end;
+                    end else if ItemDescriptionOption = 1 then begin
+
+                        PRODUCTText := "QA Header"."Item Description";
+
+                    end else if ItemDescriptionOption = 2 then begin
+                        ItemReference.Reset();
+                        ItemReference.SetRange("Item No.", "QA Header"."Item No.");
+                        ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                        ItemReference.SetRange("Reference Type No.", "QA Header"."Ship-to Customer No.");
+                        if ItemReference.FindFirst() then begin
+                            PRODUCTText := ItemReference.Description;
+                            //Description2 := ItemReference."Description 2";
+                        end else begin
+                            Error(StrSubstNo(ErrorMessage, "QA Header"."Item No.", "QA Header"."Ship-to Customer No."));
+                        end;
+                    end;
                 end;
 
                 trigger OnPreDataItem()
@@ -561,6 +588,12 @@ report 50500 "RV_COA Report"
                 group(Options)
                 {
                     Caption = 'Options';
+                    field(ItemDescriptionOption; ItemDescriptionOption)
+                    {
+                        Caption = 'Item Description';
+                        ApplicationArea = All;
+                        OptionCaption = 'Product standard,Item Description,Customer Specification';
+                    }
                 }
             }
         }
@@ -629,6 +662,9 @@ report 50500 "RV_COA Report"
         ReportTitle: Text;
         RegistrationNo: Text;
         RSPONo: Text;
+        ItemDescriptionOption: Option;
+        ItemReference: Record "Item Reference";
+        ErrorMessage: Label 'Please add Description in Item Reference for Item: %1 with Reference Type: Customer, Reference Type No.: %2.';
 
     procedure CollectUniqueSalesOrderNo(ParCOANO: Code[20])
     var

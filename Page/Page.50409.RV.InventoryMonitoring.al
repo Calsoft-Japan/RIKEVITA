@@ -238,6 +238,7 @@ page 50409 "RV Inventory Monitoring"
         BinMaster: Record Bin;
         ItemUOM: Record "Item Unit of Measure";
         DefaultDim: Record "Default Dimension";
+        QCHeader: Record "RV QC Header";
     begin
         GLSetup.Get();
         AvailableInvyLine.Init();
@@ -281,11 +282,22 @@ page 50409 "RV Inventory Monitoring"
             if BinMaster.Get(AvailableInvyLine.Location, WE."Bin Code") then
                 AvailableInvyLine.Classification := Format(BinMaster."RV_Invy. Status")
         end;
-        ;
-        If LotInfo.Get(ILE."Item No.", ILE."Variant Code", ILE."Lot No.") then begin
-            //AvailableInvyLine."Sub Lot No." := LotInfo."RV_Sub Lot No.";
-            AvailableInvyLine."Mfg. Date" := LotInfo."RV_Manufacture Date";
+        QCHeader.Reset();
+        QCHeader.SetRange("Item No.", ILE."Item No.");
+        QCHeader.SetRange("lot No.", ILE."Lot No.");
+        //ItemLedgEntry.SetFilter(Quantity, '>%1', 0);
+        if QCHeader.FindFirst() then begin
+            AvailableInvyLine."Mfg. Date" := QCHeader."Manufacturing Date";
+        end else begin
+            If LotInfo.Get(ILE."Item No.", ILE."Variant Code", ILE."Lot No.") then begin
+                if LotInfo."RV_Manufacture Date" <> 0D then
+                    AvailableInvyLine."Mfg. Date" := LotInfo."RV_Manufacture Date"
+                else
+                    AvailableInvyLine."Mfg. Date" := ILE."Posting Date";
+            end;
         end;
+
+
         if we."Bin Code" <> '' then
             AvailableInvyLine."Base Unit Invy. Qty." := WE."Qty. (Base)"
         else

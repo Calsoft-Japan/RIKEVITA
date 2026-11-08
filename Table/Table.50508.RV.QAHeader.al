@@ -445,7 +445,7 @@ table 50508 "RV QA Header"
         //SalesShipmentLine: Record "Sales Shipment Line";
         PostedWhShipLine: Record "Posted Whse. Shipment Line";
         PostedWhShipHeader: Record "Posted Whse. Shipment Header";
-
+        LotNoInformation: record "Lot No. Information";
         SalesHeader: Record "Sales Header";
         WhShipline: Record "Warehouse Shipment line";
         WhShipHeader: Record "Warehouse Shipment Header";
@@ -535,11 +535,24 @@ table 50508 "RV QA Header"
                         QCHeader.Reset();
                         QCHeader.SetRange("Item No.", WarehousePackingInfo."Item No.");
                         QCHeader.SetRange("lot No.", WarehousePackingInfo."Lot No.");
-                        //ItemLedgEntry.SetFilter(Quantity, '>%1', 0);
                         if QCHeader.FindFirst() then begin
                             QAShipmentLotNo."Expire Date" := QCHeader."Expiration Date";
                             QAShipmentLotNo."Expire Date for COA Report" := QCHeader."Expiration Date";
                             QAShipmentLotNo."Manufacturing Date" := QCHeader."Manufacturing Date";
+                        end else begin
+                            ItemLedgEntry.Reset();
+                            ItemLedgEntry.SetRange("Item No.", WarehousePackingInfo."Item No.");
+                            ItemLedgEntry.SetRange("Lot No.", WarehousePackingInfo."Lot No.");
+                            If ItemLedgEntry.FindFirst() then begin
+                                QAShipmentLotNo."Expire Date" := ItemLedgEntry."Expiration Date";
+                                QAShipmentLotNo."Expire Date for COA Report" := ItemLedgEntry."Expiration Date";
+                            end;
+                            LotNoInformation.Reset();
+                            LotNoInformation.SetRange("Item No.", WarehousePackingInfo."Item No.");
+                            LotNoInformation.SetRange("Lot No.", WarehousePackingInfo."Lot No.");
+                            if LotNoInformation.FindFirst() then begin
+                                QAShipmentLotNo."Manufacturing Date" := LotNoInformation."RV_Manufacture Date";
+                            end;
                         end;
                         QAShipmentLotNo.INSERT();
                     until WarehousePackingInfo.Next() = 0;
@@ -617,6 +630,20 @@ table 50508 "RV QA Header"
                             QAShipmentLotNo."Expire Date" := QCHeader."Expiration Date";
                             QAShipmentLotNo."Expire Date for COA Report" := QCHeader."Expiration Date";
                             QAShipmentLotNo."Manufacturing Date" := QCHeader."Manufacturing Date";
+                        end else begin
+                            ItemLedgEntry.Reset();
+                            ItemLedgEntry.SetRange("Item No.", WarehousePackingInfo."Item No.");
+                            ItemLedgEntry.SetRange("Lot No.", WarehousePackingInfo."Lot No.");
+                            If ItemLedgEntry.FindFirst() then begin
+                                QAShipmentLotNo."Expire Date" := ItemLedgEntry."Expiration Date";
+                                QAShipmentLotNo."Expire Date for COA Report" := ItemLedgEntry."Expiration Date";
+                            end;
+                            LotNoInformation.Reset();
+                            LotNoInformation.SetRange("Item No.", WarehousePackingInfo."Item No.");
+                            LotNoInformation.SetRange("Lot No.", WarehousePackingInfo."Lot No.");
+                            if LotNoInformation.FindFirst() then begin
+                                QAShipmentLotNo."Manufacturing Date" := LotNoInformation."RV_Manufacture Date";
+                            end;
                         end;
 
                         QAShipmentLotNo.Insert();
