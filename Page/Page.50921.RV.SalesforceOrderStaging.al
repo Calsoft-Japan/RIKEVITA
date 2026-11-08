@@ -339,14 +339,15 @@ page 50921 "RV Salesforce Order Staging"
                 var
                     SFMgt: Codeunit "RV Salesforce Order Mgt";
                     ProcessQst: Label 'Are you sure to process all data to Transaction?';
+                    ProcessOkMsg: Label 'Process finished.';
                 begin
-                    Message('Under construction!');
-                    exit;
 
                     if not Confirm(ProcessQst) then
                         exit;
 
                     SFMgt.SendtoTrans();
+
+                    Message(ProcessOkMsg);
 
                 end;
             }
