@@ -148,7 +148,11 @@ codeunit 50921 "RV Salesforce Order Mgt"
                         end;
                 end;
 
-                if not result then begin
+                if result then begin
+                    recSFTrans.Status := recSFTrans.Status::"Processed";
+                    recSFTrans."Error Message" := '';
+                    recSFTrans.Modify();
+                end else begin
                     recSFTrans.Status := recSFTrans.Status::"Process Error";
                     recSFTrans."Error Message" := CopyStr(GetLastErrorCode + '. ' + GetLastErrorText, 1, 2048);
                     recSFTrans.Modify();
@@ -168,9 +172,9 @@ codeunit 50921 "RV Salesforce Order Mgt"
         recSalesHeader.Init();
         recSalesHeader.Validate("Document Type", recSalesHeader."Document Type"::Order);
         recSalesHeader.Validate("No.", pSFTrans."Order No.");
-        recSalesHeader.Validate("Order Date", pSFTrans."Order Date");
         recSalesHeader.Validate("Sell-to Customer No.", pSFTrans."Sell-to Customer No.");
         recSalesHeader.Validate("Bill-to Customer No.", pSFTrans."Bill-to Customer No.");
+        recSalesHeader.Validate("Order Date", pSFTrans."Order Date");
         recSalesHeader.Validate("Ship-to Code", pSFTrans."Ship-to Code");
         if pSFTrans."Currency Code" = 'MYR' then begin
             recSalesHeader.Validate("Currency Code", '');
