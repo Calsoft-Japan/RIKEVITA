@@ -289,6 +289,29 @@ report 50201 "RV Pre Packing List Report"
                         if TempWarehousePackingInfo.FindSet() then begin
                             repeat
                                 RecItem.Get(TempWarehousePackingInfo."Item No.");
+                                ItemDescription := RecItem.Description;
+                                if ItemDescriptionOption = 0 then begin
+                                    ItemReference.Reset();
+                                    ItemReference.SetRange("Item No.", "Item No.");
+                                    ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                                    ItemReference.SetFilter("Reference Type No.", '');
+                                    if ItemReference.FindFirst() then begin
+                                        ItemDescription := ItemReference.Description;
+                                    end else begin
+                                        Error(StrSubstNo(ErrorMessage, "Item No.", ''));
+                                    end;
+                                end else if ItemDescriptionOption = 2 then begin
+                                    ItemReference.Reset();
+                                    ItemReference.SetRange("Item No.", "Item No.");
+                                    ItemReference.SetRange("Reference Type", ItemReference."Reference Type"::Customer);
+                                    ItemReference.SetRange("Reference Type No.", "Sell-to Customer No.");
+                                    if ItemReference.FindFirst() then begin
+                                        ItemDescription := ItemReference.Description;
+                                    end else begin
+                                        Error(StrSubstNo(ErrorMessage, "Item No.", "Sell-to Customer No."));
+                                    end;
+                                end;
+
                                 if (TempWarehousePackingInfo."Container No" = '') and (LotNoNumber = 0) then begin
                                     LotNo1 += '<b>' + TempWarehousePackingInfo."Container No" + '</b><br>LOT NO. :<br>';
                                     LotNo2 += '<br><br>';
@@ -298,15 +321,15 @@ report 50201 "RV Pre Packing List Report"
                                         LotNo2 += '<br><br><br>';
                                     end;
                                     LotNoNumber := 1;
-                                    LotNo1 += '<b>' + TempWarehousePackingInfo."Container No" + '</b><br>LOT NO. :<br>' + RecItem.Description + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."RV_Supp. Unit of Measure Code" + '<br><br>';
+                                    LotNo1 += '<b>' + TempWarehousePackingInfo."Container No" + '</b><br>LOT NO. :<br>' + ItemDescription + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."RV_Supp. Unit of Measure Code" + '<br><br>';
                                     LotNo2 += '<br><br>';
                                     oldContainerNo := TempWarehousePackingInfo."Container No";
                                 end else begin
                                     LotNoNumber := LotNoNumber + 1;
                                     if LotNoNumber mod 2 = 0 then begin
-                                        LotNo2 += RecItem.Description + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."RV_Supp. Unit of Measure Code" + '<br><br>';
+                                        LotNo2 += ItemDescription + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."RV_Supp. Unit of Measure Code" + '<br><br>';
                                     end else begin
-                                        LotNo1 += RecItem.Description + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."RV_Supp. Unit of Measure Code" + '<br><br>';
+                                        LotNo1 += ItemDescription + '<br>' + TempWarehousePackingInfo."Lot No." + ' - ' + Format(Round(abs(TempWarehousePackingInfo.Quantity), 0.1, '=')) + ' ' + RecItem."RV_Supp. Unit of Measure Code" + '<br><br>';
                                     end;
 
                                 end;
@@ -430,6 +453,7 @@ report 50201 "RV Pre Packing List Report"
         WarehouseComment: Text;
         chr10: Char;
         ItemDescriptionOption: Option;
+        ItemDescription: Text[100];
         ErrorMessage: Label 'Please add Description and Description 2 in Item Reference for Item: %1 with Reference Type: Customer, Reference Type No.: %2.';
 
     trigger OnPreReport()

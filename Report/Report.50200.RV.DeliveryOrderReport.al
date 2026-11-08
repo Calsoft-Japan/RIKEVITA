@@ -24,7 +24,7 @@ report 50200 "RV Delivery Order Report"
             column(CompanyName; CompanyInfo.Name)
             {
             }
-            column(RegistrationNo; 'Registration No. ' + CompanyInfo."Registration No.")
+            column(RegistrationNo; 'Registration No. ' + CompanyInfo."RV_Registration No.")
             {
             }
             column(SSTRegNo; 'SST Reg No. ' + CompanyInfo."RV_SST Reg No.")
