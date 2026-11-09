@@ -110,12 +110,15 @@ page 50922 "RV Salesforce Order Trans."
                 var
                     SFMgt: Codeunit "RV Salesforce Order Mgt";
                     ProcessQst: Label 'Are you sure to process all data to Sales Order?';
+                    ProcessOkMsg: Label 'Process finished.';
                 begin
-                    Message('Under construction!');
-                    exit;
 
                     if not Confirm(ProcessQst) then
                         exit;
+
+                    SFMgt.Carryout();
+
+                    Message(ProcessOkMsg);
 
                 end;
             }
@@ -129,4 +132,9 @@ page 50922 "RV Salesforce Order Trans."
         }
 
     }
+
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    begin
+        Rec.Status := Rec.Status::Interfaced;
+    end;
 }
