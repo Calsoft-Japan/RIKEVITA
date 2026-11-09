@@ -266,8 +266,8 @@ page 50601 "RV Prod. Result Journal Line"
                                         if rec."Manufacturing Date" = 0D then
                                             rec."Manufacturing Date" := Today;
 
-                                        if LotNoInfo."RV_Manufacture Date" <> 0D then
-                                            Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date";
+                                        // if LotNoInfo."RV_Manufacture Date" <> 0D then
+                                        //     Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date";
 
                                         ItemTrackingSetup."Lot No." := Rec."Lot No.";
                                         Rec."Expire Date" := ItemTrackingMgt.ExistingExpirationDate(Rec."Item No.", Rec."Variant Code", ItemTrackingSetup, false, EntriesExist);
@@ -545,7 +545,9 @@ page 50601 "RV Prod. Result Journal Line"
             if LotNoInfo.get(TempTrackingSpecification."Item No.",
                             TempTrackingSpecification."Variant Code",
                             TempTrackingSpecification."Lot No.") then begin
-                Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date";
+                // Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date";
+                if Rec."Manufacturing Date" = 0D then
+                    Rec."Manufacturing Date" := today;
                 Rec."Expire Date" := TempTrackingSpecification."Expiration Date";
             end;
             Rec.Modify();
