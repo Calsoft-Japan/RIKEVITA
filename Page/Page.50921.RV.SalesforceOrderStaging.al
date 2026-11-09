@@ -361,6 +361,11 @@ page 50921 "RV Salesforce Order Staging"
         }
     }
 
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    begin
+        Rec.Status := Rec.Status::Interfaced;
+    end;
+
     trigger OnAfterGetRecord()
     var
         InStr: InStream;

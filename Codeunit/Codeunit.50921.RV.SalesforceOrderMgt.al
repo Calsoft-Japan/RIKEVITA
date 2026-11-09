@@ -24,8 +24,11 @@ codeunit 50921 "RV Salesforce Order Mgt"
             repeat
                 recSFStaging.Init();
                 recSFStaging.TransferFields(recSFBuffer);
+                recSFStaging."Entry No." := 0;
                 recSFStaging.Insert();
             until recSFBuffer.Next() = 0;
+
+        //recSFBuffer.DeleteAll(); //ToDo
 
     end;
 
@@ -43,6 +46,7 @@ codeunit 50921 "RV Salesforce Order Mgt"
         if recSFStaging.FindSet() then
             repeat
                 recSFTrans.Init();
+                recSFTrans."Entry No." := 0;
                 recSFTrans."Staging Entry No." := recSFStaging."Entry No.";
 
                 if recSFStaging."Sales Company" = '' then begin

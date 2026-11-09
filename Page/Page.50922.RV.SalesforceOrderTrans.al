@@ -132,4 +132,9 @@ page 50922 "RV Salesforce Order Trans."
         }
 
     }
+
+    trigger OnInsertRecord(BelowxRec: Boolean): Boolean
+    begin
+        Rec.Status := Rec.Status::Interfaced;
+    end;
 }
