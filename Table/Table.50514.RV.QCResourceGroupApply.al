@@ -32,7 +32,7 @@ table 50514 "RV QC Resource Group Apply"
         {
             Caption = 'Item Category Code';
             TableRelation = "Item Category";
-            editable = false;
+            //editable = false;
 
         }
     }

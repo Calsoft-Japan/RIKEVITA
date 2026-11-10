@@ -26,6 +26,11 @@ page 50529 "RV QC Resource Group Apply"
                 {
                     ApplicationArea = All;
                 }
+                field("Item Category Code"; Rec."Item Category Code")
+                {
+                    ApplicationArea = All;
+                    editable = false;
+                }
             }
         }
     }
