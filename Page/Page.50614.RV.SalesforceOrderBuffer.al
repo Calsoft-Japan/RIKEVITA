@@ -176,7 +176,7 @@ page 50614 "RV Salesforce Order Buffer"
                     MultiLine = true;
                     trigger OnValidate()
                     begin
-                        rec.SetRemarks(txtSalesContactNote);
+                        rec.SetSalesContactNote(txtSalesContactNote);
                     end;
                 }
                 field(Destination; Rec.Destination)
@@ -287,14 +287,14 @@ page 50614 "RV Salesforce Order Buffer"
                 {
                     ToolTip = 'Specifies the value of the After Request Documents field.', Comment = '%';
                 }
-                field("After Remarks"; txtRemarks)
+                field("After Remarks"; txtAfterRemarks)
                 {
                     ToolTip = 'Specifies the value of the After Remarks field.', Comment = '%';
                     MultiLine = true;
 
                     trigger OnValidate()
                     begin
-                        rec.SetRemarks(txtRemarks);
+                        rec.SetAfterRemarks(txtAfterRemarks);
                     end;
                 }
                 field("After Shipment(Request)"; Rec."After Shipment(Request)")

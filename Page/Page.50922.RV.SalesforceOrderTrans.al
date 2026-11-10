@@ -1,6 +1,6 @@
 /// <summary>
 /// Page RV Salesforce Order Trans. (ID 50922).
-/// FDD006 2026/11/07: New. (Shawn)
+/// FDD004 2026/11/07: New. (Shawn)
 /// </summary>
 page 50922 "RV Salesforce Order Trans."
 {

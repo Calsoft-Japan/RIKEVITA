@@ -1,6 +1,6 @@
 /// <summary>
 /// Page RV Salesforce Order Staging (ID 50921).
-/// FDD006 2026/11/07: New. (Shawn)
+/// FDD004 2026/11/07: New. (Shawn)
 /// </summary>
 page 50921 "RV Salesforce Order Staging"
 {
@@ -176,7 +176,7 @@ page 50921 "RV Salesforce Order Staging"
                     MultiLine = true;
                     trigger OnValidate()
                     begin
-                        rec.SetRemarks(txtSalesContactNote);
+                        rec.SetSalesContactNote(txtSalesContactNote);
                     end;
                 }
                 field(Destination; Rec.Destination)
@@ -287,14 +287,14 @@ page 50921 "RV Salesforce Order Staging"
                 {
                     ToolTip = 'Specifies the value of the After Request Documents field.', Comment = '%';
                 }
-                field("After Remarks"; txtRemarks)
+                field("After Remarks"; txtAfterRemarks)
                 {
                     ToolTip = 'Specifies the value of the After Remarks field.', Comment = '%';
                     MultiLine = true;
 
                     trigger OnValidate()
                     begin
-                        rec.SetRemarks(txtRemarks);
+                        rec.SetAfterRemarks(txtAfterRemarks);
                     end;
                 }
                 field("After Shipment(Request)"; Rec."After Shipment(Request)")

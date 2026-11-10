@@ -1,6 +1,6 @@
 /// <summary>
 /// Codeunit RV Salesforce Order Mgt (ID 50921)
-/// FDD028 2026/11/07: New. (Shawn)
+/// FDD004 2026/11/07: New. (Shawn)
 /// </summary>
 codeunit 50921 "RV Salesforce Order Mgt"
 {
@@ -22,13 +22,15 @@ codeunit 50921 "RV Salesforce Order Mgt"
         recSFBuffer.Reset();
         if recSFBuffer.FindSet() then
             repeat
+                recSFBuffer.CalcFields(Remarks, "After Remarks", "Sales Contact Note"); //blob fields.
+
                 recSFStaging.Init();
                 recSFStaging.TransferFields(recSFBuffer);
                 recSFStaging."Entry No." := 0;
                 recSFStaging.Insert();
             until recSFBuffer.Next() = 0;
 
-        //recSFBuffer.DeleteAll(); //ToDo
+        recSFBuffer.DeleteAll();
 
     end;
 

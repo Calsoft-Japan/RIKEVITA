@@ -168,6 +168,7 @@ permissionset 50100 GeneratedPermission
         codeunit "RV Reservation Entry Fields"=X,
         codeunit "RV Sales Price Based on Shpt."=X,
         codeunit "RV Salesforce Order Mgt"=X,
+        codeunit "RV Salesforce Order Runner"=X,
         codeunit "RV Transf PO Addtion Fields "=X,
         codeunit "RV TransferWarehouseShipment"=X,
         codeunit "RV User Permission Check"=X,
