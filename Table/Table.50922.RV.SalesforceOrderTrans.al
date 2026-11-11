@@ -51,6 +51,7 @@ table 50922 "RV Salesforce Order Trans."
         {
             Caption = 'Sell-to Customer No.';
             DataClassification = ToBeClassified;
+            TableRelation = Customer."No.";
         }
         field(9; "Sell-to Customer Name"; Text[100])
         {
@@ -62,6 +63,7 @@ table 50922 "RV Salesforce Order Trans."
         {
             Caption = 'Bill-to Customer No.';
             DataClassification = ToBeClassified;
+            TableRelation = Customer."No.";
         }
         field(11; "Bill-to Customer Name"; Text[100])
         {
@@ -73,18 +75,20 @@ table 50922 "RV Salesforce Order Trans."
         {
             Caption = 'Ship-to Code';
             DataClassification = ToBeClassified;
+            TableRelation = "Ship-to Address".Code where("Customer No." = field("Sell-to Customer No."));
         }
         field(13; "Ship-to Customer Name"; Text[100])
         {
             Caption = 'Ship-to Customer Name';
             FieldClass = FlowField;
-            CalcFormula = lookup("Ship-to Address".Name where("Customer No." = field("Ship-to Code"),
+            CalcFormula = lookup("Ship-to Address".Name where("Customer No." = field("Sell-to Customer No."),
                                                             Code = field("Ship-to Code")));
         }
         field(14; "Currency Code"; Code[10])
         {
             Caption = 'Currency Code';
             DataClassification = ToBeClassified;
+            TableRelation = Currency.Code;
         }
         field(15; "ETA"; Date)
         {
@@ -110,6 +114,7 @@ table 50922 "RV Salesforce Order Trans."
         {
             Caption = 'Item No.';
             DataClassification = ToBeClassified;
+            TableRelation = Item."No.";
         }
         field(20; "Item Description"; Text[100])
         {
@@ -126,6 +131,7 @@ table 50922 "RV Salesforce Order Trans."
         {
             Caption = 'Unit of Measure Code';
             DataClassification = ToBeClassified;
+            TableRelation = "Item Unit of Measure".Code where("Item No." = field("Item No."));
         }
         field(23; "Unit Price"; Decimal)
         {

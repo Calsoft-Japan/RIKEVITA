@@ -73,22 +73,28 @@ codeunit 50921 "RV Salesforce Order Mgt"
                 end else begin
                     recCust.Reset();
                     recCust.SetRange(Name, recSFStaging."Sales Company");
-                    if recCust.FindFirst() then begin
-                        recSFTrans."Bill-to Customer No." := recCust."No.";
+                    if recCust.Count = 1 then begin
+                        if recCust.FindFirst() then begin
+                            recSFTrans."Bill-to Customer No." := recCust."No.";
+                        end;
                     end;
                     if recSFTrans."Action Type" in [recSFTrans."Action Type"::New, recSFTrans."Action Type"::Cancel] then begin
                         recShipto.Reset();
                         recShipto.SetRange(Name, recSFStaging.Customer);
-                        if recShipto.FindFirst() then begin
-                            recSFTrans."Sell-to Customer No." := recShipto."Customer No.";
-                            recSFTrans."Ship-to Code" := recShipto.Code;
+                        if recShipto.Count = 1 then begin
+                            if recShipto.FindFirst() then begin
+                                recSFTrans."Sell-to Customer No." := recShipto."Customer No.";
+                                recSFTrans."Ship-to Code" := recShipto.Code;
+                            end;
                         end;
                     end else begin
                         recShipto.Reset();
                         recShipto.SetRange(Name, recSFStaging."After Customer");
-                        if recShipto.FindFirst() then begin
-                            recSFTrans."Sell-to Customer No." := recShipto."Customer No.";
-                            recSFTrans."Ship-to Code" := recShipto.Code;
+                        if recShipto.Count = 1 then begin
+                            if recShipto.FindFirst() then begin
+                                recSFTrans."Sell-to Customer No." := recShipto."Customer No.";
+                                recSFTrans."Ship-to Code" := recShipto.Code;
+                            end;
                         end;
                     end
                 end;
