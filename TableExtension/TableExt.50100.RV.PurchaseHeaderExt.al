@@ -54,6 +54,12 @@ tableextension 50100 "RV Purchase Header Ext" extends "Purchase Header"
             FieldClass = FlowField;
             CalcFormula = Lookup("RV RIKEVITA Setup"."Department Dimension Code");
         }
+        field(50202; "RV_Department Code"; Code[20])// On-demand request
+        {
+            Caption = 'Department Code';
+            FieldClass = FlowField;
+            CalcFormula = Lookup("Dimension Set Entry"."Dimension Value Code" where("Dimension Code" = field("RV_Department Dimension Code"), "Dimension Set ID" = field("Dimension Set ID")));
+        }
     }
 
     /// <summary>

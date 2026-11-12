@@ -2,7 +2,7 @@
 /// PageExtension RIKE Purchase Order List Ext"(ID 50100) extends "Purchase Order List" Page
 /// FDD003 2026/03/08: New. (Liuyang)
 /// On-demand request: add RV_Supplier Quotation No. by Bobby 09/16/2026
-/// On-demand request: add RV_Department Dimension Code by Bobby 11/12/2026
+/// On-demand request: add RV_Department Code by Bobby 11/12/2026
 /// </summary>
 pageextension 50100 "RV Purchase Order List Ext" extends "Purchase Order List"
 {
@@ -10,9 +10,9 @@ pageextension 50100 "RV Purchase Order List Ext" extends "Purchase Order List"
     {
         addbefore("Purchaser Code")
         {
-            field("RV_Department Dimension Code"; Rec."RV_Department Dimension Code")
+            field("RV_Department Code"; Rec."RV_Department Code")
             {
-                Caption = 'Department Dimension Code';
+                Caption = 'Department Code';
                 ApplicationArea = All;
             }
         }
@@ -35,5 +35,14 @@ pageextension 50100 "RV Purchase Order List Ext" extends "Purchase Order List"
                 ApplicationArea = All;
             }
         }
+
     }
+    trigger OnAfterGetRecord()
+    var
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
+    begin
+        if RIKEVITASetup.Get() then begin
+            Rec."RV_Department Dimension Code" := RIKEVITASetup."Department Dimension Code";
+        end;
+    end;
 }

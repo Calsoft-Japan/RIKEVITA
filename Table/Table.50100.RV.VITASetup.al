@@ -367,7 +367,7 @@ table 50100 "RV RIKEVITA Setup"
         {
             Description = 'Department Code';
             Caption = 'Department Dimension Code';
-            TableRelation = "Dimension Value".Code where("Dimension Code" = const('ACC_DEPT'), Blocked = const(false));
+            TableRelation = Dimension;
         }
 
     }

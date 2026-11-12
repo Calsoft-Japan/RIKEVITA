@@ -1,7 +1,7 @@
 /// <summary>
 /// PageExtension RIKE Posted Pur Invoices Ext"(ID 50104) extends "Posted Purchase Invoices" Page
 /// FDD003 2026/03/08: New. (Liuyang)
-/// On-demand request: add RV_Department Dimension Code by Bobby 11/12/2026
+/// On-demand request: add RV_Department Code by Bobby 11/12/2026
 /// </summary>
 pageextension 50104 "RV Posted Pur Invoices Ext" extends "Posted Purchase Invoices"
 {
@@ -9,9 +9,9 @@ pageextension 50104 "RV Posted Pur Invoices Ext" extends "Posted Purchase Invoic
     {
         addafter("No.")
         {
-            field("RV_Department Dimension Code"; Rec."RV_Department Dimension Code")
+            field("RV_Department Code"; Rec."RV_Department Code")
             {
-                Caption = 'Department Dimension Code';
+                Caption = 'Department Code';
                 ApplicationArea = All;
             }
         }
@@ -30,4 +30,12 @@ pageextension 50104 "RV Posted Pur Invoices Ext" extends "Posted Purchase Invoic
             }
         }
     }
+    trigger OnAfterGetRecord()
+    var
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
+    begin
+        if RIKEVITASetup.Get() then begin
+            Rec."RV_Department Dimension Code" := RIKEVITASetup."Department Dimension Code";
+        end;
+    end;
 }

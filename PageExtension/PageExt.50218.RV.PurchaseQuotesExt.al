@@ -9,9 +9,9 @@ pageextension 50218 "RV Purchase Quotes Ext" extends "Purchase Quotes"
     {
         addafter("No.")
         {
-            field("RV_Department Dimension Code"; Rec."RV_Department Dimension Code")
+            field("RV_Department Code"; Rec."RV_Department Code")
             {
-                Caption = 'Department Dimension Code';
+                Caption = 'Department Code';
                 ApplicationArea = All;
             }
         }
@@ -25,4 +25,12 @@ pageextension 50218 "RV Purchase Quotes Ext" extends "Purchase Quotes"
             }
         }
     }
+    trigger OnAfterGetRecord()
+    var
+        RIKEVITASetup: Record "RV RIKEVITA Setup";
+    begin
+        if RIKEVITASetup.Get() then begin
+            Rec."RV_Department Dimension Code" := RIKEVITASetup."Department Dimension Code";
+        end;
+    end;
 }
