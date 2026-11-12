@@ -1,6 +1,7 @@
 /// <summary>
 /// TableExtension RIKE Purchase Invoice Ext (ID 50101) extends "Purch. Inv. Header" table
 /// FDD003 2026/03/08: New. (Liuyang)
+/// additional requirement 2026/11/12: Add RV_Department Dimension Code. (Bobby.ji)
 /// </summary>
 tableextension 50101 "RV Purchase Invoice Ext" extends "Purch. Inv. Header"
 {
@@ -30,6 +31,12 @@ tableextension 50101 "RV Purchase Invoice Ext" extends "Purch. Inv. Header"
         {
             Caption = 'Contract No.';
             DataClassification = ToBeClassified;
+        }
+        field(50200; "RV_Department Dimension Code"; Code[20])
+        {
+            Caption = 'Department Dimension Code';
+            FieldClass = FlowField;
+            CalcFormula = Lookup("RV RIKEVITA Setup"."Department Dimension Code");
         }
     }
 }

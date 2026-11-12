@@ -6,6 +6,7 @@
 /// FDD021 2026/05/11: Bank Information fields Added. (Bobby)
 /// FDD028 2026/05/17: Item Trace fields Added. (Shawn)
 /// FDD006 2026/07/17: Add fields (Stephen)
+/// Additional requirement 2026/11/12: Add Department Dimension Code. (Bobby)
 /// </summary>
 table 50100 "RV RIKEVITA Setup"
 {
@@ -362,6 +363,13 @@ table 50100 "RV RIKEVITA Setup"
             Caption = 'KG Unit Code';
             TableRelation = "Unit of Measure";
         }
+        field(50201; "Department Dimension Code"; Code[10])
+        {
+            Description = 'Department Code';
+            Caption = 'Department Dimension Code';
+            TableRelation = "Dimension Value".Code where("Dimension Code" = const('ACC_DEPT'), Blocked = const(false));
+        }
+
     }
     keys
     {

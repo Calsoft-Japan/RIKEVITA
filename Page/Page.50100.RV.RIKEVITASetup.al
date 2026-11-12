@@ -6,6 +6,7 @@
 /// FDD021 2026/05/11: Bank Information fields Added. (Bobby)
 /// FDD028 2026/05/17: Item Trace fields Added. (Shawn)
 /// FDD006 2026/07/17: Add fields (Stephen)
+/// Additional requirement 2026/11/12: Add Department Dimension Code. (Bobby)
 /// </summary>
 page 50100 "RIKEVITA Setup"/// 
 {
@@ -115,6 +116,12 @@ page 50100 "RIKEVITA Setup"///
                 {
                     ApplicationArea = All;
                     ToolTip = 'Specifies the global dimension code used for internal use.';
+                }
+                field("Department Dimension Code"; Rec."Department Dimension Code")
+                {
+                    Caption = 'Department Dimension Code';
+                    Description = 'Department Code';
+                    ApplicationArea = All;
                 }
                 field("Holding Period for Air"; Rec."Holding Period for Air")
                 {

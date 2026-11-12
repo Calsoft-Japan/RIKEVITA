@@ -1,6 +1,7 @@
 /// <summary>
 /// TableExtension RV_Purch. Rcpt. Line (ID 50212) extends Purch. Rcpt. Line table
 /// additional requirement 2026/10/30: Add the following field. (Bobby.ji)
+/// additional requirement 2026/11/12: Add RV_Department Dimension Code. (Bobby.ji)
 /// </summary>
 tableextension 50212 "RV Purch. Rcpt. Line Ext" extends "Purch. Rcpt. Line"
 {
@@ -13,6 +14,12 @@ tableextension 50212 "RV Purch. Rcpt. Line Ext" extends "Purch. Rcpt. Line"
             Description = 'additional requirement';
             FieldClass = FlowField;
             CalcFormula = Lookup(Vendor."Name" WHERE("No." = FIELD("Buy-from Vendor No.")));
+        }
+        field(50201; "RV_Department Dimension Code"; Code[20])
+        {
+            Caption = 'Department Dimension Code';
+            FieldClass = FlowField;
+            CalcFormula = Lookup("RV RIKEVITA Setup"."Department Dimension Code");
         }
     }
 }

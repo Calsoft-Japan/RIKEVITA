@@ -2,6 +2,7 @@
 /// TableExtension RIKE Purchase Header Ext (ID 50100) extends "Purchase Header" table
 /// FDD003 2026/03/08: New. (Liuyang)
 /// On-demand request: add RV_Supplier Quotation No. by Bobby 09/16/2026
+/// On-demand request 2026/11/12: add RV_Department Dimension Code
 /// </summary>
 tableextension 50100 "RV Purchase Header Ext" extends "Purchase Header"
 {
@@ -46,6 +47,12 @@ tableextension 50100 "RV Purchase Header Ext" extends "Purchase Header"
         {
             Caption = 'Supplier Quotation No.';
             DataClassification = ToBeClassified;
+        }
+        field(50201; "RV_Department Dimension Code"; Code[20])// On-demand request
+        {
+            Caption = 'Department Dimension Code';
+            FieldClass = FlowField;
+            CalcFormula = Lookup("RV RIKEVITA Setup"."Department Dimension Code");
         }
     }
 
