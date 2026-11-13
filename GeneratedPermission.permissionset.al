@@ -177,6 +177,7 @@ permissionset 50100 GeneratedPermission
         page "COA Internal Spec. List"=X,
         page "ISO Symbol Image FactBox"=X,
         page "ISO Symbol Setting"=X,
+        page "OB Data Update Tool"=X,
         page "RIKEVITA Setup"=X,
         page "RV Charge Calculation"=X,
         page "RV Charge Calculation Subform"=X,

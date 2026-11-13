@@ -234,8 +234,14 @@ report 50603 "RV Order Listing Update"
 
                 SalesCommentLine.SetRange("Document Type", SalesLine."Document Type");
                 SalesCommentLine.SetRange("No.", SalesLine."Document No.");
-                if SalesCommentLine.FindFirst() then
-                    OrderListing.Comment := SalesCommentLine.Comment;
+                if SalesCommentLine.FindSet() then begin
+                    repeat
+                        OrderListing.Comment := CopyStr(
+                            OrderListing.Comment + SalesCommentLine.Comment,
+                            1,
+                            MaxStrLen(OrderListing.Comment));
+                    until SalesCommentLine.Next() = 0;
+                end;
                 IF not OrderListing.Insert() then
                     OrderListing.Modify();
                 Counts += 1;

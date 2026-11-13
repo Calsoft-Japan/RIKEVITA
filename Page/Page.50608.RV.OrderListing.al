@@ -55,23 +55,24 @@ page 50608 "RV Order Listing"
                     ToolTip = 'Specifies the value of the Order Unit of Measure field.', Comment = '%';
                     Editable = false;
                 }
+                field("Order Qty. (Supp. UOM)"; Rec."Order Qty. (Supp. UOM)")
+                {
+                    ToolTip = 'Specifies the value of the Order Qty. (Supp. UOM) field.', Comment = '%';
+                    Editable = false;
+                }
                 field("Supp. Unit of Measure Code"; Rec."Supp. Unit of Measure Code")
                 {
                     ToolTip = 'Specifies the value of the Supp. Unit of Measure Code field.', Comment = '%';
                     Editable = false;
                 }
 
-                /*field("Order Qty. (Base)"; Rec."Order Qty. (Supp. UOM)")
-                {
-                    ToolTip = 'Specifies the value of the Order Qty. (Supp. UOM) field.', Comment = '%';
-                    Editable = false;
-                }
-                field("Order Qty. (KG)"; Rec."Order Qty. (KG)")
-                {
-                    ToolTip = 'Specifies the value of the Order Qty. (KG) field.', Comment = '%';
-                    Editable = false;
-                }*/
-                field("Reserved Qty. (UOM)"; Rec."Reserved Qty. (Supp. UOM)")
+                /*
+                                field("Order Qty. (KG)"; Rec."Order Qty. (KG)")
+                                {
+                                    ToolTip = 'Specifies the value of the Order Qty. (KG) field.', Comment = '%';
+                                    Editable = false;
+                                }*/
+                field("Reserved Qty. (Supp. UOM)"; Rec."Reserved Qty. (Supp. UOM)")
                 {
                     ToolTip = 'Specifies the value of the Reserved Qty. (Supp. UOM) field.', Comment = '%';
                     Editable = false;
@@ -81,6 +82,7 @@ page 50608 "RV Order Listing"
                     ToolTip = 'Specifies the value of the Reserved Qty. (KG) field.', Comment = '%';
                     Editable = false;
                 }
+
                 field("Firm Prod. Order No."; Rec."Firm Prod. Order No.")
                 {
                     ToolTip = 'Specifies the value of the Firm Prod. Order No. field.', Comment = '%';
