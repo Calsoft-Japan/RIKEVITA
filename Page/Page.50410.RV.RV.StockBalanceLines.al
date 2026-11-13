@@ -74,21 +74,23 @@ page 50410 "RV.Stock Balance Lines"
                 {
                     ToolTip = 'Specifies the value of the Bin Code field.', Comment = '%';
                 }
-                field("Base Unit of Measure"; Rec."Base Unit of Measure")
-                {
-                    ToolTip = 'Specifies the value of the Base Unit of Measure field.', Comment = '%';
-                }
+
                 field("Base Unit Invy. Qty."; Rec."Base Unit Invy. Qty.")
                 {
                     ToolTip = 'Specifies the value of the Base Unit Invy. Qty. field.', Comment = '%';
                 }
-                field("KG Unit of Measure"; Rec."Supp. Unit of Measure")
+                field("Base Unit of Measure"; Rec."Base Unit of Measure")
                 {
-                    ToolTip = 'Specifies the value of the Supp. Unit of Measure field.', Comment = '%';
+                    ToolTip = 'Specifies the value of the Base Unit of Measure field.', Comment = '%';
                 }
-                field("KG Unit Invy. Qty."; Rec."Supp. Unit Qty.")
+
+                field("Supp. Unit Qty."; Rec."Supp. Unit Qty.")
                 {
                     ToolTip = 'Specifies the value of the Supp. Invy. Qty. field.', Comment = '%';
+                }
+                field("Supp. Unit of Measure"; Rec."Supp. Unit of Measure")
+                {
+                    ToolTip = 'Specifies the value of the Supp. Unit of Measure field.', Comment = '%';
                 }
                 field("Mfg. Date"; Rec."Mfg. Date")
                 {
