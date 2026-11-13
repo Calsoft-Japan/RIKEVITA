@@ -82,7 +82,9 @@ table 50410 "RV.Available Invy. Line"
         field(17; "Item Category Code"; Code[20])
         {
             Caption = 'Item Category Code';
-            TableRelation = "Item Category";
+            FieldClass = FlowField;
+            CalcFormula = Lookup(Item."Item Category Code" WHERE("No." = field("Item No.")));
+            //TableRelation = "Item Category";
         }
         field(18; "Item Type"; Code[20])
         {
