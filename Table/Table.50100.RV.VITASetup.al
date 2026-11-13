@@ -352,6 +352,12 @@ table 50100 "RV RIKEVITA Setup"
             end;
 
         }
+        field(56; "Reason Code for Shipping"; Code[10])
+        {
+            Caption = 'Reason Code for Shipping Activity';
+            ToolTip = 'Specifies the reason code during Item journal creation for Warehouse Shipment.';
+            TableRelation = "Reason Code";
+        }
         field(50600; "Holding Period for Air"; DateFormula)
         {
             Description = 'FDD006';

@@ -134,6 +134,10 @@ page 50100 "RIKEVITA Setup"///
                     Description = 'FDD019';
                     ApplicationArea = All;
                 }
+                field("Reason Code for Shipping"; Rec."Reason Code for Shipping")
+                {
+                    ApplicationArea = All;
+                }
             }
             group(BankInformation)
             {
