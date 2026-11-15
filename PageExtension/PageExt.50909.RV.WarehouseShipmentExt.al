@@ -17,13 +17,12 @@ pageextension 50909 "RV WarehouseShipment Ext" extends "Warehouse Shipment"
 
                 trigger OnAction()
                 var
-                //WSItemReclassJnlMgt: Codeunit "RV WS Item Reclass. Jnl. Mgt.";
+                    WSItemReclassJnlMgt: Codeunit "RV WS Item Reclass. Jnl. Mgt.";
                 begin
+                    if not Confirm('Item reclassification journals will be created, continue?') then
+                        exit;
 
-                    Message('Under Construction!');
-                    exit;
-
-                    //WSItemReclassJnlMgt.CreateFromWarehouseShipment(Rec);
+                    WSItemReclassJnlMgt.CreateFromWarehouseShipment(Rec);
                 end;
             }
         }
