@@ -296,7 +296,9 @@ page 50409 "RV Inventory Monitoring"
                     AvailableInvyLine."Mfg. Date" := ILE."Posting Date";
             end;
         end;
-
+        //for PM material, the manufacturing date is not required, so set it to 0D
+        if CopyStr(AvailableInvyLine."Item No.", 1, 2) = 'PM' then
+            AvailableInvyLine."Mfg. Date" := 0D;
 
         if we."Bin Code" <> '' then
             AvailableInvyLine."Base Unit Invy. Qty." := WE."Qty. (Base)"

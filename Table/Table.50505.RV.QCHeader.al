@@ -323,6 +323,9 @@ table 50505 "RV QC Header"
                 end else begin
                     Clear("RM Manufacture Date");
                 end;
+                //for PM material, the manufacturing date is not required, so set it to 0D
+                if CopyStr("Item No.", 1, 2) = 'PM' then
+                    "RM Manufacture Date" := 0D;
             end;
         }
         field(6; "Item No."; Code[20])

@@ -192,6 +192,7 @@ page 50601 "RV Prod. Result Journal Line"
 
                                             ILE.Reset();
                                             ILE.SetRange("Entry Type", ILE."Entry Type"::Output);
+                                            ILE.SetRange("Item No.", Rec."Output Item No.");
                                             ILE.SetRange("Order No.", Rec."Prod. Order No.");
                                             ILE.SetRange("Order Line No.", Rec."Prod. Order Line No.");
                                             ILE.SetRange("Lot No.", Rec."Lot No.");
@@ -219,6 +220,7 @@ page 50601 "RV Prod. Result Journal Line"
                                             ILE.SetRange("Order No.", Rec."Prod. Order No.");
                                             ILE.SetRange("Order Line No.", Rec."Prod. Order Line No.");
                                             ILE.SetRange("Lot No.", Rec."Lot No.");
+                                            ILE.SetRange("Item No.", Rec."Item No.");
                                             if ILE.FindSet() then begin
                                                 if LotNoInfo.get(Rec."Item No.",
                                                                        Rec."Variant Code",
@@ -266,8 +268,8 @@ page 50601 "RV Prod. Result Journal Line"
                                         if rec."Manufacturing Date" = 0D then
                                             rec."Manufacturing Date" := Today;
 
-                                        // if LotNoInfo."RV_Manufacture Date" <> 0D then
-                                        //     Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date";
+                                        if LotNoInfo."RV_Manufacture Date" <> 0D then
+                                            Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date";
 
                                         ItemTrackingSetup."Lot No." := Rec."Lot No.";
                                         Rec."Expire Date" := ItemTrackingMgt.ExistingExpirationDate(Rec."Item No.", Rec."Variant Code", ItemTrackingSetup, false, EntriesExist);

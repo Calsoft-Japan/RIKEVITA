@@ -280,7 +280,8 @@ codeunit 50603 "RV Post Prod Result Line Proc."
         ItemJnlLine."Journal Template Name" := ToTemplateName;
         ItemJnlLine."Journal Batch Name" := ToBatchName;
         ItemJnlLine."Line No." := NextLineNo;
-        PostingDate := ProdResultJournalLine."Manufacturing Date";
+        //PostingDate := ProdResultJournalLine."Manufacturing Date";
+        PostingDate := WorkDate();
         if PostingDate = 0D then
             PostingDate := WorkDate();
         ItemJnlLine.Validate("Posting Date", PostingDate);
