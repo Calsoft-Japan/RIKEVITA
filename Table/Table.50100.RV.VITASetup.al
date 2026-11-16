@@ -358,6 +358,11 @@ table 50100 "RV RIKEVITA Setup"
             ToolTip = 'Specifies the reason code during Item journal creation for Warehouse Shipment.';
             TableRelation = "Reason Code";
         }
+        field(57; "Bin Code Filter for Shipping"; Code[250])
+        {
+            Caption = 'Bin Code Filter for Shipping';
+            ToolTip = 'Specifies the bin code filter during Item journal creation for Warehouse Shipment.';
+        }
         field(50600; "Holding Period for Air"; DateFormula)
         {
             Description = 'FDD006';

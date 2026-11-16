@@ -20,11 +20,14 @@ codeunit 50903 "RV WS Item Reclass. Inv. Mgt."
 
     procedure GetBinQtyBuffer(
         WhseShptHeader: Record "Warehouse Shipment Header";
+        QtyShipto: Decimal;
         ItemNo: Code[20];
         LotNo: Code[50];
         var TempWarehouseEntry: Record "Warehouse Entry" temporary)
     var
         NextEntryNo: Integer;
+        QtyApplied: Decimal;
+        QtyApply: Decimal;
     begin
 
         Cons_Location := 'SUPPLY';
@@ -35,6 +38,7 @@ codeunit 50903 "RV WS Item Reclass. Inv. Mgt."
         RVInvAvaName.Name := Cons_RVInvAvaName_Name;
         RVInvAvaName."Inventory Valuation Date" := WhseShptHeader."Posting Date";
         RVInvAvaName."Location Filter" := Cons_Location;
+        RVInvAvaName."Item Filter" := ItemNo;
         RVInvAvaName.Insert();
         CollectInvtData(); // This refers page 50409 "RV Inventory Monitoring".
 
@@ -43,34 +47,36 @@ codeunit 50903 "RV WS Item Reclass. Inv. Mgt."
         TempWarehouseEntry.DeleteAll();
 
         AvailableInvyLine.Reset();
+        AvailableInvyLine.SetCurrentKey("Expiration Date", "Bin Code");
         AvailableInvyLine.SetRange("Item No.", ItemNo);
         AvailableInvyLine.SetRange(Location, Cons_Location);
         AvailableInvyLine.SetRange("Lot No.", LotNo);
-
         if AvailableInvyLine.FindSet() then
             repeat
-                TempWarehouseEntry.Reset();
-                TempWarehouseEntry.SetRange(
-                    "Bin Code", AvailableInvyLine."Bin Code");
 
-                if TempWarehouseEntry.FindFirst() then begin
-                    TempWarehouseEntry."Qty. (Base)" += AvailableInvyLine."Base Unit Invy. Qty.";
-                    TempWarehouseEntry.Modify();
+                if (QtyApplied + AvailableInvyLine."Base Unit Invy. Qty.") <= QtyShipto then begin
+                    QtyApply := AvailableInvyLine."Base Unit Invy. Qty.";
                 end else begin
-                    NextEntryNo += 1;
-
-                    TempWarehouseEntry.Init();
-                    TempWarehouseEntry."Entry No." := NextEntryNo;
-                    TempWarehouseEntry."Item No." := ItemNo;
-                    TempWarehouseEntry."Location Code" := Cons_Location;
-                    TempWarehouseEntry."Lot No." := LotNo;
-                    TempWarehouseEntry."Bin Code" := AvailableInvyLine."Bin Code";
-                    TempWarehouseEntry."Qty. (Base)" := AvailableInvyLine."Base Unit Invy. Qty.";
-                    TempWarehouseEntry.Insert();
+                    QtyApply := QtyShipto - QtyApplied;
                 end;
-            until AvailableInvyLine.Next() = 0;
-    end;
+                QtyApplied += QtyApply;
 
+                TempWarehouseEntry.Reset();
+                NextEntryNo += 1;
+
+                TempWarehouseEntry.Init();
+                TempWarehouseEntry."Entry No." := NextEntryNo;
+                TempWarehouseEntry."Item No." := ItemNo;
+                TempWarehouseEntry."Location Code" := Cons_Location;
+                TempWarehouseEntry."Lot No." := LotNo;
+                TempWarehouseEntry."Qty. (Base)" := QtyApply;
+                TempWarehouseEntry."Bin Code" := AvailableInvyLine."Bin Code";
+                TempWarehouseEntry."Expiration Date" := AvailableInvyLine."Expiration Date";
+                TempWarehouseEntry.Insert();
+
+            until AvailableInvyLine.Next() = 0;
+
+    end;
 
     procedure CollectInvtData()
     var
@@ -264,7 +270,9 @@ codeunit 50903 "RV WS Item Reclass. Inv. Mgt."
                     AvailableInvyLine."Mfg. Date" := ILE."Posting Date";
             end;
         end;
-
+        //for PM material, the manufacturing date is not required, so set it to 0D
+        if CopyStr(AvailableInvyLine."Item No.", 1, 2) = 'PM' then
+            AvailableInvyLine."Mfg. Date" := 0D;
 
         if we."Bin Code" <> '' then
             AvailableInvyLine."Base Unit Invy. Qty." := WE."Qty. (Base)"

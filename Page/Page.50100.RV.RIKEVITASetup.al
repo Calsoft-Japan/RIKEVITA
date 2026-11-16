@@ -138,6 +138,10 @@ page 50100 "RIKEVITA Setup"///
                 {
                     ApplicationArea = All;
                 }
+                field("Bin Code Filter for Shipping"; Rec."Bin Code Filter for Shipping")
+                {
+                    ApplicationArea = All;
+                }
             }
             group(BankInformation)
             {

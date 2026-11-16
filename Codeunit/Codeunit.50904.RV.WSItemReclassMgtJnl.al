@@ -29,7 +29,6 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
         LotNo: Code[50];
         NextEntryNo: Integer;
         LineNo: Integer;
-        CreatedLineCount: Integer;
         MaxQty: Decimal;
         DestinationBin: Code[20];
         DimensionSetID: Integer;
@@ -88,7 +87,11 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
                             TempLotBuffer."Entry No." := NextEntryNo;
                             TempLotBuffer."Item No." := WhseShptLine."Item No.";
                             TempLotBuffer."Lot No." := LotNo;
+                            TempLotBuffer."Qty. to Handle (Base)" := ReservationEntry."Qty. to Handle (Base)" * -1;
                             TempLotBuffer.Insert();
+                        end else begin
+                            TempLotBuffer."Qty. to Handle (Base)" += ReservationEntry."Qty. to Handle (Base)" * -1;
+                            TempLotBuffer.Modify();
                         end;
                     end;
                 until ReservationEntry.Next() = 0;
@@ -96,7 +99,7 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
             if (not HasReservation) or HasBlankLot then
                 MissingLines +=
                     StrSubstNo(
-                        'Order No.: %1 / Line No.: %2 / Item No.: %3; ',
+                        ' Order No.: %1 / Line No.: %2 / Item No.: %3;\',
                         WhseShptLine."Source No.",
                         WhseShptLine."Source Line No.",
                         WhseShptLine."Item No.");
@@ -105,7 +108,7 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
 
         // if a Lot No. is missing.
         if MissingLines <> '' then
-            Error('Lot No. is missing on the following lines: %1', MissingLines);
+            Error('Lot No. is missing on the following lines:\%1', MissingLines);
 
         // Get Journal Batch
         ItemJournalTemplate.Reset();
@@ -134,12 +137,14 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
         // Create Journal Lines
 
         TempLotBuffer.Reset();
+        TempLotBuffer.SetFilter("Qty. to Handle (Base)", '>%1', 0);
 
         if TempLotBuffer.FindSet() then
             repeat
                 // Get stock quantity by Bin.
                 RVIntMgt.GetBinQtyBuffer(
                     WhseShptHeader,
+                    TempLotBuffer."Qty. to Handle (Base)",
                     TempLotBuffer."Item No.",
                     TempLotBuffer."Lot No.",
                     TempWarehouseEntry);
@@ -180,110 +185,59 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
 
                 if TempWarehouseEntry.FindSet() then
                     repeat
-                        if (TempWarehouseEntry."Qty. (Base)" > 0) and
-                           (TempWarehouseEntry."Bin Code" <> DestinationBin)
-                        then begin
-                            if TempWarehouseEntry."Bin Code" = '' then
-                                Error(
-                                    'Source Bin Code is blank. Item No.: %1, Lot No.: %2',
-                                    TempLotBuffer."Item No.",
-                                    TempLotBuffer."Lot No.");
 
-                            LineNo += 10000;
+                        LineNo += 10000;
 
-                            ItemJournalLine.Init();
+                        ItemJournalLine.Init();
 
-                            ItemJournalLine."Journal Template Name" := ItemJournalTemplate.Name;
-                            ItemJournalLine."Journal Batch Name" := BatchName;
-                            ItemJournalLine."Line No." := LineNo;
+                        ItemJournalLine."Journal Template Name" := ItemJournalTemplate.Name;
+                        ItemJournalLine."Journal Batch Name" := BatchName;
+                        ItemJournalLine."Line No." := LineNo;
 
-                            ItemJournalLine.Validate(
-                                "Posting Date",
-                                WhseShptHeader."Posting Date");
+                        ItemJournalLine.Validate("Posting Date", WhseShptHeader."Posting Date");
+                        ItemJournalLine.Validate("Document No.", WhseShptHeader."No.");
+                        ItemJournalLine.Validate("Entry Type", ItemJournalLine."Entry Type"::Transfer);
+                        ItemJournalLine.Validate("Item No.", TempLotBuffer."Item No.");
+                        ItemJournalLine.Validate("Location Code", Cons_Location);
+                        ItemJournalLine.Validate("Bin Code", TempWarehouseEntry."Bin Code");
+                        ItemJournalLine.Validate("New Location Code", Cons_Location);
+                        ItemJournalLine.Validate("New Bin Code", DestinationBin);
+                        ItemJournalLine.Validate("Unit of Measure Code", Item."Base Unit of Measure");
+                        ItemJournalLine.Validate(Quantity, TempWarehouseEntry."Qty. (Base)");
+                        ItemJournalLine.Validate("Reason Code", ItemJournalBatch."Reason Code");
 
-                            ItemJournalLine.Validate(
-                                "Document No.",
-                                WhseShptHeader."No.");
+                        // Original and new Lot No.
+                        ItemJournalLine."Lot No." := TempLotBuffer."Lot No.";
+                        ItemJournalLine."New Lot No." := TempLotBuffer."Lot No.";
 
-                            ItemJournalLine.Validate(
-                                "Entry Type",
-                                ItemJournalLine."Entry Type"::Transfer);
 
-                            ItemJournalLine.Validate(
-                                "Item No.",
-                                TempLotBuffer."Item No.");
+                        // Original Dimension.
+                        ItemJournalLine."Dimension Set ID" := DimensionSetID;
 
-                            ItemJournalLine.Validate(
-                                "Location Code", Cons_Location);
+                        ItemJournalLine."Shortcut Dimension 1 Code" := GlobalDim1Code;
+                        ItemJournalLine."Shortcut Dimension 2 Code" := GlobalDim2Code;
 
-                            ItemJournalLine.Validate(
-                                "Bin Code",
-                                TempWarehouseEntry."Bin Code");
+                        // New Dimension.
+                        ItemJournalLine."New Dimension Set ID" := DimensionSetID;
 
-                            ItemJournalLine.Validate(
-                                "New Location Code", Cons_Location);
+                        ItemJournalLine."New Shortcut Dimension 1 Code" := GlobalDim1Code;
+                        ItemJournalLine."New Shortcut Dimension 2 Code" := GlobalDim2Code;
 
-                            ItemJournalLine.Validate(
-                                "New Bin Code", DestinationBin);
+                        ItemJournalLine.Insert(true);
 
-                            ItemJournalLine.Validate(
-                                "Unit of Measure Code",
-                                Item."Base Unit of Measure");
+                        // Create standard Item Tracking entries.
+                        ItemJnlLineReserve.CreateItemTracking(ItemJournalLine);
 
-                            ItemJournalLine.Validate(
-                                Quantity,
-                                TempWarehouseEntry."Qty. (Base)");
-
-                            ItemJournalLine.Validate(
-                                "Reason Code",
-                                ItemJournalBatch."Reason Code");
-
-                            // Original and new Lot No.
-                            ItemJournalLine."Lot No." := TempLotBuffer."Lot No.";
-                            //ItemJournalLine."New Lot No." := TempLotBuffer."Lot No.";
-
-                            // Original Dimension.
-                            ItemJournalLine."Dimension Set ID" :=
-                                DimensionSetID;
-
-                            ItemJournalLine."Shortcut Dimension 1 Code" :=
-                                GlobalDim1Code;
-                            ItemJournalLine."Shortcut Dimension 2 Code" :=
-                                GlobalDim2Code;
-
-                            // New Dimension.
-                            ItemJournalLine."New Dimension Set ID" :=
-                                DimensionSetID;
-
-                            ItemJournalLine."New Shortcut Dimension 1 Code" :=
-                                GlobalDim1Code;
-                            ItemJournalLine."New Shortcut Dimension 2 Code" :=
-                                GlobalDim2Code;
-
-                            ItemJournalLine.Insert(true);
-
-                            // Create standard Item Tracking entries.
-                            ItemJnlLineReserve.CreateItemTracking(
-                                ItemJournalLine);
-
-                            CreatedLineCount += 1;
-                        end;
                     until TempWarehouseEntry.Next() = 0;
 
             until TempLotBuffer.Next() = 0;
 
-        if CreatedLineCount = 0 then begin
-            Message('No reclassification lines were required. All stock is already in the destination bins.');
-        end else begin
-            Message(
-                'Item Reclassification Journal created successfully.\' +
-                'Template: %1\' +
-                'Batch: %2\' +
-                'Number of Lines: %3',
-                ItemJournalTemplate.Name,
-                BatchName,
-                CreatedLineCount);
-        end;
+        Message(
+            'Item Reclassification Journal created successfully.\' +
+            'Template: %1\' +
+            'Batch: %2\',
+            ItemJournalTemplate.Name,
+            BatchName);
     end;
 
 }
