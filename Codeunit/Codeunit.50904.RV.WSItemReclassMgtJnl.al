@@ -20,6 +20,7 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
         ItemJournalTemplate: Record "Item Journal Template";
         ItemJournalBatch: Record "Item Journal Batch";
         ItemJournalLine: Record "Item Journal Line";
+        SourceCodeSetup: Record "Source Code Setup";
         ItemJnlLineReserve: Codeunit "Item Jnl. Line-Reserve";
         DimensionManagement: Codeunit DimensionManagement;
         RVIntMgt: Codeunit "RV WS Item Reclass. Inv. Mgt.";
@@ -41,6 +42,8 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
 
         RVSetup.Get();
         RVSetup.TestField("Reason Code for Shipping");
+
+        SourceCodeSetup.Get();
 
         WhseShptHeader.TestField("No.");
         WhseShptHeader.TestField("Posting Date");
@@ -136,6 +139,13 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
 
         // Create Journal Lines
 
+        ItemJournalLine.Reset();
+        ItemJournalLine.SetRange("Journal Template Name", ItemJournalTemplate.Name);
+        ItemJournalLine.SetRange("Journal Batch Name", BatchName);
+        if not ItemJournalLine.IsEmpty() then begin
+            Error('The Item Reclassification Batch %1 is not empty!', BatchName);
+        end;
+
         TempLotBuffer.Reset();
         TempLotBuffer.SetFilter("Qty. to Handle (Base)", '>%1', 0);
 
@@ -194,6 +204,7 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
                         ItemJournalLine."Journal Batch Name" := BatchName;
                         ItemJournalLine."Line No." := LineNo;
 
+                        ItemJournalLine.Validate("Source Code", SourceCodeSetup."Item Reclass. Journal");
                         ItemJournalLine.Validate("Posting Date", WhseShptHeader."Posting Date");
                         ItemJournalLine.Validate("Document No.", WhseShptHeader."No.");
                         ItemJournalLine.Validate("Entry Type", ItemJournalLine."Entry Type"::Transfer);
@@ -227,6 +238,26 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
 
                         // Create standard Item Tracking entries.
                         ItemJnlLineReserve.CreateItemTracking(ItemJournalLine);
+
+                        ReservationEntry.SetRange("Source Type", Database::"Item Journal Line");
+                        ReservationEntry.SetRange("Source Subtype", ItemJournalLine."Entry Type".AsInteger());
+                        ReservationEntry.SetRange("Source ID", ItemJournalLine."Journal Template Name");
+                        ReservationEntry.SetRange("Source Batch Name", ItemJournalLine."Journal Batch Name");
+                        ReservationEntry.SetRange("Source Ref. No.", ItemJournalLine."Line No.");
+                        ReservationEntry.SetRange("Lot No.", ItemJournalLine."Lot No.");
+
+                        if ReservationEntry.FindSet() then
+                            repeat
+                                ReservationEntry.Validate("New Lot No.", TempLotBuffer."Lot No.");
+                                ReservationEntry.Validate("New Expiration Date", TempWarehouseEntry."Expiration Date");
+                                ReservationEntry.Modify(true);
+                            until ReservationEntry.Next() = 0;
+
+
+                        // Original and new Lot No.
+                        ItemJournalLine."Lot No." := '';
+                        ItemJournalLine."New Lot No." := '';
+                        ItemJournalLine.Modify();
 
                     until TempWarehouseEntry.Next() = 0;
 

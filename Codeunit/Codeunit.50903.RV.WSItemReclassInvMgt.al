@@ -51,6 +51,7 @@ codeunit 50903 "RV WS Item Reclass. Inv. Mgt."
         AvailableInvyLine.SetRange("Item No.", ItemNo);
         AvailableInvyLine.SetRange(Location, Cons_Location);
         AvailableInvyLine.SetRange("Lot No.", LotNo);
+        AvailableInvyLine.SetFilter("Bin Code", GlobalRIKEVITASetup."Bin Code Filter for Shipping");
         if AvailableInvyLine.FindSet() then
             repeat
 
@@ -74,7 +75,7 @@ codeunit 50903 "RV WS Item Reclass. Inv. Mgt."
                 TempWarehouseEntry."Expiration Date" := AvailableInvyLine."Expiration Date";
                 TempWarehouseEntry.Insert();
 
-            until AvailableInvyLine.Next() = 0;
+            until ((AvailableInvyLine.Next() = 0) or (QtyApplied >= QtyShipto));
 
     end;
 
