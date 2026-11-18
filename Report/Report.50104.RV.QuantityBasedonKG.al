@@ -5,7 +5,7 @@
 report 50104 "RV Quantity on KG JobQueue"
 {
     ApplicationArea = All;
-    Caption = 'RV Quantity Based on KG';
+    Caption = 'Qty. Conversion for Supp. UOM';//'RV Quantity Based on KG';
     UsageCategory = Tasks;
     ProcessingOnly = true;
     Permissions =
@@ -24,8 +24,9 @@ report 50104 "RV Quantity on KG JobQueue"
 
             trigger OnAfterGetRecord()
             begin
+                CalcFields("RV_Supp. Unit of Measure Code");
                 ItemUOM.Reset();
-                if ItemUOM.Get("Item No.", "Item Ledger Entry"."RV_Supp. Unit of Measure Code") then begin//'KG'
+                if ItemUOM.Get("Item Ledger Entry"."Item No.", "Item Ledger Entry"."RV_Supp. Unit of Measure Code") then begin//'KG'
                     "RV_Quantity (Supp. UOM)" := "Item Ledger Entry".Quantity * ItemUOM."Qty. per Unit of Measure";
                     Modify();
                 end;
@@ -55,8 +56,9 @@ report 50104 "RV Quantity on KG JobQueue"
 
             trigger OnAfterGetRecord()
             begin
+                CalcFields("RV_Supp. Unit of Measure Code");
                 ItemUOM.Reset();
-                if ItemUOM.Get("Item No.", "Value Entry"."RV_Supp. Unit of Measure Code") then begin//'KG'
+                if ItemUOM.Get("Value Entry"."Item No.", "Value Entry"."RV_Supp. Unit of Measure Code") then begin//'KG'
                     "RV_IL Entry Qty (Supp. UOM)" := "Value Entry"."Item Ledger Entry Quantity" * ItemUOM."Qty. per Unit of Measure";
                     "RV_Value Quantity (Supp. UOM)" := "Value Entry"."Valued Quantity" * ItemUOM."Qty. per Unit of Measure";
                     "RV_Invoiced Qty (Supp. UOM)" := "Value Entry"."Invoiced Quantity" * ItemUOM."Qty. per Unit of Measure";
