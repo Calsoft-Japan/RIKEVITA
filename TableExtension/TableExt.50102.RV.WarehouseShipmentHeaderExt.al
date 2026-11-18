@@ -215,6 +215,12 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
             Description = 'FDD019';
             TableRelation = "Country/Region";
         }
+        field(50901; "RV_Item Reclass. Jnl. Created"; Boolean)
+        {
+            Caption = 'Item Reclass. Jnl. Created';
+            Editable = false;
+            Description = 'FDD102';
+        }
 
         modify("Posting Date")
         {

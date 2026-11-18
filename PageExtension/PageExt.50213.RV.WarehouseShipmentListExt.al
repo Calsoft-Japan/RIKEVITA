@@ -6,6 +6,14 @@ pageextension 50213 "RV Warehouse Shipment List Ext" extends "Warehouse Shipment
 {
     layout
     {
+        addafter("Location Code")
+        {
+            field("RV_Item Reclass. Jnl. Created"; Rec."RV_Item Reclass. Jnl. Created")
+            {
+                ApplicationArea = All;
+                Description = 'FDD102';
+            }
+        }
 
     }
     trigger OnDeleteRecord(): Boolean

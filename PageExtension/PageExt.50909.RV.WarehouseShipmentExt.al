@@ -4,6 +4,19 @@
 /// </summary>
 pageextension 50909 "RV WarehouseShipment Ext" extends "Warehouse Shipment"
 {
+
+    layout
+    {
+        addlast(General)
+        {
+            field("RV_Item Reclass. Jnl. Created"; Rec."RV_Item Reclass. Jnl. Created")
+            {
+                ApplicationArea = All;
+                Description = 'FDD102';
+            }
+        }
+    }
+
     actions
     {
         addlast(Processing)
@@ -19,10 +32,19 @@ pageextension 50909 "RV WarehouseShipment Ext" extends "Warehouse Shipment"
                 var
                     WSItemReclassJnlMgt: Codeunit "RV WS Item Reclass. Jnl. Mgt.";
                 begin
-                    if not Confirm('Item reclassification journals will be created, continue?') then
-                        exit;
+                    if Rec."RV_Item Reclass. Jnl. Created" then begin
+                        if not Confirm('Item reclassification journals have already been created.\Do you want to create them again?') then
+                            exit;
+                    end else begin
+                        if not Confirm('Item reclassification journals will be created.\Choose ''Yes'' to continue.') then
+                            exit;
+                    end;
 
                     WSItemReclassJnlMgt.CreateFromWarehouseShipment(Rec);
+
+                    Rec."RV_Item Reclass. Jnl. Created" := true;
+                    Rec.Modify();
+                    CurrPage.Update();
                 end;
             }
         }
