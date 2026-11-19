@@ -133,6 +133,7 @@ permissionset 50100 GeneratedPermission
         report "RV Export Payment Inv Excel"=X,
         report "RV HS Code Mgt JobQueue"=X,
         report "RV Item Trace Collect"=X,
+        report "RV Item Reclass. for Whse"=X,
         report "RV Order Listing Update"=X,
         report "RV Packing List Report"=X,
         report "RV Payment Voucher"=X,
