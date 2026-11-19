@@ -221,7 +221,7 @@ page 50601 "RV Prod. Result Journal Line"
                                             ILE.SetRange("Order Line No.", Rec."Prod. Order Line No.");
                                             ILE.SetRange("Lot No.", Rec."Lot No.");
                                             ILE.SetRange("Item No.", Rec."Item No.");
-                                            if ILE.FindSet() then begin
+                                            if ILE.FindFirst() then begin
                                                 if LotNoInfo.get(Rec."Item No.",
                                                                        Rec."Variant Code",
                                                                        Rec."Lot No.") then begin
@@ -547,7 +547,7 @@ page 50601 "RV Prod. Result Journal Line"
             if LotNoInfo.get(TempTrackingSpecification."Item No.",
                             TempTrackingSpecification."Variant Code",
                             TempTrackingSpecification."Lot No.") then begin
-                // Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date";
+                Rec."Manufacturing Date" := LotNoInfo."RV_Manufacture Date";
                 if Rec."Manufacturing Date" = 0D then
                     Rec."Manufacturing Date" := today;
                 Rec."Expire Date" := TempTrackingSpecification."Expiration Date";

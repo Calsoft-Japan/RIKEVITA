@@ -56,10 +56,10 @@ page 50407 "RV Inventory Valuation Name"
                 }
 
             }
-            Part(DeliverySchedulingLines; "RV Inventory Valuation Line")
+            Part(InventoryValuationLines; "RV Inventory Valuation Line")
             {
                 ApplicationArea = All;
-                Caption = 'Delivery Scheduling Lines';
+                Caption = 'Inventory Valuation Lines';
                 UpdatePropagation = Both;
                 SubPageLink = "Inventory Valuation Name" = field(Name);
             }
@@ -352,7 +352,7 @@ page 50407 "RV Inventory Valuation Name"
         IsEmptyLine := IsEmptyLine and ((TransferInvoicedQty = 0));
 
         if not IsEmptyLine then
-            InsertInvyValuationLine(Item, Item.GetFilter("Global Dimension 2 Filter"));
+            InsertInvyValuationLine(Item, Item.GetFilter("Global Dimension 1 Filter"));
     end;
 
 

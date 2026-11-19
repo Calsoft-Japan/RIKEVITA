@@ -174,6 +174,8 @@ permissionset 50100 GeneratedPermission
         codeunit "RV User Permission Check"=X,
         codeunit "RV Whse. Posting Subscriber"=X,
         codeunit "RV WhsePostEventHandler"=X,
+        codeunit "RV WS Item Reclass. Inv. Mgt."=X,
+        codeunit "RV WS Item Reclass. Jnl. Mgt."=X,
         page "COA Internal Spec. List"=X,
         page "ISO Symbol Image FactBox"=X,
         page "ISO Symbol Setting"=X,
