@@ -177,6 +177,7 @@ permissionset 50100 GeneratedPermission
         codeunit "RV WhsePostEventHandler"=X,
         codeunit "RV WS Item Reclass. Inv. Mgt."=X,
         codeunit "RV WS Item Reclass. Jnl. Mgt."=X,
+        codeunit "RV WS Item Reclass. Jnl. Sub."=X,
         page "COA Internal Spec. List"=X,
         page "ISO Symbol Image FactBox"=X,
         page "ISO Symbol Setting"=X,
