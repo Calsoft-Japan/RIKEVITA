@@ -33,10 +33,37 @@ page 50900 "RV Charge Calculations"
                 field("Vendor No."; Rec."Vendor No.")
                 {
                 }
+                field("Vendor Name"; Rec."Vendor Name")
+                {
+                }
                 field("Vendor Invoice No."; Rec."Vendor Invoice No.")
                 {
                 }
                 field("Invoice Currency Code"; Rec."Invoice Currency Code")
+                {
+                }
+                field("Amount Including Tax"; Rec."Amount Including Tax")
+                {
+                }
+                field("Vendor No. 2"; Rec."Vendor No. 2")
+                {
+                }
+                field("Vendor Name 2"; Rec."Vendor Name 2")
+                {
+                }
+                field("Vendor Invoice No. 2"; Rec."Vendor Invoice No. 2")
+                {
+                }
+                field("Invoice Currency Code 2"; Rec."Invoice Currency Code 2")
+                {
+                }
+                field("Amount Including Tax 2"; Rec."Amount Including Tax 2")
+                {
+                }
+                field("K2 No."; Rec."K2 No.")
+                {
+                }
+                field("K2 Date"; Rec."K2 Date")
                 {
                 }
                 field("Warehouse Shipment No."; Rec."Warehouse Shipment No.")
