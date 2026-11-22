@@ -154,6 +154,7 @@ permissionset 50100 GeneratedPermission
         codeunit "RV Doc. Attachment Custom Rec"=X,
         codeunit "RV DocAttachmentSubscriber"=X,
         codeunit "RV ECR Calculation Mgt"=X,
+        codeunit "RV Expired Lot Blocker"=X,
         codeunit "RV Get Receipt Lines"=X,
         codeunit "RV Get Shipment Lines"=X,
         codeunit "RV ILE Item Trace Mgt"=X,

@@ -51,6 +51,9 @@ page 50901 "RV Charge Calculation"
                 field("Vendor No."; Rec."Vendor No.")
                 {
                 }
+                field("Vendor Name"; Rec."Vendor Name")
+                {
+                }
                 field("Vendor Invoice No."; Rec."Vendor Invoice No.")
                 {
                     trigger OnLookup(var Text: Text): Boolean
@@ -72,6 +75,47 @@ page 50901 "RV Charge Calculation"
                     end;
                 }
                 field("Invoice Currency Code"; Rec."Invoice Currency Code")
+                {
+                }
+                field("Amount Including Tax"; Rec."Amount Including Tax")
+                {
+                }
+                field("Vendor No. 2"; Rec."Vendor No. 2")
+                {
+                }
+                field("Vendor Name 2"; Rec."Vendor Name 2")
+                {
+                }
+                field("Vendor Invoice No. 2"; Rec."Vendor Invoice No. 2")
+                {
+                    trigger OnLookup(var Text: Text): Boolean
+                    var
+                        recVend: Record Vendor;
+                        PurchInvHdrView: Record "Purch. Inv. Header";
+
+                    begin
+
+                        Rec.TestField("Vendor No. 2");
+
+                        PurchInvHdrView.Reset();
+                        PurchInvHdrView.SetRange("Buy-from Vendor No.", Rec."Vendor No. 2");
+
+                        if Page.RunModal(Page::"Posted Purchase Invoices", PurchInvHdrView) = Action::LookupOK then begin
+                            Rec.Validate("Vendor Invoice No. 2", PurchInvHdrView."Vendor Invoice No.");
+                        end;
+
+                    end;
+                }
+                field("Invoice Currency Code 2"; Rec."Invoice Currency Code 2")
+                {
+                }
+                field("Amount Including Tax 2"; Rec."Amount Including Tax 2")
+                {
+                }
+                field("K2 No."; Rec."K2 No.")
+                {
+                }
+                field("K2 Date"; Rec."K2 Date")
                 {
                 }
                 field("Warehouse Shipment No."; Rec."Warehouse Shipment No.")

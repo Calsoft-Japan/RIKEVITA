@@ -63,7 +63,8 @@ codeunit 50921 "RV Salesforce Order Mgt"
                 recSFTrans."Order Date" := recSFStaging."Order Date";
 
                 if recSFStaging."Sales Company" = '' then begin
-                    recSFTrans."Sell-to Customer No." := recSFStaging."Bill Invoice to(Code)";
+                    //recSFTrans."Sell-to Customer No." := recSFStaging."Bill Invoice to(Code)";
+                    recSFTrans."Sell-to Customer No." := recSFStaging."End Customer / Ship to(Code)";
                     recSFTrans."Bill-to Customer No." := recSFStaging."Bill Invoice to(Code)";
                     if recSFTrans."Action Type" in [recSFTrans."Action Type"::New, recSFTrans."Action Type"::Cancel] then begin
                         recSFTrans."Ship-to Code" := recSFStaging."End Customer / Ship to(Code)";

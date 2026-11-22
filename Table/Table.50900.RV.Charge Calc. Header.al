@@ -280,6 +280,9 @@ table 50900 "RV Charge Calc. Header"
                         recPurchInvHeader.SetRange("Vendor Invoice No.", "Vendor Invoice No.");
                         if recPurchInvHeader.FindFirst() then begin
                             Validate("Invoice Currency Code", recPurchInvHeader."Currency Code");
+
+                            recPurchInvHeader.CalcFields("Amount Including VAT");
+                            "Amount Including Tax" := recPurchInvHeader."Amount Including VAT";
                         end else begin
                             Error(NotValidVendInvNoErr);
                         end;
@@ -287,6 +290,8 @@ table 50900 "RV Charge Calc. Header"
                         if "Invoice Currency Code" <> '' then begin
                             if Confirm(ClearCurrCodeQst) then begin
                                 Validate("Invoice Currency Code", '');
+
+                                "Amount Including Tax" := 0;
                             end else begin
                                 Error(OperationCancelledErr);
                             end;
@@ -309,6 +314,122 @@ table 50900 "RV Charge Calc. Header"
             CalcFormula = lookup("Posted Whse. Shipment Header"."Whse. Shipment No." where("No." = field("Posted Whse. Shipment No.")));
             Editable = false;
         }
+        field(45; "Vendor Name"; Text[100])
+        {
+            Caption = 'Vendor Name';
+            FieldClass = FlowField;
+            CalcFormula = lookup(Vendor.Name where("No." = field("Vendor No.")));
+            Editable = false;
+        }
+        field(46; "Amount Including Tax"; Decimal)
+        {
+            Caption = 'Amount Including Tax';
+            AutoFormatExpression = Rec."Invoice Currency Code";
+            AutoFormatType = 1;
+            Editable = false;
+        }
+        field(47; "Vendor No. 2"; Code[20])
+        {
+            Caption = 'Vendor No. 2';
+            TableRelation = Vendor."No.";
+
+            trigger OnValidate()
+            begin
+                if "Vendor Invoice No. 2" <> '' then begin
+                    if Confirm('Vendor Invoice No. 2 will be cleared. Are you sure to change?') then begin
+                        Validate("Vendor Invoice No. 2", '');
+                    end else begin
+                        Error(OperationCancelledErr);
+                    end;
+                end;
+            end;
+        }
+        field(48; "Vendor Name 2"; Text[100])
+        {
+            Caption = 'Vendor Name 2';
+            FieldClass = FlowField;
+            CalcFormula = lookup(Vendor.Name where("No." = field("Vendor No. 2")));
+            Editable = false;
+        }
+        field(49; "Invoice Currency Code 2"; Code[10])
+        {
+            Caption = 'Invoice Currency Code 2';
+            TableRelation = Currency.Code;
+
+            trigger OnValidate()
+            var
+                recCCLine: Record "RV Charge Calc. Line";
+                recSalesLine: Record "Sales Line";
+            begin
+                /*
+                recCCLine.SetRange("Document No.", "No.");
+                if recCCLine.FindSet() then
+                    repeat
+                        recSalesLine.Get(Enum::"Sales Document Type"::Order, recCCLine."Sales Order No.", recCCLine."Sales Order Line No.");
+                        recCCLine.CalcFields("Currency Code");
+                        if Rec."Invoice Currency Code" = recCCLine."Currency Code" then begin
+                            recCCLine."Exch. Rate from Inv. Currency" := 1;
+                        end else begin
+                            recCCLine."Exch. Rate from Inv. Currency" := 0;
+                        end;
+                        recCCLine.Modify();
+
+                    until recCCLine.Next() = 0;
+                */
+            end;
+        }
+
+        field(50; "Vendor Invoice No. 2"; Code[35])
+        {
+            Caption = 'Vendor Invoice No. 2';
+
+            trigger OnValidate()
+            var
+                recPurchInvHeader: Record "Purch. Inv. Header";
+            begin
+                if ("Vendor Invoice No. 2" <> xRec."Vendor Invoice No. 2") then begin
+                    if ("Vendor Invoice No. 2" <> '') then begin
+                        TestField("Vendor No. 2");
+                        recPurchInvHeader.SetRange("Buy-from Vendor No.", "Vendor No. 2");
+                        recPurchInvHeader.SetRange("Vendor Invoice No.", "Vendor Invoice No. 2");
+                        if recPurchInvHeader.FindFirst() then begin
+                            Validate("Invoice Currency Code 2", recPurchInvHeader."Currency Code");
+
+                            recPurchInvHeader.CalcFields("Amount Including VAT");
+                            "Amount Including Tax 2" := recPurchInvHeader."Amount Including VAT";
+                        end else begin
+                            Error(NotValidVendInvNo2Err);
+                        end;
+                    end else begin
+                        if "Invoice Currency Code 2" <> '' then begin
+                            if Confirm(ClearCurrCode2Qst) then begin
+                                Validate("Invoice Currency Code 2", '');
+
+                                "Amount Including Tax 2" := 0;
+                            end else begin
+                                Error(OperationCancelledErr);
+                            end;
+                        end;
+                    end;
+                end;
+            end;
+        }
+        field(51; "Amount Including Tax 2"; Decimal)
+        {
+            Caption = 'Amount Including Tax 2';
+            AutoFormatExpression = Rec."Invoice Currency Code 2";
+            AutoFormatType = 1;
+            Editable = false;
+        }
+        field(52; "K2 No."; Code[50])
+        {
+            Caption = 'K2 No.';
+        }
+
+        field(53; "K2 Date"; Date)
+        {
+            Caption = 'K2 Date';
+        }
 
     }
     keys
@@ -325,7 +446,9 @@ table 50900 "RV Charge Calc. Header"
         ChangeToCompletedErr: Label 'Status will be Completed after Carry Out.';
         ChargeTypeBlankErr: Label 'Charge Type is blank!';
         ClearCurrCodeQst: Label 'Invoice Currency Code will be cleared and Exchange Rate will be reset. Are you sure to change?';
+        ClearCurrCode2Qst: Label 'Invoice Currency Code 2 will be cleared and Exchange Rate will be reset. Are you sure to change?';
         NotValidVendInvNoErr: Label 'Vendor Invoice No. is not valid for this Vendor.';
+        NotValidVendInvNo2Err: Label 'Vendor Invoice No. 2 is not valid for this Vendor.';
         OperationCancelledErr: Label 'Operation is cancelled.';
 
 
