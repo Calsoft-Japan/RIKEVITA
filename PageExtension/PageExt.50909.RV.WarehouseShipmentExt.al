@@ -47,10 +47,27 @@ pageextension 50909 "RV WarehouseShipment Ext" extends "Warehouse Shipment"
                     CurrPage.Update();
                 end;
             }
+            action(OpenItemReclassJournal)
+            {
+                ApplicationArea = All;
+                Caption = 'Open Item Reclass. Journal';
+                Image = OpenJournal;
+                ToolTip = 'Open the item reclassification journal for this warehouse shipment.';
+
+                trigger OnAction()
+                var
+                    WSItemReclassJnlMgt: Codeunit "RV WS Item Reclass. Jnl. Mgt.";
+                begin
+                    WSItemReclassJnlMgt.OpenFromWarehouseShipment(Rec);
+                end;
+            }
         }
         addlast("Category_Process")
         {
             actionref("CreateItemReclassJournal_Promoted"; "CreateItemReclassJournal")
+            {
+            }
+            actionref("OpoenItemReclassJournal_Promoted"; "OpenItemReclassJournal")
             {
             }
         }

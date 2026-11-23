@@ -26,7 +26,7 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
         RVIntMgt: Codeunit "RV WS Item Reclass. Inv. Mgt.";
         Item: Record Item;
         MissingLines: Text[2048];
-        BatchName: Code[20];
+        BatchName: Code[10];
         LotNo: Code[50];
         NextEntryNo: Integer;
         LineNo: Integer;
@@ -118,7 +118,7 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
         ItemJournalTemplate.SetRange(Type, ItemJournalTemplate.Type::Transfer);
 
         if not ItemJournalTemplate.FindFirst() then
-            Error('Item Reclassification Journal template was not found.');
+            Error('Item Reclassification Journal Template was not found.');
 
         BatchName := WhseShptHeader."No.";
 
@@ -271,4 +271,38 @@ codeunit 50904 "RV WS Item Reclass. Jnl. Mgt."
             BatchName);
     end;
 
+    procedure OpenFromWarehouseShipment(
+        WhseShptHeader: Record "Warehouse Shipment Header")
+    var
+        ItemJournalTemplate: Record "Item Journal Template";
+        ItemJournalBatch: Record "Item Journal Batch";
+        ItemJournalLine: Record "Item Journal Line";
+        ItemReclassJournal: Page "Item Reclass. Journal";
+        ItemJnlManagement: Codeunit ItemJnlManagement;
+        BatchName: Code[10];
+
+    begin
+        BatchName := WhseShptHeader."No.";
+
+        ItemJournalTemplate.Reset();
+        ItemJournalTemplate.SetRange(Type, ItemJournalTemplate.Type::Transfer);
+
+        if not ItemJournalTemplate.FindFirst() then
+            Error('Item Reclassification Journal Template was not found.');
+
+        ItemJournalBatch.SetRange("Journal Template Name", ItemJournalTemplate.Name);
+        ItemJournalBatch.SetRange("Name", BatchName);
+        if not ItemJournalBatch.FindFirst() then
+            Error('Item Reclassification Journal Batch was not found.');
+
+        ItemJournalLine.FilterGroup(2);
+        ItemJournalLine.SetRange("Journal Template Name", ItemJournalTemplate.Name);
+        ItemJournalLine.FilterGroup(0);
+        ItemJournalLine.SetRange("Journal Batch Name", BatchName);
+
+        ItemJournalLine."Journal Template Name" := ItemJournalTemplate.Name;
+        ItemJournalLine."Journal Batch Name" := BatchName;
+
+        Page.Run(Page::"Item Reclass. Journal", ItemJournalLine);
+    end;
 }
