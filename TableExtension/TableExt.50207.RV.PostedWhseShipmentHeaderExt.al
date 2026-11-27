@@ -46,6 +46,16 @@ tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Ship
             Description = 'FDD008';
             DataClassification = ToBeClassified;
         }
+        field(50106; "RV_Feeder Vessel"; Text[50])
+        {
+            Caption = 'Feeder Vessel';
+            Description = 'FDD019';
+        }
+        field(50107; "RV_Mother Vessel"; Text[50])
+        {
+            Caption = 'Mother Vessel';
+            Description = 'FDD019';
+        }
         field(50108; "RV_ETD"; Date)
         {
             Caption = 'ETD';
@@ -115,17 +125,57 @@ tableextension 50207 "RV Posted Whse Shipment Header" extends "Posted Whse. Ship
             Description = 'FDD019';
             TableRelation = "Country/Region";
         }
-
-        field(50207; "RV_Feeder Vessel"; Text[50])
+        field(50206; "RV_AdditionalLabelRequirement"; Text[250])
         {
-            Caption = 'Feeder Vessel';
-            Description = 'FDD019';
+            Caption = 'Additional Label Requirement';
         }
-        field(50208; "RV_Mother Vessel"; Text[50])
+        field(50207; "RV_Palletize Type"; Enum "RV Palletize Type")
         {
-            Caption = 'Mother Vessel';
-            Description = 'FDD019';
+            Caption = 'Palletize Type';
         }
-
+        field(50208; "RV_No. of Pallet"; Integer)
+        {
+            Caption = 'No. of Pallet';
+        }
+        field(50209; "RV_MAFAS"; Boolean)
+        {
+            Caption = 'MAFAS';
+        }
+        field(50210; "RV_Wooden Frame"; Boolean)
+        {
+            Caption = 'Wooden Frame';
+        }
+        field(50211; "RV_AdditionalRequestBasedOnSI"; Text[250])
+        {
+            Caption = 'Additional Request Based On SI';
+        }
+        field(50212; "RV_Fresh Lot No."; Boolean)
+        {
+            Caption = 'Fresh Lot No.';
+        }
+        field(50213; "RV_Maximum Lot No."; Integer)
+        {
+            Caption = 'Maximum Lot No.';
+        }
+        field(50214; "RV_AFAS"; Boolean)
+        {
+            Caption = 'AFAS';
+        }
+        field(50215; "RV_Container Fumigation"; Boolean)
+        {
+            Caption = 'Container Fumigation';
+        }
+        field(50216; "RV_Plastic Wall (Reefer)"; Boolean)
+        {
+            Caption = 'Plastic Wall (Reefer)';
+        }
+        field(50217; "RV_Container Liner (Blanket)"; Boolean)
+        {
+            Caption = 'Container Liner (Blanket)';
+        }
+        field(50218; "RV_Drawback"; Boolean)
+        {
+            Caption = 'Drawback';
+        }
     }
 }

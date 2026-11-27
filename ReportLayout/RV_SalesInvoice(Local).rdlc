@@ -400,7 +400,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.41667in</Height>
+                  <Height>0.59723in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -459,6 +459,39 @@ Cstr(Fields!QRCodeText.Value)</Value>
                               <Height>11pt</Height>
                               <Width>2.0998in</Width>
                               <ZIndex>1</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                                <VerticalAlign>Middle</VerticalAlign>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                                <PaddingBottom>2pt</PaddingBottom>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="Textbox85">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>=Fields!CommentList.Value</Value>
+                                      <Style>
+                                        <FontSize>8pt</FontSize>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox81</rd:DefaultName>
+                              <Top>0.30556in</Top>
+                              <Left>0.00624in</Left>
+                              <Height>11pt</Height>
+                              <Width>2.0998in</Width>
+                              <ZIndex>2</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -1446,7 +1479,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
             <DataSetName>DataSet_Result</DataSetName>
             <Top>0.04111in</Top>
             <Left>0.04063in</Left>
-            <Height>2.46529in</Height>
+            <Height>2.64585in</Height>
             <Width>7.2631in</Width>
             <Style>
               <Border>
@@ -1455,7 +1488,7 @@ Cstr(Fields!QRCodeText.Value)</Value>
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>2.5064in</Height>
+        <Height>2.68696in</Height>
         <Style />
       </Body>
       <Width>7.43389in</Width>
@@ -3178,6 +3211,9 @@ gUEPuujm4radxTKiO/JaLfYuVrNZgCo1E96eV0XLLwwIX88VxHmaFCVxxISGf+d3QgvpRVs92JsAKBQo
         </Field>
         <Field Name="Description2">
           <DataField>Description2</DataField>
+        </Field>
+        <Field Name="CommentList">
+          <DataField>CommentList</DataField>
         </Field>
         <Field Name="Quantity">
           <DataField>Quantity</DataField>

@@ -2,6 +2,7 @@
 /// TableExtension Warehouse Shipment Header Ext (ID 50102) extends "Warehouse Shipment Header" table
 /// FDD008 2026/03/14: New. (Liuyang)
 /// FDD019 2026/04/21: New. (Bobby.ji)
+/// New requirements 2026/11/27: Add ACR tab and fields under the ACR tab. (Bobby.ji)
 /// </summary>
 tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment Header"
 {
@@ -214,6 +215,58 @@ tableextension 50102 "RV Warehouse Shipment HDR Ext" extends "Warehouse Shipment
             Caption = 'Consignee Country/Region';
             Description = 'FDD019';
             TableRelation = "Country/Region";
+        }
+        field(50206; "RV_AdditionalLabelRequirement"; Text[250])
+        {
+            Caption = 'Additional Label Requirement';
+        }
+        field(50207; "RV_Palletize Type"; Enum "RV Palletize Type")
+        {
+            Caption = 'Palletize Type';
+        }
+        field(50208; "RV_No. of Pallet"; Integer)
+        {
+            Caption = 'No. of Pallet';
+        }
+        field(50209; "RV_MAFAS"; Boolean)
+        {
+            Caption = 'MAFAS';
+        }
+        field(50210; "RV_Wooden Frame"; Boolean)
+        {
+            Caption = 'Wooden Frame';
+        }
+        field(50211; "RV_AdditionalRequestBasedOnSI"; Text[250])
+        {
+            Caption = 'Additional Request Based On SI';
+        }
+        field(50212; "RV_Fresh Lot No."; Boolean)
+        {
+            Caption = 'Fresh Lot No.';
+        }
+        field(50213; "RV_Maximum Lot No."; Integer)
+        {
+            Caption = 'Maximum Lot No.';
+        }
+        field(50214; "RV_AFAS"; Boolean)
+        {
+            Caption = 'AFAS';
+        }
+        field(50215; "RV_Container Fumigation"; Boolean)
+        {
+            Caption = 'Container Fumigation';
+        }
+        field(50216; "RV_Plastic Wall (Reefer)"; Boolean)
+        {
+            Caption = 'Plastic Wall (Reefer)';
+        }
+        field(50217; "RV_Container Liner (Blanket)"; Boolean)
+        {
+            Caption = 'Container Liner (Blanket)';
+        }
+        field(50218; "RV_Drawback"; Boolean)
+        {
+            Caption = 'Drawback';
         }
         field(50901; "RV_Item Reclass. Jnl. Created"; Boolean)
         {

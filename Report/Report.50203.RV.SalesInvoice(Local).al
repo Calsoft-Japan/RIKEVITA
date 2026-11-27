@@ -93,6 +93,9 @@ report 50203 "RV Sales Invoice(Local)"
                 column(Description2; Description2)
                 {
                 }
+                column(CommentList; CommentList)
+                {
+                }
                 column(Quantity; Format(Quantity) + ' ' + "Unit of Measure Code")
                 {
                 }
@@ -115,7 +118,9 @@ report 50203 "RV Sales Invoice(Local)"
                 var
                     RecItem: Record Item;
                     ItemReference: Record "Item Reference";
+                    SalesCommentLine: Record "Sales Comment Line";
                 begin
+                    CommentList := '';
                     RecItem.Get("No.");
                     Description := RecItem.Description;
                     Description2 := RecItem."Description 2";
@@ -143,6 +148,13 @@ report 50203 "RV Sales Invoice(Local)"
                         end else begin
                             Error(StrSubstNo(ErrorMessage, "No.", "Sell-to Customer No."));
                         end;
+                    end;
+
+                    SalesCommentLine.Reset();
+                    SalesCommentLine.SetRange("Document Type", SalesCommentLine."Document Type"::Invoice);
+                    SalesCommentLine.SetRange("Document Line No.", "Line No.");
+                    if SalesCommentLine.FindFirst() then begin
+                        CommentList := SalesCommentLine.Comment;
                     end;
                 end;
 
@@ -262,6 +274,7 @@ report 50203 "RV Sales Invoice(Local)"
         QRCodeText: Text;
         QRCode: Boolean;
         ItemDescriptionOption: Option;
+        CommentList: Text[80];
         ErrorMessage: Label 'Please add Description and Description 2 in Item Reference for Item: %1 with Reference Type: Customer, Reference Type No.: %2.';
 
     trigger OnPreReport()

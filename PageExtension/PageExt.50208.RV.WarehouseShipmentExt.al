@@ -1,6 +1,7 @@
 /// <summary>
 /// PageExtension RV Warehouse Shipment (ID 50208) extends "Warehouse Shipment"
 /// FDD019 2026/04/21: New. (Bobby.ji)
+/// New requirements 2026/11/27: Add ACR tab and fields under the ACR tab. (Bobby.ji)
 /// </summary>
 pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
 {
@@ -46,6 +47,77 @@ pageextension 50208 "RV WarehouseShipmentExt" extends "Warehouse Shipment"
                     ApplicationArea = All;
                     Caption = 'Consignee Country/Region';
                     Description = 'FDD019';
+                }
+            }
+            group(ARC)// New requirements
+            {
+                Caption = 'ARC';
+                field("Additional Label Requirement"; Rec."RV_AdditionalLabelRequirement")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Additional Label Requirement';
+                    MultiLine = true;
+                }
+                field("Palletize Type"; Rec."RV_Palletize Type")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Palletize Type';
+                }
+                field("No. of Pallet"; Rec."RV_No. of Pallet")
+                {
+                    ApplicationArea = All;
+                    Caption = 'No. of Pallet';
+                }
+                field("MAFAS"; Rec."RV_MAFAS")
+                {
+                    ApplicationArea = All;
+                    Caption = 'MAFAS';
+                }
+                field("Wooden Frame"; Rec."RV_Wooden Frame")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Wooden Frame';
+                }
+                field("Additional Request Based On SI"; Rec."RV_AdditionalRequestBasedOnSI")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Additional Request Based On SI';
+                    MultiLine = true;
+                }
+                field("Fresh Lot No."; Rec."RV_Fresh Lot No.")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Fresh Lot No.';
+                }
+                field("Maximum Lot No."; Rec."RV_Maximum Lot No.")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Maximum Lot No.';
+                }
+                field("AFAS"; Rec."RV_AFAS")
+                {
+                    ApplicationArea = All;
+                    Caption = 'AFAS';
+                }
+                field("Container Fumigation"; Rec."RV_Container Fumigation")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Container Fumigation';
+                }
+                field("Plastic Wall (Reefer)"; Rec."RV_Plastic Wall (Reefer)")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Plastic Wall (Reefer)';
+                }
+                field("Container Liner (Blanket)"; Rec."RV_Container Liner (Blanket)")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Container Liner (Blanket)';
+                }
+                field("Drawback"; Rec."RV_Drawback")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Drawback';
                 }
             }
         }

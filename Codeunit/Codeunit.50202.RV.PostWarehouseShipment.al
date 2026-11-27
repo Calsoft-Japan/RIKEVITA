@@ -2,6 +2,7 @@
 /// Codeunit RV Post Warehouse Shipment (ID 50202)
 /// FDD019 2026/04/24: New. (Bobby.ji)
 /// FDD008 2026/05/19 (Liuyang)
+/// New requirements 2026/11/27: Add ACR tab and fields under the ACR tab. (Bobby.ji)
 /// </summary>
 codeunit 50202 "RV Post Warehouse Shipment"
 {
@@ -24,6 +25,21 @@ codeunit 50202 "RV Post Warehouse Shipment"
         PostedWhseShipmentHeader."RV_Shipping Type Code" := WarehouseShipmentHeader."RV_Shipping Type Code";//FDD008 Update
         PostedWhseShipmentHeader."RV_Shipment Type" := WarehouseShipmentHeader."RV_Shipment Type";//FDD008 Update
 
+        // New requirements
+        PostedWhseShipmentHeader."RV_AdditionalLabelRequirement" := WarehouseShipmentHeader."RV_AdditionalLabelRequirement";
+        PostedWhseShipmentHeader."RV_Palletize Type" := WarehouseShipmentHeader."RV_Palletize Type";
+        PostedWhseShipmentHeader."RV_No. of Pallet" := WarehouseShipmentHeader."RV_No. of Pallet";
+        PostedWhseShipmentHeader."RV_MAFAS" := WarehouseShipmentHeader."RV_MAFAS";
+        PostedWhseShipmentHeader."RV_Wooden Frame" := WarehouseShipmentHeader."RV_Wooden Frame";
+        PostedWhseShipmentHeader."RV_AdditionalRequestBasedOnSI" := WarehouseShipmentHeader."RV_AdditionalRequestBasedOnSI";
+        PostedWhseShipmentHeader."RV_Fresh Lot No." := WarehouseShipmentHeader."RV_Fresh Lot No.";
+        PostedWhseShipmentHeader."RV_Maximum Lot No." := WarehouseShipmentHeader."RV_Maximum Lot No.";
+        PostedWhseShipmentHeader."RV_AFAS" := WarehouseShipmentHeader."RV_AFAS";
+        PostedWhseShipmentHeader."RV_Container Fumigation" := WarehouseShipmentHeader."RV_Container Fumigation";
+        PostedWhseShipmentHeader."RV_Plastic Wall (Reefer)" := WarehouseShipmentHeader."RV_Plastic Wall (Reefer)";
+        PostedWhseShipmentHeader."RV_Container Liner (Blanket)" := WarehouseShipmentHeader."RV_Container Liner (Blanket)";
+        PostedWhseShipmentHeader."RV_Drawback" := WarehouseShipmentHeader."RV_Drawback";
+        // New requirements
         //FDD008
         PostedWhseShipmentHeader."RV_B/L Date" := WarehouseShipmentHeader."RV_B/L Date";
         PostedWhseShipmentHeader."RV_Closing Date" := WarehouseShipmentHeader."RV_Closing Date";

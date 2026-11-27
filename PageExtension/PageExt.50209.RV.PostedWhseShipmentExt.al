@@ -137,6 +137,91 @@ pageextension 50209 "RV PostedWhseShipmentExt" extends "Posted Whse. Shipment"
                     Editable = false;
                 }
             }
+
+            group(ARC)// New requirements
+            {
+                Caption = 'ARC';
+                field("Additional Label Requirement"; Rec."RV_AdditionalLabelRequirement")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Additional Label Requirement';
+                    MultiLine = true;
+                    Editable = false;
+                }
+                field("Palletize Type"; Rec."RV_Palletize Type")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Palletize Type';
+                    Editable = false;
+                }
+                field("No. of Pallet"; Rec."RV_No. of Pallet")
+                {
+                    ApplicationArea = All;
+                    Caption = 'No. of Pallet';
+                    Editable = false;
+                }
+                field("MAFAS"; Rec."RV_MAFAS")
+                {
+                    ApplicationArea = All;
+                    Caption = 'MAFAS';
+                    Editable = false;
+                }
+                field("Wooden Frame"; Rec."RV_Wooden Frame")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Wooden Frame';
+                    Editable = false;
+                }
+                field("Additional Request Based On SI"; Rec."RV_AdditionalRequestBasedOnSI")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Additional Request Based On SI';
+                    MultiLine = true;
+                    Editable = false;
+                }
+                field("Fresh Lot No."; Rec."RV_Fresh Lot No.")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Fresh Lot No.';
+                    Editable = false;
+                }
+                field("Maximum Lot No."; Rec."RV_Maximum Lot No.")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Maximum Lot No.';
+                    Editable = false;
+                }
+                field("AFAS"; Rec."RV_AFAS")
+                {
+                    ApplicationArea = All;
+                    Caption = 'AFAS';
+                    Editable = false;
+                }
+                field("Container Fumigation"; Rec."RV_Container Fumigation")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Container Fumigation';
+                    Editable = false;
+                }
+                field("Plastic Wall (Reefer)"; Rec."RV_Plastic Wall (Reefer)")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Plastic Wall (Reefer)';
+                    Editable = false;
+                }
+                field("Container Liner (Blanket)"; Rec."RV_Container Liner (Blanket)")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Container Liner (Blanket)';
+                    Editable = false;
+                }
+                field("Drawback"; Rec."RV_Drawback")
+                {
+                    ApplicationArea = All;
+                    Caption = 'Drawback';
+                    Editable = false;
+                }
+            }
         }
     }
     actions
